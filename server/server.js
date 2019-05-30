@@ -17,11 +17,12 @@ module.exports = port => {
   });
 
   // WebSocket example
-  app.ws('/api/socket', (socket, request) => {
+  app.ws('/socket', (socket, request) => {
     console.log('Socket opened');
 
     socket.on('message', message => {
       // Ping
+      console.log(message);
       socket.send('pong');
     })
   });

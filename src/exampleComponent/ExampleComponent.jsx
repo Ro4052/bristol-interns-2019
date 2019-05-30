@@ -7,8 +7,17 @@ class ExampleComponent extends React.Component {
     this.state = {
       text: "Waiting for a button press..."
     }
-
     this.get = this.get.bind(this);
+    this.ping = this.ping.bind(this);
+  }
+
+  componentDidMount() {
+    const wsProtocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+    this.socket = new WebSocket(`${wsProtocol}://${window.location.host}/socket`);
+    this.socket.onmessage = message => {
+      console.log(message);
+      this.setState({ text: message.data });
+    }
   }
 
   get() {
@@ -21,10 +30,15 @@ class ExampleComponent extends React.Component {
       });
   }
 
+  ping() {
+    this.socket.send("ping");
+  }
+
   render() {
     return (
       <>
         <button onClick={this.get}>Get</button>
+        <button onClick={this.ping}>Ping</button>
         <div>{this.state.text}</div>
       </>
     )
