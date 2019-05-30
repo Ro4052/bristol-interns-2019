@@ -6,7 +6,15 @@ In the project directory, you can run:
 
 ### `npm start`
 
-Runs the app in the development mode.<br>
+Runs the Node server.
+
+### `npm run start:devserver`
+
+Runs the Node server without auto re-build on saved changes using [nodemon](https://nodemon.io/).
+
+### `npm run start:devclient`
+
+Runs the app front end in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.<br>
@@ -19,7 +27,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.<br>
+Builds the app front end for production to the `build` folder.<br>
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
 The build is minified and the filenames include the hashes.<br>
@@ -36,6 +44,12 @@ If you aren’t satisfied with the build tool and configuration choices, you can
 Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+
+## Deployment
+
+This project uses [CircleCI](https://circleci.com/) for continous integration and [Heroku](https://www.heroku.com/) for deployment. There are deployments for the [master](https://bristol-interns-2019.herokuapp.com/) and [develop](https://bristol-interns-2019-dev.herokuapp.com/) branches.
+
+*Note: Master is a protected branch and cannot be pushed to (you will need to make a [pull request](https://help.github.com/en/articles/about-pull-requests))*
 
 ## Learn More
 
