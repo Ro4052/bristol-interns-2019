@@ -1,8 +1,5 @@
 version: 2.1
 
-orbs:
-  heroku: circleci/heroku@0.0.4
-
 jobs:
   test:
     docker:
@@ -23,6 +20,8 @@ jobs:
             - ./node_modules
 
   deploy-master:
+    docker:
+      - image: circleci/node:10
     steps:
       - checkout
       - run:
