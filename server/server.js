@@ -8,7 +8,7 @@ const sampleArray = ['Hello', 'World', '!'];
 module.exports = port => {
   const app = expressWs(express()).app;
 
-  app.use(express.static('public'));
+  app.use(express.static('build'));
   app.use(bodyParser.json());
 
   // REST example
@@ -29,7 +29,7 @@ module.exports = port => {
 
   // Send index file
   app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/index.html'), (err) => {
+    res.sendFile(path.join(__dirname, '../build/index.html'), (err) => {
       if (err) {
         res.status(500);
         res.send(err);
