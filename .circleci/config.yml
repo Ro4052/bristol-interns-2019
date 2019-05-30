@@ -22,14 +22,24 @@ jobs:
           paths:
             - ./node_modules
 
+  deploy-master:
+    steps:
+      - checkout
+      - run:
+          name: Deploy to Heroku
+          command: |
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
+
+
 workflows:
   version: 2
   test-deploy:
     jobs:
       - test
-      - heroku/deploy-via-git:
+      - deploy-master:
           requires:
             - test
           filters:
             branches:
-              only: master
+              only:
+                - master
