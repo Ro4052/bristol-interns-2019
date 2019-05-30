@@ -25,9 +25,19 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Deploy to Heroku
+          name: Deploy Master to Heroku
           command: |
-            git push https://heroku:${HEROKU_API_KEY}@git.heroku.com/${HEROKU_APP_NAME}.git master
+            git push https://heroku:${HEROKU_API_KEY}@git.heroku.com/${HEROKU_MASTER_APP_NAME}.git master
+
+  deploy-develop:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - run:
+          name: Deploy Develop to Heroku
+          command: |
+            git push https://heroku:${HEROKU_API_KEY}@git.heroku.com/${HEROKU_DEVELOP_APP_NAME}.git master
 
 
 workflows:
@@ -42,3 +52,10 @@ workflows:
             branches:
               only:
                 - master
+      - deploy-develop:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - develop
