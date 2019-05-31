@@ -10,7 +10,7 @@ Runs the Node server.
 
 ### `npm run start:devserver`
 
-Runs the Node server without auto re-build on saved changes using [nodemon](https://nodemon.io/).
+Runs the Node server with auto re-build on saved changes using [nodemon](https://nodemon.io/).
 
 ### `npm run start:devclient`
 
