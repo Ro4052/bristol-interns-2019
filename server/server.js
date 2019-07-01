@@ -3,8 +3,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const cookie = require('cookie');
-
-const sampleArray = ['Hello', 'World', '!'];
+const gameLogic = require('./gameLogic');
 
 module.exports = port => {
   const app = express();
@@ -27,23 +26,45 @@ module.exports = port => {
     });
   });
 
-  // REST example
-  app.get('/api/hello', (request, response) => {
-    response.json(sampleArray);
-  });
-
-  // Socket.io
-  io.on('connection', function (socket) {
-    console.log("Someone connected.");
-  });
-
   // Log in the user
   app.post('/auth/login', (req, res) => {
     res.cookie(cookie.serialize('username', req.body.username), {
       httpOnly: true,
       expires: (10 * 365 * 24 * 60 * 60)
     })
+    gameLogic.joinGame(req.body.username);
+    emitAllPlayers();
     res.status(200).json("Logged in");
-  })
+  });
+
+  // Start the game
+  app.get('/api/start', (req, res) => {
+    gameLogic.initGame();
+    const roundInfo = {
+        currentPlayer: gameLogic.getCurrentPlayer()
+    }
+    io.emit("startRound", roundInfo);
+    res.status(200);
+  });
+
+  // End your turn
+  app.get('/api/endTurn', (req, res) => {
+    // Use cookie to decide which player sent the request
+    console.log("endTurn");
+    console.log(req.cookies);
+    // End their turn
+    // If last player, go next turn
+  });
+
+  // Socket.io
+  io.on('connection', function (socket) {
+    console.log("Someone connected.");
+    emitAllPlayers();
+  });
+
+  /* SOCKETIO HELPERS */
+  const emitAllPlayers = () => {
+    io.emit("players", gameLogic.getPlayers());
+  }
 
 }
