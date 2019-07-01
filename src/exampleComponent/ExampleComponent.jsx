@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios'; // Alternative to fetch/XMLHttp
+import socket from '../socket';
 
 class ExampleComponent extends React.Component {
   constructor(props) {
@@ -12,26 +13,27 @@ class ExampleComponent extends React.Component {
   }
 
   componentDidMount() {
-    const wsProtocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
-    this.socket = new WebSocket(`${wsProtocol}://${window.location.host}/socket`);
-    this.socket.onmessage = message => {
-      console.log(message);
-      this.setState({ text: message.data });
-    }
+    // const wsProtocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+    // this.socket = new WebSocket(`${wsProtocol}://${window.location.host}/socket`);
+    // this.socket.onmessage = message => {
+    //   console.log(message);
+    //   this.setState({ text: message.data });
+    // }
+
   }
 
   get() {
-    axios.get('/api/hello')
-      .then(response => {
-        console.log(response);
-        this.setState({
-          text: response.data.join(' ')
-        });
-      });
+    // axios.get('/api/hello')
+    //   .then(response => {
+    //     console.log(response);
+    //     this.setState({
+    //       text: response.data.join(' ')
+    //     });
+    //   });
   }
 
   ping() {
-    this.socket.send("ping");
+    // this.socket.send("ping");
   }
 
   render() {
