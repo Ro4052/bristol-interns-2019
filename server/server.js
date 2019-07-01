@@ -4,6 +4,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const cookie = require('cookie');
+const gameLogic = require('./gameLogic');
 const cookieParser = require('cookie-parser')
 
 const cardManager = require('./cards');
@@ -42,9 +43,29 @@ module.exports = port => {
     });
   });
 
-  // REST example
-  app.get('/api/hello', (request, response) => {
-    response.json(sampleArray);
+  // Start the game
+  app.get('/api/start', (req, res) => {
+    gameLogic.initGame();
+    const roundInfo = {
+        currentPlayer: gameLogic.getCurrentPlayer()
+    }
+    io.emit("startRound", roundInfo);
+    res.status(200);
+  });
+
+  // End your turn
+  app.get('/api/endTurn', (req, res) => {
+    // Use cookie to decide which player sent the request
+    console.log("endTurn");
+    console.log(req.cookies);
+    // End their turn
+    // If last player, go next turn
+  });
+
+  // Socket.io
+  io.on('connection', function (socket) {
+    console.log("Someone connected.");
+    emitAllPlayers();
   });
 
   app.get('/auth', (request, response) => {
@@ -55,7 +76,7 @@ module.exports = port => {
     }
   });
 
-  // REST example
+  /* Send a random set of cards to user */
   app.get('/api/cards', (req, res) => {
     if (req.session.user) {
       var indexedBy = req.session.user;    
@@ -68,10 +89,8 @@ module.exports = port => {
   
   var currentUsers = [];
 
-  // Log in the user
+  /* Log in the user */
   app.post('/auth/login', (req, res) => {
-    console.log("logging");
-    
     var user = currentUsers.find((user) => user.username === req.body.username);
     if (!user) {
       req.session.user = req.body.username;
@@ -88,10 +107,9 @@ module.exports = port => {
     }
   });
 
-  // Socket.io
-  io.on('connection', function (socket) {
-    console.log("Someone connected.");
-  });
-  
+  /* SOCKETIO HELPERS */
+  const emitAllPlayers = () => {
+    io.emit("players", gameLogic.getPlayers());
+  }
 }
 
