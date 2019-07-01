@@ -45,7 +45,5 @@ module.exports = port => {
     })
     res.status(200).json("Logged in");
   })
-  
-  return app.listen(port, () => console.log(`Server running on port: ${port}`));
 
 }
