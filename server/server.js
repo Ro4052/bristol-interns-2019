@@ -6,10 +6,7 @@ const cors = require('cors');
 const cookie = require('cookie');
 const gameLogic = require('./gameLogic');
 const cookieParser = require('cookie-parser')
-
 const cardManager = require('./cards');
-
-const sampleArray = ['Hello', 'World', '!'];
 
 module.exports = port => {
   const app = express();
@@ -31,15 +28,16 @@ module.exports = port => {
     }
   }))
 
+  currentUsers = []
   server.listen(port, () => console.log(`Server running on port: ${port}`));
 
   // Send index file
   app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../build/index.html'), (err) => {
-      if (err) {
-        res.status(500);
-        res.send(err);
-      }
+    if (err) {
+      res.status(500);
+      res.send(err);
+    }
     });
   });
 
@@ -47,25 +45,36 @@ module.exports = port => {
   app.get('/api/start', (req, res) => {
     gameLogic.initGame();
     const roundInfo = {
-        currentPlayer: gameLogic.getCurrentPlayer()
+      currentPlayer: gameLogic.getCurrentPlayer()
     }
     io.emit("startRound", roundInfo);
     res.status(200);
   });
 
-  // End your turn
-  app.get('/api/endTurn', (req, res) => {
-    // Use cookie to decide which player sent the request
-    console.log("endTurn");
-    console.log(req.cookies);
-    // End their turn
-    // If last player, go next turn
+  // Get cards
+  app.get('/api/cards', (req, res) => {
+    if (currentUsers.length > 0) {
+      var indexedBy = req.session.user;    
+      var user = currentUsers.find((user) => user.username === indexedBy);    
+      res.status(200).json(user.cards);
+    } else {
+      res.sendStatus(404);
+    }
   });
 
-  // Socket.io
-  io.on('connection', function (socket) {
-    console.log("Someone connected.");
-    emitAllPlayers();
+  // End your turn
+  app.get('/api/endTurn', (req, res) => {
+    const indexedBy = req.session.user;    
+    const player = currentUsers.find((player) => player.username === indexedBy);
+    // End their turn
+    gameLogic.endPlayerTurn(player);
+    // If last player, go next turn
+    if (gameLogic.allPlayersFinishedTurn()) {
+      console.log("End of round!");
+      gameLogic.incrementRound();
+      emitRoundInfo();
+    }
+    res.sendStatus(200);
   });
 
   app.get('/auth', (request, response) => {
@@ -78,6 +87,8 @@ module.exports = port => {
 
   /* Send a random set of cards to user */
   app.get('/api/cards', (req, res) => {
+    console.log(req.session.user);
+    
     if (req.session.user) {
       var indexedBy = req.session.user;    
       var user = currentUsers.find((user) => user.username === indexedBy);    
@@ -86,30 +97,41 @@ module.exports = port => {
       res.sendStatus(404);
     }
   });
-  
-  var currentUsers = [];
 
   /* Log in the user */
   app.post('/auth/login', (req, res) => {
     var user = currentUsers.find((user) => user.username === req.body.username);
     if (!user) {
-      req.session.user = req.body.username;
+      req.session.user = req.body.username;      
       var newSet = cardManager.assign(currentUsers, 3 /* number of cards per user */);
-      currentUsers.push({
+      let user = {
         username: req.body.username,
         cards: newSet,
         isMyTurn: false,
         score: 0
-      });
+      };
+      currentUsers.push(user);
+      gameLogic.joinGame(user);
+      emitAllPlayers();
       res.sendStatus(200);
     } else {
       res.status(405).json({message: "User already exists"});
     }
   });
 
+  // Socket.io
+  io.on('connection', function (socket) {
+    console.log("Someone connected.");
+    emitAllPlayers();
+  });
+
   /* SOCKETIO HELPERS */
   const emitAllPlayers = () => {
     io.emit("players", gameLogic.getPlayers());
+  }
+
+  const emitRoundInfo = () => {
+    io.emit("startRound", gameLogic.getRoundInfo());
   }
 }
 
