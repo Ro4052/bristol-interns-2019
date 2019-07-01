@@ -1,41 +1,40 @@
 const express = require('express');
-const expressWs = require('express-ws');
 const path = require('path');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const cookie = require('cookie');
 
 const sampleArray = ['Hello', 'World', '!'];
 
 module.exports = port => {
-  const app = expressWs(express()).app;
+  const app = express();
+  const server = require('http').createServer(app);
+  const io = require('socket.io')(server);
 
   app.use(express.static('build'));
   app.use(bodyParser.json());
+  app.use(cors());
 
-  // REST example
-  app.get('/api/hello', (request, response) => {
-    response.json(sampleArray);
-  });
-
-  // WebSocket example
-  app.ws('/socket', (socket, request) => {
-    console.log('Socket opened');
-
-    socket.on('message', message => {
-      // Ping
-      console.log(message);
-      socket.send('pong');
-    })
-  });
+  server.listen(port, () => console.log(`Server running on port: ${port}`));
 
   // Send index file
-  app.get('/*', (req, res) => {
+  app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../build/index.html'), (err) => {
       if (err) {
         res.status(500);
         res.send(err);
       }
     });
+  });
+
+  // REST example
+  app.get('/api/hello', (request, response) => {
+    response.json(sampleArray);
+  });
+
+  // Socket.io
+  io.on('connection', function (socket) {
+    console.log("Someone connected.");
   });
 
   // Log in the user
