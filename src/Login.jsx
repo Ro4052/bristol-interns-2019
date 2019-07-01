@@ -27,7 +27,6 @@ class Login extends React.Component {
             username: this.state.value
         })
         .then(response => {
-            console.log(response);
             if (response.status === 200) {
                 window.location = '/dashboard'
             }

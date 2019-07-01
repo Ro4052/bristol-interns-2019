@@ -1,5 +1,8 @@
 import React from 'react';
 import Turn from '../components/Turn/Turn';
+import Cookies from 'js-cookie';
+import Cards from '../Cards';
+import socket from '../socket';
 
 class ExampleComponent extends React.Component {
     constructor(props) {
@@ -9,16 +12,23 @@ class ExampleComponent extends React.Component {
         }
     }
 
-    render() {
-        return (
-            <>
-                <button onClick={this.get}>Get</button>
-                <button onClick={this.ping}>Ping</button>
-                <div>{this.state.text}</div>
-                <Turn />
-            </>
-        )
+  componentWillMount() {
+    if (!Cookies.get('username')) {
+      window.location = '/'
     }
+  }
+
+  render() {
+    return (
+      <>
+        <button onClick={this.get}>Get</button>
+        <button onClick={this.ping}>Ping</button>
+        <div>{this.state.text}</div>
+        <Cards/>
+        <Turn />
+      </>
+    )
+  }
 }
 
 export default ExampleComponent;
