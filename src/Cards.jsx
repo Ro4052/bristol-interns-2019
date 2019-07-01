@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import allcards from './cards/all-cards';
 
 export default class Cards extends React.Component {
     constructor() {
@@ -8,6 +7,18 @@ export default class Cards extends React.Component {
         this.state = {
             cards: []
         }
+    }
+    componentWillMount() {
+        axios.get('/auth')
+        .then((response) => {
+            console.log(response);
+            if (response.status !== 200) {
+                window.location = '/';
+            }
+        }).catch(err => {
+            console.log(err);
+            window.location = '/';
+        })
     }
     componentDidMount() {
         axios.get('/api/cards')
@@ -24,7 +35,7 @@ export default class Cards extends React.Component {
             console.log(err);
         })
     }
-    render() {         
+    render() {        
         const cardsImages = this.state.cards.map((card, index) => (
             <img height="400" width="250" key={index} src={card}/>
         ))

@@ -1,5 +1,4 @@
 import React from 'react';
-import Cookies from 'js-cookie';
 import Cards from '../Cards';
 import socket from '../socket';
 
@@ -12,11 +11,9 @@ class ExampleComponent extends React.Component {
     this.get = this.get.bind(this);
     this.ping = this.ping.bind(this);
   }
-
-  componentWillMount() {
-    if (!Cookies.get('username')) {
-      window.location = '/'
-    }
+  componentDidMount() {
+    
+    
   }
   componentDidMount() {
     // const wsProtocol = window.location.protocol === 'http:' ? 'ws' : 'wss';

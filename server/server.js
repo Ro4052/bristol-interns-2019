@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -17,7 +18,17 @@ module.exports = port => {
   app.use(express.static('build'));
   app.use(bodyParser.json());
   app.use(cors());
-  app.use(cookieParser())
+  app.use(cookieParser());
+  app.use(session({
+    name: 'username',
+    secret: 'my-cool-secret',
+    resave: false,
+    saveUninitialized: false,
+    secure: true,
+    cookie: {
+      maxAge: 1800000
+    }
+  }))
 
   server.listen(port, () => console.log(`Server running on port: ${port}`));
 
@@ -36,10 +47,18 @@ module.exports = port => {
     response.json(sampleArray);
   });
 
+  app.get('/auth', (request, response) => {
+    if (request.session.user) {
+      response.sendStatus(200);
+    } else {
+      response.sendStatus(404);
+    }
+  });
+
   // REST example
   app.get('/api/cards', (req, res) => {
-    if (currentUsers.length > 0) {
-      var indexedBy = req.cookies.username.split('=')[0];    
+    if (req.session.user) {
+      var indexedBy = req.session.user;    
       var user = currentUsers.find((user) => user.username === indexedBy);    
       res.status(200).json(user.cards);
     } else {
@@ -51,12 +70,11 @@ module.exports = port => {
 
   // Log in the user
   app.post('/auth/login', (req, res) => {
+    console.log("logging");
+    
     var user = currentUsers.find((user) => user.username === req.body.username);
     if (!user) {
-      res.cookie(cookie.serialize('username', req.body.username), {
-        httpOnly: true,
-        expires: (10 * 365 * 24 * 60 * 60)
-      });
+      req.session.user = req.body.username;
       var newSet = cardManager.assign(currentUsers, 3 /* number of cards per user */);
       currentUsers.push({
         username: req.body.username,
@@ -66,7 +84,7 @@ module.exports = port => {
       });
       res.sendStatus(200);
     } else {
-      req.sendStatus(405);
+      res.sendStatus(405);
     }
   });
 

@@ -42,3 +42,8 @@
     font-size: 2em;
     text-align: center;
 }
+
+.errorText {
+    color: var(--red);
+    height: 5%;
+}
