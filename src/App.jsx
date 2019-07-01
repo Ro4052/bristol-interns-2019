@@ -2,7 +2,7 @@ import React from 'react';
 
 import ExampleComponent from './exampleComponent/ExampleComponent';
 import logo from './logo.svg';
-import styles from './App.module.css';
+import styles from './css/App.module.css';
 
 const App = () => (
   <div className={styles.app}>
