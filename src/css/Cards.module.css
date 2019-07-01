@@ -1,0 +1,20 @@
+.cardsContainer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.singleCard {
+    margin: 0 10px;
+    border: 2px solid black;
+    border-radius: 3vmin;
+    width: 30vmin;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.singleCard:hover {
+    transform: translate3d(0, -10px, 0);
+}

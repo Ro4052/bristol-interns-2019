@@ -103,7 +103,7 @@ module.exports = port => {
       });
       res.sendStatus(200);
     } else {
-      res.sendStatus(405);
+      res.status(405).json({message: "User already exists"});
     }
   });
 

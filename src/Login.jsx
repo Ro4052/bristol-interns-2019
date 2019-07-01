@@ -40,7 +40,7 @@ class Login extends React.Component {
         .catch(err => {
             console.log(err);
             this.setState({
-                error: "Username already taken."
+                error: err.message
             })
         })
     }
