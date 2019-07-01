@@ -1,7 +1,6 @@
 import React from 'react';
 import socket from '../../socket';
 import axios from 'axios';
-import ChooseCard from '../ChooseCard/ChooseCard';
 
 class Turn extends React.Component {
 
@@ -9,8 +8,7 @@ class Turn extends React.Component {
         super(props);
         this.state = {
             users: [],
-            currentPlayer: null,
-            chooseCard: false
+            roundInfo: {}
         }
         this.startGame = this.startGame.bind(this);
     }
@@ -20,44 +18,55 @@ class Turn extends React.Component {
             this.setState({users: msg});
         });
         socket.on("startRound", msg => {
-            console.log(msg);
+            console.log("startRound", msg);
             this.setState({
-                currentPlayer: msg.currentPlayer,
-                chooseCard: true
+                roundInfo: msg
             });
         });
     }
 
     startGame() {
-        console.log("startGame");
         axios.get('/api/start')
-        .then(response => {
-            console.log(response);
-            console.log(response.status)
-            if (response.status === 200) this.setState({chooseCard: true});
+        .then(res => {
+            // console.log(res);
         })
         .catch(err => {
             console.log(err);
         });
     }
 
-    render() {
-        const turn = this.state.currentPlayer ?
-            `It's ${this.state.currentPlayer}'s turn.` :
-            <button onClick={this.startGame}>Start game</button> ;
+    endTurn() {
+        console.log("endTurn");
+        axios.get('/api/endTurn')
+        .then(response => {
+            console.log(response);
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
 
+    render() {
+        let currentUsername = 'no one';
+        if (this.state.roundInfo.currentPlayer) {
+            currentUsername = this.state.roundInfo.currentPlayer.username || 'no one';
+        }
         return (
             <div>
                 <div>
+                    <div>Round: {this.state.roundInfo.roundNum}</div>
                     Players:
                     <ul>
                         {this.state.users.map((user, key) => {
-                            return <li key={key}>{user}</li>
+                            return <li key={key}>{user.username}</li>
                         })}
                     </ul>
                 </div>
-                {turn}
-                {this.state.chooseCard && <ChooseCard />}
+                <div>
+                    {`It's ${currentUsername}'s turn.`}
+                </div>
+                <button onClick={this.startGame}>Start game</button>
+                <button onClick={this.endTurn}>Next turn</button>
             </div>
         )
     }
