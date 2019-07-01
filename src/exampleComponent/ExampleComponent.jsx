@@ -1,5 +1,6 @@
 import React from 'react';
-import axios from 'axios'; // Alternative to fetch/XMLHttp
+import Cookies from 'js-cookie';
+import Cards from '../Cards';
 import socket from '../socket';
 
 class ExampleComponent extends React.Component {
@@ -12,6 +13,11 @@ class ExampleComponent extends React.Component {
     this.ping = this.ping.bind(this);
   }
 
+  componentWillMount() {
+    if (!Cookies.get('username')) {
+      window.location = '/'
+    }
+  }
   componentDidMount() {
     // const wsProtocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
     // this.socket = new WebSocket(`${wsProtocol}://${window.location.host}/socket`);
@@ -42,6 +48,7 @@ class ExampleComponent extends React.Component {
         <button onClick={this.get}>Get</button>
         <button onClick={this.ping}>Ping</button>
         <div>{this.state.text}</div>
+        <Cards/>
       </>
     )
   }
