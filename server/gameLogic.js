@@ -21,6 +21,16 @@ exports.joinGame = player => {
     }
 }
 
+/* Remove player from current game */
+exports.quitGame = player => {
+    if (!gameState.started && gameState.players.includes(player)) {
+        gameState.players = gameState.players.filter((otherPlayer) => otherPlayer !== player);
+    } else {
+        // TODO
+        // - Game has started, player can't quit
+    }
+}
+
 /* Start the game with the players that have joined */
 exports.startGame = () => {
     // TODO: Min players
