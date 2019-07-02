@@ -23,7 +23,8 @@ module.exports = port => {
         saveUninitialized: false,
         secure: true,
         cookie: {
-        maxAge: 1800000
+            httpOnly: false,
+            maxAge: 1800000
         }
     }))
 
@@ -90,7 +91,23 @@ module.exports = port => {
         emitGameState();
         res.sendStatus(200);
         } else {
-        res.status(405).json({message: "User already exists"});
+        res.status(404).json({message: "User already exists"});
+        }
+    });
+
+    /* Log out the user */
+    app.post('/auth/logout', (req, res) => {
+        var user = currentUsers.find((user) => user.username === req.session.user);
+        if (user) {
+            currentUsers = currentUsers.filter((otherUser) => otherUser !== user);
+            gameLogic.quitGame(user);
+            console.log(gameLogic.getGameState());
+            
+            emitGameState();
+            req.session.destroy();
+            res.sendStatus(200);
+        } else {
+            res.status(404).json({message: "Cannot log out: user does not exist."});
         }
     });
 
