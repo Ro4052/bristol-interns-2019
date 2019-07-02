@@ -68,23 +68,16 @@ module.exports = port => {
 
     // Start the game
     app.get('/api/start', (req, res) => {
-        gameLogic.initGame();
+        gameLogic.startGame();
         emitGameState();
         res.sendStatus(200);
     });
 
     // End your turn
     app.get('/api/endTurn', (req, res) => {
-        const indexedBy = req.cookies.username.split('=')[0];    
-        const player = currentUsers.find((player) => player.username === indexedBy);
-        // End their turn
-        gameLogic.endPlayerTurn(player);
-        // If last player, go next turn
-        if (gameLogic.allPlayersFinishedTurn()) {
-            console.log("End of round!");
-            gameLogic.incrementRound();
-            emitGameState();
-        }
+        const username = req.cookies.username.split('=')[0];    
+        gameLogic.endPlayerTurn(username);
+        emitGameState();
         res.sendStatus(200);
     });
 
@@ -101,7 +94,7 @@ module.exports = port => {
 
     // Whenever a change is made to the game state, emit it
     const emitGameState = () => {
-        io.emit("players", gameLogic.getGameState());
+        io.emit("gameState", gameLogic.getGameState());
     }
 
 }

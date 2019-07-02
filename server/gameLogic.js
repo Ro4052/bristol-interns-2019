@@ -30,17 +30,24 @@ exports.startGame = () => {
 }
 
 /* Call when a player finishes their turn */
-exports.endPlayerTurn = player => {
-    gameState.players[this.getPlayerIndexByUsername(player.username)].finishedTurn = true;
+exports.endPlayerTurn = username => {
+    gameState.players[getPlayerByUsername(username)].finishedTurn = true;
     if (allPlayersFinishedTurn()) incrementRound();
+}
+
+/* Get the index of the player in the list */
+const getPlayerByUsername = username => {
+    return gameState.players.findIndex(player => player.username === username);
 }
 
 /* Move on to the next round, called when all players have finished their turn */
 const incrementRound = () => {
+    console.log("End of round!");
     gameState.roundNum++;
     gameState.players = gameState.players.map(player => {
         return {...player, "finishedTurn": false}
     });
+    gameState.currentPlayer = gameState.players[gameState.roundNum % gameState.players.length];
 }
 
 /* Returns true if all players have finished the current turn */

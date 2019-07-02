@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import allcards from './cards/all-cards';
 
 export default class Cards extends React.Component {
     constructor() {
@@ -26,7 +25,7 @@ export default class Cards extends React.Component {
     }
     render() {         
         const cardsImages = this.state.cards.map((card, index) => (
-            <img height="400" width="250" key={index} src={card}/>
+            <img height="400" width="250" key={index} src={card} alt='' />
         ))
         return (
             <div>

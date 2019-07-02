@@ -2,7 +2,6 @@ import React from 'react';
 import Turn from '../components/Turn/Turn';
 import Cookies from 'js-cookie';
 import Cards from '../Cards';
-import socket from '../socket';
 
 class ExampleComponent extends React.Component {
     constructor(props) {
