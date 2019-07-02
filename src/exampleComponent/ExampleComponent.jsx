@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios'; // Alternative to fetch/XMLHttp
 import socket from '../socket';
+import Message from '../Message/Message';
 
 class ExampleComponent extends React.Component {
   constructor(props) {
@@ -42,6 +43,7 @@ class ExampleComponent extends React.Component {
         <button onClick={this.get}>Get</button>
         <button onClick={this.ping}>Ping</button>
         <div>{this.state.text}</div>
+        <Message />
       </>
     )
   }

@@ -33,8 +33,14 @@ module.exports = port => {
   });
 
   // Socket.io
+  let globalMessage = '';
   io.on('connection', function (socket) {
     console.log("Someone connected.");
+    socket.on('private message', function (msg) {
+      console.log('I received a private message saying ', msg);
+      globalMessage = msg;
+      io.emit("messages", globalMessage);
+    });
   });
 
   // Log in the user
