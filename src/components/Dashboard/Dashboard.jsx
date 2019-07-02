@@ -1,8 +1,9 @@
 import React from 'react';
-import Turn from '../components/Turn/Turn';
-import Cards from '../components/Cards/Cards';
+import Turn from '../Turn/Turn';
+import Cards from '../Cards/Cards';
+import Message from '../Message/Message';
 
-class ExampleComponent extends React.Component {
+class Dashboard extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
@@ -17,9 +18,10 @@ class ExampleComponent extends React.Component {
         <div>{this.state.text}</div>
         <Cards/>
         <Turn />
+        <Message />
       </>
     )
   }
 }
 
-export default ExampleComponent;
+export default Dashboard;

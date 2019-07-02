@@ -1,8 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom'
-import ExampleComponent from './exampleComponent/ExampleComponent';
+import Dashboard from './components/Dashboard/Dashboard';
 import Login from './components/Login/Login';
-import axios from 'axios';
 
 export default class Routes extends React.Component {
 
@@ -10,7 +9,7 @@ export default class Routes extends React.Component {
         return (
             <BrowserRouter>
                 <Route exact path='/' component={Login}/>
-                <Route path='/dashboard' component={ExampleComponent}/>
+                <Route path='/dashboard' component={Dashboard}/>
             </BrowserRouter>
         );
     }

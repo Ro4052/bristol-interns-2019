@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './css/index.css';
 import Login from './components/Login/Login';
 import Routes from './Router';
+import './index.css';
 
 ReactDOM.render(
     <Routes>
