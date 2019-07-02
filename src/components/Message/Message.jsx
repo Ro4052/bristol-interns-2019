@@ -8,8 +8,7 @@ class Message extends React.Component {
         super(props);
         this.state = {
             message: '',
-            currentValue: '',
-            box: true
+            currentValue: ''
         }
         this.handleChange = this.handleChange.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
@@ -24,25 +23,6 @@ class Message extends React.Component {
             });
             console.log(this.state.message);
         })
-        socket.on("gameState", msg => {
-            axios.get('/api/myTurn')
-            .then(response => {
-                if (response.status === 200) {
-                    this.setState({
-                        box: true
-                    });
-                } else {
-                    this.setState({
-                        box: false
-                    })
-                }
-            })
-            .catch(err => {
-                this.setState({
-                    box: false
-                });
-            })
-        });
         
     }
 
@@ -59,20 +39,20 @@ class Message extends React.Component {
     }
 
     render() {
-        if (this.state.box) {
-            return (
+        const box = (
+            <div>
+                <input onChange={this.handleChange} value={this.state.currentValue} placeholder="Type in your word" />
+                <button className="chat-button" onClick={this.sendMessage}>Send a message</button>
+            </div>
+        );
+        return (
+            <div>
+                {this.props.myTurn && box}
                 <div>
-                    <input onChange={this.handleChange} value={this.state.currentValue} placeholder="Type in your word" />
-                    <button className="chat-button" onClick={this.sendMessage}>Send a message</button>
-                    <div>
-                        <h1>{this.state.message}</h1>
-                        
-                    </div>
+                    <h1>{this.state.message}</h1>
                 </div>
-            )
-        } else {
-            return <></>
-        }
+            </div>
+        )
     }
 }
 
