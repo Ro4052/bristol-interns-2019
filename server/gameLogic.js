@@ -3,7 +3,8 @@ let gameState = {
     roundNum: 0,
     currentPlayer: null,
     players: [],
-    currentCards: []
+    currentCards: [],
+    currentWord: ""
 };
 
 /* Return the current game state */

@@ -54,7 +54,6 @@ class Dashboard extends React.Component {
             <button className={styles.logOutButton} onClick={this.logOut}>Log out</button>
             <PlayerCards/>
             <Turn />
-            <Message />
         </>
         )
     }

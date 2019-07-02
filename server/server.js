@@ -119,10 +119,9 @@ module.exports = port => {
         var user = currentUsers.find((user) => user.username === req.session.user);
         var currentuser = gameLogic.getGameState().currentPlayer;
         if (user === currentuser) {
-            res.sendStatus(200);
-            emitGameState();
-        }else {
-            res.sendStatus(404);
+            res.status(200).json({myTurn: true});
+        } else {
+            res.status(200).json({myTurn: false});
         }
     })
 
@@ -144,8 +143,8 @@ module.exports = port => {
         sockets.push(socket);
         emitGameState();
         socket.on('private message', function (msg) {
-            console.log('I received a private message saying ', msg);
             if (checkCurrentTurn(socket)) {
+                console.log('I received a private message saying ', msg);
                 globalMessage = msg;
                 io.emit("messages", globalMessage);
             }        
@@ -160,7 +159,18 @@ module.exports = port => {
 
     // Whenever a change is made to the game state, emit it
     const emitGameState = () => {
-        io.emit("gameState", gameLogic.getGameState());
+        for (let socket of sockets) {
+            let gameState = {...gameLogic.getGameState(), myTurn: checkCurrentTurn(socket)}
+            socket.emit("gameState", gameState);
+        }
+    }
+
+    // Get the player's socket
+    const getSocketByUsername = (username) => {
+        for (let socket of sockets) {
+            if (socket.handshake.session.user === gameLogic.getGameState().currentPlayer.username) return socket;
+        }
+        return null;
     }
 
     // Check if it's the sender's turn
