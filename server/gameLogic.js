@@ -13,7 +13,6 @@ exports.getGameState = () => {
 /* Add the player to the game if possible */
 exports.joinGame = player => {
     if (!gameState.started && !gameState.players.includes(player)) {
-        player = {...player, "finishedTurn": false};
         gameState.players.push(player);
     } else {
         // TODO
@@ -45,7 +44,7 @@ const incrementRound = () => {
     console.log("End of round!");
     gameState.roundNum++;
     gameState.players = gameState.players.map(player => {
-        return {...player, "finishedTurn": false}
+        return player
     });
     gameState.currentPlayer = gameState.players[gameState.roundNum % gameState.players.length];
 }
