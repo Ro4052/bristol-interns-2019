@@ -30,7 +30,7 @@ module.exports = port => {
     currentUsers = []
     server.listen(port, () => console.log(`Server running on port: ${port}`));
 
-    // Send index file
+    /* Send index file */
     app.get('/', (req, res) => {
         res.sendFile(path.join(__dirname, '../build/index.html'), (err) => {
         if (err) {
@@ -40,7 +40,7 @@ module.exports = port => {
         });
     });
 
-    // Check if player logged in
+    /* Check if player is logged in */
     app.get('/auth', (request, response) => {
         if (request.session.user) {
         response.sendStatus(200);
@@ -49,7 +49,7 @@ module.exports = port => {
         }
     });
 
-    // Get cards
+    /* Get cards */
     app.get('/api/cards', (req, res) => {
         if (currentUsers.length > 0) {
         var indexedBy = req.session.user;    
@@ -82,7 +82,7 @@ module.exports = port => {
         let user = {
             username: req.body.username,
             cards: newSet,
-            isMyTurn: false,
+            finishedTurn: false,
             score: 0
         };
         currentUsers.push(user);
@@ -94,14 +94,14 @@ module.exports = port => {
         }
     });
 
-    // Start the game
+    /* Start the game */
     app.get('/api/start', (req, res) => {
         gameLogic.startGame();
         emitGameState();
         res.sendStatus(200);
     });
 
-    // End your turn
+    /* End your turn */
     app.get('/api/endTurn', (req, res) => {
         const username = req.session.user;    
         gameLogic.endPlayerTurn(username);
