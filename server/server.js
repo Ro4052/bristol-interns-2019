@@ -25,9 +25,9 @@ module.exports = port => {
         cookie: {
         maxAge: 1800000
         }
-    }))
+    }));
 
-    currentUsers = []
+    let currentUsers = [];
     server.listen(port, () => console.log(`Server running on port: ${port}`));
 
     /* Send index file */
@@ -111,8 +111,8 @@ module.exports = port => {
 
     /* SOCKET */
 
-    let sockets = []
-    let globalMessage = ''
+    let sockets = [];
+    let globalMessage = '';
     
     // Setup connection
     io.on('connection', function (socket) {
