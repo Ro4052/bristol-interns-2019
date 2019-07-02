@@ -37,13 +37,12 @@ class Login extends React.Component {
             }
         })
         .catch(err => {
-            console.log(err);
             this.setState({
                 error: err.message
             })
         })
     }
-    render() {
+    render() {        
         return (
             <div className={styles.loginPage}>
             <form className={styles.loginForm} onSubmit={this.sendLogin.bind(this)}>
