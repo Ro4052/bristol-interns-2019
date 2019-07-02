@@ -1,6 +1,6 @@
 import React from 'react';
 import Turn from '../components/Turn/Turn';
-import Cards from '../Cards';
+import Cards from '../components/Cards/Cards';
 
 class ExampleComponent extends React.Component {
   constructor(props) {

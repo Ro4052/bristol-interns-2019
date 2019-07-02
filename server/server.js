@@ -3,7 +3,6 @@ const session = require('express-session');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const cookie = require('cookie');
 const gameLogic = require('./gameLogic');
 const cookieParser = require('cookie-parser')
 const cardManager = require('./cards');

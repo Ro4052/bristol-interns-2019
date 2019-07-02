@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom'
 import ExampleComponent from './exampleComponent/ExampleComponent';
-import Login from './Login';
+import Login from './components/Login/Login';
 import axios from 'axios';
 
 export default class Routes extends React.Component {

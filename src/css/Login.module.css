@@ -37,6 +37,10 @@
     cursor: pointer;
 }
 
+.loginButton:hover {
+    background-color: rgba(234, 53, 70, 0.9)
+}
+
 .formHeader {
     min-width: 300px;
     font-size: 2em;

@@ -1,7 +1,6 @@
 import React from 'react';
-import styles from './css/Login.module.css';
+import styles from '../../css/Login.module.css';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 
 class Login extends React.Component {
     constructor(props) {

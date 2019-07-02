@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import styles from './css/Cards.module.css';
+import styles from '../../css/Cards.module.css';
 
 export default class Cards extends React.Component {
     constructor() {
@@ -28,7 +28,7 @@ export default class Cards extends React.Component {
             for (var i = 0; i < response.data.length; i++) {
                 var index = response.data[i]
                 cards.push({
-                    url: require(`./cards/card (${index}).jpg`),
+                    url: require(`../cards/card (${index}).jpg`),
                     id: index
                 });
             }
