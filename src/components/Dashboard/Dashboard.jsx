@@ -1,6 +1,6 @@
 import React from 'react';
 import Turn from '../Turn/Turn';
-import Cards from '../Cards/Cards';
+import PlayerCards from '../Cards/PlayerCards';
 import Message from '../Message/Message';
 import styles from './Dashboard.module.css';
 import axios from 'axios';
@@ -12,6 +12,16 @@ class Dashboard extends React.Component {
             text: "Waiting for a button press..."
         }
         this.logOut = this.logOut.bind(this);
+    }
+    componentWillMount() {
+        axios.get('/auth')
+        .then((response) => {
+            if (response.status !== 200) {
+                window.location = '/';
+            }
+        }).catch(err => {
+            window.location = '/';
+        })
     }
     deleteAllCookies() {
         var cookies = document.cookie.split(";");
@@ -40,7 +50,7 @@ class Dashboard extends React.Component {
         <>
             <div>{this.state.text}</div>
             <button className={styles.logOutButton} onClick={this.logOut}>Log out</button>
-            <Cards/>
+            <PlayerCards/>
             <Turn />
             <Message />
         </>

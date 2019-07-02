@@ -2,7 +2,8 @@ let gameState = {
     started: false,
     roundNum: 0,
     currentPlayer: null,
-    players: []
+    players: [],
+    currentCards: []
 };
 
 /* Return the current game state */
@@ -65,4 +66,9 @@ const allPlayersFinishedTurn = () => {
         if (!player.finishedTurn) return false;
     }
     return true;
+}
+
+/* Adds player's card to list of played cards */
+exports.playCard = card => {
+    gameState.currentCards.push({id: card, hidden: true});
 }
