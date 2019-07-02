@@ -1,6 +1,6 @@
 import React from 'react';
 import Turn from '../Turn/Turn';
-import Cards from '../Cards/Cards';
+import PlayerCards from '../Cards/PlayerCards';
 import Message from '../Message/Message';
 import styles from './Dashboard.module.css';
 import axios from 'axios';
@@ -14,7 +14,16 @@ class Dashboard extends React.Component {
         }
         this.logOut = this.logOut.bind(this);
     }
-
+    componentWillMount() {
+        axios.get('/auth')
+        .then((response) => {
+            if (response.status !== 200) {
+                window.location = '/';
+            }
+        }).catch(err => {
+            window.location = '/';
+        })
+    }
     deleteAllCookies() {
         var cookies = document.cookie.split(";");
         for (var i = 0; i < cookies.length; i++) {
@@ -40,13 +49,13 @@ class Dashboard extends React.Component {
 
     render() {            
         return (
-            <>
-                <div>{this.state.text}</div>
-                <button className={styles.logOutButton} onClick={this.logOut}>Log out</button>
-                <Cards/>
-                <Turn />
-                <Message />
-            </>
+        <>
+            <div>{this.state.text}</div>
+            <button className={styles.logOutButton} onClick={this.logOut}>Log out</button>
+            <PlayerCards/>
+            <Turn />
+            <Message />
+        </>
         )
     }
 }

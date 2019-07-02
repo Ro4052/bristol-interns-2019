@@ -133,11 +133,17 @@ module.exports = port => {
         emitGameState();
         socket.on('private message', function (msg) {
             console.log('I received a private message saying ', msg);
-            if (socket.handshake.session.user === gameLogic.getGameState().currentPlayer.username) {
+            if (checkCurrentTurn(socket)) {
                 globalMessage = msg;
                 io.emit("messages", globalMessage);
             }        
         });
+        socket.on('play card', (cardID) => {
+            if (checkCurrentTurn(socket)) {
+                gameLogic.playCard(cardID)
+                emitGameState();
+            }
+        })
     });
 
     // Whenever a change is made to the game state, emit it
@@ -145,5 +151,13 @@ module.exports = port => {
         io.emit("gameState", gameLogic.getGameState());
     }
 
+    // Check if it's the sender's turn
+    const checkCurrentTurn = (socket) => {
+        if (gameLogic.getGameState().currentPlayer) {
+            return (socket.handshake.session.user === gameLogic.getGameState().currentPlayer.username)
+        } else {
+            return false;
+        }
+    }
 }
 

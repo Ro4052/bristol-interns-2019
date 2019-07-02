@@ -1,25 +1,16 @@
 import React from 'react';
 import axios from 'axios';
 import styles from './Cards.module.css';
+import socket from '../../socket';
 
 export default class Cards extends React.Component {
     constructor() {
         super();
         this.state = {
             cards: [],
-            playedCardText: ""
+            playedCardText: "",
+            myTurn: false
         }
-    }
-    componentWillMount() {
-        axios.get('/auth')
-        .then((response) => {
-            if (response.status !== 200) {
-                window.location = '/';
-            }
-        }).catch(err => {
-            console.log(err);
-            window.location = '/';
-        })
     }
     componentDidMount() {
         axios.get('/api/cards')
@@ -39,15 +30,31 @@ export default class Cards extends React.Component {
             console.log(err);
         })
     }
-    playCard(card) {
-        console.log(card.target.id);
-        this.setState({
-            playedCardText: "You played card " + card.target.id.toString()
+    checkMyTurn() {
+        axios.get('/api/myTurn')
+        .then(response => {
+            if (response.status === 200) {
+                this.setState({
+                    myTurn: true
+                })
+            }
         })
+        .catch(err => {
+            console.log(err);
+            this.setState({
+                myTurn: false
+            })
+        })
+    }
+    playCard(card) {
+        socket.emit("play card", card.target.id)
+    }
+    disableOnEndTurn() {
+        return (this.state.myTurn) ? styles.singleCard : styles.disabledCard
     }
     render() {        
         const cardsImages = this.state.cards.map((card, index) => (
-            <img id={card.id} className={styles.singleCard} key={card.id} src={card.url} onClick={this.playCard.bind(this)}/>
+            <img id={card.id} alt='' className={this.disableOnEndTurn()} key={card.id} src={card.url} onClick={this.playCard.bind(this)}/>
         ))
         return (
             <div className={styles.cardsContainer}>
