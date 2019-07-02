@@ -28,7 +28,7 @@ export default class Cards extends React.Component {
             for (var i = 0; i < response.data.length; i++) {
                 var index = response.data[i]
                 cards.push({
-                    url: require(`../cards/card (${index}).jpg`),
+                    url: require(`../../cards/card (${index}).jpg`),
                     id: index
                 });
             }

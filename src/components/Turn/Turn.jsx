@@ -7,21 +7,20 @@ class Turn extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            users: [],
-            roundInfo: {}
+            gameState: {
+                started: false,
+                roundNum: 0,
+                currentPlayer: null,
+                players: []
+            }
         }
         this.startGame = this.startGame.bind(this);
     }
 
     componentDidMount() {
-        socket.on("players", msg => {
-            this.setState({users: msg});
-        });
-        socket.on("startRound", msg => {
-            console.log("startRound", msg);
-            this.setState({
-                roundInfo: msg
-            });
+        socket.on("gameState", msg => {
+            // console.log(msg);
+            this.setState({ gameState: msg });
         });
     }
 
@@ -48,24 +47,22 @@ class Turn extends React.Component {
 
     render() {
         let currentUsername = 'no one';
-        if (this.state.roundInfo.currentPlayer) {
-            currentUsername = this.state.roundInfo.currentPlayer.username || 'no one';
+        if (this.state.gameState.currentPlayer) {
+            currentUsername = this.state.gameState.currentPlayer.username;
         }
         return (
             <div>
-                <div>
-                    <div>Round: {this.state.roundInfo.roundNum}</div>
-                    Players:
-                    <ul>
-                        {this.state.users.map((user, key) => {
-                            return <li key={key}>{user.username}</li>
-                        })}
-                    </ul>
-                </div>
+                <div>Round: {this.state.gameState.roundNum}</div>
+                Players:
+                <ul>
+                    {this.state.gameState.players.map((player, key) => {
+                        return <li key={key}>{player.username}</li>
+                    })}
+                </ul>
                 <div>
                     {`It's ${currentUsername}'s turn.`}
                 </div>
-                <button onClick={this.startGame}>Start game</button>
+                {!this.state.gameState.started && <button onClick={this.startGame}>Start game</button>}
                 <button onClick={this.endTurn}>Next turn</button>
             </div>
         )

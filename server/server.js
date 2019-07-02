@@ -40,14 +40,13 @@ module.exports = port => {
     });
   });
 
-  // Start the game
-  app.get('/api/start', (req, res) => {
-    gameLogic.initGame();
-    const roundInfo = {
-      currentPlayer: gameLogic.getCurrentPlayer()
+  // Check if player logged in
+  app.get('/auth', (request, response) => {
+    if (request.session.user) {
+      response.sendStatus(200);
+    } else {
+      response.sendStatus(404);
     }
-    io.emit("startRound", roundInfo);
-    res.status(200);
   });
 
   // Get cards
@@ -58,29 +57,6 @@ module.exports = port => {
       res.status(200).json(user.cards);
     } else {
       res.sendStatus(404);
-    }
-  });
-
-  // End your turn
-  app.get('/api/endTurn', (req, res) => {
-    const indexedBy = req.session.user;    
-    const player = currentUsers.find((player) => player.username === indexedBy);
-    // End their turn
-    gameLogic.endPlayerTurn(player);
-    // If last player, go next turn
-    if (gameLogic.allPlayersFinishedTurn()) {
-      console.log("End of round!");
-      gameLogic.incrementRound();
-      emitRoundInfo();
-    }
-    res.sendStatus(200);
-  });
-
-  app.get('/auth', (request, response) => {
-    if (request.session.user) {
-      response.sendStatus(200);
-    } else {
-      response.sendStatus(404);
     }
   });
 
@@ -111,26 +87,43 @@ module.exports = port => {
       };
       currentUsers.push(user);
       gameLogic.joinGame(user);
-      emitAllPlayers();
+      emitGameState();
       res.sendStatus(200);
     } else {
       res.status(405).json({message: "User already exists"});
     }
   });
 
-  // Socket.io
-  io.on('connection', function (socket) {
-    console.log("Someone connected.");
-    emitAllPlayers();
+  // Start the game
+  app.get('/api/start', (req, res) => {
+    gameLogic.startGame();
+    emitGameState();
+    res.sendStatus(200);
   });
 
-  /* SOCKETIO HELPERS */
-  const emitAllPlayers = () => {
-    io.emit("players", gameLogic.getPlayers());
+  // End your turn
+  app.get('/api/endTurn', (req, res) => {
+    const username = req.session.user;    
+    gameLogic.endPlayerTurn(username);
+    emitGameState();
+    res.sendStatus(200);
+  });
+
+  /* SOCKET */
+
+  let sockets = []
+
+  // Setup connection
+  io.on('connection', function (socket) {
+      console.log("Someone connected.");
+      sockets.push(socket);
+      emitGameState();
+  });
+
+  // Whenever a change is made to the game state, emit it
+  const emitGameState = () => {
+      io.emit("gameState", gameLogic.getGameState());
   }
 
-  const emitRoundInfo = () => {
-    io.emit("startRound", gameLogic.getRoundInfo());
-  }
 }
 
