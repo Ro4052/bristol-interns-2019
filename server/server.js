@@ -114,6 +114,18 @@ module.exports = port => {
         res.sendStatus(200);
     });
 
+    /* Check if it's my turn */
+    app.get('/api/myTurn', (req,res) => {
+        var user = currentUsers.find((user) => user.username === req.session.user);
+        var currentuser = gameLogic.getGameState().currentPlayer;
+        if (user === currentuser) {
+            res.sendStatus(200);
+            emitGameState();
+        }else {
+            res.sendStatus(404);
+        }
+    })
+
     /* End your turn */
     app.get('/api/endTurn', (req, res) => {
         const username = req.session.user;    
