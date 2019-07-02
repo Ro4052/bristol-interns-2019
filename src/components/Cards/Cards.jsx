@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import styles from './css/Cards.module.css';
+import styles from './Cards.module.css';
 
 export default class Cards extends React.Component {
     constructor() {
