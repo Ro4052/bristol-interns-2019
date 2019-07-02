@@ -59,7 +59,7 @@ module.exports = port => {
             };
             currentUsers.push(user);
             gameLogic.joinGame(user);
-            emitAllPlayers();
+            emitGameState();
             res.sendStatus(200);
         } else {
             res.sendStatus(405);
@@ -69,7 +69,7 @@ module.exports = port => {
     // Start the game
     app.get('/api/start', (req, res) => {
         gameLogic.initGame();
-        emitRoundInfo();
+        emitGameState();
         res.sendStatus(200);
     });
 
@@ -83,24 +83,25 @@ module.exports = port => {
         if (gameLogic.allPlayersFinishedTurn()) {
             console.log("End of round!");
             gameLogic.incrementRound();
-            emitRoundInfo();
+            emitGameState();
         }
         res.sendStatus(200);
     });
 
-    // Socket.io
+    /* SOCKET */
+
+    let sockets = []
+
+    // Setup connection
     io.on('connection', function (socket) {
         console.log("Someone connected.");
-        emitAllPlayers();
+        sockets.push(socket);
+        emitGameState();
     });
 
-    /* SOCKETIO HELPERS */
-    const emitAllPlayers = () => {
-        io.emit("players", gameLogic.getPlayers());
-    }
-
-    const emitRoundInfo = () => {
-        io.emit("startRound", gameLogic.getRoundInfo());
+    // Whenever a change is made to the game state, emit it
+    const emitGameState = () => {
+        io.emit("players", gameLogic.getGameState());
     }
 
 }

@@ -1,48 +1,51 @@
-let roundNum = 0;
-let players = [];
+let gameState = {
+    started: false,
+    roundNum: 0,
+    currentPlayer: null,
+    players: []
+};
 
-exports.initGame = () => {
-    players = players.map(player => {
-        return {...player, "finishedTurn": false}
-    });
+/* Return the current game state */
+exports.getGameState = () => {
+    return gameState;
 }
 
-exports.getRoundInfo = () => {
-    return {
-        roundNum: roundNum,
-        currentPlayer: this.getCurrentPlayer()
-    };
-}
-
-exports.incrementRound = () => {
-    roundNum++;
-    players = players.map(player => {
-        return {...player, "finishedTurn": false}
-    });
-}
-
-exports.getPlayerIndexByUsername = username => {
-    return players.findIndex(player => player.username === username);
-}
-
-exports.getPlayers = () => {
-    return players;
-}
-
-exports.getCurrentPlayer = () => {
-    return players[roundNum % players.length];
-}
-
+/* Add the player to the game if possible */
 exports.joinGame = player => {
-    players.push(player);
+    if (!gameState.started && !gameState.players.includes(player)) {
+        player = {...player, "finishedTurn": false};
+        gameState.players.push(player);
+    } else {
+        // TODO
+        // - Game has started, player can't join
+        // - Player has already joined
+    }
 }
 
+/* Start the game with the players that have joined */
+exports.startGame = () => {
+    // TODO: Min players
+    gameState.started = true;
+    gameState.currentPlayer = gameState.players[0];
+}
+
+/* Call when a player finishes their turn */
 exports.endPlayerTurn = player => {
-    players[this.getPlayerIndexByUsername(player.username)].finishedTurn = true;
+    gameState.players[this.getPlayerIndexByUsername(player.username)].finishedTurn = true;
+    if (allPlayersFinishedTurn()) incrementRound();
 }
 
-exports.allPlayersFinishedTurn = () => {
-    for (let player of players) {
+/* Move on to the next round, called when all players have finished their turn */
+const incrementRound = () => {
+    gameState.roundNum++;
+    gameState.players = gameState.players.map(player => {
+        return {...player, "finishedTurn": false}
+    });
+}
+
+/* Returns true if all players have finished the current turn */
+const allPlayersFinishedTurn = () => {
+    for (let player of gameState.players) {
         if (!player.finishedTurn) return false;
     }
     return true;
