@@ -2,6 +2,7 @@ import React from 'react';
 import Turn from '../Turn/Turn';
 import Cards from '../Cards/Cards';
 import Message from '../Message/Message';
+import styles from './Dashboard.module.css';
 import axios from 'axios';
 
 class Dashboard extends React.Component {
@@ -38,7 +39,7 @@ class Dashboard extends React.Component {
         return (
         <>
             <div>{this.state.text}</div>
-            <button onClick={this.logOut}>Log out</button>
+            <button className={styles.logOutButton} onClick={this.logOut}>Log out</button>
             <Cards/>
             <Turn />
             <Message />
