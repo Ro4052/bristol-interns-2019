@@ -1,5 +1,5 @@
 const express = require('express');
-const session = require('express-session');
+const sharedsession = require("express-socket.io-session");
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -16,17 +16,15 @@ module.exports = port => {
     app.use(bodyParser.json());
     app.use(cors());
     app.use(cookieParser());
-    app.use(session({
+    var session = require('express-session')({
         name: 'username',
         secret: 'my-cool-secret',
         resave: false,
         saveUninitialized: false,
-        secure: true,
-        cookie: {
-            httpOnly: false,
-            maxAge: 1800000
-        }
-    }))
+        secure: true
+    });
+    app.use(session)
+    io.use(sharedsession(session));
 
     currentUsers = []
     server.listen(port, () => console.log(`Server running on port: ${port}`));
@@ -62,9 +60,7 @@ module.exports = port => {
     });
 
     /* Send a random set of cards to user */
-    app.get('/api/cards', (req, res) => {
-        console.log(req.session.user);
-        
+    app.get('/api/cards', (req, res) => {        
         if (req.session.user) {
         var indexedBy = req.session.user;    
         var user = currentUsers.find((user) => user.username === indexedBy);    
@@ -78,13 +74,14 @@ module.exports = port => {
     app.post('/auth/login', (req, res) => {
         var user = currentUsers.find((user) => user.username === req.body.username);
         if (!user) {
-        req.session.user = req.body.username;      
+        req.session.user = req.body.username;
         var newSet = cardManager.assign(currentUsers, 3 /* number of cards per user */);
         let user = {
             username: req.body.username,
             cards: newSet,
             finishedTurn: false,
-            score: 0
+            score: 0,
+            cookie: req.headers.cookie
         };
         currentUsers.push(user);
         gameLogic.joinGame(user);
@@ -100,9 +97,7 @@ module.exports = port => {
         var user = currentUsers.find((user) => user.username === req.session.user);
         if (user) {
             currentUsers = currentUsers.filter((otherUser) => otherUser !== user);
-            gameLogic.quitGame(user);
-            console.log(gameLogic.getGameState());
-            
+            gameLogic.quitGame(user);            
             emitGameState();
             req.session.destroy();
             res.sendStatus(200);
@@ -133,13 +128,14 @@ module.exports = port => {
     
     // Setup connection
     io.on('connection', function (socket) {
-        console.log("Someone connected.");
         sockets.push(socket);
         emitGameState();
         socket.on('private message', function (msg) {
             console.log('I received a private message saying ', msg);
-            globalMessage = msg;
-            io.emit("messages", globalMessage);
+            if (socket.handshake.session.user === gameLogic.getGameState().currentPlayer.username) {
+                globalMessage = msg;
+                io.emit("messages", globalMessage);
+            }        
         });
     });
 
