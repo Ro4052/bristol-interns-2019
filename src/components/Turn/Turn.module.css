@@ -1,0 +1,15 @@
+.roundInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--main-font);
+}
+
+.currentPlayersBox {
+    width: 20%;
+}
+
+.currentPlayersBox > ul {
+    list-style: none;
+}
