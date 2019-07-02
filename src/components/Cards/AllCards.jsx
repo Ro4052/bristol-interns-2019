@@ -1,13 +1,16 @@
 import React from 'react';
 
 export default class AllCards extends React.Component {
-    constructor(props) {
-        super(props);
+    getCardItems() {
+        if (this.props.cards) {
+            return this.props.cards.map(card => (
+                <li key={card.id}>{card.id}</li>
+            ))
+        }
+        return <></>;
     }
     render() {
-        const cardItems = this.props.cards.map(card => (
-            <li key={card.id}>{card.id}</li>
-        ))
+        const cardItems = this.getCardItems();
         return (
             <div className="playedCards">
                 {cardItems}

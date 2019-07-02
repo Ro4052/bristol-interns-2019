@@ -41,12 +41,12 @@ exports.startGame = () => {
 
 /* Call when a player finishes their turn */
 exports.endPlayerTurn = username => {
-    gameState.players[getPlayerByUsername(username)].finishedTurn = true;
+    gameState.players[getPlayerIndexByUsername(username)].finishedTurn = true;
     if (allPlayersFinishedTurn()) incrementRound();
 }
 
 /* Get the index of the player in the list */
-const getPlayerByUsername = username => {
+const getPlayerIndexByUsername = username => {
     return gameState.players.findIndex(player => player.username === username);
 }
 
@@ -55,7 +55,7 @@ const incrementRound = () => {
     console.log("End of round!");
     gameState.roundNum++;
     gameState.players = gameState.players.map(player => {
-        return player
+        return {...player, finishedTurn: false};
     });
     gameState.currentPlayer = gameState.players[gameState.roundNum % gameState.players.length];
 }

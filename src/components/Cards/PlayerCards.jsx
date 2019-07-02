@@ -54,7 +54,7 @@ export default class Cards extends React.Component {
     }
     render() {        
         const cardsImages = this.state.cards.map((card, index) => (
-            <img id={card.id} className={this.disableOnEndTurn()} key={card.id} src={card.url} onClick={this.playCard.bind(this)}/>
+            <img id={card.id} alt='' className={this.disableOnEndTurn()} key={card.id} src={card.url} onClick={this.playCard.bind(this)}/>
         ))
         return (
             <div className={styles.cardsContainer}>

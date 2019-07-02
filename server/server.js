@@ -6,6 +6,7 @@ const cors = require('cors');
 const gameLogic = require('./gameLogic');
 const cookieParser = require('cookie-parser')
 const cardManager = require('./cards');
+const expressSession = require('express-session');
 
 module.exports = port => {
     const app = express();
@@ -16,17 +17,17 @@ module.exports = port => {
     app.use(bodyParser.json());
     app.use(cors());
     app.use(cookieParser());
-    var session = require('express-session')({
+    var session = expressSession({
         name: 'username',
         secret: 'my-cool-secret',
         resave: false,
         saveUninitialized: false,
         secure: true
     });
-    app.use(session)
+    app.use(session);
     io.use(sharedsession(session));
 
-    currentUsers = []
+    let currentUsers = [];
     server.listen(port, () => console.log(`Server running on port: ${port}`));
 
     /* Send index file */
@@ -123,8 +124,8 @@ module.exports = port => {
 
     /* SOCKET */
 
-    let sockets = []
-    let globalMessage = ''
+    let sockets = [];
+    let globalMessage = '';
     
     // Setup connection
     io.on('connection', function (socket) {
