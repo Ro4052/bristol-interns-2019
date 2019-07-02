@@ -10,16 +10,6 @@ class Login extends React.Component {
             error: ""
         }
     }
-    componentWillMount() {
-        axios.get('/auth')
-        .then((response) => {
-            if (response.status === 200) {
-                window.location = '/dashboard';
-            }
-        }).catch(err => {
-            console.log(err);
-        })
-    }
     handleChange(event) {
         event.preventDefault();
         this.setState({

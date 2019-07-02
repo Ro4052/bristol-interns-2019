@@ -1,6 +1,7 @@
 import React from 'react';
 import socket from '../../socket';
 import axios from 'axios';
+import AllCards from '../Cards/AllCards'
 
 class Turn extends React.Component {
 
@@ -11,7 +12,8 @@ class Turn extends React.Component {
                 started: false,
                 roundNum: 0,
                 currentPlayer: null,
-                players: []
+                players: [],
+                currentCards: []
             }
         }
         this.startGame = this.startGame.bind(this);
@@ -46,6 +48,8 @@ class Turn extends React.Component {
     }
 
     render() {
+        console.log(this.state.gameState.currentCards);
+        
         let currentUsername = 'no one';
         if (this.state.gameState.currentPlayer) {
             currentUsername = this.state.gameState.currentPlayer.username;
@@ -64,6 +68,7 @@ class Turn extends React.Component {
                 </div>
                 {!this.state.gameState.started && <button onClick={this.startGame}>Start game</button>}
                 <button onClick={this.endTurn}>Next turn</button>
+                <AllCards cards={this.state.gameState.currentCards}/>
             </div>
         )
     }

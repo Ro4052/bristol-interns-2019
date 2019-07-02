@@ -6,6 +6,7 @@ const cors = require('cors');
 const gameLogic = require('./gameLogic');
 const cookieParser = require('cookie-parser')
 const cardManager = require('./cards');
+const expressSession = require('express-session');
 
 module.exports = port => {
     const app = express();
@@ -16,17 +17,17 @@ module.exports = port => {
     app.use(bodyParser.json());
     app.use(cors());
     app.use(cookieParser());
-    var session = require('express-session')({
+    var session = expressSession({
         name: 'username',
         secret: 'my-cool-secret',
         resave: false,
         saveUninitialized: false,
         secure: true
     });
-    app.use(session)
+    app.use(session);
     io.use(sharedsession(session));
 
-    currentUsers = []
+    let currentUsers = [];
     server.listen(port, () => console.log(`Server running on port: ${port}`));
 
     /* Send index file */
@@ -135,8 +136,8 @@ module.exports = port => {
 
     /* SOCKET */
 
-    let sockets = []
-    let globalMessage = ''
+    let sockets = [];
+    let globalMessage = '';
     
     // Setup connection
     io.on('connection', function (socket) {
@@ -144,11 +145,17 @@ module.exports = port => {
         emitGameState();
         socket.on('private message', function (msg) {
             console.log('I received a private message saying ', msg);
-            if (socket.handshake.session.user === gameLogic.getGameState().currentPlayer.username) {
+            if (checkCurrentTurn(socket)) {
                 globalMessage = msg;
                 io.emit("messages", globalMessage);
             }        
         });
+        socket.on('play card', (cardID) => {
+            if (checkCurrentTurn(socket)) {
+                gameLogic.playCard(cardID)
+                emitGameState();
+            }
+        })
     });
 
     // Whenever a change is made to the game state, emit it
@@ -156,5 +163,13 @@ module.exports = port => {
         io.emit("gameState", gameLogic.getGameState());
     }
 
+    // Check if it's the sender's turn
+    const checkCurrentTurn = (socket) => {
+        if (gameLogic.getGameState().currentPlayer) {
+            return (socket.handshake.session.user === gameLogic.getGameState().currentPlayer.username)
+        } else {
+            return false;
+        }
+    }
 }
 

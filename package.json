@@ -26,7 +26,7 @@
     "start:devserver": "nodemon server.js --watch ./server --watch ./server.js",
     "start:devclient": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --coverage --watchAll=false",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -47,5 +47,12 @@
   "devDependencies": {
     "http-proxy-middleware": "^0.19.1",
     "nodemon": "^1.19.1"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/components/**/*.{js,jsx,ts,tsx}",
+      "!<rootDir>/node_modules/",
+      "!<rootDir>/path/to/dir/"
+    ]
   }
 }

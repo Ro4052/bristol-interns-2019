@@ -18,3 +18,11 @@
 .singleCard:hover {
     transform: translate3d(0, -10px, 0);
 }
+
+.disabledCard {
+    margin: 0 10px;
+    border: 2px solid black;
+    border-radius: 3vmin;
+    width: 30vmin;
+    opacity: 0.7;
+}
