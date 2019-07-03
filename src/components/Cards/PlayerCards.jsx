@@ -1,33 +1,28 @@
 import React from 'react';
-import axios from 'axios';
 import styles from './Cards.module.css';
 import socket from '../../socket';
+import { connect } from 'react-redux';
 
-export default class Cards extends React.Component {
+class PlayerCards extends React.Component {
     constructor() {
         super();
         this.state = {
-            cards: [],
+            cardImages: [],
             playedCardText: ""
         }
     }
-    componentDidMount() {
-        axios.get('/api/cards')
-        .then((response) => {
-            var cards = [];
-            for (var i = 0; i < response.data.length; i++) {
-                var index = response.data[i]
-                cards.push({
+    getPlayerCards() {
+        let cardImages = [];
+        if (this.props.currentPlayer) {
+            for (let i = 0; i < this.props.currentPlayer.cards.length; i++) {
+                let index = this.props.currentPlayer.cards[i]
+                cardImages.push({
                     url: require(`./cards/card (${index}).jpg`),
                     id: index
                 });
             }
-            this.setState({
-                cards: cards
-            })
-        }).catch(err => {
-            console.log(err);
-        })
+        }
+        return cardImages;
     }
     playCard(card) {
         socket.emit("play card", card.target.id)
@@ -35,8 +30,9 @@ export default class Cards extends React.Component {
     disableOnEndTurn() {
         return (this.props.myTurn) ? styles.singleCard : styles.disabledCard
     }
-    render() {        
-        const cardsImages = this.state.cards.map((card, index) => (
+    render() {
+        
+        const cardsImages = this.getPlayerCards().map((card) => (
             <img id={card.id} alt='' className={this.disableOnEndTurn()} key={card.id} src={card.url} onClick={this.playCard.bind(this)}/>
         ))
         return (
@@ -47,3 +43,12 @@ export default class Cards extends React.Component {
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return ({
+        myTurn: state.gameState.myTurn,
+        currentPlayer: state.gameState.currentPlayer
+    });
+};
+
+export default connect(mapStateToProps)(PlayerCards);
