@@ -7,6 +7,7 @@ import PlayerCards from '../Cards/PlayerCards';
 import style from './Dashboard.module.css';
 import axios from 'axios';
 import { setGameState } from '../../store/actions';
+import { LogoutButton } from '../Login/LogoutButton';
 
 class Dashboard extends React.Component {
 
@@ -64,6 +65,7 @@ class Dashboard extends React.Component {
                 <AllCards />
                 <PlayerCards />
                 <Message />
+                <LogoutButton/>
             </div>
         )
     }

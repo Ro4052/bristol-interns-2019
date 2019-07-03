@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './Cards.module.css';
 import socket from '../../socket';
 import { connect } from 'react-redux';
+import Axios from 'axios';
 
 export class PlayerCards extends React.Component {
     constructor() {
@@ -11,18 +12,15 @@ export class PlayerCards extends React.Component {
             playedCardText: ""
         }
     }
-    getPlayerCards() {
+    componentDidMount() {
         let cardImages = [];
-        if (this.props.currentPlayer) {
-            for (let i = 0; i < this.props.currentPlayer.cards.length; i++) {
-                let index = this.props.currentPlayer.cards[i]
-                cardImages.push({
-                    url: require(`./cards/card (${index}).jpg`),
-                    id: index
-                });
-            }
-        }
-        return cardImages;
+        Axios.get('/api/cards')
+        .then(response => {
+            console.log(response.data);
+        })
+        .catch(err => {
+            console.log(err);
+        })
     }
     playCard(card) {
         socket.emit("play card", card.target.id)

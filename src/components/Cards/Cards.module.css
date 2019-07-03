@@ -10,7 +10,8 @@
     margin: 0 10px;
     border: 2px solid black;
     border-radius: 3vmin;
-    width: 30vmin;
+    width: 25vmin;
+    height: 40vmin;
     cursor: pointer;
     transition: 0.5s;
 }

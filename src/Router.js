@@ -2,9 +2,26 @@ import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom'
 import Dashboard from './components/Dashboard/Dashboard';
 import Login from './components/Login/Login';
+import axios from 'axios';
 
 export default class Routes extends React.Component {
-
+    componentWillMount() {
+        axios.get('/auth')
+        .then((response) => {
+            if (response.status === 200) {
+                if (response.data.loggedIn && window.location.pathname !== '/dashboard') {
+                    window.location = '/dashboard'
+                } 
+                if (!response.data.loggedIn && window.location.pathname === '/dashboard') {
+                    window.location = '/';
+                }
+            }
+        }).catch(err => {
+            if (window.location.pathname !== '/') {
+                window.location = '/';
+            }
+        })
+    }
     render() {
         return (
             <BrowserRouter>
