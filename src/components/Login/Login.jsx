@@ -16,10 +16,29 @@ class Login extends React.Component {
           value: event.target.value
         })
     }
+    sendLogin(event) {
+        event.preventDefault();
+        axios.post('/auth/login', {
+            username: this.state.value
+        })
+        .then(response => {
+            if (response.status === 200) {
+                this.setState ({
+                    loggedIn: true
+                })
+            }
+        })
+        .catch(err => {
+            this.setState({
+                loggedIn: false,
+                error: err.message
+            })
+        })
+    }
     render() {        
         return (
             <div className={styles.loginPage}>
-            <form className={styles.loginForm} onSubmit={this.props.sendLogin.bind(this)}>
+            <form className={styles.loginForm} onSubmit={this.sendLogin.bind(this)}>
                 <h3 className={styles.errorText}>{this.state.error}</h3>
                 <h2 className={styles.formHeader}>Type a username to enter the game:</h2>
                 <input className={styles.loginInput} placeholder="Type in your username" onChange={this.handleChange.bind(this)} autoFocus/>
