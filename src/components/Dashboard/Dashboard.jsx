@@ -6,7 +6,7 @@ import Message from '../Message/Message'
 import PlayerCards from '../Cards/PlayerCards';
 import style from './Dashboard.module.css';
 import axios from 'axios';
-import { setGameState } from '../../store/actions';
+import { setGameState, setMessage } from '../../store/actions';
 
 class Dashboard extends React.Component {
 
@@ -17,10 +17,10 @@ class Dashboard extends React.Component {
     }
     componentDidMount() {
         socket.on("gameState", msg => {
-            // this.setState({ gameState: msg });
-            console.log(msg);
-            
             this.props.setGameState(msg);
+        });
+        socket.on("messages", msg => {
+            this.props.setMessage(msg);
         });
     }
     startGame() {
@@ -76,7 +76,8 @@ const mapStateToProps = (state, props) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    setGameState: gameState => dispatch(setGameState(gameState))
+    setGameState: gameState => dispatch(setGameState(gameState)),
+    setMessage: message => dispatch(setMessage(message))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
