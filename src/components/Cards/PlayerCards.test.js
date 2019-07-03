@@ -1,6 +1,17 @@
 import React from 'react';
 import { PlayerCards } from './PlayerCards';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
+import moxios from 'moxios'
+import axios from 'axios';
+const express = require('express');
+const server = require('./mockserver');
+const request = require('supertest');
+
+const initServer = () => {
+    const app = express();
+    app.use(server);
+    return app;
+}
 
 describe('on initial render', () => {
     it('renders without crashing', () => {
@@ -12,13 +23,6 @@ describe('on initial render', () => {
     })
 })
 
-const helper = {
-    play(id) {
-      return id;
-    },
-};
-
-
 describe('on given a set of cards', () => {
     let playerCards = [1, 2, 3];
     it('displays the correct number of cards', () => {
@@ -26,9 +30,7 @@ describe('on given a set of cards', () => {
         expect(wrapper.find('ul').children().length).toEqual(3);
     })
     it('displays the correct card images', () => {
-        const wrapper = shallow(<PlayerCards cards={playerCards} fetchCards={() => {}} playCard={() => {}}/>);
-        console.log(wrapper.find('ul').children());
-        
+        const wrapper = shallow(<PlayerCards cards={playerCards} fetchCards={() => {}} playCard={() => {}}/>);        
         expect(wrapper.find('ul').children().length).toEqual(3);
     })
     it('is able to play a chosen card', () => {
@@ -41,3 +43,50 @@ describe('on given a set of cards', () => {
     })
 })
 
+const helper = {
+    fetchCards () {
+        return axios.get('/api/cards')
+    }
+}
+
+describe('moxios', () => {
+    it('should install', () => {
+      let defaultAdapter = axios.defaults.adapter
+      moxios.install()
+      expect(axios.defaults.adapter === defaultAdapter).toEqual(false);
+      moxios.uninstall()
+    })
+
+    it('should uninstall', () => {
+        let defaultAdapter = axios.defaults.adapter
+        moxios.install()
+        moxios.uninstall()
+        expect(axios.defaults.adapter === defaultAdapter).toEqual(true);
+    })    
+
+    describe('GET /api/cards', () => {
+        beforeEach(() => {
+            moxios.install()
+        })
+    
+        afterEach(() => {
+            moxios.uninstall()
+        })
+
+        it('should get cards', () => {
+            moxios.stubRequest('/api/cards', {
+                status: 200,
+                response: {
+                    cards: [1, 2, 3]
+                }
+            });
+
+            axios.get('/api/cards').then(response => {
+                let cards = response.data.cards;
+                const wrapper = shallow(<PlayerCards cards={cards} fetchCards={() => {}} playCard={() => {}}/>);
+                expect(wrapper.find('ul').children().length).toEqual(3)
+            })
+            
+        })
+    })
+})

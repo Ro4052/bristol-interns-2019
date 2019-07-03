@@ -16,21 +16,46 @@ export class Login extends React.Component {
           value: event.target.value
         })
     }
+    checkSpecialChar(string) {        
+        var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+        if (format.test(string)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    checkUsername() {
+        if (this.state.value === '') {
+            window.alert('Please provide a username');
+            return false;
+        }
+        if (this.checkSpecialChar(this.state.value)) {
+            window.alert('Please provide a valid username')
+            return false;
+        }
+        return true;
+    }
     sendLogin(event) {
         event.preventDefault();
-        axios.post('/auth/login', {
-            username: this.state.value
-        })
-        .then(response => {
-            if (response.status === 200) {
-                window.location = '/dashboard';
-            }
-        })
-        .catch(err => {
-            this.setState({
-                error: err.message
+        if (this.checkUsername()) {
+            axios.post('/auth/login', {
+                username: this.state.value
             })
-        })
+            .then(response => {                
+                if (response.data.message === "OK") {
+                    window.location = '/dashboard';
+                } else {
+                    this.setState({
+                        error: response.data.message
+                    })
+                }
+            })
+            .catch(err => {
+                this.setState({
+                    error:  err.message
+                })
+            })
+        }
     }
     render() {        
         return (

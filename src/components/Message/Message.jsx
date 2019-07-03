@@ -21,8 +21,6 @@ export class Message extends React.Component {
 
     sendMessage() {
         // Get value of input
-        console.log(this.state.currentValue);
-
         socket.emit("private message", this.state.currentValue);
     }
 

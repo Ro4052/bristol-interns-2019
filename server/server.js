@@ -77,9 +77,9 @@ module.exports = port => {
             currentUsers.push(user);
             gameLogic.joinGame(user);
             emitGameState();
-            res.sendStatus(200);
+            res.status(200).json({message: "OK"});
         } else {
-            res.status(404).json({message: "User already exists"});
+            res.status(200).json({message: "User already exists"});
         }
     });
 
@@ -143,9 +143,7 @@ module.exports = port => {
     
     // Setup connection
     io.on('connection', function (socket) {
-        sockets.push(socket);
-        console.log(socket.handshake.session);
-        
+        sockets.push(socket);        
         emitGameState();
         socket.on('private message', function (msg) {
             if (checkCurrentTurn(socket)) {
