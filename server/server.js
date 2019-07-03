@@ -98,10 +98,13 @@ module.exports = port => {
         var user = currentUsers.find((user) => user.username === req.session.user);
         if (user) {
             currentUsers = currentUsers.filter((otherUser) => otherUser !== user);
-            gameLogic.quitGame(user);            
-            emitGameState();
-            req.session.destroy();
-            res.sendStatus(200);
+            if (gameLogic.quitGame(user)) {
+                emitGameState();
+                req.session.destroy();
+                res.sendStatus(200);
+            } else {
+                res.sendStatus(400)
+            }
         } else {
             res.status(404).json({message: "Cannot log out: user does not exist."});
         }

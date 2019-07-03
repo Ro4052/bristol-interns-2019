@@ -8,8 +8,7 @@ export default class Cards extends React.Component {
         super();
         this.state = {
             cards: [],
-            playedCardText: "",
-            myTurn: false
+            playedCardText: ""
         }
     }
     componentDidMount() {
@@ -30,27 +29,11 @@ export default class Cards extends React.Component {
             console.log(err);
         })
     }
-    checkMyTurn() {
-        axios.get('/api/myTurn')
-        .then(response => {
-            if (response.status === 200) {
-                this.setState({
-                    myTurn: true
-                })
-            }
-        })
-        .catch(err => {
-            console.log(err);
-            this.setState({
-                myTurn: false
-            })
-        })
-    }
     playCard(card) {
         socket.emit("play card", card.target.id)
     }
     disableOnEndTurn() {
-        return (this.state.myTurn) ? styles.singleCard : styles.disabledCard
+        return (this.props.myTurn) ? styles.singleCard : styles.disabledCard
     }
     render() {        
         const cardsImages = this.state.cards.map((card, index) => (

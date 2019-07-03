@@ -27,9 +27,10 @@ exports.joinGame = player => {
 exports.quitGame = player => {
     if (!gameState.started && gameState.players.includes(player)) {
         gameState.players = gameState.players.filter((otherPlayer) => otherPlayer !== player);
+        return true;
     } else {
-        // TODO
-        // - Game has started, player can't quit
+        // Game has started, player can't quit
+        return false;
     }
 }
 

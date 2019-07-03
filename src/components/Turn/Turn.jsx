@@ -3,6 +3,8 @@ import socket from '../../socket';
 import axios from 'axios';
 import AllCards from '../Cards/AllCards'
 import Message from '../Message/Message'
+import PlayerCards from '../Cards/PlayerCards';
+import style from './Turn.module.css';
 
 class Turn extends React.Component {
 
@@ -14,8 +16,7 @@ class Turn extends React.Component {
                 roundNum: 0,
                 currentPlayer: null,
                 players: [],
-                currentCards: [],
-                myTurn: false
+                currentCards: []
             }
         }
         this.startGame = this.startGame.bind(this);
@@ -55,20 +56,21 @@ class Turn extends React.Component {
             currentUsername = this.state.gameState.currentPlayer.username;
         }
         return (
-            <div>
-                <div>Round: {this.state.gameState.roundNum}</div>
-                Players:
-                <ul>
-                    {this.state.gameState.players.map((player, key) => {
-                        return <li key={key}>{player.username}</li>
-                    })}
-                </ul>
-                <div>
-                    {`It's ${currentUsername}'s turn.`}
+            <div className={style.roundInfo}>
+                <h2>Round: {this.state.gameState.roundNum}</h2>
+                <div className={style.currentPlayersBox}>
+                    Players:
+                    <ul>
+                        {this.state.gameState.players.map((player, key) => {
+                            return <li key={key}>{player.username}</li>
+                        })}
+                    </ul>
                 </div>
+                <h2>{`It's ${currentUsername}'s turn.`}</h2>
                 {!this.state.gameState.started && <button onClick={this.startGame}>Start game</button>}
                 <button onClick={this.endTurn}>Next turn</button>
                 <AllCards cards={this.state.gameState.currentCards}/>
+                <PlayerCards myTurn={this.state.gameState.myTurn}/>
                 <Message myTurn={this.state.gameState.myTurn}/>
             </div>
         )
