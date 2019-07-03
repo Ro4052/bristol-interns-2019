@@ -1,6 +1,7 @@
 import React from 'react';
 import socket from '../../socket';
 import axios from 'axios';
+import { connect } from 'react-redux';
 
 class Message extends React.Component {
 
@@ -56,4 +57,11 @@ class Message extends React.Component {
     }
 }
 
-export default Message;
+const mapStateToProps = (state, props) => {
+    console.log(state);
+    return ({
+        myTurn: state.gameState.myTurn
+    });
+}
+
+export default connect(mapStateToProps)(Message);

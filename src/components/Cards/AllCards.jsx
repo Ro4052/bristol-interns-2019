@@ -1,6 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
-export default class AllCards extends React.Component {
+class AllCards extends React.Component {
     getCardItems() {
         if (this.props.cards) {
             return this.props.cards.map(card => (
@@ -18,3 +19,11 @@ export default class AllCards extends React.Component {
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return ({
+        cards: state.gameState.currentCards
+    });
+};
+
+export default connect(mapStateToProps)(AllCards);

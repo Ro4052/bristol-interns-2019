@@ -16,9 +16,9 @@ export default class App extends React.Component {
     componentWillMount() {
         axios.get('/auth')
         .then((response) => {
-            if (response.status !== 200) {
+            if (response.status === 200) {
                 this.setState({
-                    loggedIn: false
+                    loggedIn: response.data.loggedIn
                 })
             }
         }).catch(err => {

@@ -30,22 +30,12 @@ module.exports = port => {
     let currentUsers = [];
     server.listen(port, () => console.log(`Server running on port: ${port}`));
 
-    /* Send index file */
-    app.get('/', (req, res) => {
-        res.sendFile(path.join(__dirname, '../build/index.html'), (err) => {
-        if (err) {
-        res.status(500);
-        res.send(err);
-        }
-        });
-    });
-
     /* Check if player is logged in */
     app.get('/auth', (request, response) => {
         if (request.session.user) {
-        response.sendStatus(200);
+            response.status(200).json({loggedIn: true});
         } else {
-        response.sendStatus(404);
+            response.status(200).json({loggedIn: false});
         }
     });
 
@@ -134,6 +124,16 @@ module.exports = port => {
         gameLogic.endPlayerTurn(username);
         emitGameState();
         res.sendStatus(200);
+    });
+
+    /* DEFAULT Send index file */
+    app.get('/*', (req, res) => {
+        res.sendFile(path.join(__dirname, '../build/index.html'), (err) => {
+        if (err) {
+        res.status(500);
+        res.send(err);
+        }
+        });
     });
 
     /* SOCKET */
