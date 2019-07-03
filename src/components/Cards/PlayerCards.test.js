@@ -40,7 +40,6 @@ describe('on given a set of cards', () => {
         const wrapper = shallow(<PlayerCards currentPlayer={currentPlayer}/>);
         wrapper.find('#card-1').simulate('click', mockedEvent);
         expect(spy).toHaveBeenCalled();
-      
         spy.mockRestore();
     })
 })
