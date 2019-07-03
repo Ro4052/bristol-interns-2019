@@ -64,6 +64,7 @@ class Dashboard extends React.Component {
                 <AllCards />
                 <PlayerCards />
                 <Message />
+                <LogoutButton/>
             </div>
         )
     }

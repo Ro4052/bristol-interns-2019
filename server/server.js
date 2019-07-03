@@ -44,9 +44,9 @@ module.exports = port => {
         if (currentUsers.length > 0) {
         var indexedBy = req.session.user;    
         var user = currentUsers.find((user) => user.username === indexedBy);    
-        res.status(200).json(user.cards);
+            res.status(200).json(user.cards);
         } else {
-        res.sendStatus(404);
+            res.sendStatus(404);
         }
     });
 
@@ -55,9 +55,9 @@ module.exports = port => {
         if (req.session.user) {
         var indexedBy = req.session.user;    
         var user = currentUsers.find((user) => user.username === indexedBy);    
-        res.status(200).json(user.cards);
+            res.status(200).json(user.cards);
         } else {
-        res.sendStatus(404);
+            res.sendStatus(404);
         }
     });
 
