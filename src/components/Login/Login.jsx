@@ -23,11 +23,14 @@ class Login extends React.Component {
         })
         .then(response => {
             if (response.status === 200) {
-                window.location = '/dashboard'
+                this.setState ({
+                    loggedIn: true
+                })
             }
         })
         .catch(err => {
             this.setState({
+                loggedIn: false,
                 error: err.message
             })
         })
