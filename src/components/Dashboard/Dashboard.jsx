@@ -71,7 +71,7 @@ class Dashboard extends React.Component {
 
 const mapStateToProps = (state, props) => {
     return({
-        gameState: state.gameState
+        gameState: state.reducer.gameState
     });
 }
 
