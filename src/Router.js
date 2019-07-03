@@ -5,7 +5,7 @@ import Login from './components/Login/Login';
 import axios from 'axios';
 
 export default class Routes extends React.Component {
-    componentWillMount() {
+    componentDidUpdate() {
         axios.get('/auth')
         .then((response) => {
             if (response.status === 200) {
@@ -16,7 +16,7 @@ export default class Routes extends React.Component {
                     window.location = '/';
                 }
             }
-        }).catch(err => {
+        }).catch(() => {
             if (window.location.pathname !== '/') {
                 window.location = '/';
             }

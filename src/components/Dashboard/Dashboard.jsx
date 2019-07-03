@@ -18,9 +18,6 @@ class Dashboard extends React.Component {
     }
     componentDidMount() {
         socket.on("gameState", msg => {
-            // this.setState({ gameState: msg });
-            console.log(msg);
-            
             this.props.setGameState(msg);
         });
     }

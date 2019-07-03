@@ -2,23 +2,31 @@ import React from 'react';
 import styles from './Cards.module.css';
 import socket from '../../socket';
 import { connect } from 'react-redux';
-import Axios from 'axios';
+import axios from 'axios';
 
 export class PlayerCards extends React.Component {
     constructor() {
         super();
         this.state = {
-            cardImages: [],
+            cards: [],
             playedCardText: ""
         }
     }
     componentDidMount() {
-        let cardImages = [];
-        Axios.get('/api/cards')
-        .then(response => {
-            console.log(response.data);
-        })
-        .catch(err => {
+        axios.get('/api/cards')
+        .then((response) => {
+            var cards = [];
+            for (var i = 0; i < response.data.length; i++) {
+                var index = response.data[i]
+                cards.push({
+                    url: require(`./cards/card (${index}).jpg`),
+                    id: index
+                });
+            }
+            this.setState({
+                cards: cards
+            })
+        }).catch(err => {
             console.log(err);
         })
     }
@@ -30,7 +38,7 @@ export class PlayerCards extends React.Component {
         return (this.props.myTurn) ? styles.singleCard : styles.disabledCard
     }
     render() {
-        const cardsImages = this.getPlayerCards().map((card) => (
+        const cardsImages = this.state.cards.map((card) => (
             <img id={"card-" + card.id} alt='' className={this.disableOnEndTurn()} key={card.id} src={card.url} onClick={this.playCard.bind(this)}/>
         ))
         return (
