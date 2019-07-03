@@ -8,7 +8,7 @@ import style from './Dashboard.module.css';
 import axios from 'axios';
 import { setGameState, setMessage } from '../../store/actions';
 
-class Dashboard extends React.Component {
+export class Dashboard extends React.Component {
 
     constructor(props) {
         super(props);
@@ -49,18 +49,18 @@ class Dashboard extends React.Component {
         }        
         return (
             <div className={style.roundInfo}>
-                <h2>Round: {this.props.gameState.roundNum}</h2>
+                {this.props.gameState.started && <h2>Round: <span id="round-number">{this.props.gameState.roundNum}</span></h2>}
                 <div className={style.currentPlayersBox}>
                     Players:
-                    <ul>
+                    <ul id="players">
                         {this.props.gameState.players.map((player, key) => {
                             return <li key={key}>{player.username}</li>
                         })}
                     </ul>
                 </div>
                 <h2>Current player: {this.props.gameState.currentPlayer && <span id="current-player">{currentUsername}</span>}</h2>
-                {!this.props.gameState.started && <button onClick={this.startGame}>Start game</button>}
-                <button onClick={this.endTurn}>Next turn</button>
+                {!this.props.gameState.started && <button id="start-game" onClick={this.startGame}>Start game</button>}
+                {this.props.gameState.started && <button id="end-turn" onClick={this.endTurn}>Next turn</button>}
                 <AllCards />
                 <PlayerCards />
                 <Message />
