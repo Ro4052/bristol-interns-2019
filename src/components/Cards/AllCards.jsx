@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-class AllCards extends React.Component {
+export class AllCards extends React.Component {
     getCardItems() {
         if (this.props.cards) {
             return this.props.cards.map(card => (
@@ -13,8 +13,10 @@ class AllCards extends React.Component {
     render() {
         const cardItems = this.getCardItems();
         return (
-            <div className="playedCards">
-                {cardItems}
+            <div className="playedCards" id="played-cards">
+                <ul>
+                    {cardItems}
+                </ul>
             </div>
         );
     }

@@ -3,7 +3,7 @@ import styles from './Cards.module.css';
 import socket from '../../socket';
 import { connect } from 'react-redux';
 
-class PlayerCards extends React.Component {
+export class PlayerCards extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -26,19 +26,21 @@ class PlayerCards extends React.Component {
     }
     playCard(card) {
         socket.emit("play card", card.target.id)
+        return card.id
     }
     disableOnEndTurn() {
         return (this.props.myTurn) ? styles.singleCard : styles.disabledCard
     }
     render() {
-        
         const cardsImages = this.getPlayerCards().map((card) => (
-            <img id={card.id} alt='' className={this.disableOnEndTurn()} key={card.id} src={card.url} onClick={this.playCard.bind(this)}/>
+            <img id={"card-" + card.id} alt='' className={this.disableOnEndTurn()} key={card.id} src={card.url} onClick={this.playCard.bind(this)}/>
         ))
         return (
-            <div className={styles.cardsContainer}>
+            <div className={styles.cardsContainer} id="my-cards">
                 <h2>{this.state.playedCardText}</h2>
-                {cardsImages}
+                <ul>
+                    {cardsImages}
+                </ul>
             </div>
         );
     }
