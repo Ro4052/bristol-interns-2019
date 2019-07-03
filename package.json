@@ -45,6 +45,8 @@
     ]
   },
   "devDependencies": {
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
     "http-proxy-middleware": "^0.19.1",
     "nodemon": "^1.19.1"
   },

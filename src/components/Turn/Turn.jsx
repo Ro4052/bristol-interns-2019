@@ -50,6 +50,7 @@ class Turn extends React.Component {
     }
 
     render() {
+
         let currentUsername = 'no one';
         if (this.state.gameState.currentPlayer) {
             currentUsername = this.state.gameState.currentPlayer.username;
@@ -64,7 +65,7 @@ class Turn extends React.Component {
                     })}
                 </ul>
                 <div>
-                    {`It's ${currentUsername}'s turn.`}
+                    Current player: {this.state.gameState.currentPlayer && <span id="current-player">{currentUsername}</span>}
                 </div>
                 {!this.state.gameState.started && <button onClick={this.startGame}>Start game</button>}
                 <button onClick={this.endTurn}>Next turn</button>
