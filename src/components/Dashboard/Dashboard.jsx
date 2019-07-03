@@ -6,6 +6,7 @@ import PlayerCards from '../Cards/PlayerCards';
 import style from './Dashboard.module.css';
 import axios from 'axios';
 import { setGameState, setMessage } from '../../store/actions';
+import connectSocket from './socket';
 
 export class Dashboard extends React.Component {
 
@@ -27,6 +28,10 @@ export class Dashboard extends React.Component {
         .catch(err => {
             console.log(err);
         })
+    }
+
+    componentDidMount() {
+        connectSocket();
     }
     
     render() {

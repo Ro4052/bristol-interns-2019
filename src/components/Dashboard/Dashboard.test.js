@@ -72,7 +72,7 @@ describe('on start of game', () => {
 });
 
 describe('before you have finished your turn', () => {
-    // TODO: Setup state
+    // TODO: Setup state for these tests
     it('displays the end turn button', () => {
         const wrapper = shallow(<Dashboard gameState={firstRoundGameState} />);
         expect(wrapper.exists('button#end-turn')).toEqual(true);

@@ -2,7 +2,7 @@ import React from 'react';
 import Dashboard from './components/Dashboard/Dashboard';
 import styles from './components/Login/Login.module.css';
 import axios from 'axios';
-import connectSocket from './socket';
+
 
 export default class App extends React.Component {
     constructor(props) {
@@ -15,7 +15,6 @@ export default class App extends React.Component {
         this.logOut = this.logOut.bind(this);
     }
     componentWillMount() {
-        connectSocket();
         axios.get('/auth')
         .then((response) => {
             if (response.status === 200) {
