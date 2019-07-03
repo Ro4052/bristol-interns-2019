@@ -1,5 +1,5 @@
 import React from 'react';
-import { sendWord } from '../../socket';
+import { sendWord } from '../../services/socket';
 import { connect } from 'react-redux';
 
 export class Message extends React.Component {
@@ -18,14 +18,14 @@ export class Message extends React.Component {
     }
 
     sendMessage() {
-        sendWord(this.state.currentValue);
+        sendWord(this.props.socket, this.state.currentValue);
     }
 
     render() {
         const box = (
             <div>
                 <input onChange={this.handleChange} value={this.state.currentValue} placeholder="Type in your word" />
-                <button className="chat-button" onClick={this.sendMessage}>Send a message</button>
+                <button id="send-message" className="chat-button" onClick={this.sendMessage}>Send a message</button>
             </div>
         );
         return (
@@ -43,7 +43,8 @@ const mapStateToProps = (state, props) => {
     console.log(state);
     return ({
         myTurn: state.gameState.myTurn,
-        message: state.message
+        message: state.message,
+        socket: state.socket
     });
 }
 

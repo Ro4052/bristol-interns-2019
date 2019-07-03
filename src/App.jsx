@@ -2,7 +2,9 @@ import React from 'react';
 import Dashboard from './components/Dashboard/Dashboard';
 import styles from './components/Login/Login.module.css';
 import axios from 'axios';
-
+import connectSocket from './services/socket';
+import { dispatch } from './store/store';
+import { setSocket } from './store/actions';
 
 export default class App extends React.Component {
     constructor(props) {
@@ -50,6 +52,9 @@ export default class App extends React.Component {
         })
         .then(response => {
             if (response.status === 200) {
+                console.log("here");
+                const socket = connectSocket();
+                dispatch(setSocket(socket));
                 this.setState ({
                     loggedIn: true
                 })

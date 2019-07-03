@@ -11,3 +11,11 @@ export const setMessage = message => {
         message
     }
 }
+
+/** @param {SocketIOClient.Socket} socket */
+export const setSocket = socket => {
+    return {
+        type: "SET_SOCKET",
+        socket
+    }
+}

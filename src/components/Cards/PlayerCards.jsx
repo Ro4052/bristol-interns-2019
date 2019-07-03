@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Cards.module.css';
-import { sendCard } from '../../socket';
+import { sendCard } from '../../services/socket';
 import { connect } from 'react-redux';
 
 export class PlayerCards extends React.Component {
@@ -25,7 +25,7 @@ export class PlayerCards extends React.Component {
         return cardImages;
     }
     playCard(card) {
-        sendCard(card.target.id);
+        sendCard(this.props.socket, card.target.id);
         return card.id
     }
     disableOnEndTurn() {
@@ -49,7 +49,8 @@ export class PlayerCards extends React.Component {
 const mapStateToProps = (state) => {
     return ({
         myTurn: state.gameState.myTurn,
-        currentPlayer: state.gameState.currentPlayer
+        currentPlayer: state.gameState.currentPlayer,
+        socket: state.socket
     });
 };
 

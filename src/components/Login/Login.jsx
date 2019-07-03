@@ -23,9 +23,11 @@ class Login extends React.Component {
         })
         .then(response => {
             if (response.status === 200) {
+                // If log in succeeds, connect to the socket
                 this.setState ({
                     loggedIn: true
                 })
+
             }
         })
         .catch(err => {
