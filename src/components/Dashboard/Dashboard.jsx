@@ -1,52 +1,73 @@
 import React from 'react';
-import Turn from '../Turn/Turn';
-import styles from './Dashboard.module.css';
+import socket from '../../socket';
+import AllCards from '../Cards/AllCards'
+import Message from '../Message/Message'
+import PlayerCards from '../Cards/PlayerCards';
+import style from './Dashboard.module.css';
 import axios from 'axios';
 
 class Dashboard extends React.Component {
 
     constructor(props) {
         super(props);
-        this.logOut = this.logOut.bind(this);
-    }
-    componentWillMount() {
-        axios.get('/auth')
-        .then((response) => {
-            if (response.status !== 200) {
-                window.location = '/';
+        this.state = {
+            gameState: {
+                started: false,
+                roundNum: 0,
+                currentPlayer: null,
+                players: [],
+                currentCards: []
             }
-        }).catch(err => {
-            window.location = '/';
-        })
-    }
-    deleteAllCookies() {
-        var cookies = document.cookie.split(";");
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i];
-            var eqPos = cookie.indexOf("=");
-            var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-            document.cookie = name + "=;expires=Thu, 01 Jan 1975 00:00:00 GMT";
         }
+        this.startGame = this.startGame.bind(this);
     }
-    logOut() {
-        axios.post('/auth/logout')
+    componentDidMount() {
+        socket.on("gameState", msg => {
+            this.setState({ gameState: msg });
+        });
+    }
+    startGame() {
+        axios.get('/api/start')
+        .then(res => {
+            // console.log(res);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    }
+    endTurn() {
+        console.log("endTurn");
+        axios.get('/api/endTurn')
         .then(response => {
-            if (response.status === 200) {
-                this.deleteAllCookies();
-                window.location = '/'
-            }
+            console.log(response);
         })
-        .catch(() => {
-            window.alert('Cannot log out of a current game');
+        .catch(err => {
+            console.log(err);
         })
     }
-
-    render() {            
+    render() {
+        let currentUsername = 'no one';
+        if (this.state.gameState.currentPlayer) {
+            currentUsername = this.state.gameState.currentPlayer.username;
+        }        
         return (
-        <>
-            <Turn />
-            <button className={styles.logOutButton} onClick={this.logOut}>Log out</button>
-        </>
+            <div className={style.roundInfo}>
+                <h2>Round: {this.state.gameState.roundNum}</h2>
+                <div className={style.currentPlayersBox}>
+                    Players:
+                    <ul>
+                        {this.state.gameState.players.map((player, key) => {
+                            return <li key={key}>{player.username}</li>
+                        })}
+                    </ul>
+                </div>
+                <h2>{`It's ${currentUsername}'s turn.`}</h2>
+                {!this.state.gameState.started && <button onClick={this.startGame}>Start game</button>}
+                <button onClick={this.endTurn}>Next turn</button>
+                <AllCards cards={this.state.gameState.currentCards}/>
+                <PlayerCards myTurn={this.state.gameState.myTurn}/>
+                <Message myTurn={this.state.gameState.myTurn}/>
+            </div>
         )
     }
 }
