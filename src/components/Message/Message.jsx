@@ -3,28 +3,15 @@ import socket from '../../socket';
 import axios from 'axios';
 import { connect } from 'react-redux';
 
-class Message extends React.Component {
+export class Message extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            message: '',
             currentValue: ''
         }
         this.handleChange = this.handleChange.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
-    }
-
-    componentDidMount() {
-        socket.on("messages", msg => {
-            console.log(msg);
-            // Update the state with the messages
-            this.setState({
-                message: msg
-            });
-            console.log(this.state.message);
-        })
-        
     }
 
     handleChange(event) {
@@ -50,7 +37,7 @@ class Message extends React.Component {
             <div>
                 {this.props.myTurn && box}
                 <div>
-                    <h1>{this.state.message}</h1>
+                    <h1 id="message">{this.props.message}</h1>
                 </div>
             </div>
         )
@@ -60,7 +47,8 @@ class Message extends React.Component {
 const mapStateToProps = (state, props) => {
     console.log(state);
     return ({
-        myTurn: state.gameState.myTurn
+        myTurn: state.gameState.myTurn,
+        message: state.message
     });
 }
 
