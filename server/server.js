@@ -44,17 +44,17 @@ module.exports = port => {
         if (currentUsers.length > 0) {
         var indexedBy = req.session.user;    
         var user = currentUsers.find((user) => user.username === indexedBy);    
-        res.status(200).json(user.cards);
+            res.status(200).json(user.cards);
         } else {
-        res.sendStatus(404);
+            res.sendStatus(404);
         }
     });
 
     /* Send a random set of cards to user */
     app.get('/api/cards', (req, res) => {        
         if (req.session.user) {
-            var indexedBy = req.session.user;    
-            var user = currentUsers.find((user) => user.username === indexedBy);    
+        var indexedBy = req.session.user;    
+        var user = currentUsers.find((user) => user.username === indexedBy);    
             res.status(200).json(user.cards);
         } else {
             res.sendStatus(404);

@@ -8,7 +8,6 @@ export class PlayerCards extends React.Component {
     constructor() {
         super();
         this.state = {
-            cardImages: [],
             playedCardText: ""
         }
     }
@@ -51,8 +50,6 @@ export class PlayerCards extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    console.log(state);
-    
     return ({
         myTurn: state.reducer.gameState.myTurn,
         cards: state.cardReducer.cards

@@ -4,6 +4,7 @@ import socket from '../../socket';
 import AllCards from '../Cards/AllCards'
 import Message from '../Message/Message'
 import PlayerCards from '../Cards/PlayerCards';
+import LogoutButton from '../Login/LogoutButton'
 import style from './Dashboard.module.css';
 import axios from 'axios';
 import { setGameState, setMessage } from '../../store/actions';
@@ -64,6 +65,7 @@ class Dashboard extends React.Component {
                 <AllCards />
                 <PlayerCards />
                 <Message />
+                <LogoutButton/>
             </div>
         )
     }
