@@ -30,7 +30,7 @@ export class Dashboard extends React.Component {
         axios.get('/api/endTurn')
         .catch(err => {
             console.log(err);
-        })
+        });
     }
     
     render() {
