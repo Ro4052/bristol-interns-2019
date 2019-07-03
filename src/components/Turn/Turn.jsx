@@ -24,7 +24,6 @@ class Turn extends React.Component {
 
     componentDidMount() {
         socket.on("gameState", msg => {
-            // console.log(msg);
             this.setState({ gameState: msg });
         });
     }
@@ -51,10 +50,11 @@ class Turn extends React.Component {
     }
 
     render() {
-        let currentUsername = 'no one';
+        let currentUsername = '';
         if (this.state.gameState.currentPlayer) {
             currentUsername = this.state.gameState.currentPlayer.username;
         }
+
         return (
             <div className={style.roundInfo}>
                 <h2>Round: {this.state.gameState.roundNum}</h2>
@@ -66,7 +66,7 @@ class Turn extends React.Component {
                         })}
                     </ul>
                 </div>
-                <h2>{`It's ${currentUsername}'s turn.`}</h2>
+                <h2>Current player: {this.state.gameState.currentPlayer && <span id="current-player">{currentUsername}</span>}</h2>
                 {!this.state.gameState.started && <button onClick={this.startGame}>Start game</button>}
                 <button onClick={this.endTurn}>Next turn</button>
                 <AllCards cards={this.state.gameState.currentCards}/>
