@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import socket from '../../socket';
 import AllCards from '../Cards/AllCards'
 import Message from '../Message/Message'
 import PlayerCards from '../Cards/PlayerCards';
@@ -15,33 +14,21 @@ export class Dashboard extends React.Component {
         this.state = {}
         this.startGame = this.startGame.bind(this);
     }
-    componentDidMount() {
-        socket.on("gameState", msg => {
-            this.props.setGameState(msg);
-        });
-        socket.on("messages", msg => {
-            this.props.setMessage(msg);
-        });
-    }
+
     startGame() {
         axios.get('/api/start')
-        .then(res => {
-            // console.log(res);
-        })
         .catch(err => {
             console.log(err);
         });
     }
+
     endTurn() {
-        console.log("endTurn");
         axios.get('/api/endTurn')
-        .then(response => {
-            console.log(response);
-        })
         .catch(err => {
             console.log(err);
         })
     }
+    
     render() {
         let currentUsername = 'no one';
         if (this.props.gameState.currentPlayer) {

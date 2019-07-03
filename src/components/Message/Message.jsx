@@ -1,6 +1,5 @@
 import React from 'react';
-import socket from '../../socket';
-import axios from 'axios';
+import { sendWord } from '../../socket';
 import { connect } from 'react-redux';
 
 export class Message extends React.Component {
@@ -16,14 +15,10 @@ export class Message extends React.Component {
 
     handleChange(event) {
         this.setState({ currentValue: event.target.value });
-        // console.log(this.state.currentValue);
     }
 
     sendMessage() {
-        // Get value of input
-        console.log(this.state.currentValue);
-
-        socket.emit("private message", this.state.currentValue);
+        sendWord(this.state.currentValue);
     }
 
     render() {

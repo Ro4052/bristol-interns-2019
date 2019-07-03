@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Cards.module.css';
-import socket from '../../socket';
+import { sendCard } from '../../socket';
 import { connect } from 'react-redux';
 
 export class PlayerCards extends React.Component {
@@ -25,7 +25,7 @@ export class PlayerCards extends React.Component {
         return cardImages;
     }
     playCard(card) {
-        socket.emit("play card", card.target.id)
+        sendCard(card.target.id);
         return card.id
     }
     disableOnEndTurn() {
