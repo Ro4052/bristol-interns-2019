@@ -39,11 +39,11 @@ export class Message extends React.Component {
     }
 }
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = (state) => {
     return ({
-        myTurn: state.gameState.myTurn,
-        message: state.message,
-        socket: state.socket
+        myTurn: state.reducer.gameState.myTurn,
+        message: state.reducer.message,
+        socket: state.reducer.socket
     });
 }
 

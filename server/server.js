@@ -65,7 +65,7 @@ module.exports = port => {
     app.post('/auth/login', (req, res) => {
         var user = currentUsers.find((user) => user.username === req.body.username);
         if (!user) {
-            req.session.user = req.body.username;
+            req.session.user = req.body.username;            
             var newSet = cardManager.assign(currentUsers, 3 /* number of cards per user */);
             let user = {
                 username: req.body.username,
@@ -129,10 +129,10 @@ module.exports = port => {
     /* DEFAULT Send index file */
     app.get('/*', (req, res) => {
         res.sendFile(path.join(__dirname, '../build/index.html'), (err) => {
-        if (err) {
-        res.status(500);
-        res.send(err);
-        }
+            if (err) {
+                res.status(500);
+                res.send(err);
+            }
         });
     });
 
@@ -145,6 +145,8 @@ module.exports = port => {
     io.on('connection', function (socket) {
         console.log("socket connection");
         sockets.push(socket);
+        console.log(socket.handshake.session);
+        
         emitGameState();
         socket.on('private message', function (msg) {
             if (checkCurrentTurn(socket)) {
