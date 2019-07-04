@@ -13,7 +13,7 @@ module.exports = port => {
     app.use(bodyParser.json());
     app.use(cors());
     app.use(cookieParser());
-    var session = expressSession({
+    const session = expressSession({
         name: 'username',
         secret: 'my-cool-secret',
         resave: false,
