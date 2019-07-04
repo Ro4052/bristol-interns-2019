@@ -11,20 +11,6 @@ exports.setupSocket = (server, session) => {
     io.on('connection', function (socket) {
         sockets.push(socket);
         emitGameState();
-
-        // socket.on('play word', function (msg) {
-        //     if (isCurrentPlayerSocket(socket)) {
-        //         gameLogic.setCurrentWord(msg);
-        //         emitGameState();
-        //     }        
-        // });
-
-        // socket.on('play card', (cardID) => {
-        //     if (isCurrentPlayerSocket(socket)) {
-        //         gameLogic.playCard(cardID)
-        //         emitGameState();
-        //     }
-        // });
     });
 }
 
@@ -36,6 +22,11 @@ const emitGameState = exports.emitGameState = () => {
     }
 }
 
+// Tell all the players what word was played
+const emitWord = exports.emitWord = word => {
+    io.emit("played word", word);
+}
+
 // Ask the current player for a word and a card
 const promptCurrentPlayer = exports.promptCurrentPlayer = () => {
     for (let socket of sockets) {
@@ -43,11 +34,6 @@ const promptCurrentPlayer = exports.promptCurrentPlayer = () => {
             socket.emit("play word and card");
         }
     }
-}
-
-// Tell all the players what word was played
-const emitWord = exports.emitWord = word => {
-    io.emit("played word", word);
 }
 
 // Ask the other players for a card

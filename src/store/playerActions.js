@@ -6,6 +6,8 @@ export const FETCH_CARDS_FAILURE = 'FETCH_CARDS_FAILURE';
 export const REQUEST_PLAY_CARD = 'REQUEST_PLAY_CARD';
 export const FINISH_PLAY_CARD = 'FINISH_PLAY_CARD';
 export const PLAY_WORD  = 'PLAY_WORD';
+export const MY_TURN  = 'MY_TURN';
+export const OTHERS_TURN  = 'OTHERS_TURN';
 
 
 export const fetchCardsBegin = () => ({
@@ -52,5 +54,17 @@ export const playWord = (word) => {
     return {
         type: PLAY_WORD,
         word
+    }
+}
+
+export const setMyTurn = () => {
+    return {
+        type: MY_TURN
+    }
+}
+
+export const setOthersTurn = () => {
+    return {
+        type: OTHERS_TURN
     }
 }

@@ -1,13 +1,15 @@
 import React from 'react';
 import styles from './Cards.module.css';
 import { connect } from 'react-redux';
+import axios from 'axios';
 import { fetchCards, requestPlayCard } from '../../store/playerActions';
 
 export class PlayerCards extends React.Component {
     constructor() {
         super();
         this.state = {
-            playedCardText: ""
+            playedCardText: "",
+            havePlayed: false
         }
     }
     componentDidMount() {
@@ -30,10 +32,25 @@ export class PlayerCards extends React.Component {
         if (this.props.myTurn) {
             this.props.requestPlayCard(card.target.id.split('-')[1]);
         }
+        if (this.props.othersTurn) {
+            this.props.requestPlayCard(card.target.id.split('-')[1]);
+            this.playCardForWord();
+        }
     }
-        
+    playCardForWord() {
+        console.log("Playing card for word...");
+        axios.post('/api/playCard', {
+            card: this.props.playedCard,
+        })
+        .then(() => {
+            this.props.finishPlayCard(this.props.playedCard)
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    }
     disableOnEndTurn() {
-        return (this.props.myTurn) ? styles.singleCard : styles.disabledCard
+        return ((this.props.myTurn || this.props.othersTurn) && this.props.playedCard === 0) ? styles.singleCard : styles.disabledCard
     }
     render() {
         const cardsImages = this.getPlayerCards().map((card) => (
@@ -52,10 +69,10 @@ export class PlayerCards extends React.Component {
 
 const mapStateToProps = (state) => {
     return ({
-        myTurn: state.reducer.gameState.myTurn,
+        myTurn: state.playerReducer.myTurn,
+        othersTurn: state.playerReducer.othersTurn,
         myCards: state.playerReducer.myCards,
-        currentPlayer: state.reducer.gameState.currentPlayer,
-        socket: state.reducer.socket
+        playedCard: state.playerReducer.playedCard
     });
 };
 

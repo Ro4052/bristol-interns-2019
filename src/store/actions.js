@@ -5,10 +5,10 @@ export const setGameState = gameState => {
     }
 }
 
-export const setMessage = message => {
+export const setCurrentWord = currentWord => {
     return {
-        type: "SET_MESSAGE",
-        message
+        type: "SET_CURRENT_WORD",
+        currentWord
     }
 }
 

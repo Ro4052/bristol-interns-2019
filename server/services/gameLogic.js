@@ -91,6 +91,7 @@ exports.playCardAndWord = (username, cardId, word) => {
 
 /* Adds player's card to list of played cards */
 exports.playCard = (username, card) => {
+    console.log("playCard");
     if (gameState.status === statusTypes.WAITING_FOR_OTHER_PLAYERS && !gameState.players[getPlayerIndexByUsername(username)].finishedTurn) {
         gameState.currentCards.push({id: card, hidden: true});
         gameState.players[getPlayerIndexByUsername(username)].finishedTurn = true;
@@ -106,6 +107,7 @@ const getPlayerIndexByUsername = username => {
 
 /* Move on to the next round, called when all players have finished their turn */
 const incrementRound = () => {
+    console.log("Everyone done, next round!");
     gameState.roundNum++;
     gameState.players = gameState.players.map(player => {
         return {...player, finishedTurn: false};
