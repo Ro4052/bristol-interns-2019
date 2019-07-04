@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const path = require('path');
-
 const auth = require('../services/auth');
 const gameLogic = require('../services/gameLogic');
 const cardManager = require('../services/cards');
@@ -65,9 +64,15 @@ router.get('/api/start', auth, (req, res) => {
     res.sendStatus(200);
 });
 
-/* End your turn */
-router.post('/api/endTurn', auth, (req, res) => {
+/* Current player plays a card and a word */
+router.post('/api/playCardWord', auth, (req, res) => {
     gameLogic.playCardAndWord(req.session.user, req.body.card, req.body.word);
+    res.sendStatus(200);
+});
+
+/* Current player plays a card and a word */
+router.post('/api/playCard', auth, (req, res) => {
+    gameLogic.playCard(req.session.user, req.body.card);
     res.sendStatus(200);
 });
 
