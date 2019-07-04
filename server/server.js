@@ -72,7 +72,7 @@ module.exports = port => {
                 cards: newSet,
                 finishedTurn: false,
                 score: 0,
-                cookie: req.headers.cookie
+                cookie: req.headers.cookie // Remove soon
             };
             currentUsers.push(user);
             gameLogic.joinGame(user);
@@ -143,7 +143,9 @@ module.exports = port => {
     
     // Setup connection
     io.on('connection', function (socket) {
-        sockets.push(socket);        
+        console.log("socket connection");
+        sockets.push(socket);
+        console.log(socket.handshake.session);
         emitGameState();
         socket.on('private message', function (msg) {
             if (checkCurrentTurn(socket)) {
@@ -162,6 +164,7 @@ module.exports = port => {
 
     // Whenever a change is made to the game state, emit it
     const emitGameState = () => {
+        console.log("emitGameState");
         for (let socket of sockets) {
             let gameState = {...gameLogic.getGameState(), myTurn: checkCurrentTurn(socket)}
             socket.emit("gameState", gameState);

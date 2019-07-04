@@ -7,4 +7,7 @@ const store = createStore(
     combineReducers({reducer, cardReducer}),
     applyMiddleware(thunk)
 );
-export { store };
+
+const dispatch = store.dispatch;
+
+export { store, dispatch };
