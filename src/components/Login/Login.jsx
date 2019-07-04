@@ -23,7 +23,11 @@ export class Login extends React.Component {
         })
         .then(response => {
             if (response.status === 200) {
-                window.location = '/dashboard';
+                console.log("log in successful, attempt to connect to socket");
+                this.setState ({
+                    loggedIn: true
+                })
+                this.props.history.push('/dashboard');
             }
         })
         .catch(err => {

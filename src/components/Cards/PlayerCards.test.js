@@ -1,6 +1,7 @@
 import React from 'react';
 import { PlayerCards } from './PlayerCards';
 import { shallow, mount } from 'enzyme';
+import SocketMock from 'socket.io-mock';
 
 describe('on initial render', () => {
     it('renders without crashing', () => {
@@ -32,9 +33,10 @@ describe('on given a set of cards', () => {
         expect(wrapper.find('ul').children().length).toEqual(3);
     })
     it('is able to play a chosen card', () => {
+        const socket = new SocketMock();
         const mockedEvent = { target: {id: '1'} }
         const spy = jest.spyOn(PlayerCards.prototype, 'playCard');
-        const wrapper = shallow(<PlayerCards cards={playerCards} fetchCards={() => {}} playCard={() => {}}/>);
+        const wrapper = shallow(<PlayerCards socket={socket} cards={playerCards} fetchCards={() => {}} playCard={() => {}}/>);
         wrapper.find('#card-1').simulate('click', mockedEvent);
         expect(spy).toHaveBeenCalled();
         spy.mockRestore();

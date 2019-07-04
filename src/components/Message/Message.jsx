@@ -1,6 +1,5 @@
 import React from 'react';
-import socket from '../../socket';
-import axios from 'axios';
+import { sendWord } from '../../services/socket';
 import { connect } from 'react-redux';
 
 export class Message extends React.Component {
@@ -16,21 +15,17 @@ export class Message extends React.Component {
 
     handleChange(event) {
         this.setState({ currentValue: event.target.value });
-        // console.log(this.state.currentValue);
     }
 
     sendMessage() {
-        // Get value of input
-        console.log(this.state.currentValue);
-
-        socket.emit("private message", this.state.currentValue);
+        sendWord(this.props.socket, this.state.currentValue);
     }
 
     render() {
         const box = (
             <div>
                 <input onChange={this.handleChange} value={this.state.currentValue} placeholder="Type in your word" />
-                <button className="chat-button" onClick={this.sendMessage}>Send a message</button>
+                <button id="send-message" className="chat-button" onClick={this.sendMessage}>Send a message</button>
             </div>
         );
         return (
@@ -47,7 +42,8 @@ export class Message extends React.Component {
 const mapStateToProps = (state) => {
     return ({
         myTurn: state.reducer.gameState.myTurn,
-        message: state.reducer.message
+        message: state.reducer.message,
+        socket: state.reducer.socket
     });
 }
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import socket from '../../socket';
 import AllCards from '../Cards/AllCards'
 import Message from '../Message/Message'
 import PlayerCards from '../Cards/PlayerCards';
@@ -8,22 +7,19 @@ import LogoutButton from '../Login/LogoutButton'
 import style from './Dashboard.module.css';
 import axios from 'axios';
 import { setGameState, setMessage } from '../../store/actions';
+import connectSocket from '../../services/socket';
+import { dispatch } from '../../store/store';
+import { setSocket } from '../../store/actions';
 
-class Dashboard extends React.Component {
+
+export class Dashboard extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {}
         this.startGame = this.startGame.bind(this);
     }
-    componentDidMount() {
-        socket.on("gameState", msg => {
-            this.props.setGameState(msg);
-        });
-        socket.on("messages", msg => {
-            this.props.setMessage(msg);
-        });
-    }
+
     startGame() {
         axios.get('/api/start')
         .then(res => {
@@ -33,35 +29,37 @@ class Dashboard extends React.Component {
             console.log(err);
         });
     }
+
     endTurn() {
-        console.log("endTurn");
         axios.get('/api/endTurn')
-        .then(response => {
-            console.log(response);
-        })
         .catch(err => {
             console.log(err);
-        })
+        });
     }
+
+    componentDidMount() {
+        // If log in succeeds, connect to the socket
+        const socket = connectSocket();
+        dispatch(setSocket(socket));
+    }
+    
     render() {
-        let currentUsername = 'no one';
-        if (this.props.gameState.currentPlayer) {
-            currentUsername = this.props.gameState.currentPlayer.username;
-        }        
+        const startGameButton = <button id="start-game" onClick={this.startGame}>Start game</button>;
+        const nextTurnButton = <button id="end-turn" onClick={this.endTurn}>Next turn</button>;
+
         return (
             <div className={style.roundInfo}>
-                <h2>Round: {this.props.gameState.roundNum}</h2>
+                {this.props.gameState.started && <h2>Round: <span id="round-number">{this.props.gameState.roundNum}</span></h2>}
                 <div className={style.currentPlayersBox}>
                     Players:
-                    <ul>
+                    <ul id="players">
                         {this.props.gameState.players.map((player, key) => {
                             return <li key={key}>{player.username}</li>
                         })}
                     </ul>
                 </div>
-                <h2>Current player: {this.props.gameState.currentPlayer && <span id="current-player">{currentUsername}</span>}</h2>
-                {!this.props.gameState.started && <button onClick={this.startGame}>Start game</button>}
-                <button onClick={this.endTurn}>Next turn</button>
+                <h2>Current player: {this.props.gameState.currentPlayer && <span id="current-player">{this.props.gameState.currentPlayer.username}</span>}</h2>
+                {this.props.gameState.started ? nextTurnButton : startGameButton}
                 <AllCards />
                 <PlayerCards />
                 <Message />
