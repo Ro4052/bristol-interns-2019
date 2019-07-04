@@ -35,8 +35,6 @@ const cardReducer = (state = initialState, action) => {
                 playedCard: action.id
             }
         case FINISH_PLAY_CARD:
-            console.log(state.myCards);
-            
             return {
                 ...state,
                 myCards: state.myCards.filter((card) => card.toString() !== action.id)
