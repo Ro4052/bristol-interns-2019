@@ -81,6 +81,7 @@ exports.playCardAndWord = (username, cardId, word) => {
 
 /* Adds player's card to list of played cards */
 exports.playCard = card => {
+    // if (gameState.status === status.WAITING_FOR_OTHER_PLAYERS)
     gameState.currentCards.push({id: card, hidden: true});
     socket.emitGameState();
 }
