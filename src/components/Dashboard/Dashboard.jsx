@@ -6,12 +6,10 @@ import PlayerCards from '../Cards/PlayerCards';
 import LogoutButton from '../Login/LogoutButton'
 import style from './Dashboard.module.css';
 import axios from 'axios';
-import { setGameState } from '../../store/actions';
+import { setGameState, setSocket } from '../../store/actions';
 import connectSocket from '../../services/socket';
 import { dispatch } from '../../store/store';
-import { setSocket } from '../../store/actions';
 import { finishPlayCard } from '../../store/playerActions';
-import Auth from '../Auth';
 
 export class Dashboard extends React.Component {
 

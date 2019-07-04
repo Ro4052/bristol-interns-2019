@@ -41,6 +41,7 @@ const cardReducer = (state = initialState, action) => {
         case FINISH_PLAY_CARD:
             return {
                 ...state,
+                playedCard: 0,
                 myCards: state.myCards.filter((card) => card.toString() !== action.id)
             }
         case PLAY_WORD:

@@ -1,14 +1,23 @@
 const socket = require('./socket');
 
-const status = {
+const statusTypes = {
     NOT_STARTED: "NOT_STARTED",
     WAITING_FOR_CURRENT_PLAYER: "WAITING_FOR_CURRENT_PLAYER",
     WAITING_FOR_OTHER_PLAYERS: "WAITING_FOR_OTHER_PLAYERS",
     GAME_OVER: "GAME_OVER"
 };
 
+let status = statusTypes.NOT_STARTED;
+let roundNum = 0;
+let currentPlayer;
+let allPlayers = [];
+let cardsPlayed = [];
+let currentCard;
+let otherCards = [];
+let currentWord = '';
+
 let gameState = {
-    status: status.NOT_STARTED,
+    status: statusTypes.NOT_STARTED,
     started: false, // Going to remove eventually using status instead
     roundNum: 0,
     currentPlayer: null,
@@ -55,7 +64,7 @@ exports.startGame = () => {
         ...gameState,
         started: true,
         currentPlayer: gameState.players[0],
-        status: status.WAITING_FOR_CURRENT_PLAYER,
+        status: statusTypes.WAITING_FOR_CURRENT_PLAYER,
     };
     socket.emitGameState();
     socket.promptCurrentPlayer();
@@ -63,11 +72,12 @@ exports.startGame = () => {
 
 /* The player whose turn it is plays a card and a word */
 exports.playCardAndWord = (username, cardId, word) => {
-    if (gameState.status === status.WAITING_FOR_CURRENT_PLAYER && gameState.currentPlayer.username === username) {
+    if (gameState.status === statusTypes.WAITING_FOR_CURRENT_PLAYER && gameState.currentPlayer.username === username) {
         console.log("Current player is ending their turn!");
+        gameState.players[getPlayerIndexByUsername(username)].finishedTurn = true;
         gameState = {
             ...gameState,
-            status: status.WAITING_FOR_OTHER_PLAYERS,
+            status: statusTypes.WAITING_FOR_OTHER_PLAYERS,
             currentWord: word,
             currentCardId: cardId
         };
@@ -80,9 +90,13 @@ exports.playCardAndWord = (username, cardId, word) => {
 }
 
 /* Adds player's card to list of played cards */
-exports.playCard = card => {
-    gameState.currentCards.push({id: card, hidden: true});
-    socket.emitGameState();
+exports.playCard = (username, card) => {
+    if (gameState.status === statusTypes.WAITING_FOR_OTHER_PLAYERS && !gameState.players[getPlayerIndexByUsername(username)].finishedTurn) {
+        gameState.currentCards.push({id: card, hidden: true});
+        gameState.players[getPlayerIndexByUsername(username)].finishedTurn = true;
+        if (allPlayersFinishedTurn()) incrementRound();
+        else socket.emitGameState();
+    }
 }
 
 /* Get the index of the player in the list */

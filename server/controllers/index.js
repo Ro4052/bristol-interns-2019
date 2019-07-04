@@ -1,26 +1,15 @@
 const router = require('express').Router();
 const path = require('path');
-
+const auth = require('../services/auth');
 const gameLogic = require('../services/gameLogic');
 const cardManager = require('../services/cards');
 
 let currentUsers = [];
 
 /* Check if player is logged in */
-router.get('/auth', (request, response) => {
-    if (request.session.user) {
-        response.sendStatus(200);
-    } else {
-        response.sendStatus(401);
-    }
-});
-
-/* Send a random set of cards to user */
-router.get('/api/cards', (req, res) => {        
+router.get('/auth', (req, res) => {
     if (req.session.user) {
-    var indexedBy = req.session.user;    
-    var user = currentUsers.find((user) => user.username === indexedBy);    
-        res.status(200).json(user.cards);
+        res.sendStatus(200);
     } else {
         res.sendStatus(401);
     }
@@ -28,11 +17,11 @@ router.get('/api/cards', (req, res) => {
 
 /* Log in the user */
 router.post('/auth/login', (req, res) => {
-    var user = currentUsers.find((user) => user.username === req.body.username);
+    const user = currentUsers.find((user) => user.username === req.body.username);
     if (!user) {
         req.session.user = req.body.username;            
-        var newSet = cardManager.assign(currentUsers, 3 /* number of cards per user */);
-        let user = {
+        const newSet = cardManager.assign(currentUsers, 3 /* number of cards per user */);
+        const user = {
             username: req.body.username,
             cards: newSet,
             finishedTurn: false,
@@ -49,7 +38,7 @@ router.post('/auth/login', (req, res) => {
 
 /* Log out the user */
 router.post('/auth/logout', (req, res) => {
-    var user = currentUsers.find((user) => user.username === req.session.user);
+    const user = currentUsers.find((user) => user.username === req.session.user);
     if (user) {
         currentUsers = currentUsers.filter((otherUser) => otherUser !== user);
         if (gameLogic.quitGame(user)) {
@@ -63,30 +52,31 @@ router.post('/auth/logout', (req, res) => {
     }
 });
 
+/* Send a random set of cards to user */
+router.get('/api/cards', auth, (req, res) => {
+    const user = currentUsers.find((user) => user.username === req.session.user);    
+    res.status(200).json(user.cards);
+});
+
 /* Start the game */
-router.get('/api/start', (req, res) => {
+router.get('/api/start', auth, (req, res) => {
     gameLogic.startGame();
     res.sendStatus(200);
 });
 
-/* Check if it's my turn */
-router.get('/api/myTurn', (req,res) => {
-    var user = currentUsers.find((user) => user.username === req.session.user);
-    var currentuser = gameLogic.getGameState().currentPlayer;
-    if (user === currentuser) {
-        res.status(200).json({myTurn: true});
-    } else {
-        res.status(200).json({myTurn: false});
-    }
-})
-
-/* End your turn */
-router.post('/api/endTurn', (req, res) => {
+/* Current player plays a card and a word */
+router.post('/api/playCardWord', auth, (req, res) => {
     gameLogic.playCardAndWord(req.session.user, req.body.card, req.body.word);
     res.sendStatus(200);
 });
 
-/* DEFAULT Send index file */
+/* Current player plays a card and a word */
+router.post('/api/playCard', auth, (req, res) => {
+    gameLogic.playCard(req.session.user, req.body.card);
+    res.sendStatus(200);
+});
+
+/* Send index file */
 router.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, '../build/index.html'), (err) => {
         if (err) {

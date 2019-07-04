@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './Cards.module.css';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { fetchCards, requestPlayCard } from '../../store/playerActions';
+import { fetchCards, requestPlayCard, finishPlayCard } from '../../store/playerActions';
 
 export class PlayerCards extends React.Component {
     constructor() {
@@ -34,7 +34,7 @@ export class PlayerCards extends React.Component {
         }
         if (this.props.othersTurn) {
             this.props.requestPlayCard(card.target.id.split('-')[1]);
-            if (this.props.playedCard) this.playCardForWord();
+            this.playCardForWord();
         }
     }
     playCardForWord() {
@@ -79,6 +79,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
     fetchCards: () => dispatch(fetchCards()),
     requestPlayCard: (id) => dispatch(requestPlayCard(id)),
+    finishPlayCard: (id) => dispatch(finishPlayCard(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayerCards);

@@ -37,7 +37,8 @@ export class Login extends React.Component {
           value: event.target.value
         })
     }
-    checkSpecialChar(string) {        
+    checkSpecialChar(string) {
+        // eslint-disable-next-line
         var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
         if (format.test(string)){
             return true;
