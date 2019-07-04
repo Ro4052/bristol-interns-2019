@@ -33,9 +33,10 @@ export class Dashboard extends React.Component {
     }
     endTurn() {        
         if (this.props.myWord && this.props.playedCard) {
-            sendCard(this.props.socket, this.props.playedCard);
-            sendWord(this.props.socket, this.props.myWord);
-            axios.get('/api/endTurn')
+            axios.post('/api/endTurn', {
+                card: this.props.playedCard,
+                word: this.props.myWord
+            })
             .then(() => {
                 this.props.finishPlayCard(this.props.playedCard)
             })
