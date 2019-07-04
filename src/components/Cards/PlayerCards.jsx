@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Cards.module.css';
 import { connect } from 'react-redux';
-import { fetchCards, requestPlayCard } from './playerActions';
+import { fetchCards, requestPlayCard } from '../../store/playerActions';
 
 export class PlayerCards extends React.Component {
     constructor() {
