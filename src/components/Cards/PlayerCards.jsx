@@ -28,15 +28,18 @@ export class PlayerCards extends React.Component {
         return cardImages;
     }
     playCard(card) {
+
         sendCard(this.props.socket, card.target.id);
         this.props.playCard(card.target.id.split('-')[1]);
+
     }
+        
     disableOnEndTurn() {
         return (this.props.myTurn) ? styles.singleCard : styles.disabledCard
     }
     render() {
         const cardsImages = this.getPlayerCards().map((card) => (
-            <img id={"card-" + card.id} alt='' className={this.disableOnEndTurn()} key={card.id} src={card.url} onClick={this.playCard.bind(this)}/>
+            <img id={"card-" + card.id} alt='' className={this.disableOnEndTurn()} key={card.id} src={card.url} onClick={this.props.myTurn && this.playCard.bind(this)}/>
         ))
         return (
             <div className={styles.cardsContainer} id="my-cards">
