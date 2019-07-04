@@ -18,7 +18,8 @@ const firstRoundGameState = {
     players: [
         { username: 'player1' },
         { username: 'player2' }
-    ]
+    ],
+    myTurn: true
 };
 
 describe('on initial render', () => {
