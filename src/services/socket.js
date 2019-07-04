@@ -32,6 +32,10 @@ const connectSocket = () => {
         console.log("Your turn, play a word and a card");
     });
 
+    socket.on("play card", () => {
+        console.log("Play a card");
+    });
+
     return socket;
 }
 

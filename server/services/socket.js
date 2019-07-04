@@ -12,19 +12,19 @@ exports.setupSocket = (server, session) => {
         sockets.push(socket);
         emitGameState();
 
-        socket.on('play word', function (msg) {
-            if (isCurrentPlayerSocket(socket)) {
-                gameLogic.setCurrentWord(msg);
-                emitGameState();
-            }        
-        });
+        // socket.on('play word', function (msg) {
+        //     if (isCurrentPlayerSocket(socket)) {
+        //         gameLogic.setCurrentWord(msg);
+        //         emitGameState();
+        //     }        
+        // });
 
-        socket.on('play card', (cardID) => {
-            if (isCurrentPlayerSocket(socket)) {
-                gameLogic.playCard(cardID)
-                emitGameState();
-            }
-        });
+        // socket.on('play card', (cardID) => {
+        //     if (isCurrentPlayerSocket(socket)) {
+        //         gameLogic.playCard(cardID)
+        //         emitGameState();
+        //     }
+        // });
     });
 }
 
@@ -51,7 +51,7 @@ const emitWord = exports.emitWord = word => {
 }
 
 // Ask the other players for a card
-const promptOtherPlayer = exports.promptOtherPlayer = () => {
+const promptOtherPlayers = exports.promptOtherPlayers = () => {
     for (let socket of sockets) {
         if (socket.handshake.session.user !== gameLogic.getGameState().currentPlayer.username) {
             socket.emit("play card");

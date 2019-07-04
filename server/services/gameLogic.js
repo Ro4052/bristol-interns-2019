@@ -14,6 +14,7 @@ let gameState = {
     currentPlayer: null,
     players: [],
     currentCards: [],
+    currentCardId: null,
     currentWord: ""
 };
 
@@ -50,27 +51,48 @@ exports.quitGame = player => {
 /* Start the game with the players that have joined */
 exports.startGame = () => {
     // TODO: Min players
-    gameState.started = true;
-    gameState.currentPlayer = gameState.players[0];
-    gameState.status = status.WAITING_FOR_CURRENT_PLAYER;
+    gameState = {
+        ...gameState,
+        started: true,
+        currentPlayer: gameState.players[0],
+        status: status.WAITING_FOR_CURRENT_PLAYER,
+    };
     socket.emitGameState();
     socket.promptCurrentPlayer();
 }
 
 /* Call when a player finishes their turn */
 exports.endPlayerTurn = username => {
-    console.log(username);
-    gameState.players[getPlayerIndexByUsername(username)].finishedTurn = true;
+    // console.log("username from session", username);
+    // console.log("current player", gameState.currentPlayer.username);
+    // console.log("game status", gameState.status);
+    // gameState.players[getPlayerIndexByUsername(username)].finishedTurn = true;
+    // if (gameState.status === status.WAITING_FOR_CURRENT_PLAYER && gameState.currentPlayer.username === username) {
+    //     console.log("Current player is ending their turn!");
+    //     gameState.status = status.WAITING_FOR_OTHER_PLAYERS;
+    //     socket.emitWord(gameState.currentWord);
+    // } else if (true) {
+    //     // Are we waiting for one of the other players?
+
+
+    //     // If we have changed something, check whether we want to increment the round
+    //     if (allPlayersFinishedTurn()) incrementRound();
+    // }
+}
+
+exports.playCardAndWord = (username, cardId, word) => {
     if (gameState.status === status.WAITING_FOR_CURRENT_PLAYER && gameState.currentPlayer.username === username) {
         console.log("Current player is ending their turn!");
-        gameState.status = status.WAITING_FOR_OTHER_PLAYERS;
-        socket.emitWord(gameState.currentWord);
-    } else if (true) {
-        // Are we waiting for one of the other players?
-
-
-        // If we have changed something, check whether we want to increment the round
-        if (allPlayersFinishedTurn()) incrementRound();
+        gameState = {
+            ...gameState,
+            status: status.WAITING_FOR_OTHER_PLAYERS,
+            currentWord: word,
+            currentCardId: cardId
+        };
+        socket.emitWord(word);
+        socket.promptOtherPlayers();
+    } else {
+        // Error or nothing?
     }
 }
 
