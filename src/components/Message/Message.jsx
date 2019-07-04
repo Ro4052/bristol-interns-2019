@@ -44,11 +44,10 @@ export class Message extends React.Component {
     }
 }
 
-const mapStateToProps = (state, props) => {
-    console.log(state);
+const mapStateToProps = (state) => {
     return ({
-        myTurn: state.gameState.myTurn,
-        message: state.message
+        myTurn: state.reducer.gameState.myTurn,
+        message: state.reducer.message
     });
 }
 

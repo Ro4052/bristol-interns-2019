@@ -65,21 +65,21 @@ module.exports = port => {
     app.post('/auth/login', (req, res) => {
         var user = currentUsers.find((user) => user.username === req.body.username);
         if (!user) {
-        req.session.user = req.body.username;
-        var newSet = cardManager.assign(currentUsers, 3 /* number of cards per user */);
-        let user = {
-            username: req.body.username,
-            cards: newSet,
-            finishedTurn: false,
-            score: 0,
-            cookie: req.headers.cookie
-        };
-        currentUsers.push(user);
-        gameLogic.joinGame(user);
-        emitGameState();
-        res.sendStatus(200);
+            req.session.user = req.body.username;            
+            var newSet = cardManager.assign(currentUsers, 3 /* number of cards per user */);
+            let user = {
+                username: req.body.username,
+                cards: newSet,
+                finishedTurn: false,
+                score: 0,
+                cookie: req.headers.cookie
+            };
+            currentUsers.push(user);
+            gameLogic.joinGame(user);
+            emitGameState();
+            res.sendStatus(200);
         } else {
-        res.status(404).json({message: "User already exists"});
+            res.status(404).json({message: "User already exists"});
         }
     });
 
@@ -129,10 +129,10 @@ module.exports = port => {
     /* DEFAULT Send index file */
     app.get('/*', (req, res) => {
         res.sendFile(path.join(__dirname, '../build/index.html'), (err) => {
-        if (err) {
-        res.status(500);
-        res.send(err);
-        }
+            if (err) {
+                res.status(500);
+                res.send(err);
+            }
         });
     });
 
@@ -144,6 +144,8 @@ module.exports = port => {
     // Setup connection
     io.on('connection', function (socket) {
         sockets.push(socket);
+        console.log(socket.handshake.session);
+        
         emitGameState();
         socket.on('private message', function (msg) {
             if (checkCurrentTurn(socket)) {
