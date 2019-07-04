@@ -9,6 +9,7 @@ const connectSocket = () => {
     } else {
         connectionString = `wss://${window.location.host}`;
     }
+
     const socket = io(connectionString, {
         transports:  ['websocket'],
         upgrade: false

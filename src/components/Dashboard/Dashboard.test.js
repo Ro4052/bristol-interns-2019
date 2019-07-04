@@ -22,9 +22,6 @@ const firstRoundGameState = {
 };
 
 describe('on initial render', () => {
-    it("renders without crashing", () => {
-        shallow(<Dashboard gameState={initialGameState} />);
-    });
     it("doesn't display the current player", () => {
         const wrapper = shallow(<Dashboard gameState={initialGameState} />);
         expect(wrapper.exists('#current-player')).toEqual(false);

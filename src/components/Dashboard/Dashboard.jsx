@@ -44,10 +44,9 @@ export class Dashboard extends React.Component {
     }
     
     render() {
-        let currentUsername = 'no one';
-        if (this.props.gameState.currentPlayer) {
-            currentUsername = this.props.gameState.currentPlayer.username;
-        }        
+        const startGameButton = <button id="start-game" onClick={this.startGame}>Start game</button>;
+        const nextTurnButton = <button id="end-turn" onClick={this.endTurn}>Next turn</button>;
+
         return (
             <div className={style.roundInfo}>
                 {this.props.gameState.started && <h2>Round: <span id="round-number">{this.props.gameState.roundNum}</span></h2>}
@@ -59,13 +58,12 @@ export class Dashboard extends React.Component {
                         })}
                     </ul>
                 </div>
-                <h2>Current player: {this.props.gameState.currentPlayer && <span id="current-player">{currentUsername}</span>}</h2>
-                {!this.props.gameState.started && <button id="start-game" onClick={this.startGame}>Start game</button>}
-                {this.props.gameState.started && <button id="end-turn" onClick={this.endTurn}>Next turn</button>}
+                <h2>Current player: {this.props.gameState.currentPlayer && <span id="current-player">{this.props.gameState.currentPlayer.username}</span>}</h2>
+                {this.props.gameState.started ? nextTurnButton : startGameButton}
                 <AllCards />
                 <PlayerCards />
                 <Message />
-                {/* <LogoutButton/> */}
+                <LogoutButton/>
             </div>
         )
     }

@@ -27,8 +27,7 @@ export class Login extends React.Component {
                 this.setState ({
                     loggedIn: true
                 })
-                window.location = '/dashboard';
-
+                this.props.history.push('/dashboard');
             }
         })
         .catch(err => {
