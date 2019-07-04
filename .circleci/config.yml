@@ -4,7 +4,6 @@ jobs:
   test:
     docker:
       - image: circleci/node:10
-    parallelism: 4
     steps:
       - checkout
       - restore_cache:
