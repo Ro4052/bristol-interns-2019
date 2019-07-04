@@ -40,7 +40,6 @@ export class Message extends React.Component {
 }
 
 const mapStateToProps = (state, props) => {
-    console.log(state);
     return ({
         myTurn: state.gameState.myTurn,
         message: state.message,

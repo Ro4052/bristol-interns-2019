@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './Login.module.css';
 import axios from 'axios';
 
-class Login extends React.Component {
+export class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -23,16 +23,16 @@ class Login extends React.Component {
         })
         .then(response => {
             if (response.status === 200) {
-                // If log in succeeds, connect to the socket
+                console.log("log in successful, attempt to connect to socket");
                 this.setState ({
                     loggedIn: true
                 })
+                window.location = '/dashboard';
 
             }
         })
         .catch(err => {
             this.setState({
-                loggedIn: false,
                 error: err.message
             })
         })
@@ -43,7 +43,7 @@ class Login extends React.Component {
             <form className={styles.loginForm} onSubmit={this.sendLogin.bind(this)}>
                 <h3 className={styles.errorText}>{this.state.error}</h3>
                 <h2 className={styles.formHeader}>Type a username to enter the game:</h2>
-                <input className={styles.loginInput} placeholder="Type in your username" onChange={this.handleChange.bind(this)} autoFocus/>
+                <input className={styles.loginInput} value={this.state.value} placeholder="Type in your username" onChange={this.handleChange.bind(this)} autoFocus/>
                 <button className={styles.loginButton} type="submit">Log in</button>
             </form>
             </div>

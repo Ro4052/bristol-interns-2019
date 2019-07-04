@@ -6,6 +6,9 @@ import PlayerCards from '../Cards/PlayerCards';
 import style from './Dashboard.module.css';
 import axios from 'axios';
 import { setGameState, setMessage } from '../../store/actions';
+import connectSocket from '../../services/socket';
+import { dispatch } from '../../store/store';
+import { setSocket } from '../../store/actions';
 
 
 export class Dashboard extends React.Component {
@@ -19,7 +22,7 @@ export class Dashboard extends React.Component {
     startGame() {
         axios.get('/api/start')
         .then(res => {
-            console.log(res);
+            // console.log(res);
         })
         .catch(err => {
             console.log(err);
@@ -31,6 +34,12 @@ export class Dashboard extends React.Component {
         .catch(err => {
             console.log(err);
         });
+    }
+
+    componentDidMount() {
+        // If log in succeeds, connect to the socket
+        const socket = connectSocket();
+        dispatch(setSocket(socket));
     }
     
     render() {
@@ -55,6 +64,7 @@ export class Dashboard extends React.Component {
                 <AllCards />
                 <PlayerCards />
                 <Message />
+                {/* <LogoutButton/> */}
             </div>
         )
     }

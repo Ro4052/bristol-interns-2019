@@ -15,6 +15,8 @@ const connectSocket = () => {
     });
 
     socket.on("gameState", msg => {
+        console.log("HERE");
+        console.log("gameState", msg);
         dispatch(setGameState(msg));
     });
 
