@@ -20,7 +20,7 @@ export class Login extends React.Component {
             .then(res => {            
                 if (res.status === 200) {
                     this.setState({ loggedIn: true })
-                } else if (res.status === 400) {
+                } else if (res.status === 401) {
                     this.setState({ loggedIn: false })
                 } else {
                     const error = new Error(res.error);
@@ -67,9 +67,7 @@ export class Login extends React.Component {
                 username: this.state.value
             })
             .then(response => {        
-                if (response.status === 200) {
-                    console.log(response);
-                    
+                if (response.status === 200) {                    
                     this.setState({
                         loggedIn: true
                     })
