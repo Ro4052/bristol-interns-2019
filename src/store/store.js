@@ -1,10 +1,10 @@
 import { createStore, applyMiddleware, combineReducers  } from 'redux';
 import reducer from './reducer';
-import cardReducer from '../components/Cards/CardReducer';
+import playerReducer from '../components/Cards/PlayerReducer';
 import thunk from 'redux-thunk';
 
 const store = createStore(
-    combineReducers({reducer, cardReducer}),
+    combineReducers({reducer, playerReducer}),
     applyMiddleware(thunk)
 );
 
