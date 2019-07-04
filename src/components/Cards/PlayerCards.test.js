@@ -4,14 +4,6 @@ import { shallow } from 'enzyme';
 import moxios from 'moxios'
 import axios from 'axios';
 const express = require('express');
-const server = require('./mockserver');
-const request = require('supertest');
-
-const initServer = () => {
-    const app = express();
-    app.use(server);
-    return app;
-}
 
 describe('on initial render', () => {
     it('renders without crashing', () => {
@@ -42,12 +34,6 @@ describe('on given a set of cards', () => {
         spy.mockRestore();
     })
 })
-
-const helper = {
-    fetchCards () {
-        return axios.get('/api/cards')
-    }
-}
 
 describe('moxios', () => {
     it('should install', () => {

@@ -77,9 +77,9 @@ module.exports = port => {
             currentUsers.push(user);
             gameLogic.joinGame(user);
             emitGameState();
-            res.status(200).json({message: "OK"});
+            res.sendStatus(200);
         } else {
-            res.status(200).json({message: "User already exists"});
+            res.sendStatus(400);
         }
     });
 
