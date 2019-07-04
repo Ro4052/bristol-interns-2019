@@ -27,7 +27,7 @@ describe('on given a set of cards', () => {
         const socket = new SocketMock();
         const mockedEvent = { target: {id: '1'} }
         const spy = jest.spyOn(PlayerCards.prototype, 'playCard');
-        const wrapper = shallow(<PlayerCards socket={socket} myCards={playerCards} fetchCards={() => {}} requestPlayCard={() => {}}/>);
+        const wrapper = shallow(<PlayerCards socket={socket} myTurn={true} myCards={playerCards} fetchCards={() => {}} requestPlayCard={() => {}}/>);
         wrapper.find('#card-1').simulate('click', mockedEvent);
         expect(spy).toHaveBeenCalled();
         spy.mockRestore();
@@ -73,5 +73,18 @@ describe('moxios', () => {
             })
             
         })
+    })
+    describe('when myTurn is true and click', () => {
+        let playerCards = [1, 2, 3];
+        it('calls sendCard and playCard', () => {
+            const socket = new SocketMock();
+            const mockedEvent = { target: {id: '1'} }
+            const spy = jest.spyOn(PlayerCards.prototype, 'playCard')
+            const wrapper = shallow(<PlayerCards socket={socket} myTurn={true} myCards={playerCards} fetchCards={() => {}} requestPlayCard={() => {}} />);
+            wrapper.find('#card-1').simulate('click', mockedEvent);
+            expect(spy).toHaveBeenCalled();
+            spy.mockRestore();
+        })
+
     })
 })
