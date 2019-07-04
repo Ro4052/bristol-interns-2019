@@ -25,4 +25,19 @@ code {
 
 #root {
   height: 100%;
+  font-family: var(--main-font);
+}
+
+#end-turn {
+  background-color: var(--blue);
+  padding: 1em 3em;
+  outline: none;
+  border: 1px solid black;
+  font-family: var(--main-font);
+  border-radius: 20px;
+  font-size: 1em;
+  z-index: 1;
+  margin: 1em;
+  cursor: pointer;
+  transition: 0.2s;
 }

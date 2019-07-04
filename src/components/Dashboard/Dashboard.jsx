@@ -56,7 +56,7 @@ export class Dashboard extends React.Component {
             <div className={style.roundInfo}>
                 {this.props.gameState.started && <h2>Round: <span id="round-number">{this.props.gameState.roundNum}</span></h2>}
                 <div className={style.currentPlayersBox}>
-                    Players:
+                    <h3>Players:</h3>
                     <ul id="players">
                         {this.props.gameState.players.map((player, key) => {
                             return <li key={key}>{player.username}</li>
@@ -64,10 +64,12 @@ export class Dashboard extends React.Component {
                     </ul>
                 </div>
                 <h2>Current player: {this.props.gameState.currentPlayer && <span id="current-player">{this.props.gameState.currentPlayer.username}</span>}</h2>
-                {this.props.gameState.started ? nextTurnButton : startGameButton}
                 <AllCards />
                 <PlayerCards />
-                <Message />
+                <div className={style.playerInteractions}>
+                    <Message />
+                    {this.props.gameState.started ? nextTurnButton : startGameButton}
+                </div>
                 <LogoutButton/>
             </div>
         )

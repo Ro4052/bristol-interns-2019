@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { playWord } from '../Cards/playerActions';
+import style from './Message.module.css';
 
 export class Message extends React.Component {
 
@@ -23,17 +24,17 @@ export class Message extends React.Component {
 
     render() {
         const box = (
-            <div>
+            <>
                 <input onChange={this.handleChange} value={this.state.currentValue} placeholder="Type in your word" />
-                <button id="send-message" className="chat-button" onClick={this.sendMessage}>Send a message</button>
-            </div>
+                <button id="send-message" className={style.sendWordButton} onClick={this.sendMessage}>Send word</button>
+            </>
         );
         return (
-            <div>
-                {this.props.myTurn && box}
+            <div className={style.messageBox}>
                 <div>
-                    <h1 id="message">{this.props.message}</h1>
+                    <h1 id="message">Hello</h1>
                 </div>
+                {(this.props.myTurn) ? box : ""}
             </div>
         )
     }
