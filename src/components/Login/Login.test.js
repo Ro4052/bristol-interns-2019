@@ -10,7 +10,7 @@ describe('on log in', () => {
         const input = wrapper.find('input');
         input.simulate('change', { preventDefault: () => {}, target: { value: '' } });
         wrapper.find('form').simulate('submit', { preventDefault: () => {}})
-        expect(window.alert).toBeCalledWith("Please provide a username");
+        expect(wrapper.state().error).toEqual('Username cannot be an empty string');
     })
     it('is not able to submit a username with special characters', () => {
         jest.spyOn(window, 'alert').mockImplementation(() => {});
@@ -18,7 +18,7 @@ describe('on log in', () => {
         const input = wrapper.find('input');
         input.simulate('change', { preventDefault: () => {}, target: { value: 'unicorn_$$1' } });
         wrapper.find('form').simulate('submit', { preventDefault: () => {}})
-        expect(window.alert).toBeCalledWith("Please provide a valid username");
+        expect(wrapper.state().error).toEqual('Username cannot contain special characters');
     })
     it('is able to input a username', () => {
         const spy = jest.spyOn(Login.prototype, 'sendLogin');
