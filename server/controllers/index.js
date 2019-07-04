@@ -82,8 +82,11 @@ router.get('/api/myTurn', (req,res) => {
 
 /* End your turn */
 router.get('/api/endTurn', (req, res) => {
-    const username = req.session.user;
-    gameLogic.endPlayerTurn(username);
+    const cardId = 1;
+    const word = "test";
+    gameLogic.playCardAndWord(req.session.user, cardId, word);
+    // gameLogic.endPlayerTurn(req.session.user);
+    // In future expect a word (string) and a card id (number)
     res.sendStatus(200);
 });
 
