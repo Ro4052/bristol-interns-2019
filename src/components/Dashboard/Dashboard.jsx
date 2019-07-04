@@ -55,7 +55,6 @@ export class Dashboard extends React.Component {
 
         return (
             <div className={style.roundInfo}>
-                <Auth/>
                 {this.props.gameState.started && <h2>Round: <span id="round-number">{this.props.gameState.roundNum}</span></h2>}
                 <div className={style.currentPlayersBox}>
                     Players:

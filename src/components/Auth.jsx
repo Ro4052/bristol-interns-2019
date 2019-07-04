@@ -1,25 +1,42 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 
-export default class Auth extends React.Component {
+export default function Auth(ProtectedComponent) {
+
+  return class extends Component {
+
+    constructor() {
+      super();
+      this.state = {
+        loading: true,
+        authenticated: false
+      };
+    }
     componentDidMount() {
-        axios.get('/auth')
-        .then((response) => {
-            console.log(response);
-            if (response.status === 200) {
-                if (window.location.pathname !== '/dashboard') {
-                    window.location = '/dashboard'
-                } 
-            }
-        }).catch((err) => {
-            console.log(err);
-            
-            if (window.location.pathname !== '/') {
-                window.location = '/';
+      axios.get('/auth', {
+        validateStatus: (status) => {
+          return status < 500;
+        }})
+        .then(res => {            
+            if (res.status === 200) {
+                this.setState({ loading: false, authenticated: true });
+            } else if (res.status === 400) {
+                this.setState({ loading: false, authenticated: false });
+            } else {
+                const error = new Error(res.error);
+                throw error;
             }
         })
+        .catch(err => {
+          this.setState({ loading: false, authenticated: false });
+        });
     }
     render() {
-        return null;
+      const { loading, authenticated } = this.state;
+      if (loading) return null;
+      if (authenticated) return (<ProtectedComponent {...this.props} />);
+      return (<Redirect to='/' />);
     }
+  }
 }
