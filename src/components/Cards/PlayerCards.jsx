@@ -1,8 +1,7 @@
 import React from 'react';
 import styles from './Cards.module.css';
-import { sendCard } from '../../services/socket';
 import { connect } from 'react-redux';
-import { fetchCards, playCard } from './cardsActions';
+import { fetchCards, requestPlayCard } from './playerActions';
 
 export class PlayerCards extends React.Component {
     constructor() {
@@ -16,9 +15,9 @@ export class PlayerCards extends React.Component {
     }
     getPlayerCards() {
         let cardImages = [];
-        if (this.props.cards) {
-            for (let i = 0; i < this.props.cards.length; i++) {
-                let index = this.props.cards[i]
+        if (this.props.myCards) {
+            for (let i = 0; i < this.props.myCards.length; i++) {
+                let index = this.props.myCards[i]
                 cardImages.push({
                     url: require(`./cards/card (${index}).jpg`),
                     id: index
@@ -28,10 +27,7 @@ export class PlayerCards extends React.Component {
         return cardImages;
     }
     playCard(card) {
-
-        sendCard(this.props.socket, card.target.id);
-        this.props.playCard(card.target.id.split('-')[1]);
-
+        this.props.requestPlayCard(card.target.id.split('-')[1]);
     }
         
     disableOnEndTurn() {
@@ -55,7 +51,7 @@ export class PlayerCards extends React.Component {
 const mapStateToProps = (state) => {
     return ({
         myTurn: state.reducer.gameState.myTurn,
-        cards: state.cardReducer.cards,
+        myCards: state.playerReducer.myCards,
         currentPlayer: state.reducer.gameState.currentPlayer,
         socket: state.reducer.socket
     });
@@ -63,7 +59,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
     fetchCards: () => dispatch(fetchCards()),
-    playCard: (id) => dispatch(playCard(id))
+    requestPlayCard: (id) => dispatch(requestPlayCard(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayerCards);

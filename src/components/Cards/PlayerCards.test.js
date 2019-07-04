@@ -7,11 +7,8 @@ import { shallow, mount } from 'enzyme';
 import SocketMock from 'socket.io-mock';
 
 describe('on initial render', () => {
-    it('renders without crashing', () => {
-        shallow(<PlayerCards fetchCards={() => {}} playCard={() => {}}/>);
-    })
     it("doesn't display all cards", () => {
-        const wrapper = shallow(<PlayerCards fetchCards={() => {}} playCard={() => {}}/>);
+        const wrapper = shallow(<PlayerCards fetchCards={() => {}} requestPlayCard={() => {}}/>);
         expect(wrapper.exists('#my-cards li')).toEqual(false)
     })
 })
@@ -19,18 +16,22 @@ describe('on initial render', () => {
 describe('on given a set of cards', () => {
     let playerCards = [1, 2, 3];
     it('displays the correct number of cards', () => {
-        const wrapper = shallow(<PlayerCards cards={playerCards} fetchCards={() => {}} playCard={() => {}}/>);
+        const wrapper = shallow(<PlayerCards myCards={playerCards} fetchCards={() => {}} requestPlayCard={() => {}}/>);
         expect(wrapper.find('ul').children().length).toEqual(3);
     })
     it('displays the correct card images', () => {
-        const wrapper = shallow(<PlayerCards cards={playerCards} fetchCards={() => {}} playCard={() => {}}/>);        
+        const wrapper = shallow(<PlayerCards myCards={playerCards} fetchCards={() => {}} requestPlayCard={() => {}}/>);        
         expect(wrapper.find('ul').children().length).toEqual(3);
     })
     it('is able to play a chosen card', () => {
         const socket = new SocketMock();
         const mockedEvent = { target: {id: '1'} }
         const spy = jest.spyOn(PlayerCards.prototype, 'playCard');
+<<<<<<< HEAD
         const wrapper = shallow(<PlayerCards socket={socket} myTurn={true} cards={playerCards} fetchCards={() => {}} playCard={() => {}}/>);
+=======
+        const wrapper = shallow(<PlayerCards socket={socket} myCards={playerCards} fetchCards={() => {}} requestPlayCard={() => {}}/>);
+>>>>>>> develop
         wrapper.find('#card-1').simulate('click', mockedEvent);
         expect(spy).toHaveBeenCalled();
         spy.mockRestore();

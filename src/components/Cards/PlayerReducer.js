@@ -1,7 +1,9 @@
-import {FETCH_CARDS_BEGIN, FETCH_CARDS_SUCCESS, FETCH_CARDS_FAILURE, PLAY_CARD} from './cardsActions';
+import {FETCH_CARDS_BEGIN, FETCH_CARDS_SUCCESS, FETCH_CARDS_FAILURE, REQUEST_PLAY_CARD, FINISH_PLAY_CARD, PLAY_WORD} from './playerActions';
 
 export const initialState = {
-    cards: [],
+    myCards: [],
+    playedCard: 0,
+    myWord: "",
     loading: true,
     error: null
 }
@@ -18,19 +20,31 @@ const cardReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                cards: action.payload.cards
+                myCards: action.payload.cards
             };
         case FETCH_CARDS_FAILURE: 
             return {
                 ...state,
                 loading: false,
                 error: action.payload.error,
-                cards: []
+                myCards: []
             }
-        case PLAY_CARD:
+        case REQUEST_PLAY_CARD:
             return {
                 ...state,
-                cards: state.cards.filter((card) => card.toString() !== action.id)
+                playedCard: action.id
+            }
+        case FINISH_PLAY_CARD:
+            console.log(state.myCards);
+            
+            return {
+                ...state,
+                myCards: state.myCards.filter((card) => card.toString() !== action.id)
+            }
+        case PLAY_WORD:
+            return {
+                ...state,
+                myWord: action.word
             }
         default:
             return state;

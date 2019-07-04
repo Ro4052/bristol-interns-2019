@@ -10,7 +10,8 @@ import { setGameState, setMessage } from '../../store/actions';
 import connectSocket from '../../services/socket';
 import { dispatch } from '../../store/store';
 import { setSocket } from '../../store/actions';
-
+import { sendWord, sendCard } from '../../services/socket';
+import { finishPlayCard } from '../Cards/playerActions';
 
 export class Dashboard extends React.Component {
 
@@ -18,8 +19,8 @@ export class Dashboard extends React.Component {
         super(props);
         this.state = {}
         this.startGame = this.startGame.bind(this);
+        this.endTurn = this.endTurn.bind(this);
     }
-
     startGame() {
         axios.get('/api/start')
         .then(res => {
@@ -29,23 +30,27 @@ export class Dashboard extends React.Component {
             console.log(err);
         });
     }
-
     endTurn() {
-        axios.get('/api/endTurn')
-        .catch(err => {
-            console.log(err);
-        });
+        if (this.props.myWord && this.props.playedCard) {
+            sendCard(this.props.socket, this.props.playedCard);
+            sendWord(this.props.socket, this.props.myWord);
+            axios.get('/api/endTurn')
+            .then(() => {
+                this.props.finishPlayCard(this.props.playedCard)
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        }
     }
-
     componentDidMount() {
         // If log in succeeds, connect to the socket
         const socket = connectSocket();
         dispatch(setSocket(socket));
     }
-    
     render() {
         const startGameButton = <button id="start-game" onClick={this.startGame}>Start game</button>;
-        const nextTurnButton = <button id="end-turn" onClick={this.endTurn}>Next turn</button>;
+        const nextTurnButton = (this.props.gameState.myTurn) ? <button id="end-turn" onClick={this.endTurn}>End my turn</button> : "";
 
         return (
             <div className={style.roundInfo}>
@@ -71,13 +76,17 @@ export class Dashboard extends React.Component {
 
 const mapStateToProps = (state, props) => {
     return({
-        gameState: state.reducer.gameState
+        socket: state.reducer.socket,
+        gameState: state.reducer.gameState,
+        myWord: state.playerReducer.myWord,
+        playedCard: state.playerReducer.playedCard
     });
 }
 
 const mapDispatchToProps = (dispatch) => ({
     setGameState: gameState => dispatch(setGameState(gameState)),
-    setMessage: message => dispatch(setMessage(message))
+    setMessage: message => dispatch(setMessage(message)),
+    finishPlayCard: (id) => dispatch(finishPlayCard(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

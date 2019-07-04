@@ -3,7 +3,9 @@ import axios from "axios";
 export const FETCH_CARDS_BEGIN   = 'FETCH_CARDS_BEGIN';
 export const FETCH_CARDS_SUCCESS = 'FETCH_CARDS_SUCCESS';
 export const FETCH_CARDS_FAILURE = 'FETCH_CARDS_FAILURE';
-export const PLAY_CARD  = 'PLAY_CARD';
+export const REQUEST_PLAY_CARD = 'REQUEST_PLAY_CARD';
+export const FINISH_PLAY_CARD = 'FINISH_PLAY_CARD';
+export const PLAY_WORD  = 'PLAY_WORD';
 
 
 export const fetchCardsBegin = () => ({
@@ -32,9 +34,23 @@ export const fetchCards = () => {
     }
 }
 
-export const playCard = (id) => {
+export const requestPlayCard = (id) => {
     return {
-        type: PLAY_CARD,
+        type: REQUEST_PLAY_CARD,
         id
+    }
+}
+
+export const finishPlayCard = (id) => {
+    return {
+        type: FINISH_PLAY_CARD,
+        id
+    }
+}
+
+export const playWord = (word) => {
+    return {
+        type: PLAY_WORD,
+        word
     }
 }
