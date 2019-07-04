@@ -1,14 +1,35 @@
 import React from 'react';
 import styles from './Login.module.css';
 import axios from 'axios';
+import { Redirect } from 'react-router-dom';
 
 export class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             value: "",
-            error: ""
+            error: "",
+            loggedIn: false
         }
+    }
+    componentDidMount() {
+        axios.get('/auth', {
+            validateStatus: (status) => {
+              return status < 500;
+            }})
+            .then(res => {            
+                if (res.status === 200) {
+                    this.setState({ loggedIn: true })
+                } else if (res.status === 401) {
+                    this.setState({ loggedIn: false })
+                } else {
+                    const error = new Error(res.error);
+                    throw error;
+                }
+            })
+            .catch(err => {
+                this.setState({ loggedIn: false });
+            });
     }
     handleChange(event) {
         event.preventDefault();
@@ -46,18 +67,22 @@ export class Login extends React.Component {
                 username: this.state.value
             })
             .then(response => {        
-                if (response.status === 200) {
-                    window.location = '/dashboard';
+                if (response.status === 200) {                    
+                    this.setState({
+                        loggedIn: true
+                    })
                 }
             })
             .catch(err => {                
-                if (err.message.includes(400)) {
+                if (err.message.includes(409)) {
                     this.setState({
-                        error: "Username already exists"
+                        error: "Username already exists",
+                        loggedIn: false
                     })
                 } else {
                     this.setState({
-                        error:  err.message
+                        error:  err.message,
+                        loggedIn: false
                     })
                 }
             })
@@ -66,16 +91,18 @@ export class Login extends React.Component {
     getInputStyle() {
         return (this.state.error !== '') ? {border: '2px solid #EA3546'} : {};
     }
-    render() {        
+    render() {
         return (
-            <div className={styles.loginPage}>
-            <form className={styles.loginForm} onSubmit={this.sendLogin.bind(this)}>
-                <h3 className={styles.errorText}>{this.state.error}</h3>
-                <h2 className={styles.formHeader}>Type a username to enter the game:</h2>
-                <input className={styles.loginInput} style={this.getInputStyle()} value={this.state.value} placeholder="Type in your username" onChange={this.handleChange.bind(this)} autoFocus/>
-                <button className={styles.loginButton} type="submit">Log in</button>
-            </form>
-            </div>
+            (!this.state.loggedIn) ?
+                <div className={styles.loginPage}>
+                <form className={styles.loginForm} onSubmit={this.sendLogin.bind(this)}>
+                    <h3 className={styles.errorText}>{this.state.error}</h3>
+                    <h2 className={styles.formHeader}>Type a username to enter the game:</h2>
+                    <input className={styles.loginInput} style={this.getInputStyle()} value={this.state.value} placeholder="Type in your username" onChange={this.handleChange.bind(this)} autoFocus/>
+                    <button className={styles.loginButton} type="submit">Log in</button>
+                </form>
+                </div>
+            : <Redirect to='/dashboard' />
         )
     }
 }

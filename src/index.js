@@ -6,7 +6,6 @@ import { Provider } from 'react-redux';
 import { store } from './store/store';
 
 import './index.css';
-import Login from './components/Login/Login';
 
 ReactDOM.render(
     <Provider store={store}>
