@@ -33,9 +33,9 @@ module.exports = port => {
     /* Check if player is logged in */
     app.get('/auth', (request, response) => {
         if (request.session.user) {
-            response.status(200).json({loggedIn: true});
+            response.sendStatus(200);
         } else {
-            response.status(200).json({loggedIn: false});
+            response.sendStatus(400);
         }
     });
 

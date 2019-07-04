@@ -12,6 +12,7 @@ import { dispatch } from '../../store/store';
 import { setSocket } from '../../store/actions';
 import { sendWord, sendCard } from '../../services/socket';
 import { finishPlayCard } from '../Cards/playerActions';
+import Auth from '../Auth';
 
 export class Dashboard extends React.Component {
 
@@ -54,6 +55,7 @@ export class Dashboard extends React.Component {
 
         return (
             <div className={style.roundInfo}>
+                <Auth/>
                 {this.props.gameState.started && <h2>Round: <span id="round-number">{this.props.gameState.roundNum}</span></h2>}
                 <div className={style.currentPlayersBox}>
                     Players:

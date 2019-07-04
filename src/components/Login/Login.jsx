@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './Login.module.css';
 import axios from 'axios';
+import Auth from '../Auth';
 
 export class Login extends React.Component {
     constructor(props) {
@@ -69,6 +70,7 @@ export class Login extends React.Component {
     render() {        
         return (
             <div className={styles.loginPage}>
+            <Auth/>
             <form className={styles.loginForm} onSubmit={this.sendLogin.bind(this)}>
                 <h3 className={styles.errorText}>{this.state.error}</h3>
                 <h2 className={styles.formHeader}>Type a username to enter the game:</h2>
