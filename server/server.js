@@ -76,7 +76,6 @@ module.exports = port => {
             };
             currentUsers.push(user);
             gameLogic.joinGame(user);
-            socket.emitGameState();
             res.sendStatus(200);
         } else {
             res.sendStatus(400);
@@ -89,7 +88,6 @@ module.exports = port => {
         if (user) {
             currentUsers = currentUsers.filter((otherUser) => otherUser !== user);
             if (gameLogic.quitGame(user)) {
-                socket.emitGameState();
                 req.session.destroy();
                 res.sendStatus(200);
             } else {
@@ -103,7 +101,6 @@ module.exports = port => {
     /* Start the game */
     app.get('/api/start', (req, res) => {
         gameLogic.startGame();
-        socket.emitGameState();
         res.sendStatus(200);
     });
 
@@ -120,9 +117,8 @@ module.exports = port => {
 
     /* End your turn */
     app.get('/api/endTurn', (req, res) => {
-        const username = req.session.user;    
+        const username = req.session.user;
         gameLogic.endPlayerTurn(username);
-        socket.emitGameState();
         res.sendStatus(200);
     });
 

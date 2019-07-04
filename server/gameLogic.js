@@ -1,3 +1,5 @@
+const socket = require('./socket');
+
 let gameState = {
     started: false,
     roundNum: 0,
@@ -14,12 +16,14 @@ exports.getGameState = () => {
 
 exports.setCurrentWord = (word) => {
     gameState = {...gameState, currentWord: word};
+    socket.emitGameState();
 }
 
 /* Add the player to the game if possible */
 exports.joinGame = player => {
     if (!gameState.started && !gameState.players.includes(player)) {
         gameState.players.push(player);
+        socket.emitGameState();
     } else {
         // TODO
         // - Game has started, player can't join
@@ -31,6 +35,7 @@ exports.joinGame = player => {
 exports.quitGame = player => {
     if (!gameState.started && gameState.players.includes(player)) {
         gameState.players = gameState.players.filter((otherPlayer) => otherPlayer !== player);
+        socket.emitGameState();
         return true;
     } else {
         // Game has started, player can't quit
@@ -43,6 +48,7 @@ exports.startGame = () => {
     // TODO: Min players
     gameState.started = true;
     gameState.currentPlayer = gameState.players[0];
+    socket.emitGameState();
 }
 
 /* Call when a player finishes their turn */
@@ -58,12 +64,14 @@ const getPlayerIndexByUsername = username => {
 
 /* Move on to the next round, called when all players have finished their turn */
 const incrementRound = () => {
-    console.log("End of round!");
     gameState.roundNum++;
     gameState.players = gameState.players.map(player => {
         return {...player, finishedTurn: false};
     });
     gameState.currentPlayer = gameState.players[gameState.roundNum % gameState.players.length];
+    gameState.currentCards = [];
+    gameState.currentWord = '';
+    socket.emitGameState();
 }
 
 /* Returns true if all players have finished the current turn */
@@ -77,4 +85,5 @@ const allPlayersFinishedTurn = () => {
 /* Adds player's card to list of played cards */
 exports.playCard = card => {
     gameState.currentCards.push({id: card, hidden: true});
+    socket.emitGameState();
 }
