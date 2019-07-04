@@ -1,5 +1,4 @@
 const express = require('express');
-const sharedsession = require("express-socket.io-session");
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -7,12 +6,12 @@ const gameLogic = require('./gameLogic');
 const cookieParser = require('cookie-parser')
 const cardManager = require('./cards');
 const expressSession = require('express-session');
+const socket = require('./socket');
 
 module.exports = port => {
     const app = express();
     const server = require('http').createServer(app);
-    const io = require('socket.io')(server);
-
+    
     app.use(express.static('build'));
     app.use(bodyParser.json());
     app.use(cors());
@@ -25,7 +24,8 @@ module.exports = port => {
         secure: true
     });
     app.use(session);
-    io.use(sharedsession(session));
+    
+    socket.setupSocket(server, session);
 
     let currentUsers = [];
     server.listen(port, () => console.log(`Server running on port: ${port}`));
@@ -76,7 +76,7 @@ module.exports = port => {
             };
             currentUsers.push(user);
             gameLogic.joinGame(user);
-            emitGameState();
+            socket.emitGameState();
             res.sendStatus(200);
         } else {
             res.sendStatus(400);
@@ -89,7 +89,7 @@ module.exports = port => {
         if (user) {
             currentUsers = currentUsers.filter((otherUser) => otherUser !== user);
             if (gameLogic.quitGame(user)) {
-                emitGameState();
+                socket.emitGameState();
                 req.session.destroy();
                 res.sendStatus(200);
             } else {
@@ -103,7 +103,7 @@ module.exports = port => {
     /* Start the game */
     app.get('/api/start', (req, res) => {
         gameLogic.startGame();
-        emitGameState();
+        socket.emitGameState();
         res.sendStatus(200);
     });
 
@@ -122,7 +122,7 @@ module.exports = port => {
     app.get('/api/endTurn', (req, res) => {
         const username = req.session.user;    
         gameLogic.endPlayerTurn(username);
-        emitGameState();
+        socket.emitGameState();
         res.sendStatus(200);
     });
 
@@ -135,57 +135,4 @@ module.exports = port => {
             }
         });
     });
-
-    /* SOCKET */
-
-    let sockets = [];
-    let globalMessage = '';
-    
-    // Setup connection
-    io.on('connection', function (socket) {
-        console.log("socket connection");
-        sockets.push(socket);
-        console.log(socket.handshake.session);
-        emitGameState();
-        socket.on('private message', function (msg) {
-            if (checkCurrentTurn(socket)) {
-                console.log('I received a private message saying ', msg);
-                globalMessage = msg;
-                io.emit("messages", globalMessage);
-            }        
-        });
-        socket.on('play card', (cardID) => {
-            if (checkCurrentTurn(socket)) {
-                gameLogic.playCard(cardID)
-                emitGameState();
-            }
-        })
-    });
-
-    // Whenever a change is made to the game state, emit it
-    const emitGameState = () => {
-        console.log("emitGameState");
-        for (let socket of sockets) {
-            let gameState = {...gameLogic.getGameState(), myTurn: checkCurrentTurn(socket)}
-            socket.emit("gameState", gameState);
-        }
-    }
-
-    // Get the player's socket
-    const getSocketByUsername = (username) => {
-        for (let socket of sockets) {
-            if (socket.handshake.session.user === gameLogic.getGameState().currentPlayer.username) return socket;
-        }
-        return null;
-    }
-
-    // Check if it's the sender's turn
-    const checkCurrentTurn = (socket) => {
-        if (gameLogic.getGameState().currentPlayer) {
-            return (socket.handshake.session.user === gameLogic.getGameState().currentPlayer.username)
-        } else {
-            return false;
-        }
-    }
 }
-
