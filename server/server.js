@@ -79,7 +79,7 @@ module.exports = port => {
             emitGameState();
             res.sendStatus(200);
         } else {
-            res.status(404).json({message: "User already exists"});
+            res.sendStatus(400);
         }
     });
 
@@ -146,7 +146,6 @@ module.exports = port => {
         console.log("socket connection");
         sockets.push(socket);
         console.log(socket.handshake.session);
-        
         emitGameState();
         socket.on('private message', function (msg) {
             if (checkCurrentTurn(socket)) {
