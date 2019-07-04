@@ -5,8 +5,6 @@ const gameLogic = require('./gameLogic');
 let io;
 let sockets = [];
 
-let globalMessage = '';
-
 exports.setupSocket = (server, session) => {
     io = socketio(server);
     io.use(sharedsession(session));
@@ -14,11 +12,10 @@ exports.setupSocket = (server, session) => {
         sockets.push(socket);
         emitGameState();
 
-        socket.on('private message', function (msg) {
+        socket.on('play word', function (msg) {
             if (checkCurrentTurn(socket)) {
-                console.log('I received a private message saying ', msg);
-                globalMessage = msg;
-                io.emit("messages", globalMessage);
+                gameLogic.setCurrentWord(msg);
+                emitGameState();
             }        
         });
 
@@ -33,7 +30,6 @@ exports.setupSocket = (server, session) => {
 
 // Emit the current game state to all players
 const emitGameState = exports.emitGameState = () => {
-    console.log("emitGameState");
     for (let socket of sockets) {
         let gameState = {...gameLogic.getGameState(), myTurn: checkCurrentTurn(socket)}
         socket.emit("gameState", gameState);
