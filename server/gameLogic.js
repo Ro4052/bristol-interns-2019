@@ -12,6 +12,10 @@ exports.getGameState = () => {
     return gameState;
 }
 
+exports.setCurrentWord = (word) => {
+    gameState = {...gameState, currentWord: word};
+}
+
 /* Add the player to the game if possible */
 exports.joinGame = player => {
     if (!gameState.started && !gameState.players.includes(player)) {
