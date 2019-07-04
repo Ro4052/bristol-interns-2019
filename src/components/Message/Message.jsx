@@ -32,7 +32,7 @@ export class Message extends React.Component {
         return (
             <div className={style.messageBox}>
                 <div>
-                    <h1 id="message">Hello</h1>
+                    <h1 id="message">{this.props.message}</h1>
                 </div>
                 {(this.props.myTurn) ? box : ""}
             </div>

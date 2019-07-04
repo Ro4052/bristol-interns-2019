@@ -26,9 +26,10 @@ code {
 #root {
   height: 100%;
   font-family: var(--main-font);
+  background-color: beige;
 }
 
-#end-turn {
+#end-turn, #start-game {
   background-color: var(--blue);
   padding: 1em 3em;
   outline: none;
