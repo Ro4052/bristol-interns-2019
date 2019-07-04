@@ -1,7 +1,15 @@
 const socket = require('./socket');
 
+const status = {
+    NOT_STARTED: "NOT_STARTED",
+    WAITING_FOR_CURRENT_PLAYER: "WAITING_FOR_CURRENT_PLAYER",
+    WAITING_FOR_OTHER_PLAYERS: "WAITING_FOR_OTHER_PLAYERS",
+    GAME_OVER: "GAME_OVER"
+};
+
 let gameState = {
-    started: false,
+    status: status.NOT_STARTED,
+    started: false, // Going to remove eventually using status instead
     roundNum: 0,
     currentPlayer: null,
     players: [],
@@ -14,11 +22,6 @@ exports.getGameState = () => {
     return gameState;
 }
 
-exports.setCurrentWord = (word) => {
-    gameState = {...gameState, currentWord: word};
-    socket.emitGameState();
-}
-
 /* Add the player to the game if possible */
 exports.joinGame = player => {
     if (!gameState.started && !gameState.players.includes(player)) {
@@ -28,6 +31,7 @@ exports.joinGame = player => {
         // TODO
         // - Game has started, player can't join
         // - Player has already joined
+        // - Max players reached
     }
 }
 
@@ -48,13 +52,37 @@ exports.startGame = () => {
     // TODO: Min players
     gameState.started = true;
     gameState.currentPlayer = gameState.players[0];
+    gameState.status = status.WAITING_FOR_CURRENT_PLAYER;
     socket.emitGameState();
+    socket.promptCurrentPlayer();
 }
 
 /* Call when a player finishes their turn */
 exports.endPlayerTurn = username => {
+    console.log(username);
     gameState.players[getPlayerIndexByUsername(username)].finishedTurn = true;
-    if (allPlayersFinishedTurn()) incrementRound();
+    if (gameState.status === status.WAITING_FOR_CURRENT_PLAYER && gameState.currentPlayer.username === username) {
+        console.log("Current player is ending their turn!");
+        gameState.status = status.WAITING_FOR_OTHER_PLAYERS;
+        socket.emitWord(gameState.currentWord);
+    } else if (true) {
+        // Are we waiting for one of the other players?
+
+
+        // If we have changed something, check whether we want to increment the round
+        if (allPlayersFinishedTurn()) incrementRound();
+    }
+}
+
+/* Adds player's card to list of played cards */
+exports.playCard = card => {
+    gameState.currentCards.push({id: card, hidden: true});
+    socket.emitGameState();
+}
+
+exports.setCurrentWord = (word) => {
+    gameState = {...gameState, currentWord: word};
+    socket.emitGameState();
 }
 
 /* Get the index of the player in the list */
@@ -72,6 +100,7 @@ const incrementRound = () => {
     gameState.currentCards = [];
     gameState.currentWord = '';
     socket.emitGameState();
+    socket.promptCurrentPlayer();
 }
 
 /* Returns true if all players have finished the current turn */
@@ -80,10 +109,4 @@ const allPlayersFinishedTurn = () => {
         if (!player.finishedTurn) return false;
     }
     return true;
-}
-
-/* Adds player's card to list of played cards */
-exports.playCard = card => {
-    gameState.currentCards.push({id: card, hidden: true});
-    socket.emitGameState();
 }

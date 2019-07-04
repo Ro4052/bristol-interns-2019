@@ -16,13 +16,20 @@ const connectSocket = () => {
     });
 
     socket.on("gameState", msg => {
-        console.log("HERE");
-        console.log("gameState", msg);
+        console.log("Received an updated game state", msg);
         dispatch(setGameState(msg));
     });
 
     socket.on("messages", msg => {
         dispatch(setMessage(msg));
+    });
+
+    socket.on("played word", msg => {
+        console.log("The current player played the word: ", msg);
+    });
+
+    socket.on("play word and card", () => {
+        console.log("Your turn, play a word and a card");
     });
 
     return socket;
