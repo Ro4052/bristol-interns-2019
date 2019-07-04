@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './Cards.module.css';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { fetchCards, requestPlayCard } from '../../store/playerActions';
+import { fetchCards, requestPlayCard, finishPlayCard } from '../../store/playerActions';
 
 export class PlayerCards extends React.Component {
     constructor() {
@@ -79,6 +79,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
     fetchCards: () => dispatch(fetchCards()),
     requestPlayCard: (id) => dispatch(requestPlayCard(id)),
+    finishPlayCard: (id) => dispatch(finishPlayCard(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayerCards);
