@@ -21,7 +21,7 @@ export default function Auth(ProtectedComponent) {
         .then(res => {            
             if (res.status === 200) {
                 this.setState({ loading: false, authenticated: true });
-            } else if (res.status === 400) {
+            } else if (res.status === 401) {
                 this.setState({ loading: false, authenticated: false });
             } else {
                 const error = new Error(res.error);

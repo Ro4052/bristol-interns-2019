@@ -33,7 +33,7 @@ router.get('/api/cards', (req, res) => {
     var user = currentUsers.find((user) => user.username === indexedBy);    
         res.status(200).json(user.cards);
     } else {
-        res.sendStatus(404);
+        res.sendStatus(401);
     }
 });
 
@@ -54,7 +54,7 @@ router.post('/auth/login', (req, res) => {
         gameLogic.joinGame(user);
         res.sendStatus(200);
     } else {
-        res.sendStatus(400);
+        res.sendStatus(409);
     }
 });
 
