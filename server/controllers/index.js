@@ -53,17 +53,6 @@ router.post('/auth/logout', (req, res) => {
     }
 });
 
-/* Check if it's my turn */
-// router.get('/api/myTurn', auth, (req,res) => {
-//     let user = currentUsers.find((user) => user.username === req.session.user);
-//     let currentuser = gameLogic.getGameState().currentPlayer;
-//     if (user === currentuser) {
-//         res.status(200).json({myTurn: true});
-//     } else {
-//         res.status(200).json({myTurn: false});
-//     }
-// })
-
 /* Send a random set of cards to user */
 router.get('/api/cards', auth, (req, res) => {
     const user = currentUsers.find((user) => user.username === req.session.user);    
