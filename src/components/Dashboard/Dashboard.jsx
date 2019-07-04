@@ -31,7 +31,7 @@ export class Dashboard extends React.Component {
             console.log(err);
         });
     }
-    endTurn() {
+    endTurn() {        
         if (this.props.myWord && this.props.playedCard) {
             sendCard(this.props.socket, this.props.playedCard);
             sendWord(this.props.socket, this.props.myWord);

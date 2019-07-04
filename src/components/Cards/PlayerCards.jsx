@@ -27,7 +27,9 @@ export class PlayerCards extends React.Component {
         return cardImages;
     }
     playCard(card) {
-        this.props.requestPlayCard(card.target.id.split('-')[1]);
+        if (this.props.myTurn) {
+            this.props.requestPlayCard(card.target.id.split('-')[1]);
+        }
     }
         
     disableOnEndTurn() {
@@ -35,7 +37,7 @@ export class PlayerCards extends React.Component {
     }
     render() {
         const cardsImages = this.getPlayerCards().map((card) => (
-            <img id={"card-" + card.id} alt='' className={this.disableOnEndTurn()} key={card.id} src={card.url} onClick={this.props.myTurn && this.playCard.bind(this)}/>
+            <img id={"card-" + card.id} alt='' className={this.disableOnEndTurn()} key={card.id} src={card.url} onClick={this.playCard.bind(this)}/>
         ))
         return (
             <div className={styles.cardsContainer} id="my-cards">
