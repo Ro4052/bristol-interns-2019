@@ -1,6 +1,7 @@
 import io from 'socket.io-client';
 import { dispatch } from '../store/store';
-import { setGameState, setMessage } from '../store/actions';
+import { setGameState, setCurrentWord } from '../store/actions';
+import { setMyTurn, setOthersTurn } from '../store/playerActions';
 
 const connectSocket = () => {
     let connectionString;
@@ -20,20 +21,19 @@ const connectSocket = () => {
         dispatch(setGameState(msg));
     });
 
-    socket.on("messages", msg => {
-        dispatch(setMessage(msg));
-    });
-
     socket.on("played word", msg => {
         console.log("The current player played the word: ", msg);
+        dispatch(setCurrentWord(msg));
     });
 
     socket.on("play word and card", () => {
         console.log("Your turn, play a word and a card");
+        dispatch(setMyTurn());
     });
 
     socket.on("play card", () => {
         console.log("Play a card");
+        dispatch(setOthersTurn());
     });
 
     return socket;

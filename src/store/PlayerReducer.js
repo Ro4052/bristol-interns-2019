@@ -1,14 +1,18 @@
-import {FETCH_CARDS_BEGIN, FETCH_CARDS_SUCCESS, FETCH_CARDS_FAILURE, REQUEST_PLAY_CARD, FINISH_PLAY_CARD, PLAY_WORD} from './playerActions';
+import {FETCH_CARDS_BEGIN, FETCH_CARDS_SUCCESS, FETCH_CARDS_FAILURE, REQUEST_PLAY_CARD, FINISH_PLAY_CARD, PLAY_WORD, MY_TURN, OTHERS_TURN} from './playerActions';
 
 export const initialState = {
     myCards: [],
     playedCard: 0,
     myWord: "",
     loading: true,
-    error: null
+    error: null,
+    myTurn: false /* true when player needs to play both a word and a card */,
+    othersTurn: false /* true when player only needs to play a card given the word */
 }
 
 const cardReducer = (state = initialState, action) => {
+    console.log(action);
+    console.log(state);
     switch (action.type) {
         case FETCH_CARDS_BEGIN:
             return {
@@ -43,6 +47,17 @@ const cardReducer = (state = initialState, action) => {
             return {
                 ...state,
                 myWord: action.word
+            }
+        case MY_TURN:
+            return {
+                ...state,
+                myTurn: true
+            }
+        case OTHERS_TURN:
+            return {
+                ...state,
+                myTurn: false,
+                othersTurn: true
             }
         default:
             return state;

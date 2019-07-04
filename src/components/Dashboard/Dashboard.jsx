@@ -6,7 +6,7 @@ import PlayerCards from '../Cards/PlayerCards';
 import LogoutButton from '../Login/LogoutButton'
 import style from './Dashboard.module.css';
 import axios from 'axios';
-import { setGameState, setMessage } from '../../store/actions';
+import { setGameState } from '../../store/actions';
 import connectSocket from '../../services/socket';
 import { dispatch } from '../../store/store';
 import { setSocket } from '../../store/actions';
@@ -32,7 +32,7 @@ export class Dashboard extends React.Component {
     }
     endTurn() {        
         if (this.props.myWord && this.props.playedCard) {
-            axios.post('/api/endTurn', {
+            axios.post('/api/playCardWord', {
                 card: this.props.playedCard,
                 word: this.props.myWord
             })
@@ -51,9 +51,9 @@ export class Dashboard extends React.Component {
     }
     render() {
         const startGameButton = <button id="start-game" onClick={this.startGame}>Start game</button>;
-        const nextTurnButton = (this.props.gameState.myTurn) ? <button id="end-turn" onClick={this.endTurn}>End my turn</button> : "";
-        const pickWordText = (this.props.gameState.myTurn && !this.props.myWord) ? <h3>Type in a word</h3> : "";
-        const pickCardText = (this.props.gameState.myTurn && !this.props.playedCard) ? <h3>Pick a card</h3> : "";
+        const nextTurnButton = (this.props.myTurn) ? <button id="end-turn" onClick={this.endTurn}>End my turn</button> : "";
+        const pickWordText = (this.props.myTurn && !this.props.myWord) ? <h3>Type in a word</h3> : "";
+        const pickCardText = ((this.props.myTurn || this.props.othersTurn) && !this.props.playedCard) ? <h3>Pick a card</h3> : "";
         return (
             <div className={style.roundInfo}>
                 {this.props.gameState.started && <h2>Round: <span id="round-number">{this.props.gameState.roundNum}</span></h2>}
@@ -87,13 +87,14 @@ const mapStateToProps = (state, props) => {
         socket: state.reducer.socket,
         gameState: state.reducer.gameState,
         myWord: state.playerReducer.myWord,
+        myTurn: state.playerReducer.myTurn,
+        othersTurn: state.playerReducer.othersTurn,
         playedCard: state.playerReducer.playedCard
     });
 }
 
 const mapDispatchToProps = (dispatch) => ({
     setGameState: gameState => dispatch(setGameState(gameState)),
-    setMessage: message => dispatch(setMessage(message)),
     finishPlayCard: (id) => dispatch(finishPlayCard(id))
 });
 
