@@ -76,7 +76,7 @@ export class Login extends React.Component {
                 }
             })
             .catch(err => {                
-                if (err.message.includes(400)) {
+                if (err.message.includes(409)) {
                     this.setState({
                         error: "Username already exists",
                         loggedIn: false
