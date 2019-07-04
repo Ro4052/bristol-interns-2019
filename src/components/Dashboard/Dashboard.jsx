@@ -10,8 +10,7 @@ import { setGameState, setMessage } from '../../store/actions';
 import connectSocket from '../../services/socket';
 import { dispatch } from '../../store/store';
 import { setSocket } from '../../store/actions';
-import { sendWord, sendCard } from '../../services/socket';
-import { finishPlayCard } from '../Cards/playerActions';
+import { finishPlayCard } from '../../store/playerActions';
 import Auth from '../Auth';
 
 export class Dashboard extends React.Component {

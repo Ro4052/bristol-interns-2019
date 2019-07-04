@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { playWord } from '../Cards/playerActions';
+import { playWord } from '../../store/playerActions';
 import style from './Message.module.css';
 
 export class Message extends React.Component {
@@ -32,7 +32,7 @@ export class Message extends React.Component {
         return (
             <div className={style.messageBox}>
                 <div>
-                    <h1 id="message">{this.props.currentWord}</h1>
+                    <h1 id="message">{this.props.message}</h1>
                 </div>
                 {(this.props.myTurn) ? box : ""}
             </div>
@@ -43,7 +43,7 @@ export class Message extends React.Component {
 const mapStateToProps = (state) => {
     return ({
         myTurn: state.reducer.gameState.myTurn,
-        currentWord: state.reducer.gameState.currentWord,
+        message: state.reducer.message,
         socket: state.reducer.socket
     });
 }
