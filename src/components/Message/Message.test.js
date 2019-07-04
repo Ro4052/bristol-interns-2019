@@ -21,7 +21,7 @@ describe('on submit message', () => {
     it('calls sendMessage', () => {
         const spy = jest.spyOn(Message.prototype, 'sendMessage');
         const socket = new SocketMock();
-        const wrapper = shallow(<Message myTurn={true} message={''} socket={socket} />);
+        const wrapper = shallow(<Message myTurn={true} message={''} playWord={() => {}} socket={socket} />);
         wrapper.find('button#send-message').simulate('click');
         expect(spy).toHaveBeenCalled();
         spy.mockRestore();

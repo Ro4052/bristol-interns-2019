@@ -1,6 +1,6 @@
 import React from 'react';
-import { sendWord } from '../../services/socket';
 import { connect } from 'react-redux';
+import { playWord } from '../Cards/playerActions';
 
 export class Message extends React.Component {
 
@@ -18,7 +18,7 @@ export class Message extends React.Component {
     }
 
     sendMessage() {
-        sendWord(this.props.socket, this.state.currentValue);
+        this.props.playWord(this.state.currentValue);
     }
 
     render() {
@@ -47,4 +47,8 @@ const mapStateToProps = (state) => {
     });
 }
 
-export default connect(mapStateToProps)(Message);
+const mapDispatchToProps = (dispatch) => ({
+    playWord: (word) => dispatch(playWord(word))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Message);
