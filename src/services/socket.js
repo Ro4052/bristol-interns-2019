@@ -29,7 +29,7 @@ const connectSocket = () => {
 }
 
 export const sendWord = (socket, msg) => {
-    socket.emit("private message", msg);
+    socket.emit("play word", msg);
 }
 
 export const sendCard = (socket, msg) => {

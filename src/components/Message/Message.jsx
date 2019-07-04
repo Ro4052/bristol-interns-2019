@@ -32,7 +32,7 @@ export class Message extends React.Component {
             <div>
                 {this.props.myTurn && box}
                 <div>
-                    <h1 id="message">{this.props.message}</h1>
+                    <h1 id="message">{this.props.currentWord}</h1>
                 </div>
             </div>
         )
@@ -42,7 +42,7 @@ export class Message extends React.Component {
 const mapStateToProps = (state) => {
     return ({
         myTurn: state.reducer.gameState.myTurn,
-        message: state.reducer.message,
+        currentWord: state.reducer.gameState.currentWord,
         socket: state.reducer.socket
     });
 }
