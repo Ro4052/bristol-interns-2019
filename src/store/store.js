@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware, combineReducers  } from 'redux';
 import reducer from './reducer';
-import playerReducer from '../components/Cards/PlayerReducer';
+import playerReducer from './PlayerReducer';
 import thunk from 'redux-thunk';
 
 const store = createStore(

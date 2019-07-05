@@ -11,33 +11,61 @@ exports.setupSocket = (server, session) => {
     io.on('connection', function (socket) {
         sockets.push(socket);
         emitGameState();
-
-        socket.on('play word', function (msg) {
-            if (checkCurrentTurn(socket)) {
-                gameLogic.setCurrentWord(msg);
-                emitGameState();
-            }        
-        });
-
-        socket.on('play card', (cardID) => {
-            if (checkCurrentTurn(socket)) {
-                gameLogic.playCard(cardID)
-                emitGameState();
-            }
-        });
     });
 }
 
 // Emit the current game state to all players
 const emitGameState = exports.emitGameState = () => {
     for (let socket of sockets) {
-        let gameState = {...gameLogic.getGameState(), myTurn: checkCurrentTurn(socket)}
+        let gameState = {...gameLogic.getGameState(), myTurn: isCurrentPlayerSocket(socket)}
         socket.emit("gameState", gameState);
     }
 }
 
+// Tell all the players what word was played
+exports.emitWord = word => {
+    console.log("emitWord");
+    io.emit("played word", word);
+}
+
+// When everyone has played their cards, send them all to the players
+exports.emitPlayedCards = cards => {
+    console.log("emitPlayedCards");
+    io.emit("played cards", cards);
+}
+
+// Ask the current player for a word and a card
+exports.promptCurrentPlayer = () => {
+    console.log("promptCurrentPlayer");
+    for (let socket of sockets) {
+        if (socket.handshake.session.user === gameLogic.getGameState().currentPlayer.username) {
+            socket.emit("play word and card");
+        }
+    }
+}
+
+// Ask the other players for a card
+exports.promptOtherPlayers = () => {
+    console.log("promptOtherPlayers");
+    for (let socket of sockets) {
+        if (socket.handshake.session.user !== gameLogic.getGameState().currentPlayer.username) {
+            socket.emit("play card");
+        }
+    }
+}
+
+// Ask the other players to vote on the cards
+exports.promptPlayersVote = () => {
+    console.log("promptPlayersVotes");
+    for (let socket of sockets) {
+        if (socket.handshake.session.user !== gameLogic.getGameState().currentPlayer.username) {
+            socket.emit("vote");
+        }
+    }
+}
+
 // Check if it's the sender's turn
-const checkCurrentTurn = (socket) => {
+const isCurrentPlayerSocket = exports.isCurrentPlayerSocket = (socket) => {
     if (gameLogic.getGameState().currentPlayer) {
         return (socket.handshake.session.user === gameLogic.getGameState().currentPlayer.username)
     } else {

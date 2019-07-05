@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { playWord } from '../Cards/playerActions';
+import { playWord } from '../../store/playerActions';
+import style from './Message.module.css';
 
 export class Message extends React.Component {
 
@@ -23,17 +24,17 @@ export class Message extends React.Component {
 
     render() {
         const box = (
-            <div>
+            <>
                 <input onChange={this.handleChange} value={this.state.currentValue} placeholder="Type in your word" />
-                <button id="send-message" className="chat-button" onClick={this.sendMessage}>Send a message</button>
-            </div>
+                <button id="send-message" className={style.sendWordButton} onClick={this.sendMessage}>Send word</button>
+            </>
         );
+        console.log(this.props.finishedRound);
         return (
-            <div>
-                {this.props.myTurn && box}
-                <div>
-                    <h1 id="message">{this.props.currentWord}</h1>
-                </div>
+            
+            <div className={style.messageBox}>
+                {this.props.message && <h1 id="message">{this.props.message}</h1>}
+                {(this.props.myTurn && !this.props.finishedRound) ? box : ""}
             </div>
         )
     }
@@ -42,7 +43,8 @@ export class Message extends React.Component {
 const mapStateToProps = (state) => {
     return ({
         myTurn: state.reducer.gameState.myTurn,
-        currentWord: state.reducer.gameState.currentWord,
+        finishedRound: state.playerReducer.finishedRound,
+        message: state.reducer.message,
         socket: state.reducer.socket
     });
 }

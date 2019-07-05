@@ -1,3 +1,4 @@
+
 body {
   height: 100%;
   margin: 0;
@@ -18,11 +19,28 @@ code {
   --blue: #43BCCD;
   --purple: #662E9B;
   --red: #EA3546;
-  --orange: #F86624;
+  --orange: rgba(223, 109, 15, 0.9);
   --yellow: #F9C80E;
   --main-font: 'Acme', sans-serif;
 }
 
 #root {
   height: 100%;
+  font-family: var(--main-font);
+  background: url('./components/Dashboard/back.jpg');
+  background-size: cover;
+}
+
+#end-turn, #start-game {
+  background-color: var(--orange);
+  padding: 1em 3em;
+  outline: none;
+  border: 1px solid black;
+  font-family: var(--main-font);
+  border-radius: 20px;
+  font-size: 1em;
+  z-index: 1;
+  margin: 1em;
+  cursor: pointer;
+  transition: 0.2s;
 }

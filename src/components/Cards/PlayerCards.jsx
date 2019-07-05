@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from './Cards.module.css';
 import { connect } from 'react-redux';
-import { fetchCards, requestPlayCard } from './playerActions';
+import axios from 'axios';
+import { fetchCards, requestPlayCard, finishPlayCard } from '../../store/playerActions';
 
 export class PlayerCards extends React.Component {
     constructor() {
@@ -27,15 +28,33 @@ export class PlayerCards extends React.Component {
         return cardImages;
     }
     playCard(card) {
-        this.props.requestPlayCard(card.target.id.split('-')[1]);
+        var id = card.target.id.split('-')[1];
+        if (this.props.myTurn) {
+            this.props.requestPlayCard(id);
+        }
+        if (this.props.othersTurn) {
+            this.props.requestPlayCard(id);
+            this.playCardForWord(id);
+        }
     }
-        
+    playCardForWord(id) {
+        console.log("Playing card for word...");
+        axios.post('/api/playCard', {
+            card: id,
+        })
+        .then(() => {
+            this.props.finishPlayCard(this.props.playedCard)
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    }
     disableOnEndTurn() {
-        return (this.props.myTurn) ? styles.singleCard : styles.disabledCard
+        return ((this.props.playedCard === 0) && (this.props.myTurn || this.props.othersTurn)) ? styles.singleCard : styles.disabledCard
     }
     render() {
         const cardsImages = this.getPlayerCards().map((card) => (
-            <img id={"card-" + card.id} alt='' className={this.disableOnEndTurn()} key={card.id} src={card.url} onClick={this.props.myTurn && this.playCard.bind(this)}/>
+            <img id={"card-" + card.id} alt='' className={this.disableOnEndTurn()} key={card.id} src={card.url} onClick={this.playCard.bind(this)}/>
         ))
         return (
             <div className={styles.cardsContainer} id="my-cards">
@@ -50,16 +69,18 @@ export class PlayerCards extends React.Component {
 
 const mapStateToProps = (state) => {
     return ({
-        myTurn: state.reducer.gameState.myTurn,
+        myTurn: state.playerReducer.myTurn,
+        othersTurn: state.playerReducer.othersTurn,
         myCards: state.playerReducer.myCards,
-        currentPlayer: state.reducer.gameState.currentPlayer,
-        socket: state.reducer.socket
+        playedCard: state.playerReducer.playedCard,
+        finishedRound: state.playerReducer.finishedRound
     });
 };
 
 const mapDispatchToProps = (dispatch) => ({
     fetchCards: () => dispatch(fetchCards()),
     requestPlayCard: (id) => dispatch(requestPlayCard(id)),
+    finishPlayCard: (id) => dispatch(finishPlayCard(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayerCards);

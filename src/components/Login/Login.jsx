@@ -37,7 +37,8 @@ export class Login extends React.Component {
           value: event.target.value
         })
     }
-    checkSpecialChar(string) {        
+    checkSpecialChar(string) {
+        // eslint-disable-next-line
         var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
         if (format.test(string)){
             return true;
@@ -90,17 +91,29 @@ export class Login extends React.Component {
     }
     getInputStyle() {
         return (this.state.error !== '') ? {border: '2px solid #EA3546'} : {};
+            
     }
     render() {
         return (
             (!this.state.loggedIn) ?
-                <div className={styles.loginPage}>
-                <form className={styles.loginForm} onSubmit={this.sendLogin.bind(this)}>
-                    <h3 className={styles.errorText}>{this.state.error}</h3>
-                    <h2 className={styles.formHeader}>Type a username to enter the game:</h2>
-                    <input className={styles.loginInput} style={this.getInputStyle()} value={this.state.value} placeholder="Type in your username" onChange={this.handleChange.bind(this)} autoFocus/>
-                    <button className={styles.loginButton} type="submit">Log in</button>
-                </form>
+                <div>
+                     <div className={styles.foo}>
+                        <span className={styles.letter} data-letter="D">D</span>
+                        <span className={styles.letter} data-letter="i">i</span>
+                        <span className={styles.letter} data-letter="X">X</span>
+                        <span className={styles.letter} data-letter="i">i</span>
+                        <span className={styles.letter} data-letter="t">t</span>
+
+                    </div>
+                    <div className={styles.loginPage}>
+                        <form className={styles.loginForm} onSubmit={this.sendLogin.bind(this)}>
+                            <h3 className={styles.errorText}>{this.state.error}</h3>
+                            <h2 className={styles.formHeader}>Type a username to enter the game:</h2>
+                            <input className={styles.loginInput} style={this.getInputStyle()} value={this.state.value} placeholder="Enter username" onChange={this.handleChange.bind(this)} autoFocus/>
+                            <button className={styles.loginButton} type="submit">Log in</button>
+                        </form>
+                    </div>
+                   
                 </div>
             : <Redirect to='/dashboard' />
         )
