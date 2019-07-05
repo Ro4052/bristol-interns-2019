@@ -12,6 +12,7 @@
 
 h1 {
     text-align: right;
+    color: var(--yellow);
 }
 
 .sendWordButton {
