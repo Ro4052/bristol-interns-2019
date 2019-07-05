@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './Cards.module.css';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import { fetchCards, requestPlayCard, finishPlayCard } from '../../store/playerActions';
 
 export class PlayerCards extends React.Component {
@@ -16,7 +15,7 @@ export class PlayerCards extends React.Component {
     componentDidMount() {
         this.props.fetchCards();
     }
-    
+
     getPlayerCards() {
         let cardImages = [];
         if (this.props.myCards) {
