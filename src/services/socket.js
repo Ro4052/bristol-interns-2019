@@ -17,7 +17,6 @@ const connectSocket = () => {
     });
 
     socket.on("all players", msg => {
-        console.log("all players", msg);
         dispatch(setAllPlayers(msg.allPlayers));
     });
 

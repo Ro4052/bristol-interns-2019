@@ -28,14 +28,11 @@ export class Dashboard extends React.Component {
     }
 
     componentDidMount() {
-        // If log in succeeds, connect to the socket
         const socket = connectSocket();
-        console.log("connectSocket");
         dispatch(setSocket(socket));
     }
 
     render() {
-        console.log(this.props.playCard);
         return (
             <div className={style.roundInfo}>
                 {this.props.status === "NOT_STARTED" && <button id="start-game" onClick={this.startGame}>Start game</button>}
@@ -59,7 +56,8 @@ const mapStateToProps = (state) => {
         roundNum: state.reducer.roundNum,
         currentPlayer: state.reducer.currentPlayer,
         playWordAndCard: state.playerReducer.playWordAndCard,
-        playCard: state.playerReducer.playCard
+        playCard: state.playerReducer.playCard,
+        currentWord: state.reducer.currentWord
     });
 }
 

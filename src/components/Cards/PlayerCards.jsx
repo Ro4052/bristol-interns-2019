@@ -54,8 +54,6 @@ export class PlayerCards extends React.Component {
     }
 
     render() {
-        console.log("playWordAndCard", this.props.playWordAndCard);
-        console.log("playedCard", this.props.playedCard);
         const cardsImages = this.getPlayerCards().map((card) => (
             <img id={"card-" + card.id} alt='' className={this.disableOnEndTurn()} key={card.id} src={card.url} onClick={this.playCard.bind(this)}/>
         ))
