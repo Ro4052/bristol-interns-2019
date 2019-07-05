@@ -49,7 +49,7 @@ export class Dashboard extends React.Component {
     }
     render() {
         const startGameButton = <button id="start-game" onClick={this.startGame}>Start game</button>;
-        const nextTurnButton = (this.props.myTurn) ? <button id="end-turn" onClick={this.endTurn}>End my turn</button> : "";
+        const nextTurnButton = this.props.myTurn && <button id="end-turn" onClick={this.endTurn}>End my turn</button>;
         const pickWordText = (this.props.myTurn && !this.props.myWord) ? <h3>Type in a word</h3> : "";
         const pickCardText = ((this.props.myTurn || this.props.othersTurn) && !this.props.playedCard) ? <h3>Pick a card</h3> : "";
         return (
