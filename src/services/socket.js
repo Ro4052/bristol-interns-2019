@@ -36,6 +36,14 @@ const connectSocket = () => {
         dispatch(setOthersTurn());
     });
 
+    socket.on("played cards", msg => {
+        console.log("Played cards", msg);
+    });
+
+    socket.on("vote", () => {
+        console.log("Vote");
+    });
+
     return socket;
 }
 
