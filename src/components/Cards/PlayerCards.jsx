@@ -31,22 +31,23 @@ export class PlayerCards extends React.Component {
     }
 
     playCard(card) {
+        var id = card.target.id.split('-')[1];
         if (this.props.playWordAndCard) {
-            this.props.requestPlayCard(card.target.id.split('-')[1]);
+            this.props.requestPlayCard(id);
         } else if (this.props.playCard) {
-            this.props.requestPlayCard(card.target.id.split('-')[1]);
+            this.props.requestPlayCard(id);
         }
     }
 
-    playCardForWord(card) {
-        var id = card.target.id.split('-')[1];
-        if (this.props.myTurn) {
-            this.props.requestPlayCard(id);
-        } else if (this.props.othersTurn) {
-            this.props.requestPlayCard(id);
-            this.playCardForWord(id);
-        }
-    }
+    // playCardForWord(card) {
+    //     var id = card.target.id.split('-')[1];
+    //     if (this.props.myTurn) {
+    //         this.props.requestPlayCard(id);
+    //     } else if (this.props.othersTurn) {
+    //         this.props.requestPlayCard(id);
+            
+    //     }
+    // }
 
     disableOnEndTurn() {
         return ((this.props.playWordAndCard || this.props.playCard) && this.props.playedCard !== 0) ? styles.singleCard : styles.disabledCard

@@ -40,7 +40,7 @@ export class PlayWordAndCard extends React.Component {
                 word: this.props.myWord
             })
             .then(() => {
-                this.props.finishPlayCard(this.props.playedCard)
+                this.props.finishPlayCard(this.props.playedCard);
             })
             .catch(err => {
                 console.log(err);
