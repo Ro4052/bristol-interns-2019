@@ -72,13 +72,13 @@ describe('on start of game', () => {
 describe('before you have finished your turn', () => {
     // TODO: Setup state for these tests
     it('displays the end turn button', () => {
-        const wrapper = shallow(<Dashboard gameState={firstRoundGameState} />);
+        const wrapper = shallow(<Dashboard gameState={firstRoundGameState} myTurn={true}/>);
         expect(wrapper.exists('button#end-turn')).toEqual(true);
     });
     describe('on clicking the end turn button', () => {
         it('calls endTurn', () => {
             const spy = jest.spyOn(Dashboard.prototype, 'endTurn');
-            const wrapper = shallow(<Dashboard gameState={firstRoundGameState} />);
+            const wrapper = shallow(<Dashboard gameState={firstRoundGameState} myTurn={true}/>);
             wrapper.find('button#end-turn').simulate('click');
             expect(spy).toHaveBeenCalled();
             spy.mockRestore();
