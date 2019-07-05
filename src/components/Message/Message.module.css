@@ -11,8 +11,10 @@
 }
 
 h1 {
+    font-family: 'Dilana';
     text-align: right;
     color: var(--yellow);
+
 }
 
 .sendWordButton {
