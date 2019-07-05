@@ -9,11 +9,7 @@ export const initialState = {
 }
 
 const reducer = (state = initialState, action) => {
-    console.log(state);
-    
     switch (action.type) {
-        // case "SET_GAME_STATE":
-        //     return {...state, gameState: action.gameState };
         case "SET_STATUS":
             return {...state, status: action.status };
         case "SET_ROUND_NUMBER":

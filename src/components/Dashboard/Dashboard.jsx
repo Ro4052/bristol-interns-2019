@@ -14,24 +14,20 @@ import PlayWordAndCard from '../PlayerInfo/PlayWordAndCard';
 import axios from 'axios';
 
 export class Dashboard extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {}
     }
-
     startGame() {
         axios.get('/api/start')
         .catch(err => {
             console.log(err);
         });
     }
-
     componentDidMount() {
         const socket = connectSocket();
         dispatch(setSocket(socket));
     }
-
     render() {
         return (
             <div className={style.roundInfo}>
