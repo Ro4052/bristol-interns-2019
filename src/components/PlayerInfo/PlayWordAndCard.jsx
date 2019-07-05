@@ -49,7 +49,6 @@ export class PlayWordAndCard extends React.Component {
     }
 
     render() {
-        console.log("playedCard", this.props.playedCard);
         const sendWord = (
             <div>
                 <input onChange={this.handleChange} value={this.state.currentValue} placeholder="Type in your word" />
@@ -61,7 +60,7 @@ export class PlayWordAndCard extends React.Component {
                 {this.props.playWordAndCard && !this.props.myWord && <h3>Type in a word</h3>}
                 {(this.props.playCard || this.props.playWordAndCard) && !this.props.playedCard && <h3>Pick a card</h3>}
                 {sendWord}
-                {this.props.playCard && this.props.playedCard && <button id="end-turn" onClick={this.endTurn}>End my turn</button>}
+                {this.props.myWord && this.props.playedCard && <button id="end-turn" onClick={this.endTurn}>End my turn</button>}
             </div>
         );
     }

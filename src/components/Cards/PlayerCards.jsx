@@ -16,6 +16,7 @@ export class PlayerCards extends React.Component {
     componentDidMount() {
         this.props.fetchCards();
     }
+    
     getPlayerCards() {
         let cardImages = [];
         if (this.props.myCards) {
@@ -42,8 +43,7 @@ export class PlayerCards extends React.Component {
         var id = card.target.id.split('-')[1];
         if (this.props.myTurn) {
             this.props.requestPlayCard(id);
-        }
-        if (this.props.othersTurn) {
+        } else if (this.props.othersTurn) {
             this.props.requestPlayCard(id);
             this.playCardForWord(id);
         }
