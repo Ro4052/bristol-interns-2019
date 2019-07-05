@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import styles from './Cards.module.css';
 
 export class AllCards extends React.Component {
     getCardItems() {
         if (this.props.cards) {
             return this.props.cards.map(card => (
-                <li key={card.id}>{card.id}</li>
+                <img className={styles.allCards} key={card.id} src={require(`./cards/back.jpg`)}></img>
             ))
         }
         return <></>;

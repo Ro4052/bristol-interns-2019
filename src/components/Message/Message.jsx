@@ -29,12 +29,12 @@ export class Message extends React.Component {
                 <button id="send-message" className={style.sendWordButton} onClick={this.sendMessage}>Send word</button>
             </>
         );
+        console.log(this.props.finishedRound);
         return (
+            
             <div className={style.messageBox}>
-                <div>
-                    <h1 id="message">{this.props.message}</h1>
-                </div>
-                {(this.props.myTurn) ? box : ""}
+                {this.props.message ? <h1 id="message">{"Current word: " + this.props.message}</h1> : ""}
+                {(this.props.myTurn && !this.props.finishedRound) ? box : ""}
             </div>
         )
     }
@@ -43,6 +43,7 @@ export class Message extends React.Component {
 const mapStateToProps = (state) => {
     return ({
         myTurn: state.reducer.gameState.myTurn,
+        finishedRound: state.playerReducer.finishedRound,
         message: state.reducer.message,
         socket: state.reducer.socket
     });
