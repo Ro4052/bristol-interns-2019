@@ -33,7 +33,7 @@ export class Message extends React.Component {
         return (
             
             <div className={style.messageBox}>
-                {this.props.message ? <h1 id="message">{"Current word: " + this.props.message}</h1> : ""}
+                {this.props.message && <h1 id="message">{this.props.message}</h1>}
                 {(this.props.myTurn && !this.props.finishedRound) ? box : ""}
             </div>
         )
