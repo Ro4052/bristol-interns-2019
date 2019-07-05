@@ -24,7 +24,7 @@ const reducer = (state = initialState, action) => {
             return {...state, currentCards: action.currentCards };
         case "SET_CURRENT_WORD":
             console.log("SET_CURRENT_WORD");
-            return {...state, message: action.currentWord };
+            return {...state, currentWord: action.currentWord };
         case "SET_SOCKET":
             return {...state, socket: action.socket };
         default:
