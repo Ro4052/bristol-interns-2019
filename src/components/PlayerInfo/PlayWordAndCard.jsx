@@ -60,7 +60,7 @@ export class PlayWordAndCard extends React.Component {
                 {!this.props.myWord && <h3>Type in a word</h3>}
                 {!this.props.playedCard && <h3>Pick a card</h3>}
                 {!this.props.myWord && sendWord}
-                {this.props.myWord && this.props.playedCard && <button id="end-turn" onClick={this.endTurn}>End my turn</button>}
+                {this.props.myWord && this.props.playedCard && !this.props.finishedRound && <button id="end-turn" onClick={this.endTurn}>End my turn</button>}
             </div>
         );
     }
@@ -70,7 +70,8 @@ const mapStateToProps = (state) => ({
     playWordAndCard: state.playerReducer.playWordAndCard,
     playCard: state.playerReducer.playCard,
     myWord: state.playerReducer.myWord,
-    playedCard: state.playerReducer.playedCard
+    playedCard: state.playerReducer.playedCard,
+    finishedRound: state.playerReducer.finishedRound
 });
 
 const mapDispatchToProps = (dispatch) => ({

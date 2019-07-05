@@ -9,8 +9,6 @@ export const initialState = {
     myWord: "",
     loading: true,
     error: null,
-    myTurn: false /* true when player needs to play both a word and a card */,
-    othersTurn: false /* true when player only needs to play a card given the word */,
     finishedRound: false
 }
 
