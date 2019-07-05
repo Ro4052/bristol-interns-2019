@@ -91,6 +91,7 @@ export class Login extends React.Component {
     }
     getInputStyle() {
         return (this.state.error !== '') ? {border: '2px solid #EA3546'} : {};
+            
     }
     render() {
         return (
@@ -108,7 +109,7 @@ export class Login extends React.Component {
                         <form className={styles.loginForm} onSubmit={this.sendLogin.bind(this)}>
                             <h3 className={styles.errorText}>{this.state.error}</h3>
                             <h2 className={styles.formHeader}>Type a username to enter the game:</h2>
-                            <input className={styles.loginInput} style={this.getInputStyle()} value={this.state.value} placeholder="Type in your username" onChange={this.handleChange.bind(this)} autoFocus/>
+                            <input className={styles.loginInput} style={this.getInputStyle()} value={this.state.value} placeholder="Enter username" onChange={this.handleChange.bind(this)} autoFocus/>
                             <button className={styles.loginButton} type="submit">Log in</button>
                         </form>
                     </div>
