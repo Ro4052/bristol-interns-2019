@@ -31,7 +31,7 @@ describe('on submit message', () => {
 
 describe('on receives a message', () => {
     it('displays the message', () => {
-        const wrapper = shallow(<Message myTurn={true} message={'Test word'} />);
+        const wrapper = shallow(<Message myTurn={true} message={'Current word: Test word'} />);
         const text = wrapper.find("#message").text();
         expect(text).toEqual('Test word');
     });
