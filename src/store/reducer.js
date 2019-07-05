@@ -9,6 +9,8 @@ export const initialState = {
 }
 
 const reducer = (state = initialState, action) => {
+    console.log(state);
+    
     switch (action.type) {
         // case "SET_GAME_STATE":
         //     return {...state, gameState: action.gameState };
@@ -23,7 +25,7 @@ const reducer = (state = initialState, action) => {
         case "SET_CURRENT_CARDS":
             return {...state, currentCards: action.currentCards };
         case "SET_CURRENT_WORD":
-            return {...state, message: action.currentWord };
+            return {...state, currentWord: action.currentWord };
         case "SET_SOCKET":
             return {...state, socket: action.socket };
         default:

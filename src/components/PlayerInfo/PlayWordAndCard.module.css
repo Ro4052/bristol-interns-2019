@@ -26,26 +26,17 @@ h1 {
 }
 
 .playerInteractions {
+    margin: 10px;
     position: absolute;
     bottom: 0;
     right: 0;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    font-size: 1.5em;
-    font-family: var(--main-font);
 }
 
 .playerInteractions > h3 {
     margin-right: 1em;
     text-align: center;
     width: 100%;
-}
-
-.playerInteractions > input {
-    margin: 10px;
-    padding: 1em 2em;
-    border: 1px solid black;
-    border-radius: 15px;
-    outline: none;
 }

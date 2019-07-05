@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import style from '../Dashboard/Dashboard.module.css';
+import styles from './PlayWordAndCard.module.css';
 import { finishPlayCard } from '../../store/playerActions';
 
 export class PlayCard extends React.Component {
 
     render() {
         return (
-            <div className={style.playerInteractions}>
-                {this.props.currentWord && <h3>{this.props.currentWord}</h3>}
+            <div className={styles.playerInteractions}>
+                {this.props.currentWord && <h3>{"Current word: " + this.props.currentWord}</h3>}
                 {!this.props.playedCard && <h3>Pick a card</h3>}
             </div>
         );

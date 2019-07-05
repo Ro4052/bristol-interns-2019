@@ -17,22 +17,18 @@ export class PlayWordAndCard extends React.Component {
         this.startGame = this.startGame.bind(this);
         this.endTurn = this.endTurn.bind(this);
     }
-
     handleChange(event) {
         this.setState({ currentValue: event.target.value });
     }
-
     sendMessage() {
         this.props.playWord(this.state.currentValue);
     }
-
     startGame() {
         axios.get('/api/start')
         .catch(err => {
             console.log(err);
         });
     }
-
     endTurn() {        
         if (this.props.myWord && this.props.playedCard) {
             axios.post('/api/playCardWord', {
@@ -47,20 +43,19 @@ export class PlayWordAndCard extends React.Component {
             });
         }
     }
-
     render() {
         const sendWord = (
-            <>
+            <div className={styles.messageBox}>
                 <input onChange={this.handleChange} value={this.state.currentValue} placeholder="Type in your word" />
                 <button id="send-message" className={styles.sendWordButton} onClick={this.sendMessage}>Send word</button>
-            </>
+            </div>
         );
         return (
             <div className={styles.playerInteractions}>
                 {!this.props.myWord && <h3>Type in a word</h3>}
                 {!this.props.playedCard && <h3>Pick a card</h3>}
-                {(!this.props.myWord) && sendWord}
-                {this.props.myWord && this.props.playedCard && <button id="end-turn" onClick={this.endTurn}>End my turn</button>}
+                {!this.props.myWord && sendWord}
+                {this.props.playWordAndCard && this.props.myWord && this.props.playedCard && <button id="end-turn" onClick={this.endTurn}>End my turn</button>}
             </div>
         );
     }

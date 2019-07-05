@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import styles from './Cards.module.css';
 import { connect } from 'react-redux';
 import { fetchCards, requestPlayCard, finishPlayCard } from '../../store/playerActions';
@@ -32,7 +33,19 @@ export class PlayerCards extends React.Component {
             this.props.requestPlayCard(id);
         } else if (this.props.playCard) {
             this.props.requestPlayCard(id);
+            this.playCardForWord(id);
         }
+    }
+    playCardForWord(card) {
+        axios.post('/api/playCard', {
+            card: card,
+        })
+        .then(() => {
+            this.props.finishPlayCard(this.props.playedCard);
+        })
+        .catch(err => {
+            console.log(err);
+        });
     }
     disableOnEndTurn() {
         return ((this.props.playWordAndCard || this.props.playCard) && this.props.playedCard === 0) ? styles.singleCard : styles.disabledCard
