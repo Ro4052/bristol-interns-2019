@@ -8,14 +8,15 @@ const statusTypes = {
     GAME_OVER: "GAME_OVER"
 };
 
-// let status = statusTypes.NOT_STARTED;
-// let roundNum = 0;
-// let currentPlayer;
-// let allPlayers = [];
-// let cardsPlayed = [];
-// let currentCard;
-// let otherCards = [];
-// let currentWord = '';
+let status = statusTypes.NOT_STARTED;
+let roundNum = 0;
+let currentPlayer;
+let allPlayers = [];
+let cardsPlayed = [];
+let currentCard;
+let otherCards = [];
+let currentWord = '';
+let votes = [];
 
 let gameState = {
     status: statusTypes.NOT_STARTED,
@@ -32,6 +33,17 @@ let gameState = {
 /* Return the current game state */
 exports.getGameState = () => {
     return gameState;
+    // return {
+    //     status: status,
+    //     roundNum: roundNum,
+    //     currentPlayer: currentPlayer,
+    //     allPlayers: allPlayers,
+    //     cardsPlayed: cardsPlayed,
+    //     currentCard: currentCard,
+    //     otherCards: otherCards,
+    //     currentWord: currentWord,
+    //     votes: votes
+    // };
 }
 
 /* Add the player to the game if possible */
@@ -94,7 +106,7 @@ exports.playCardAndWord = (username, cardId, word) => {
 
 /* Adds player's card to list of played cards */
 exports.playCard = (username, card) => {
-    console.log("playCard");
+    console.log("playCard", card);
     if (gameState.status === statusTypes.WAITING_FOR_OTHER_PLAYERS && !gameState.players[getPlayerIndexByUsername(username)].playedCard) {
         gameState.currentCards.push({id: card, hidden: true});
         gameState.players[getPlayerIndexByUsername(username)].playedCard = true;
