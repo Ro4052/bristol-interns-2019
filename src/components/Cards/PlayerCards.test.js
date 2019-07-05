@@ -2,8 +2,7 @@ import React from 'react';
 import { PlayerCards } from './PlayerCards';
 import moxios from 'moxios'
 import axios from 'axios';
-const express = require('express');
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import SocketMock from 'socket.io-mock';
 
 describe('on initial render', () => {

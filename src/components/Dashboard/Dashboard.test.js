@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dashboard } from './Dashboard';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 
 const initialGameState = {
     started: false,
@@ -31,27 +31,6 @@ describe('on initial render', () => {
         const wrapper = shallow(<Dashboard gameState={initialGameState} />);
         expect(wrapper.exists('#round-number')).toEqual(false);
     });
-    it("doesn't display the end turn button", () => {
-        const wrapper = shallow(<Dashboard gameState={initialGameState} />);
-        expect(wrapper.exists('button#end-turn')).toEqual(false);
-    });
-    it("doesn't display any players", () => {
-        const wrapper = shallow(<Dashboard gameState={initialGameState} />);
-        expect(wrapper.find('ul#players').children().length).toEqual(0);
-    });
-    it("displays the start game button", () => {
-        const wrapper = shallow(<Dashboard gameState={initialGameState} />);
-        expect(wrapper.exists('button#start-game')).toEqual(true);
-    });
-    describe('on clicking the start game button', () => {
-        it('calls startGame', () => {
-            const spy = jest.spyOn(Dashboard.prototype, 'startGame');
-            const wrapper = shallow(<Dashboard gameState={initialGameState} />);
-            wrapper.find('button#start-game').simulate('click');
-            expect(spy).toHaveBeenCalled();
-            spy.mockRestore();
-        });
-    });
 });
 
 describe('on start of game', () => {
@@ -66,23 +45,6 @@ describe('on start of game', () => {
     it("doesn't display the start game button", () => {
         const wrapper = shallow(<Dashboard gameState={firstRoundGameState} />);
         expect(wrapper.exists('#start-game')).toEqual(false);
-    });
-});
-
-describe('before you have finished your turn', () => {
-    // TODO: Setup state for these tests
-    it('displays the end turn button', () => {
-        const wrapper = shallow(<Dashboard gameState={firstRoundGameState} myTurn={true}/>);
-        expect(wrapper.exists('button#end-turn')).toEqual(true);
-    });
-    describe('on clicking the end turn button', () => {
-        it('calls endTurn', () => {
-            const spy = jest.spyOn(Dashboard.prototype, 'endTurn');
-            const wrapper = shallow(<Dashboard gameState={firstRoundGameState} myTurn={true}/>);
-            wrapper.find('button#end-turn').simulate('click');
-            expect(spy).toHaveBeenCalled();
-            spy.mockRestore();
-        });
     });
 });
 
