@@ -53,6 +53,8 @@ export class PlayerInteractions extends React.Component {
 }
 
 const mapStateToProps = (state, props) => {
+    console.log(state.playerReducer.playedCard);
+    
     return({
         myWord: state.playerReducer.myWord,
         myTurn: state.playerReducer.myTurn,
