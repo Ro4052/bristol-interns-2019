@@ -26,12 +26,12 @@ export class Dashboard extends React.Component {
     render() {
         return (
             <div className={style.roundInfo}>
-                {this.props.gameState.started && <h2>Round: <span id="round-number">{this.props.gameState.roundNum}</span></h2>}
+                {!this.props.gameState.status === "NOT_STARTED" && <h2>Round: <span id="round-number">{this.props.gameState.roundNum}</span></h2>}
                 <h2>Current player: {this.props.gameState.currentPlayer && <span id="current-player">{this.props.gameState.currentPlayer.username}</span>}</h2>
-                <Players players={this.props.gameState.players} />
+                <Players players={this.props.gameState.allPlayers} />
                 <AllCards />
                 <PlayerCards />
-                <PlayerInteractions started={this.props.gameState.started}/>
+                <PlayerInteractions started={this.props.gameState.status !== "NOT_STARTED"}/>
                 <LogoutButton />
             </div>
         )

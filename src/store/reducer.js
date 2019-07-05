@@ -1,9 +1,11 @@
+
+
 export const initialState = {
     gameState: {
-        started: false,
+        status: "NOT_STARTED",
         roundNum: 0,
         currentPlayer: null,
-        players: [],
+        allPlayers: [],
         currentCards: [],
     },
     currentWord: '',
