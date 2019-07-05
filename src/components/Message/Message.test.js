@@ -1,6 +1,6 @@
 import React from 'react';
 import { Message } from './Message';
-import  { shallow, mount } from 'enzyme';
+import  { shallow } from 'enzyme';
 import SocketMock from 'socket.io-mock';
 
 describe('on render', () => {

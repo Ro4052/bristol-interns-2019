@@ -1,6 +1,6 @@
 import React from 'react';
 import {AllCards} from './AllCards';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 
 describe('on initial render', () => {
     it('renders without crashing', () => {
