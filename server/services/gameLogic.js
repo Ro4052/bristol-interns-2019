@@ -4,17 +4,18 @@ const statusTypes = {
     NOT_STARTED: "NOT_STARTED",
     WAITING_FOR_CURRENT_PLAYER: "WAITING_FOR_CURRENT_PLAYER",
     WAITING_FOR_OTHER_PLAYERS: "WAITING_FOR_OTHER_PLAYERS",
+    WAITING_FOR_VOTES: "WAITING_FOR_VOTES",
     GAME_OVER: "GAME_OVER"
 };
 
-let status = statusTypes.NOT_STARTED;
-let roundNum = 0;
-let currentPlayer;
-let allPlayers = [];
-let cardsPlayed = [];
-let currentCard;
-let otherCards = [];
-let currentWord = '';
+// let status = statusTypes.NOT_STARTED;
+// let roundNum = 0;
+// let currentPlayer;
+// let allPlayers = [];
+// let cardsPlayed = [];
+// let currentCard;
+// let otherCards = [];
+// let currentWord = '';
 
 let gameState = {
     status: statusTypes.NOT_STARTED,
@@ -24,7 +25,8 @@ let gameState = {
     players: [],
     currentCards: [],
     currentCardId: null,
-    currentWord: ""
+    currentWord: "",
+    votes: []
 };
 
 /* Return the current game state */
@@ -74,7 +76,8 @@ exports.startGame = () => {
 exports.playCardAndWord = (username, cardId, word) => {
     if (gameState.status === statusTypes.WAITING_FOR_CURRENT_PLAYER && gameState.currentPlayer.username === username) {
         console.log("Current player is ending their turn!");
-        gameState.players[getPlayerIndexByUsername(username)].finishedTurn = true;
+        gameState.players[getPlayerIndexByUsername(username)].playedCard = true;
+        gameState.currentCards.push({id: cardId, hidden: true});
         gameState = {
             ...gameState,
             status: statusTypes.WAITING_FOR_OTHER_PLAYERS,
@@ -92,11 +95,26 @@ exports.playCardAndWord = (username, cardId, word) => {
 /* Adds player's card to list of played cards */
 exports.playCard = (username, card) => {
     console.log("playCard");
-    if (gameState.status === statusTypes.WAITING_FOR_OTHER_PLAYERS && !gameState.players[getPlayerIndexByUsername(username)].finishedTurn) {
+    if (gameState.status === statusTypes.WAITING_FOR_OTHER_PLAYERS && !gameState.players[getPlayerIndexByUsername(username)].playedCard) {
         gameState.currentCards.push({id: card, hidden: true});
-        gameState.players[getPlayerIndexByUsername(username)].finishedTurn = true;
-        if (allPlayersFinishedTurn()) incrementRound();
-        else socket.emitGameState();
+        gameState.players[getPlayerIndexByUsername(username)].playedCard = true;
+        if (allPlayersPlayedCard()) {
+            gameState.status = statusTypes.WAITING_FOR_VOTES;
+            socket.emitPlayedCards(gameState.currentCards);
+            socket.promptPlayersVote();
+        } else socket.emitGameState();
+    }
+}
+
+/* Vote for a card */
+exports.voteCard = (username, card) => {
+    console.log("voteCard/end turn");
+    if (gameState.status === statusTypes.WAITING_FOR_VOTES && !gameState.players[getPlayerIndexByUsername(username)].voted) {
+        gameState.votes.push({id: card, user: username});
+        gameState.players[getPlayerIndexByUsername(username)].voted = true;
+        if (allPlayersVoted()) {
+            incrementRound();
+        } else socket.emitGameState();
     }
 }
 
@@ -110,7 +128,7 @@ const incrementRound = () => {
     console.log("Everyone done, next round!");
     gameState.roundNum++;
     gameState.players = gameState.players.map(player => {
-        return {...player, finishedTurn: false};
+        return {...player, playedCard: false, voted: false};
     });
     gameState.currentPlayer = gameState.players[gameState.roundNum % gameState.players.length];
     gameState.currentCards = [];
@@ -119,10 +137,18 @@ const incrementRound = () => {
     socket.promptCurrentPlayer();
 }
 
-/* Returns true if all players have finished the current turn */
-const allPlayersFinishedTurn = () => {
-    for (let player of gameState.players) {
-        if (!player.finishedTurn) return false;
+/* Returns true if all players have played a card this round */
+const allPlayersPlayedCard = () => {
+    for (let player of gameState.players.filter(player => gameState.currentPlayer !== player)) {
+        if (!player.playedCard) return false;
+    }
+    return true;
+}
+
+/* Returns true if all players have voted this round */
+const allPlayersVoted = () => {
+    for (let player of gameState.players.filter(player => gameState.currentPlayer !== player)) {
+        if (!player.voted) return false;
     }
     return true;
 }

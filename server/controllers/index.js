@@ -24,7 +24,8 @@ router.post('/auth/login', (req, res) => {
         const user = {
             username: req.body.username,
             cards: newSet,
-            finishedTurn: false,
+            playedCard: false,
+            voted: false,
             score: 0,
             cookie: req.headers.cookie // Remove soon
         };
