@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import Message from '../Message/Message';
 import style from '../Dashboard/Dashboard.module.css';
 import { finishPlayCard } from '../../store/playerActions';
 
@@ -45,7 +44,6 @@ export class PlayerInteractions extends React.Component {
                 {(pickCardText && pickWordText) ? <h3>{"&"}</h3> : ""}
                 {pickCardText}
                 {!(pickCardText || pickWordText) && this.props.myTurn  && !this.props.finishedRound ? <h3>Now click "End my turn"</h3> : ""}
-                <Message />
                 {this.props.started ? nextTurnButton : startGameButton}
             </div>
         )
