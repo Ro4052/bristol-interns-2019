@@ -8,17 +8,11 @@ export class PlayerCards extends React.Component {
     constructor() {
         super();
         this.state = {
-            playedCardText: "",
-            havePlayed: false
+            playedCardText: ""
         }
     }
     componentDidMount() {
         this.props.fetchCards();
-    }
-    componentDidUpdate() {
-        if (this.props.playedCard !== 0 && this.props.othersTurn) {
-            this.playCardForWord();
-        }
     }
     getPlayerCards() {
         let cardImages = [];
@@ -34,17 +28,19 @@ export class PlayerCards extends React.Component {
         return cardImages;
     }
     playCard(card) {
+        var id = card.target.id.split('-')[1];
         if (this.props.myTurn) {
-            this.props.requestPlayCard(card.target.id.split('-')[1]);
+            this.props.requestPlayCard(id);
         }
         if (this.props.othersTurn) {
-            this.props.requestPlayCard(card.target.id.split('-')[1]);
+            this.props.requestPlayCard(id);
+            this.playCardForWord(id);
         }
     }
-    playCardForWord() {
+    playCardForWord(id) {
         console.log("Playing card for word...");
         axios.post('/api/playCard', {
-            card: this.props.playedCard,
+            card: id,
         })
         .then(() => {
             this.props.finishPlayCard(this.props.playedCard)
@@ -54,7 +50,7 @@ export class PlayerCards extends React.Component {
         });
     }
     disableOnEndTurn() {
-        return ((this.props.myTurn || this.props.othersTurn) && this.props.playedCard === 0) ? styles.singleCard : styles.disabledCard
+        return ((this.props.playedCard === 0) && (this.props.myTurn || this.props.othersTurn)) ? styles.singleCard : styles.disabledCard
     }
     render() {
         const cardsImages = this.getPlayerCards().map((card) => (
@@ -76,7 +72,8 @@ const mapStateToProps = (state) => {
         myTurn: state.playerReducer.myTurn,
         othersTurn: state.playerReducer.othersTurn,
         myCards: state.playerReducer.myCards,
-        playedCard: state.playerReducer.playedCard
+        playedCard: state.playerReducer.playedCard,
+        finishedRound: state.playerReducer.finishedRound
     });
 };
 
