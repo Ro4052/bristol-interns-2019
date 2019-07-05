@@ -75,7 +75,7 @@ exports.startGame = () => {
 /* The player whose turn it is plays a card and a word */
 exports.playCardAndWord = (username, cardId, word) => {
     if (gameState.status === statusTypes.WAITING_FOR_CURRENT_PLAYER && gameState.currentPlayer.username === username) {
-        console.log("Current player is ending their turn!");
+        console.log("Current player has played card and word");
         gameState.players[getPlayerIndexByUsername(username)].playedCard = true;
         gameState.currentCards.push({id: cardId, hidden: true});
         gameState = {

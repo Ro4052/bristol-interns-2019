@@ -24,16 +24,19 @@ const emitGameState = exports.emitGameState = () => {
 
 // Tell all the players what word was played
 exports.emitWord = word => {
+    console.log("emitWord");
     io.emit("played word", word);
 }
 
 // When everyone has played their cards, send them all to the players
 exports.emitPlayedCards = cards => {
+    console.log("emitPlayedCards");
     io.emit("played cards", cards);
 }
 
 // Ask the current player for a word and a card
 exports.promptCurrentPlayer = () => {
+    console.log("promptCurrentPlayer");
     for (let socket of sockets) {
         if (socket.handshake.session.user === gameLogic.getGameState().currentPlayer.username) {
             socket.emit("play word and card");
@@ -43,6 +46,7 @@ exports.promptCurrentPlayer = () => {
 
 // Ask the other players for a card
 exports.promptOtherPlayers = () => {
+    console.log("promptOtherPlayers");
     for (let socket of sockets) {
         if (socket.handshake.session.user !== gameLogic.getGameState().currentPlayer.username) {
             socket.emit("play card");
@@ -50,7 +54,9 @@ exports.promptOtherPlayers = () => {
     }
 }
 
+// Ask the other players to vote on the cards
 exports.promptPlayersVote = () => {
+    console.log("promptPlayersVotes");
     for (let socket of sockets) {
         if (socket.handshake.session.user !== gameLogic.getGameState().currentPlayer.username) {
             socket.emit("vote");
