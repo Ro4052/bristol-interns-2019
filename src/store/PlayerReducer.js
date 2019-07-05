@@ -7,12 +7,11 @@ export const initialState = {
     loading: true,
     error: null,
     myTurn: false /* true when player needs to play both a word and a card */,
-    othersTurn: false /* true when player only needs to play a card given the word */
+    othersTurn: false /* true when player only needs to play a card given the word */,
+    finishedRound: false
 }
 
 const cardReducer = (state = initialState, action) => {
-    console.log(action);
-    console.log(state);
     switch (action.type) {
         case FETCH_CARDS_BEGIN:
             return {
@@ -36,12 +35,13 @@ const cardReducer = (state = initialState, action) => {
         case REQUEST_PLAY_CARD:
             return {
                 ...state,
-                playedCard: action.id
+                playedCard: action.id,
+                myCards: state.myCards.filter((card) => card.toString() !== action.id)
             }
         case FINISH_PLAY_CARD:
             return {
                 ...state,
-                myCards: state.myCards.filter((card) => card.toString() !== action.id)
+                finishedRound: true
             }
         case PLAY_WORD:
             return {

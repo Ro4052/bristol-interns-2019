@@ -36,15 +36,15 @@ export class PlayerInteractions extends React.Component {
     }
     render() {
         const startGameButton = <button id="start-game" onClick={this.startGame}>Start game</button>;
-        const nextTurnButton = (this.props.myTurn) ? <button id="end-turn" onClick={this.endTurn}>End my turn</button> : "";
+        const nextTurnButton = (this.props.myTurn && !this.props.finishedRound) ? <button id="end-turn" onClick={this.endTurn}>End my turn</button> : "";
         const pickWordText = (this.props.myTurn && !this.props.myWord) ? <h3>Type in a word</h3> : "";
-        const pickCardText = ((this.props.myTurn || this.props.othersTurn) && !this.props.playedCard) ? <h3>Pick a card</h3> : "";
+        const pickCardText = ((this.props.playedCard === 0) && (this.props.myTurn || this.props.othersTurn)) ? <h3>Pick a card</h3> : "";
         return (
             <div className={style.playerInteractions}>
                 {pickWordText}
                 {(pickCardText && pickWordText) ? <h3>{"&"}</h3> : ""}
                 {pickCardText}
-                {!(pickCardText || pickWordText) && this.props.myTurn ? <h3>Now click "End my turn"</h3> : ""}
+                {!(pickCardText || pickWordText) && this.props.myTurn  && !this.props.finishedRound ? <h3>Now click "End my turn"</h3> : ""}
                 <Message />
                 {this.props.started ? nextTurnButton : startGameButton}
             </div>
@@ -59,7 +59,8 @@ const mapStateToProps = (state, props) => {
         myWord: state.playerReducer.myWord,
         myTurn: state.playerReducer.myTurn,
         othersTurn: state.playerReducer.othersTurn,
-        playedCard: state.playerReducer.playedCard
+        playedCard: state.playerReducer.playedCard,
+        finishedRound: state.playerReducer.finishedRound
     });
 }
 
