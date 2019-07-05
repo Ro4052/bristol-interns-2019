@@ -1,10 +1,87 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:900);
+*, *:before, *:after{
+  box-sizing: none
+}
+@font-face {
+    font-family: 'Dilana';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Dilana'), url('./fuente_dilana.ttf') format('truetype');
+}
+
+div.foo{
+  width: 90%;
+  margin: 0 auto;
+  text-align: center;
+  
+}
+.letter{
+  display: inline-block;
+  font-weight: 900;
+  font-size: 8em;
+  margin: 0.05em;
+  position: relative;
+  color: rgb(138, 67, 9);
+  transform-style: preserve-3d;
+  perspective: 400;
+  z-index: 1;
+  font-family: 'Dilana';
+}
+.letter:before, .letter:after{
+  position:absolute;
+  content: attr(data-letter);
+  transform-origin: top left;
+  top:0;
+  left:0;
+}
+.letter, .letter:before, .letter:after{
+  transition: all 0.3s ease-in-out;
+}
+.letter:before{
+  color: rgb(255, 175, 109);
+  text-shadow: 
+    -1px 0px 1px rgba(255, 126, 5, 0.8),
+    1px 0px 1px rgba(0,0,0,.8);
+  z-index: 3;
+  transform:
+    rotateX(0deg)
+    rotateY(-15deg)
+    rotateZ(0deg);
+}
+.letter:after{
+  color: rgba(0,0,0,.11);
+  z-index:2;
+  transform:
+    scale(1.08,1)
+    rotateX(0deg)
+    rotateY(0deg)
+    rotateZ(0deg)
+    skew(0deg,1deg);
+}
+.letter:hover:before{
+  color: #ff7b00;
+  transform:
+    rotateX(0deg)
+    rotateY(-40deg)
+    rotateZ(0deg);
+}
+.letter:hover:after{
+  transform:
+    scale(1.08,1)
+    rotateX(0deg)
+    rotateY(40deg)
+    rotateZ(0deg)
+    skew(0deg,22deg);
+}
+
+
+
 .loginPage {
     height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: var(--blue);
     font-family: var(--main-font);
 }
 
@@ -20,7 +97,7 @@
     width: 50%;
     min-width: 200px;
     padding: 1em;
-    border: 1px solid black;
+    border: 1px solid rgb(235, 104, 17);
     border-radius: 15px;
     outline: none;
 }
@@ -45,6 +122,7 @@
     min-width: 300px;
     font-size: 2em;
     text-align: center;
+    color: rgb(231, 122, 20);
 }
 
 .errorText {
@@ -67,3 +145,4 @@
     font-size: 1em;
     cursor: pointer;
 }
+
