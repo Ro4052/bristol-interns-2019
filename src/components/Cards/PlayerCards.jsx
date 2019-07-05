@@ -9,21 +9,13 @@ export class PlayerCards extends React.Component {
     constructor() {
         super();
         this.state = {
-            playedCardText: "",
-            havePlayed: false
+            playedCardText: ""
         }
     }
 
     componentDidMount() {
         this.props.fetchCards();
     }
-
-    componentDidUpdate() {
-        if (this.props.playedCard !== 0 && this.props.othersTurn) {
-            this.playCardForWord();
-        }
-    }
-
     getPlayerCards() {
         let cardImages = [];
         if (this.props.myCards) {
@@ -46,17 +38,15 @@ export class PlayerCards extends React.Component {
         }
     }
 
-    playCardForWord() {
-        console.log("Playing card for word...");
-        axios.post('/api/playCard', {
-            card: this.props.playedCard,
-        })
-        .then(() => {
-            this.props.finishPlayCard(this.props.playedCard)
-        })
-        .catch(err => {
-            console.log(err);
-        });
+    playCardForWord(card) {
+        var id = card.target.id.split('-')[1];
+        if (this.props.myTurn) {
+            this.props.requestPlayCard(id);
+        }
+        if (this.props.othersTurn) {
+            this.props.requestPlayCard(id);
+            this.playCardForWord(id);
+        }
     }
 
     disableOnEndTurn() {
@@ -85,7 +75,9 @@ const mapStateToProps = (state) => ({
     playCard: state.playerReducer.playCard,
     othersTurn: state.playerReducer.othersTurn,
     myCards: state.playerReducer.myCards,
-    playedCard: state.playerReducer.playedCard
+    playedCard: state.playerReducer.playedCard,
+    myTurn: state.playerReducer.myTurn,
+    finishedRound: state.playerReducer.finishedRound
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -17,7 +17,7 @@
 }
 
 .singleCard:hover {
-    transform: translate3d(0, -10px, 0);
+    transform: scale(1.05);
 }
 
 .disabledCard {
@@ -27,4 +27,18 @@
     width: 25vmin;
     height: 40vmin;
     opacity: 0.7;
+}
+
+.allCards {
+    margin: 0 10px;
+    border-radius: 2vmin;
+    height: 25vmin;
+    width: 15vmin;
+    border: 2px solid black;
+    transition: 0.2s;
+}
+
+.playedCards {
+    height: 40vmin;
+    padding: 4vmin 0;
 }

@@ -1,11 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import styles from './Cards.module.css';
 
 export class AllCards extends React.Component {
     getCardItems() {
         if (this.props.cards) {
             return this.props.cards.map(card => (
-                <li key={card.id}>{card.id}</li>
+                <img className={styles.allCards} key={card.id} src={require(`../Dashboard/dixit_logo.png`)}></img>
+                
             ))
         }
         return <></>;
@@ -13,11 +15,9 @@ export class AllCards extends React.Component {
     render() {
         const cardItems = this.getCardItems();
         return (
-            <div className="playedCards" id="played-cards">
-                <ul>
+            <ul className={styles.playedCards} id="played-cards">
                     {cardItems}
-                </ul>
-            </div>
+            </ul>
         );
     }
 }

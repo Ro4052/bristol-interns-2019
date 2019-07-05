@@ -26,11 +26,12 @@ code {
 #root {
   height: 100%;
   font-family: var(--main-font);
-  background-color: beige;
+  background: url('./components/Dashboard/back.jpg');
+  background-size: cover;
 }
 
 #end-turn, #start-game {
-  background-color: var(--blue);
+  background-color: var(--red);
   padding: 1em 3em;
   outline: none;
   border: 1px solid black;
