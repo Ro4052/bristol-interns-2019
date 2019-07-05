@@ -11,7 +11,7 @@ import { dispatch } from '../../store/store';
 import { finishPlayCard } from '../../store/playerActions';
 import PlayCard from '../PlayerInfo/PlayCard';
 import PlayWordAndCard from '../PlayerInfo/PlayWordAndCard';
-import PlayedCards from '../Cards/PlayedCards';
+import PlayedCards from '../Cards/PlayedCards/PlayedCards';
 import axios from 'axios';
 
 export class Dashboard extends React.Component {
