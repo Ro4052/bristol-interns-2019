@@ -5,7 +5,7 @@ import {PlayerInteractions} from './PlayerInteractions';
 
 describe('on initial render', () => {
     it("doesn't display any players", () => {
-        const wrapper = shallow(<Players players={[]} />);
+        const wrapper = shallow(<Players allPlayers={[]} />);
         expect(wrapper.find('ul#players').children().length).toEqual(0);
     });
     it("doesn't display the end turn button", () => {

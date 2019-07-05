@@ -27,7 +27,7 @@ router.post('/auth/login', (req, res) => {
             playedCard: false,
             voted: false,
             score: 0,
-            cookie: req.headers.cookie // Remove soon
+            cookie: req.headers.cookie // TODO: Remove?
         };
         currentUsers.push(user);
         gameLogic.joinGame(user);

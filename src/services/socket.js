@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
 import { dispatch } from '../store/store';
-import { setGameState, setCurrentWord } from '../store/actions';
-import { setMyTurn, setOthersTurn } from '../store/playerActions';
+import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setAllPlayers, setCurrentCards } from '../store/actions';
+import { setPlayWordAndCard, setPlayCard, setPlayedCard } from '../store/playerActions';
 
 const connectSocket = () => {
     let connectionString;
@@ -16,43 +16,57 @@ const connectSocket = () => {
         upgrade: false
     });
 
-    socket.on("gameState", msg => {
-        console.log("Received an updated game state", msg);
-        dispatch(setGameState(msg));
+    socket.on("all players", msg => {
+        dispatch(setAllPlayers(msg.allPlayers));
+    });
+
+    socket.on("new round", msg => {
+        console.log("new round", msg);
+        dispatch(setStatus(msg.status));
+        dispatch(setRoundNumber(msg.roundNum));
+        dispatch(setCurrentPlayer(msg.currentPlayer));
+        dispatch(setCurrentWord(''));
+        dispatch(setCurrentCards([]));
+        dispatch(setPlayCard(false));
+        dispatch(setPlayWordAndCard(false));
+        dispatch(setPlayedCard(0));
+        // Reset flags
+    });
+
+    socket.on("status", msg => {
+        console.log("status", msg);
+        dispatch(setStatus(msg));
+    });
+
+    socket.on("start game", msg => {
+        console.log("start game", msg);
+        dispatch(setAllPlayers(msg.allPlayers));
     });
 
     socket.on("played word", msg => {
-        console.log("The current player played the word: ", msg);
+        console.log("played word", msg);
         dispatch(setCurrentWord(msg));
     });
 
     socket.on("play word and card", () => {
-        console.log("Your turn, play a word and a card");
-        dispatch(setMyTurn());
+        console.log("play word and card");
+        dispatch(setPlayWordAndCard(true));
     });
 
     socket.on("play card", () => {
-        console.log("Play a card");
-        dispatch(setOthersTurn());
+        console.log("play card");
+        dispatch(setPlayCard(true));
     });
 
     socket.on("played cards", msg => {
-        console.log("Played cards", msg);
+        console.log("played cards", msg);
     });
 
     socket.on("vote", () => {
-        console.log("Vote");
+        console.log("vote");
     });
 
     return socket;
-}
-
-export const sendWord = (socket, msg) => {
-    socket.emit("play word", msg);
-}
-
-export const sendCard = (socket, msg) => {
-    socket.emit("play card", msg);
 }
 
 export default connectSocket;

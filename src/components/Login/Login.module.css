@@ -134,7 +134,7 @@ div.foo{
     outline: none;
     border: 2px solid black;
     border-radius: 15px;
-    font-size: 2em;
+    font-size: 1.8vmin;
     cursor: pointer;
     font-weight: 600;
     animation: pulse_animation 1s infinite;

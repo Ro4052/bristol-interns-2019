@@ -6,7 +6,8 @@ export class AllCards extends React.Component {
     getCardItems() {
         if (this.props.cards) {
             return this.props.cards.map(card => (
-                <img className={styles.allCards} key={card.id} src={require(`./cards/back.jpg`)}></img>
+                <img className={styles.allCards} key={card.id} src={require(`../Dashboard/dixit_logo.png`)}></img>
+                
             ))
         }
         return <></>;
@@ -14,18 +15,16 @@ export class AllCards extends React.Component {
     render() {
         const cardItems = this.getCardItems();
         return (
-            <div className="playedCards" id="played-cards">
-                <ul>
+            <ul className={styles.playedCards} id="played-cards">
                     {cardItems}
-                </ul>
-            </div>
+            </ul>
         );
     }
 }
 
 const mapStateToProps = (state) => {
     return ({
-        cards: state.reducer.gameState.currentCards
+        cards: state.reducer.currentCards
     });
 };
 
