@@ -36,20 +36,3 @@ h3 {
 .currentPlayersBox > li {
     display: inline-block;
 }
-
-.playerInteractions {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    font-size: 1.5em;
-    font-family: var(--main-font);
-}
-
-.playerInteractions > h3 {
-    margin-right: 1em;
-    text-align: center;
-    width: 100%;
-}

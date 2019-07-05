@@ -24,7 +24,7 @@ export class AllCards extends React.Component {
 
 const mapStateToProps = (state) => {
     return ({
-        cards: state.reducer.gameState.currentCards
+        cards: state.reducer.currentCards
     });
 };
 

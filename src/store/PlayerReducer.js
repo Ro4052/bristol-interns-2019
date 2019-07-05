@@ -1,7 +1,10 @@
-import {FETCH_CARDS_BEGIN, FETCH_CARDS_SUCCESS, FETCH_CARDS_FAILURE, REQUEST_PLAY_CARD, FINISH_PLAY_CARD, PLAY_WORD, MY_TURN, OTHERS_TURN} from './playerActions';
+import {FETCH_CARDS_BEGIN, SET_PLAY_WORD_AND_CARD, SET_PLAY_CARD, FETCH_CARDS_SUCCESS, FETCH_CARDS_FAILURE, REQUEST_PLAY_CARD, FINISH_PLAY_CARD, PLAY_WORD, MY_TURN, OTHERS_TURN} from './playerActions';
 
 export const initialState = {
+    playWordAndCard: false,
+    playCard: false,
     myCards: [],
+    allCards: [],
     playedCard: 0,
     myWord: "",
     loading: true,
@@ -31,8 +34,9 @@ const cardReducer = (state = initialState, action) => {
                 loading: false,
                 error: action.payload.error,
                 myCards: []
-            }
+            };
         case REQUEST_PLAY_CARD:
+            console.log("Request play card");
             return {
                 ...state,
                 playedCard: action.id,
@@ -47,18 +51,28 @@ const cardReducer = (state = initialState, action) => {
             return {
                 ...state,
                 myWord: action.word
-            }
+            };
+        case SET_PLAY_WORD_AND_CARD:
+            return {
+                ...state,
+                playWordAndCard: action.bool
+            };
+        case SET_PLAY_CARD:
+            return {
+                ...state,
+                playCard: action.bool
+            };
         case MY_TURN:
             return {
                 ...state,
                 myTurn: true
-            }
+            };
         case OTHERS_TURN:
             return {
                 ...state,
                 myTurn: false,
                 othersTurn: true
-            }
+            };
         default:
             return state;
     }

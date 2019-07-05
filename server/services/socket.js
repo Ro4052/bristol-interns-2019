@@ -10,65 +10,91 @@ exports.setupSocket = (server, session) => {
     io.use(sharedsession(session));
     io.on('connection', function (socket) {
         sockets.push(socket);
-        emitGameState();
+        emitAllPlayers(gameLogic.getAllPlayers());
     });
 }
 
-// Emit the current game state to all players
-const emitGameState = exports.emitGameState = () => {
-    for (let socket of sockets) {
-        let gameState = {...gameLogic.getGameState(), myTurn: isCurrentPlayerSocket(socket)}
-        socket.emit("gameState", gameState);
+// Check if it's the sender's turn
+exports.isCurrentPlayerSocket = (socket) => {
+    if (gameLogic.getGameState().currentPlayer) {
+        return (socket.handshake.session.user === gameLogic.getGameState().currentPlayer.username)
+    } else {
+        return false;
     }
+}
+
+// Emit all the players
+const emitAllPlayers = exports.emitAllPlayers = allPlayers => {
+    // console.log("emitAllPlayers", allPlayers);
+    io.emit("all players", {
+        allPlayers: allPlayers
+    });
+}
+
+// Tell everyone that the game has started
+exports.emitStartGame = (allPlayers, status) => {
+    // console.log("emitStartGame");
+    io.emit("start game", {
+        allPlayers: allPlayers
+    });
+}
+
+// Let the players know about the next round
+exports.emitNewRound = (status, roundNum, currentPlayer) => {
+    // console.log("emitNewRound");
+    io.emit("new round", {
+        status: status,
+        roundNum: roundNum,
+        currentPlayer: currentPlayer
+    });
+}
+
+// Emit the new status of the game
+exports.emitStatus = status => {
+    // console.log("emitStatus");
+    io.emit("status", {
+        status: status
+    });
 }
 
 // Tell all the players what word was played
 exports.emitWord = word => {
-    console.log("emitWord");
+    // console.log("emitWord");
     io.emit("played word", word);
 }
 
 // When everyone has played their cards, send them all to the players
 exports.emitPlayedCards = cards => {
-    console.log("emitPlayedCards");
+    // console.log("emitPlayedCards");
     io.emit("played cards", cards);
 }
 
 // Ask the current player for a word and a card
-exports.promptCurrentPlayer = () => {
-    console.log("promptCurrentPlayer");
+exports.promptCurrentPlayer = currentPlayer => {
+    // console.log("promptCurrentPlayer", currentPlayer.username);
     for (let socket of sockets) {
-        if (socket.handshake.session.user === gameLogic.getGameState().currentPlayer.username) {
+        if (socket.handshake.session.user === currentPlayer.username) {
             socket.emit("play word and card");
         }
     }
 }
 
 // Ask the other players for a card
-exports.promptOtherPlayers = () => {
-    console.log("promptOtherPlayers");
+exports.promptOtherPlayers = currentPlayer => {
+    // console.log("promptOtherPlayers");
     for (let socket of sockets) {
-        if (socket.handshake.session.user !== gameLogic.getGameState().currentPlayer.username) {
+        if (socket.handshake.session.user !== currentPlayer.username) {
             socket.emit("play card");
         }
     }
 }
 
 // Ask the other players to vote on the cards
-exports.promptPlayersVote = () => {
-    console.log("promptPlayersVotes");
+exports.promptPlayersVote = currentPlayer => {
+    // console.log("promptPlayersVotes");
     for (let socket of sockets) {
-        if (socket.handshake.session.user !== gameLogic.getGameState().currentPlayer.username) {
+        if (socket.handshake.session.user !== currentPlayer.username) {
             socket.emit("vote");
         }
-    }
-}
-
-// Check if it's the sender's turn
-const isCurrentPlayerSocket = exports.isCurrentPlayerSocket = (socket) => {
-    if (gameLogic.getGameState().currentPlayer) {
-        return (socket.handshake.session.user === gameLogic.getGameState().currentPlayer.username)
-    } else {
-        return false;
     }
 }
