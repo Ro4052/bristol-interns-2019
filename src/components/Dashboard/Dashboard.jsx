@@ -28,9 +28,7 @@ export class Dashboard extends React.Component {
     }
 
     componentDidMount() {
-        // If log in succeeds, connect to the socket
         const socket = connectSocket();
-        console.log("connectSocket");
         dispatch(setSocket(socket));
     }
 
@@ -39,13 +37,13 @@ export class Dashboard extends React.Component {
             <div className={style.roundInfo}>
                 {this.props.status === "NOT_STARTED" && <button id="start-game" onClick={this.startGame}>Start game</button>}
                 {this.props.status !== "NOT_STARTED" && <h2>Round: <span id="round-number">{this.props.roundNum}</span></h2>}
-                <h2>Current player: {this.props.currentPlayer && <span id="current-player">{this.props.currentPlayer.username}</span>}</h2>
+                {this.props.currentPlayer && <h2>Current player: <span id="current-player">{this.props.currentPlayer.username}</span></h2>}
+                {this.props.currentWord !== '' && <h1 id="message">Word: {this.props.currentWord}</h1>}
                 <Players />
                 <AllCards />
                 <PlayerCards />
                 {this.props.playWordAndCard && <PlayWordAndCard />}
                 {this.props.playCard && <PlayCard />}
-                <h1 id="message">{this.props.message}</h1>
                 <LogoutButton />
             </div>
         );
@@ -58,7 +56,8 @@ const mapStateToProps = (state) => {
         roundNum: state.reducer.roundNum,
         currentPlayer: state.reducer.currentPlayer,
         playWordAndCard: state.playerReducer.playWordAndCard,
-        playCard: state.playerReducer.playCard
+        playCard: state.playerReducer.playCard,
+        currentWord: state.reducer.currentWord
     });
 }
 

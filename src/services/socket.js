@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
 import { dispatch } from '../store/store';
-import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setAllPlayers } from '../store/actions';
-import { setPlayWordAndCard, setPlayCard } from '../store/playerActions';
+import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setAllPlayers, setCurrentCards } from '../store/actions';
+import { setPlayWordAndCard, setPlayCard, setPlayedCard } from '../store/playerActions';
 
 const connectSocket = () => {
     let connectionString;
@@ -17,7 +17,6 @@ const connectSocket = () => {
     });
 
     socket.on("all players", msg => {
-        console.log("all players", msg);
         dispatch(setAllPlayers(msg.allPlayers));
     });
 
@@ -26,6 +25,12 @@ const connectSocket = () => {
         dispatch(setStatus(msg.status));
         dispatch(setRoundNumber(msg.roundNum));
         dispatch(setCurrentPlayer(msg.currentPlayer));
+        dispatch(setCurrentWord(''));
+        dispatch(setCurrentCards([]));
+        dispatch(setPlayCard(false));
+        dispatch(setPlayWordAndCard(false));
+        dispatch(setPlayedCard(0));
+        // Reset flags
     });
 
     socket.on("status", msg => {

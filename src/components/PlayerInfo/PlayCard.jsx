@@ -8,15 +8,15 @@ export class PlayCard extends React.Component {
     render() {
         return (
             <div className={styles.playerInteractions}>
-                {this.props.currentWord && <h3>{"Current word: " + this.props.currentWord}</h3>}
-                {!this.props.playedCard && <h3>Pick a card</h3>}
+                {!this.props.playedCard && !this.props.finishedRound && <h3>Pick a card</h3>}
             </div>
         );
     }
 }
 
 const mapStateToProps = (state) => ({
-    currentWord: state.reducer.currentWord
+    currentWord: state.reducer.currentWord,
+    finishedRound: state.playerReducer.finishedRound
 });
 
 const mapDispatchToProps = (dispatch) => ({

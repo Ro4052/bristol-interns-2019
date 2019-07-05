@@ -62,7 +62,7 @@ exports.startGame = () => {
 /* The player whose turn it is plays a card and a word */
 exports.playCardAndWord = (username, cardId, word) => {
     if (status === statusTypes.WAITING_FOR_CURRENT_PLAYER && currentPlayer.username === username) {
-        // console.log("Current player has played card and word");
+        console.log("Current player has played card and word");
         allPlayers[getPlayerIndexByUsername(username)].playedCard = true;
         cardsPlayed.push({id: cardId, hidden: true});
         status = statusTypes.WAITING_FOR_OTHER_PLAYERS;
@@ -78,7 +78,7 @@ exports.playCardAndWord = (username, cardId, word) => {
 
 /* Adds player's card to list of played cards */
 exports.playCard = (username, card) => {
-    // console.log("playCard", card);
+    console.log("playCard", card);
     if (status === statusTypes.WAITING_FOR_OTHER_PLAYERS && !allPlayers[getPlayerIndexByUsername(username)].playedCard) {
         cardsPlayed.push({id: card, hidden: true});
         allPlayers[getPlayerIndexByUsername(username)].playedCard = true;
@@ -86,7 +86,7 @@ exports.playCard = (username, card) => {
             status = statusTypes.WAITING_FOR_VOTES;
             socket.emitPlayedCards(cardsPlayed);
             socket.promptPlayersVote(currentPlayer);
-        } else emitSomething();
+        }
     }
 }
 
@@ -98,7 +98,7 @@ exports.voteCard = (username, card) => {
         allPlayers[getPlayerIndexByUsername(username)].voted = true;
         if (allPlayersVoted()) {
             incrementRound();
-        } else emitSomething();
+        }
     }
 }
 
@@ -117,7 +117,6 @@ const incrementRound = () => {
     currentPlayer = allPlayers[roundNum % allPlayers.length];
     cardsPlayed = [];
     currentWord = '';
-    emitSomething();
     socket.promptCurrentPlayer(currentPlayer);
 }
 
