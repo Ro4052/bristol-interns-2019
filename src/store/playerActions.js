@@ -10,6 +10,7 @@ export const MY_TURN  = 'MY_TURN';
 export const OTHERS_TURN  = 'OTHERS_TURN';
 export const SET_PLAY_WORD_AND_CARD = 'SET_PLAY_WORD_AND_CARD';
 export const SET_PLAY_CARD = 'SET_PLAY_CARD';
+export const SET_PLAYED_CARD = "SET_PLAYED_CARD";
 
 
 export const fetchCardsBegin = () => ({
@@ -56,6 +57,13 @@ export const playWord = (word) => {
     return {
         type: PLAY_WORD,
         word
+    }
+}
+
+export const setPlayedCard = id => {
+    return {
+        type: SET_PLAYED_CARD,
+        id
     }
 }
 

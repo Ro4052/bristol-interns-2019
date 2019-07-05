@@ -1,4 +1,4 @@
-import {FETCH_CARDS_BEGIN, SET_PLAY_WORD_AND_CARD, SET_PLAY_CARD, FETCH_CARDS_SUCCESS, FETCH_CARDS_FAILURE, REQUEST_PLAY_CARD, FINISH_PLAY_CARD, PLAY_WORD, MY_TURN, OTHERS_TURN} from './playerActions';
+import {FETCH_CARDS_BEGIN, SET_PLAYED_CARD, SET_PLAY_WORD_AND_CARD, SET_PLAY_CARD, FETCH_CARDS_SUCCESS, FETCH_CARDS_FAILURE, REQUEST_PLAY_CARD, FINISH_PLAY_CARD, PLAY_WORD, MY_TURN, OTHERS_TURN} from './playerActions';
 
 export const initialState = {
     playWordAndCard: false,
@@ -36,11 +36,15 @@ const cardReducer = (state = initialState, action) => {
                 myCards: []
             };
         case REQUEST_PLAY_CARD:
-            console.log("Request play card");
             return {
                 ...state,
                 playedCard: action.id,
                 myCards: state.myCards.filter((card) => card.toString() !== action.id)
+            }
+        case SET_PLAYED_CARD:
+            return {
+                ...state,
+                playedCard: 0
             }
         case FINISH_PLAY_CARD:
             return {
