@@ -9,8 +9,8 @@ import { setSocket } from '../../store/actions';
 import connectSocket from '../../services/socket';
 import { dispatch } from '../../store/store';
 import { finishPlayCard } from '../../store/playerActions';
-import { PlayCard } from '../PlayerInfo/PlayCard';
-import { PlayWordAndCard } from '../PlayerInfo/PlayWordAndCard';
+import PlayCard from '../PlayerInfo/PlayCard';
+import PlayWordAndCard from '../PlayerInfo/PlayWordAndCard';
 import axios from 'axios';
 
 export class Dashboard extends React.Component {
