@@ -6,7 +6,6 @@ import PlayerCards from '../Cards/PlayerCards';
 import LogoutButton from '../Login/LogoutButton';
 import Players from '../PlayerInfo/Players';
 import style from './Dashboard.module.css';
-import axios from 'axios';
 import { setSocket } from '../../store/actions';
 import connectSocket from '../../services/socket';
 import { dispatch } from '../../store/store';
@@ -18,31 +17,36 @@ export class Dashboard extends React.Component {
         super(props);
         this.state = {}
     }
+
     componentDidMount() {
         // If log in succeeds, connect to the socket
         const socket = connectSocket();
+        console.log("connectSocket");
         dispatch(setSocket(socket));
     }
+
     render() {
         return (
             <div className={style.roundInfo}>
-                {!this.props.gameState.status === "NOT_STARTED" && <h2>Round: <span id="round-number">{this.props.gameState.roundNum}</span></h2>}
-                <h2>Current player: {this.props.gameState.currentPlayer && <span id="current-player">{this.props.gameState.currentPlayer.username}</span>}</h2>
-                <Players players={this.props.gameState.allPlayers} />
+                {!this.props.status === "NOT_STARTED" && <h2>Round: <span id="round-number">{this.props.roundNum}</span></h2>}
+                <h2>Current player: {this.props.currentPlayer && <span id="current-player">{this.props.currentPlayer.username}</span>}</h2>
+                <Players players={this.props.allPlayers} />
                 <AllCards />
                 <PlayerCards />
-                <PlayerInteractions started={this.props.gameState.status !== "NOT_STARTED"}/>
+                <PlayerInteractions started={this.props.status !== "NOT_STARTED"}/>
                 <LogoutButton />
             </div>
         )
     }
 }
 
-
-const mapStateToProps = (state, props) => {
-    return({
+const mapStateToProps = (state) => {
+    return ({
+        status: state.reducer.status,
         socket: state.reducer.socket,
-        gameState: state.reducer.gameState,
+        roundNum: state.reducer.roundNum,
+        currentPlayer: state.reducer.currentPlayer,
+        allPlayers: state.reducer.allPlayers,
         myWord: state.playerReducer.myWord,
         myTurn: state.playerReducer.myTurn,
         othersTurn: state.playerReducer.othersTurn,

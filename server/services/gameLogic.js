@@ -18,39 +18,17 @@ let otherCards = [];
 let currentWord = '';
 let votes = [];
 
-// let gameState = {
-//     status: statusTypes.NOT_STARTED,
-//     started: false, // Going to remove eventually using status instead
-//     roundNum: 0,
-//     currentPlayer: null,
-//     players: [],
-//     currentCards: [],
-//     currentCardId: null,
-//     currentWord: "",
-//     votes: []
-// };
-
-/* Return the current game state */
-exports.getGameState = () => {
-    // return gameState;
-    return {
-        status: status,
-        roundNum: roundNum,
-        currentPlayer: currentPlayer,
-        allPlayers: allPlayers,
-        cardsPlayed: cardsPlayed,
-        currentCard: currentCard,
-        otherCards: otherCards,
-        currentWord: currentWord,
-        votes: votes
-    };
+/* Return the list of players */
+exports.getAllPlayers = () => {
+    return allPlayers;
 }
 
 /* Add the player to the game if possible */
 exports.joinGame = player => {
+    // console.log("Attempting to join game");
     if (status === statusTypes.NOT_STARTED && !allPlayers.includes(player)) {
+        // console.log("Join game successful");
         allPlayers.push(player);
-        socket.emitGameState();
     } else {
         // TODO
         // - Game has started, player can't join
@@ -63,7 +41,7 @@ exports.joinGame = player => {
 exports.quitGame = player => {
     if (status === statusTypes.NOT_STARTED && !allPlayers.includes(player)) {
         allPlayers = allPlayers.filter((otherPlayer) => otherPlayer !== player);
-        socket.emitGameState();
+        socket.emitAllPlayers();
         return true;
     } else {
         // Game has started, player can't quit
@@ -76,22 +54,23 @@ exports.startGame = () => {
     // TODO: Min players
     status = statusTypes.WAITING_FOR_CURRENT_PLAYER;
     currentPlayer = allPlayers[0];
-    socket.emitGameState();
-    socket.promptCurrentPlayer();
+    socket.emitStartGame(allPlayers, status);
+    socket.emitNewRound(status, roundNum, currentPlayer);
+    socket.promptCurrentPlayer(currentPlayer);
 }
 
 /* The player whose turn it is plays a card and a word */
 exports.playCardAndWord = (username, cardId, word) => {
     if (status === statusTypes.WAITING_FOR_CURRENT_PLAYER && currentPlayer.username === username) {
-        console.log("Current player has played card and word");
+        // console.log("Current player has played card and word");
         allPlayers[getPlayerIndexByUsername(username)].playedCard = true;
         cardsPlayed.push({id: cardId, hidden: true});
         status = statusTypes.WAITING_FOR_OTHER_PLAYERS;
+        socket.emitStatus(status);
         currentWord = word;
+        socket.emitWord(currentWord);
         currentCard = cardId;
-        socket.emitGameState();
-        socket.emitWord(word);
-        socket.promptOtherPlayers();
+        socket.promptOtherPlayers(currentPlayer);
     } else {
         // Error or nothing?
     }
@@ -99,27 +78,27 @@ exports.playCardAndWord = (username, cardId, word) => {
 
 /* Adds player's card to list of played cards */
 exports.playCard = (username, card) => {
-    console.log("playCard", card);
+    // console.log("playCard", card);
     if (status === statusTypes.WAITING_FOR_OTHER_PLAYERS && !allPlayers[getPlayerIndexByUsername(username)].playedCard) {
         cardsPlayed.push({id: card, hidden: true});
         allPlayers[getPlayerIndexByUsername(username)].playedCard = true;
         if (allPlayersPlayedCard()) {
             status = statusTypes.WAITING_FOR_VOTES;
             socket.emitPlayedCards(cardsPlayed);
-            socket.promptPlayersVote();
-        } else socket.emitGameState();
+            socket.promptPlayersVote(currentPlayer);
+        } else emitSomething();
     }
 }
 
 /* Vote for a card */
 exports.voteCard = (username, card) => {
-    console.log("voteCard/end turn");
+    // console.log("voteCard/end turn");
     if (status === statusTypes.WAITING_FOR_VOTES && !allPlayers[getPlayerIndexByUsername(username)].voted) {
         votes.push({id: card, user: username});
         allPlayers[getPlayerIndexByUsername(username)].voted = true;
         if (allPlayersVoted()) {
             incrementRound();
-        } else socket.emitGameState();
+        } else emitSomething();
     }
 }
 
@@ -130,7 +109,7 @@ const getPlayerIndexByUsername = username => {
 
 /* Move on to the next round, called when all players have finished their turn */
 const incrementRound = () => {
-    console.log("Everyone done, next round!");
+    // console.log("Everyone done, next round!");
     roundNum++;
     allPlayers = allPlayers.map(player => {
         return {...player, playedCard: false, voted: false};
@@ -138,8 +117,8 @@ const incrementRound = () => {
     currentPlayer = allPlayers[roundNum % allPlayers.length];
     cardsPlayed = [];
     currentWord = '';
-    socket.emitGameState();
-    socket.promptCurrentPlayer();
+    emitSomething();
+    socket.promptCurrentPlayer(currentPlayer);
 }
 
 /* Returns true if all players have played a card this round */
