@@ -71,7 +71,7 @@ exports.emitPlayedCards = cards => {
 
 // Ask the current player for a word and a card
 exports.promptCurrentPlayer = currentPlayer => {
-    // console.log("promptCurrentPlayer");
+    // console.log("promptCurrentPlayer", currentPlayer.username);
     for (let socket of sockets) {
         if (socket.handshake.session.user === currentPlayer.username) {
             socket.emit("play word and card");

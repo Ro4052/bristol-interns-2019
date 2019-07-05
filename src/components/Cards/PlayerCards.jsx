@@ -5,6 +5,7 @@ import axios from 'axios';
 import { fetchCards, requestPlayCard, finishPlayCard } from '../../store/playerActions';
 
 export class PlayerCards extends React.Component {
+
     constructor() {
         super();
         this.state = {
@@ -12,14 +13,17 @@ export class PlayerCards extends React.Component {
             havePlayed: false
         }
     }
+
     componentDidMount() {
         this.props.fetchCards();
     }
+
     componentDidUpdate() {
         if (this.props.playedCard !== 0 && this.props.othersTurn) {
             this.playCardForWord();
         }
     }
+
     getPlayerCards() {
         let cardImages = [];
         if (this.props.myCards) {
@@ -33,14 +37,15 @@ export class PlayerCards extends React.Component {
         }
         return cardImages;
     }
+
     playCard(card) {
-        if (this.props.myTurn) {
+        if (this.props.playWordAndCard) {
             this.props.requestPlayCard(card.target.id.split('-')[1]);
-        }
-        if (this.props.othersTurn) {
+        } else if (this.props.playCard) {
             this.props.requestPlayCard(card.target.id.split('-')[1]);
         }
     }
+
     playCardForWord() {
         console.log("Playing card for word...");
         axios.post('/api/playCard', {
@@ -53,10 +58,14 @@ export class PlayerCards extends React.Component {
             console.log(err);
         });
     }
+
     disableOnEndTurn() {
-        return ((this.props.myTurn || this.props.othersTurn) && this.props.playedCard === 0) ? styles.singleCard : styles.disabledCard
+        return ((this.props.playWordAndCard || this.props.playCard) && this.props.playedCard !== 0) ? styles.singleCard : styles.disabledCard
     }
+
     render() {
+        console.log("playWordAndCard", this.props.playWordAndCard);
+        console.log("playedCard", this.props.playedCard);
         const cardsImages = this.getPlayerCards().map((card) => (
             <img id={"card-" + card.id} alt='' className={this.disableOnEndTurn()} key={card.id} src={card.url} onClick={this.playCard.bind(this)}/>
         ))
@@ -71,14 +80,13 @@ export class PlayerCards extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return ({
-        myTurn: state.playerReducer.myTurn,
-        othersTurn: state.playerReducer.othersTurn,
-        myCards: state.playerReducer.myCards,
-        playedCard: state.playerReducer.playedCard
-    });
-};
+const mapStateToProps = (state) => ({
+    playWordAndCard: state.playerReducer.playWordAndCard,
+    playCard: state.playerReducer.playCard,
+    othersTurn: state.playerReducer.othersTurn,
+    myCards: state.playerReducer.myCards,
+    playedCard: state.playerReducer.playedCard
+});
 
 const mapDispatchToProps = (dispatch) => ({
     fetchCards: () => dispatch(fetchCards()),
