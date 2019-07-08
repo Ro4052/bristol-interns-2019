@@ -33,7 +33,6 @@ export class Dashboard extends React.Component {
     }
     
     render() {
-        console.log(this.props.status);
         return (
             <div className={style.roundInfo}>
                 {this.props.status === "NOT_STARTED" && <button id="start-game" onClick={this.startGame}>Start game</button>}

@@ -5,11 +5,11 @@ import card1 from '../cards/card (1).jpg';
 
 const empty = [];
 const oneCard = [
-    { id: 1 }
+    { cardId: 1 }
 ];
 const twoCards = [
-    { id: 1 }, 
-    { id: 2 }
+    { cardId: 1 }, 
+    { cardId: 2 }
 ];
 
 describe('if given no cards', () => {
