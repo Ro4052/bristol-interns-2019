@@ -6,8 +6,7 @@ export class AllCards extends React.Component {
     getCardItems() {
         if (this.props.cards) {
             return this.props.cards.map(card => (
-                <img className={styles.allCards} key={card.id} src={require(`../Dashboard/dixit_logo.png`)}></img>
-                
+                <img className={styles.allCards} key={card.id} src={require(`../Dashboard/dixit_logo.png`)}></img>     
             ))
         }
         return <></>;
@@ -16,7 +15,7 @@ export class AllCards extends React.Component {
         const cardItems = this.getCardItems();
         return (
             <ul className={styles.playedCards} id="played-cards">
-                    {cardItems}
+                {cardItems}
             </ul>
         );
     }

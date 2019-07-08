@@ -1,7 +1,7 @@
 import React from 'react';
 import {Login} from './Login';
-
-import { shallow, mount } from 'enzyme';
+import LogoutButton from './LogoutButton';
+import { shallow } from 'enzyme';
 
 describe('on log in', () => {
     it('is not able to submit a blank username', () => {
@@ -31,4 +31,23 @@ describe('on log in', () => {
         spy.mockRestore();
     })
 })
+
+describe('on log out', () => {
+    it('displays the logout button', () => {
+        const wrapper = shallow(<LogoutButton/>);
+        expect(wrapper.exists('button')).toEqual(true);
+    })
+    it('calls the logout function', () => {
+        const spy = jest.spyOn(LogoutButton.prototype, 'logOut');
+        const wrapper = shallow(<LogoutButton/>);
+        wrapper.find('button').simulate('click');
+        expect(spy).toHaveBeenCalled();
+        spy.mockRestore();
+    })
+    it("doesn't display the logout button when logged out", () => {
+        const wrapper = shallow(<LogoutButton/>);
+        wrapper.setState({ loggedIn: false });
+        expect(wrapper.exists('button')).toEqual(false);
+    })
+});
 
