@@ -7,7 +7,7 @@ import SocketMock from 'socket.io-mock';
 
 describe('on initial render', () => {
     it("doesn't display all cards", () => {
-        const wrapper = shallow(<PlayerCards fetchCards={() => {}} requestPlayCard={() => {}}/>);
+        const wrapper = shallow(<PlayerCards fetchCards={() => {}} myCards={[]} requestPlayCard={() => {}}/>);
         expect(wrapper.exists('#my-cards li')).toEqual(false)
     })
 })
