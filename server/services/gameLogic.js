@@ -61,6 +61,9 @@ exports.startGame = () => {
 
 /* The player whose turn it is plays a card and a word */
 exports.playCardAndWord = (username, cardId, word) => {
+    console.log("playCardAndWord");
+    console.log(username);
+    console.log(status);
     if (status === statusTypes.WAITING_FOR_CURRENT_PLAYER && currentPlayer.username === username) {
         console.log("Current player has played card and word");
         allPlayers[getPlayerIndexByUsername(username)].playedCard = true;
@@ -84,6 +87,7 @@ exports.playCard = (username, card) => {
         allPlayers[getPlayerIndexByUsername(username)].playedCard = true;
         if (allPlayersPlayedCard()) {
             status = statusTypes.WAITING_FOR_VOTES;
+            socket.emitStatus(status);
             socket.emitPlayedCards(cardsPlayed);
             socket.promptPlayersVote(currentPlayer);
         }

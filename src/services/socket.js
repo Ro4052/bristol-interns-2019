@@ -54,6 +54,8 @@ const connectSocket = () => {
     });
 
     socket.on("played cards", msg => {
+        console.log("played cards", msg);
+        dispatch(setCurrentCards(msg));
     });
 
     socket.on("vote", () => {

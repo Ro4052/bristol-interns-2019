@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import AllCards from '../Cards/AllCards'
 import PlayerCards from '../Cards/PlayerCards';
 import LogoutButton from '../Login/LogoutButton';
 import Players from '../PlayerInfo/Players';
@@ -11,6 +10,7 @@ import { dispatch } from '../../store/store';
 import { finishPlayCard } from '../../store/playerActions';
 import PlayCard from '../PlayerInfo/PlayCard';
 import PlayWordAndCard from '../PlayerInfo/PlayWordAndCard';
+import PlayedCards from '../Cards/PlayedCards/PlayedCards';
 import axios from 'axios';
 
 export class Dashboard extends React.Component {
@@ -29,6 +29,7 @@ export class Dashboard extends React.Component {
         dispatch(setSocket(socket));
     }
     render() {
+        console.log("status ", this.props.status);
         return (
             <div className={style.roundInfo}>
                 {this.props.status === "NOT_STARTED" && <button id="start-game" onClick={this.startGame}>Start game</button>}
@@ -36,7 +37,7 @@ export class Dashboard extends React.Component {
                 {this.props.currentPlayer && <h2>Current player: <span id="current-player">{this.props.currentPlayer.username}</span></h2>}
                 {this.props.currentWord !== '' && <h1 id="message">Word: {this.props.currentWord}</h1>}
                 <Players />
-                <AllCards />
+                <PlayedCards />
                 <PlayerCards />
                 {this.props.playWordAndCard && <PlayWordAndCard />}
                 {this.props.playCard && <PlayCard />}
