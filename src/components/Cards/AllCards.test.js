@@ -26,7 +26,7 @@ describe('on given a set of played cards', () => {
             },
         ]
         const wrapper = shallow(<AllCards cards={cards}/>);
-        expect(wrapper.find('ul').children().length).toEqual(3);
+        expect(wrapper.find('#played-cards').children().length).toEqual(3);
     })
 })
 
