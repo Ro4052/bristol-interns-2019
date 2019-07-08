@@ -5,30 +5,19 @@ import { connect } from 'react-redux';
 import { fetchCards, requestPlayCard, finishPlayCard } from '../../store/playerActions';
 
 export class PlayerCards extends React.Component {
+
     constructor() {
         super();
-        this.state = {
-            playedCardText: ""
-        }
+        this.state = {};
+        this.playCard = this.playCard.bind(this);
+        this.handleClickCard = this.handleClickCard.bind(this);
     }
+
     componentDidMount() {
         this.props.fetchCards();
     }
-    getPlayerCards() {
-        let cardImages = [];
-        if (this.props.myCards) {
-            for (let i = 0; i < this.props.myCards.length; i++) {
-                let index = this.props.myCards[i]
-                cardImages.push({
-                    url: require(`./cards/card (${index}).jpg`),
-                    id: index
-                });
-            }
-        }
-        return cardImages;
-    }
-    playCard(card) {
-        var id = card.target.id.split('-')[1];
+
+    playCard(id) {
         if (this.props.playWordAndCard) {
             this.props.requestPlayCard(id);
         } else if (this.props.playCard) {
@@ -36,6 +25,7 @@ export class PlayerCards extends React.Component {
             this.playCardForWord(id);
         }
     }
+
     playCardForWord(card) {
         axios.post('/api/playCard', {
             card: card,
@@ -47,18 +37,23 @@ export class PlayerCards extends React.Component {
             console.log(err);
         });
     }
-    disableOnEndTurn() {
+
+    handleClickCard(event) {
+        if (!this.props.playedCard) {
+            const id = event.target.id.split('-')[1];
+            this.playCard(id);
+        }
+    }
+
+    getCardClass() {
         return ((this.props.playWordAndCard || this.props.playCard) && this.props.playedCard === 0) ? styles.singleCard : styles.disabledCard
     }
+
     render() {
-        const cardsImages = this.getPlayerCards().map((card) => (
-            <img id={"card-" + card.id} alt='' className={this.disableOnEndTurn()} key={card.id} src={card.url} onClick={this.playCard.bind(this)}/>
-        ))
         return (
             <div className={styles.cardsContainer} id="my-cards">
-                <h2>{this.state.playedCardText}</h2>
                 <ul>
-                    {cardsImages}
+                    {this.props.myCards.map((cardId) => <img id={"card-" + cardId} alt={"card-" + cardId} className={this.getCardClass()} key={cardId} src={require(`./cards/card (${cardId}).jpg`)} onClick={this.handleClickCard} />)}
                 </ul>
             </div>
         );
@@ -68,10 +63,8 @@ export class PlayerCards extends React.Component {
 const mapStateToProps = (state) => ({
     playWordAndCard: state.playerReducer.playWordAndCard,
     playCard: state.playerReducer.playCard,
-    othersTurn: state.playerReducer.othersTurn,
     myCards: state.playerReducer.myCards,
     playedCard: state.playerReducer.playedCard,
-    myTurn: state.playerReducer.myTurn,
     finishedRound: state.playerReducer.finishedRound
 });
 
