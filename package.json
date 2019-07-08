@@ -25,12 +25,15 @@
   },
   "scripts": {
     "start": "node server.js",
+    "env": "npx cross-env PORT=123 node server.js",
     "start:devserver": "nodemon server.js --watch ./server --watch ./server.js",
     "start:devclient": "react-scripts start",
     "build": "react-scripts build",
     "test:client": "react-scripts test --coverage --watchAll=false",
     "eject": "react-scripts eject",
     "cy:run": "cypress run",
+    "cy:open": "cypress open",
+    "instrument": "npx nyc instrument --compact=false server instrumented/server && npx nyc instrument --compact=false build instrumented/build",
     "test:e2e": "concurrently --success first --kill-others \"npm run start\" \"node run-cypress-test.js -r tap\""
   },
   "eslintConfig": {

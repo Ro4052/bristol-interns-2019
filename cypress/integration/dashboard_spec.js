@@ -1,3 +1,5 @@
+/// <reference types="Cypress" />
+
 describe('The Dashboard Page', function () {
     it('logs in programmatically without using the UI', () => {
       // destructuring assignment of the this.currentUser object
