@@ -1,7 +1,6 @@
 import React from 'react';
 import { PlayedCards } from './PlayedCards';
 import { shallow } from 'enzyme';
-import card1 from '../cards/card (1).jpg';
 
 const empty = [];
 const oneCard = [
@@ -26,7 +25,7 @@ describe('if given one card', () => {
     });
     it("gives it the correct src", () => {
         const wrapper = shallow(<PlayedCards cards={oneCard} />);
-        expect(wrapper.find('#played-cards img').prop("src")).toEqual(card1);
+        expect(wrapper.find('#played-cards img').prop("src")).toEqual('../cards/card (1).jpg');
     });
 });
 
