@@ -10,8 +10,6 @@
 
 # testing
 /coverage
-/cypress/plugins
-/cypress/suport
 /cypress/videos
 
 # production

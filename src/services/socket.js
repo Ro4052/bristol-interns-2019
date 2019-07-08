@@ -18,6 +18,7 @@ const connectSocket = () => {
     });
 
     socket.on("players", msg => {
+        console.log("players array ", msg.players);
         dispatch(setPlayers(msg.players));
     });
 

@@ -25,7 +25,7 @@ exports.isCurrentPlayerSocket = (socket) => {
 
 // Emit all the players
 const emitPlayers = exports.emitPlayers = players => {
-    // console.log("emitAllPlayers", players);
+    console.log("emitAllPlayers", players);
     io.emit("players", {
         players: players
     });
