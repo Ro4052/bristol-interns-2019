@@ -38,7 +38,7 @@ let cards = [];
 let votes = [];
 
 /* Return the list of players, without their assigned cards */
-exports.getPlayers = () => players.map(player => ({ username: player.username, score: player.score }));
+const getPlayers = exports.getPlayers = () => players.map(player => ({ username: player.username, score: player.score }));
 
 /* Return the list of cards played this round, without who played them */
 const getCards = exports.getCards = () => cards.map(card => ({ cardId: card.cardId }));
@@ -68,7 +68,7 @@ exports.joinGame = user => {
 exports.quitGame = player => {
     if (status === statusTypes.NOT_STARTED && !players.includes(player)) {
         players = players.filter((otherPlayer) => otherPlayer !== player);
-        socket.emitPlayers();
+        socket.emitPlayers(getPlayers());
         return true;
     } else {
         // Game has started, player can't quit
