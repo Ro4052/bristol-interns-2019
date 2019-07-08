@@ -38,56 +38,32 @@ export const fetchCards = () => {
     }
 }
 
-export const requestPlayCard = (id) => {
-    return {
-        type: REQUEST_PLAY_CARD,
-        id
-    }
-}
+export const requestPlayCard = (id) => ({
+    type: REQUEST_PLAY_CARD,
+    id
+});
 
-export const finishPlayCard = (id) => {
-    return {
-        type: FINISH_PLAY_CARD,
-        id
-    }
-}
+export const finishPlayCard = (id) => ({
+    type: FINISH_PLAY_CARD,
+    id
+});
 
-export const playWord = (word) => {
-    return {
-        type: PLAY_WORD,
-        word
-    }
-}
+export const playWord = (word) => ({
+    type: PLAY_WORD,
+    word
+});
 
-export const setPlayedCard = id => {
-    return {
-        type: SET_PLAYED_CARD,
-        id
-    }
-}
+export const setPlayedCard = id => ({
+    type: SET_PLAYED_CARD,
+    id
+});
 
-export const setPlayWordAndCard = bool => {
-    return {
-        type: SET_PLAY_WORD_AND_CARD,
-        bool
-    }
-}
+export const setPlayWordAndCard = bool => ({
+    type: SET_PLAY_WORD_AND_CARD,
+    bool
+});
 
-export const setPlayCard = bool => {
-    return {
-        type: SET_PLAY_CARD,
-        bool
-    }
-}
-
-export const setMyTurn = () => {
-    return {
-        type: MY_TURN
-    }
-}
-
-export const setOthersTurn = () => {
-    return {
-        type: OTHERS_TURN
-    }
-}
+export const setPlayCard = bool => ({
+    type: SET_PLAY_CARD,
+    bool
+});
