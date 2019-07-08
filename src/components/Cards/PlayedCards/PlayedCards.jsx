@@ -6,9 +6,7 @@ export class PlayedCards extends React.Component {
     render() {
         return (
             <ul id="played-cards">
-                {this.props.cards.map(card => {
-                    return <img id={"card-" + card.id} className={styles.allCards}  alt={"card-" + card.id} key={card.id} src={require(`../cards/card (${card.id}).jpg`)}/>
-                })}
+                {this.props.cards.map(card => <img id={"card-" + card.id} className={styles.allCards} alt={"card-" + card.id} key={card.id} src={require(`../cards/card (${card.id}).jpg`)}/>)}
             </ul>
         );
     }

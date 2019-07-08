@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import AllCards from '../Cards/AllCards'
 import PlayerCards from '../Cards/PlayerCards';
 import LogoutButton from '../Login/LogoutButton';
 import Players from '../PlayerInfo/Players';
@@ -42,7 +41,6 @@ export class Dashboard extends React.Component {
                 {this.props.currentPlayer && <h2>Current player: <span id="current-player">{this.props.currentPlayer.username}</span></h2>}
                 {this.props.currentWord !== '' && <h1 id="message">Word: {this.props.currentWord}</h1>}
                 <Players />
-                {/* <AllCards /> */}
                 <PlayedCards />
                 <PlayerCards />
                 {this.props.playWordAndCard && <PlayWordAndCard />}
