@@ -52,24 +52,21 @@ describe('The Dashboard Page', function () {
 
     /* WHEN GAME HAS STARTED */
     describe('after start of game', () => {
-        // before(() => {
-        //     cy.request({
-        //         url: '/auth/login',
-        //         method: 'POST',
-        //         body: {
-        //             username: 'unicorn'
-        //         }
-        //     });
-        // })
+        before(() => {
+            cy.request({
+                url: '/auth/login',
+                method: 'POST',
+                body: {
+                    username: 'unicorn'
+                }
+            });
+        })
 
-        // it("after start has been pressed", () => {
-        //     cy.request({
-        //         url: '/api/start',
-        //         method: 'GET'
-        //     });
-        //     cy.get('#round-number').should('exist')
-        //     cy.get('#current-player').should('exist')
-        //     cy.get('#message').should('not.exist')
-        // })
+        it("after start has been pressed", () => {
+            cy.get('#start-game').click()
+            cy.get('#round-number').should('exist')
+            cy.get('#current-player').should('exist')
+            cy.get('#message').should('not.exist')
+        })
     })
 })
