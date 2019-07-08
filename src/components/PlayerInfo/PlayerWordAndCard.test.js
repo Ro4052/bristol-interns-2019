@@ -17,10 +17,6 @@ const finishedState = {
 }
 
 describe('on initial render', () => {
-    it("doesn't display any players", () => {
-        const wrapper = shallow(<Players allPlayers={[]} />);
-        expect(wrapper.find('ul#players').children().length).toEqual(0);
-    });
     it("doesn't display the end turn button", () => {
         const wrapper = shallow(<PlayWordAndCard myWord={initialState.myWord} playedCard={initialState.playedCard} finishedRound={initialState.finishedRound}/>);
         expect(wrapper.exists('button#end-turn')).toEqual(false);
@@ -31,11 +27,6 @@ describe('on start of game', () => {
     it("displays the 'Play card' and 'Play word' texts", () => {
         const wrapper = shallow(<PlayWordAndCard myWord={initialState.myWord} playedCard={initialState.playedCard} finishedRound={initialState.finishedRound}/>);
         expect(wrapper.find('h3').children().length).toEqual(2);
-    });
-    it("displays the correct number of players", () => {
-        const wrapper = shallow(<Players allPlayers={["Sibela", "Tilly", "Belle"]} />);
-        expect(wrapper.find('h3').text()).toEqual("Players:");
-        expect(wrapper.find('ul#players').children().length).toEqual(3);
     });
 });
 
@@ -83,10 +74,3 @@ describe('on clicking the end turn button', () => {
         spy.mockRestore();
     });
 });
-
-describe("on other players' turn", () => {
-    it("displays the 'Play card' text", () => {
-        const wrapper = shallow(<PlayCard />);
-        expect(wrapper.find('h3').text()).toEqual("Pick a card");
-    });
-})
