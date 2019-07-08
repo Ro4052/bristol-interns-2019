@@ -5,10 +5,10 @@ const expressSession = require('express-session');
 const cors = require('cors');
 const socket = require('./services/socket');
 
-const app = express();
-const server = require('http').createServer(app);
+module.exports = port => {
+    const app = express();
+    const server = require('http').createServer(app);
 
-module.exports.server = (port) => {
     app.use(express.static('build'));
     app.use(bodyParser.json());
     app.use(cors());
@@ -27,15 +27,4 @@ module.exports.server = (port) => {
     app.use(require('./controllers'));
 
     server.listen(port, () => console.log(`Server running on port: ${port}`));
-    
 }
-
-exports.stop = function(){
-    server.close();
-};
-
-process.on('SIGTERM', function () {
-    server.close(function () {
-      process.exit(0);
-    });
-});
