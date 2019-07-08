@@ -30,9 +30,7 @@
     "build": "react-scripts build",
     "test:client": "react-scripts test --coverage --watchAll=false",
     "eject": "react-scripts eject",
-    "cypress:open": "cypress open",
-    "cy:run": "cypress run",
-    "test": "start-server-and-test start http://localhost:8080 cy:run"
+    "test:e2e": "concurrently --success first --kill-others \"npm run start\" \"node run-cypress-test.js -r tap\""
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -50,6 +48,7 @@
     ]
   },
   "devDependencies": {
+    "concurrently": "^4.1.1",
     "cypress": "^3.3.2",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
