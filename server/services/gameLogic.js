@@ -48,7 +48,7 @@ const getCards = exports.getCards = () => {
 }
 
 exports.getCardsByUsername = (username) => {
-    return players.filter(player => player.username === username).cards;
+    return players.find(player => player.username === username).cards;
 }
 
 /* Add the player to the game if possible */
@@ -83,7 +83,7 @@ exports.quitGame = player => {
 
 /* Start the game with the players that have joined */
 exports.startGame = () => {
-    if (players.length > minPlayers) {
+    if (status === statusTypes.NOT_STARTED && players.length > minPlayers) {
         status = statusTypes.STARTED;
         nextRound();
     } else {
@@ -94,14 +94,20 @@ exports.startGame = () => {
 
 /* Move on to the next round, called when all players have finished their turn */
 const nextRound = () => {
-    status = statusTypes.WAITING_FOR_CURRENT_PLAYER;
-    roundNum++;
-    currentPlayer = players[roundNum % players.length];
-    currentWord = '';
-    cards = [];
-    votes = [];
-    socket.emitNewRound(status, roundNum, currentPlayer);
-    socket.promptCurrentPlayer(currentPlayer);
+    if (roundNum !== rounds) {
+        status = statusTypes.WAITING_FOR_CURRENT_PLAYER;
+        roundNum++;
+        currentPlayer = players[roundNum % players.length];
+        currentWord = '';
+        cards = [];
+        votes = [];
+        socket.emitNewRound(status, roundNum, currentPlayer);
+        socket.promptCurrentPlayer(currentPlayer);
+    } else {
+        status = statusTypes.GAME_OVER;
+        // TODO
+        // - Emit game over and final scores/winner
+    }
 }
 
 /* The player whose turn it is plays a card and a word */

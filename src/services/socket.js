@@ -37,10 +37,6 @@ const connectSocket = () => {
         dispatch(setStatus(msg));
     });
 
-    socket.on("start game", msg => {
-        dispatch(setPlayers(msg.allPlayers));
-    });
-
     socket.on("played word", msg => {
         dispatch(setCurrentWord(msg));
     });
@@ -54,6 +50,8 @@ const connectSocket = () => {
     });
 
     socket.on("played cards", msg => {
+        console.log("played cards", msg);
+        dispatch(setCurrentCards(msg));
     });
 
     socket.on("vote", () => {

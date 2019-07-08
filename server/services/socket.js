@@ -31,14 +31,6 @@ const emitPlayers = exports.emitPlayers = players => {
     });
 }
 
-// Tell everyone that the game has started
-exports.emitStartGame = (players, status) => {
-    // console.log("emitStartGame");
-    io.emit("start game", {
-        players: players
-    });
-}
-
 // Let the players know about the next round
 exports.emitNewRound = (status, roundNum, currentPlayer) => {
     // console.log("emitNewRound");

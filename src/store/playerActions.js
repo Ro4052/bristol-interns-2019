@@ -33,7 +33,6 @@ export const fetchCards = () => {
         return axios.get('/api/cards')
         .then(res => {
             dispatch(fetchCardsSuccess(res.data));
-            return res.data;
         })
         .catch(error => dispatch(fetchCardsFailure(error)));
     }

@@ -48,7 +48,8 @@ router.post('/auth/logout', (req, res) => {
 
 /* Get the players list of cards */
 router.get('/api/cards', auth, (req, res) => {
-    res.status(200).json(gameLogic.getCardsByUsername(req.session.user));
+    const cards = gameLogic.getCardsByUsername(req.session.user);
+    res.status(200).json(cards);
 });
 
 /* Start the game */
