@@ -2,7 +2,6 @@ const router = require('express').Router();
 const path = require('path');
 const auth = require('../services/auth');
 const gameLogic = require('../services/gameLogic');
-const cardManager = require('../services/cards');
 
 let currentUsers = [];
 
@@ -20,14 +19,8 @@ router.post('/auth/login', (req, res) => {
     const user = currentUsers.find((user) => user.username === req.body.username);
     if (!user) {
         req.session.user = req.body.username;            
-        const newSet = cardManager.assign(currentUsers, 3 /* number of cards per user */);
         const user = {
-            username: req.body.username,
-            cards: newSet,
-            playedCard: false,
-            voted: false,
-            score: 0,
-            cookie: req.headers.cookie // TODO: Remove?
+            username: req.body.username
         };
         currentUsers.push(user);
         gameLogic.joinGame(user);
@@ -53,10 +46,10 @@ router.post('/auth/logout', (req, res) => {
     }
 });
 
-/* Send a random set of cards to user */
+/* Get the players list of cards */
 router.get('/api/cards', auth, (req, res) => {
-    const user = currentUsers.find((user) => user.username === req.session.user);    
-    res.status(200).json(user.cards);
+    const cards = gameLogic.getCardsByUsername(req.session.user);
+    res.status(200).json(cards);
 });
 
 /* Start the game */
