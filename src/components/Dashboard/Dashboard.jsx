@@ -14,24 +14,20 @@ import PlayedCards from '../Cards/PlayedCards/PlayedCards';
 import axios from 'axios';
 
 export class Dashboard extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {}
     }
-
     startGame() {
         axios.get('/api/start')
         .catch(err => {
             console.log(err);
         });
     }
-
     componentDidMount() {
         const socket = connectSocket();
         dispatch(setSocket(socket));
     }
-
     render() {
         console.log("status ", this.props.status);
         return (

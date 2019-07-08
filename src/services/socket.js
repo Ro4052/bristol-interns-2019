@@ -34,27 +34,22 @@ const connectSocket = () => {
     });
 
     socket.on("status", msg => {
-        console.log("status", msg);
         dispatch(setStatus(msg));
     });
 
     socket.on("start game", msg => {
-        console.log("start game", msg);
         dispatch(setAllPlayers(msg.allPlayers));
     });
 
     socket.on("played word", msg => {
-        console.log("played word", msg);
         dispatch(setCurrentWord(msg));
     });
 
     socket.on("play word and card", () => {
-        console.log("play word and card");
         dispatch(setPlayWordAndCard(true));
     });
 
     socket.on("play card", () => {
-        console.log("play card");
         dispatch(setPlayCard(true));
     });
 
@@ -64,7 +59,6 @@ const connectSocket = () => {
     });
 
     socket.on("vote", () => {
-        console.log("vote");
     });
 
     return socket;

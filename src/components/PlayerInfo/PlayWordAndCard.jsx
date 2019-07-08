@@ -14,7 +14,6 @@ export class PlayWordAndCard extends React.Component {
         }
         this.handleChange = this.handleChange.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
-        this.startGame = this.startGame.bind(this);
         this.endTurn = this.endTurn.bind(this);
     }
     handleChange(event) {
@@ -22,12 +21,6 @@ export class PlayWordAndCard extends React.Component {
     }
     sendMessage() {
         this.props.playWord(this.state.currentValue);
-    }
-    startGame() {
-        axios.get('/api/start')
-        .catch(err => {
-            console.log(err);
-        });
     }
     endTurn() {        
         if (this.props.myWord && this.props.playedCard) {
