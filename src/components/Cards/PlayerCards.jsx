@@ -51,9 +51,10 @@ export class PlayerCards extends React.Component {
         return ((this.props.playWordAndCard || this.props.playCard) && this.props.playedCard === 0) ? styles.singleCard : styles.disabledCard
     }
     render() {
+        console.log(this.props.playedCard);
         const cardsImages = this.getPlayerCards().map((card) => (
-            <img id={"card-" + card.id} alt='' className={this.disableOnEndTurn()} key={card.id} src={card.url} onClick={this.playCard.bind(this)}/>
-        ))
+            <img id={"card-" + card.id} alt='' className={this.disableOnEndTurn()} key={card.id} src={card.url} onClick={this.props.playedCard === 0 ? this.playCard.bind(this) : () => {}}/>
+        ));
         return (
             <div className={styles.cardsContainer} id="my-cards">
                 <h2>{this.state.playedCardText}</h2>
@@ -68,10 +69,8 @@ export class PlayerCards extends React.Component {
 const mapStateToProps = (state) => ({
     playWordAndCard: state.playerReducer.playWordAndCard,
     playCard: state.playerReducer.playCard,
-    othersTurn: state.playerReducer.othersTurn,
     myCards: state.playerReducer.myCards,
     playedCard: state.playerReducer.playedCard,
-    myTurn: state.playerReducer.myTurn,
     finishedRound: state.playerReducer.finishedRound
 });
 
