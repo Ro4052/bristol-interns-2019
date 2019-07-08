@@ -2,7 +2,7 @@ export const initialState = {
     status: "NOT_STARTED",
     roundNum: 0,
     currentPlayer: null,
-    allPlayers: [],
+    players: [],
     currentCards: [],
     currentWord: '',
     socket: null
@@ -16,8 +16,8 @@ const reducer = (state = initialState, action) => {
             return {...state, roundNum: action.roundNum };
         case "SET_CURRENT_PLAYER":
             return {...state, currentPlayer: action.currentPlayer };
-        case "SET_ALL_PLAYERS":
-            return {...state, allPlayers: action.allPlayers };
+        case "SET_PLAYERS":
+            return {...state, players: action.players };
         case "SET_CURRENT_CARDS":
             return {...state, currentCards: action.currentCards };
         case "SET_CURRENT_WORD":

@@ -8,7 +8,7 @@ export class Players extends React.PureComponent {
             <div className={style.currentPlayersBox}>
                 <h3>Players:</h3>
                 <ul id="players">
-                    {this.props.allPlayers.map((player, key) => {
+                    {this.props.players.map((player, key) => {
                         return <li key={key}>{player.username}</li>
                     })}
                 </ul>
@@ -19,7 +19,7 @@ export class Players extends React.PureComponent {
 
 const mapStateToProps = (state) => {
     return ({
-        allPlayers: state.reducer.allPlayers
+        players: state.reducer.players
     });
 }
 

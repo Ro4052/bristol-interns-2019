@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 import { dispatch } from '../store/store';
-import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setAllPlayers, setCurrentCards } from '../store/actions';
+import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setPlayers, setCurrentCards } from '../store/actions';
 import { setPlayWordAndCard, setPlayCard, setPlayedCard } from '../store/playerActions';
 
 const connectSocket = () => {
@@ -16,8 +16,8 @@ const connectSocket = () => {
         upgrade: false
     });
 
-    socket.on("all players", msg => {
-        dispatch(setAllPlayers(msg.allPlayers));
+    socket.on("players", msg => {
+        dispatch(setPlayers(msg.players));
     });
 
     socket.on("new round", msg => {
@@ -38,7 +38,7 @@ const connectSocket = () => {
     });
 
     socket.on("start game", msg => {
-        dispatch(setAllPlayers(msg.allPlayers));
+        dispatch(setPlayers(msg.allPlayers));
     });
 
     socket.on("played word", msg => {

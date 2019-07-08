@@ -26,10 +26,10 @@ export const setCurrentPlayer = currentPlayer => {
     }
 }
 
-export const setAllPlayers = allPlayers => {
+export const setPlayers = players => {
     return {
-        type: "SET_ALL_PLAYERS",
-        allPlayers
+        type: "SET_PLAYERS",
+        players
     }
 }
 
