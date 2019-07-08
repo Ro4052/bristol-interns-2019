@@ -1,5 +1,5 @@
 require('dotenv').config();
-const server = require('./server/server');
+const app = require('./server/server');
 
 const port = process.env.PORT || 8080;
-server(port);
+app.server(port);
