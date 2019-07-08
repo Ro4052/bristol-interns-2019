@@ -27,4 +27,5 @@ module.exports = port => {
     app.use(require('./controllers'));
 
     server.listen(port, () => console.log(`Server running on port: ${port}`));
+
 }
