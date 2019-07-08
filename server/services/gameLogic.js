@@ -38,18 +38,13 @@ let cards = [];
 let votes = [];
 
 /* Return the list of players, without their assigned cards */
-exports.getPlayers = () => {
-    return players.map(player => ({ username: player.username, score: player.score }));
-}
+exports.getPlayers = () => players.map(player => ({ username: player.username, score: player.score }));
 
 /* Return the list of cards played this round, without who played them */
-const getCards = exports.getCards = () => {
-    return cards.map(card => ({ cardId: card.cardId }));
-}
+const getCards = exports.getCards = () => cards.map(card => ({ cardId: card.cardId }));
 
-exports.getCardsByUsername = (username) => {
-    return players.find(player => player.username === username).cards;
-}
+/* Get the list of cards for a specific player */
+exports.getCardsByUsername = (username) => players.find(player => player.username === username).cards;
 
 /* Add the player to the game if possible */
 exports.joinGame = user => {
@@ -157,27 +152,13 @@ exports.voteCard = (username, cardId) => {
 }
 
 /* Return true if the player has already played this round */
-const playerHasPlayedCard = (username) => {
-    return cards.filter(card => card.username === username).length > 0;
-}
+const playerHasPlayedCard = (username) => cards.filter(card => card.username === username).length > 0;
 
 /* Return true if the player has already voted this round */
-const playerHasVoted = (username) => {
-    return votes.filter(vote => vote.username === username).length > 0;
-}
+const playerHasVoted = (username) => votes.filter(vote => vote.username === username).length > 0;
 
 /* Returns true if all players have played a card this round */
-const allPlayersPlayedCard = () => {
-    for (let player of players) {
-        if (!playerHasPlayedCard(player.username)) return false;
-    }
-    return true;
-}
+const allPlayersPlayedCard = () => players.every(player => playerHasPlayedCard(player.username));
 
-/* Returns true if all players have voted this round */
-const allPlayersVoted = () => {
-    for (let player of players.filter(player => currentPlayer !== player)) {
-        if (!playerHasVoted(player.username)) return false;
-    }
-    return true;
-}
+/* Returns true if all players (apart from the current player) have voted this round */
+const allPlayersVoted = () => players.filter(player => player.username !== currentPlayer.username).every(player => playerHasVoted(player));
