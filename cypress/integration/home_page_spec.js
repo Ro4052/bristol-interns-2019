@@ -3,10 +3,8 @@ describe('The Home Page', function() {
       cy.visit('http://localhost:8080') // change URL to match your dev URL
     })
 })
-describe('The Login Page', function () {
-  beforeEach(function () {
-  })
 
+describe('The Login Page', function () {
   it('sets auth cookie when logging in via form submission', function () {
     // destructuring assignment of the this.currentUser object
     const username = 'jane'
