@@ -8,7 +8,7 @@ let sockets = [];
 exports.setupSocket = (server, session) => {
     io = socketio(server);
     io.use(sharedsession(session));
-    io.on('connection', function (socket) {        
+    io.on('connection', function (socket) {
         sockets.push(socket);
         emitPlayers(gameLogic.getPlayers());
         socket.on('refresh', () => {

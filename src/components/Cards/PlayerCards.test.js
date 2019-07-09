@@ -13,7 +13,7 @@ describe('on initial render', () => {
 })
 
 describe('on given a set of cards', () => {
-    let playerCards = [1, 2, 3];
+    let playerCards = [{id: 1}, {id: 2}, {id: 3}];
     it('displays the correct number of cards', () => {
         const wrapper = shallow(<PlayerCards myCards={playerCards} fetchCards={() => {}} requestPlayCard={() => {}}/>);
         expect(wrapper.find('ul').children().length).toEqual(3);
@@ -74,7 +74,7 @@ describe('moxios', () => {
         })
     })
     describe('when myTurn is true and click', () => {
-        let playerCards = [1, 2, 3];
+        let playerCards = [{id: 1}, {id: 2}, {id: 3}];
         it('calls sendCard and playCard', () => {
             const socket = new SocketMock();
             const mockedEvent = { target: {id: '1'} }

@@ -38,6 +38,7 @@ describe('The Dashboard Page', function () {
                     username: 'unicorn'
                 }
             });
+            cy.visit('/dashboard')
         })
 
         after(() => {

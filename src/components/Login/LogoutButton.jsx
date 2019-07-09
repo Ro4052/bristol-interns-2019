@@ -11,6 +11,7 @@ export class LogoutButton extends React.Component {
         }
         this.logOut = this.logOut.bind(this);
     }
+
     deleteAllCookies() {
         var cookies = document.cookie.split(";");
         for (var i = 0; i < cookies.length; i++) {
@@ -20,6 +21,7 @@ export class LogoutButton extends React.Component {
             document.cookie = name + "=;expires=Thu, 01 Jan 1975 00:00:00 GMT";
         }
     }
+
     logOut() {
         axios.post('/auth/logout')
         .then(response => {
@@ -35,6 +37,7 @@ export class LogoutButton extends React.Component {
             window.alert('Cannot log out of a current game');
         })
     }
+    
     render() {        
         return (
             (this.state.loggedIn) ?

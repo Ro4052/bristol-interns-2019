@@ -18,16 +18,19 @@ export class Dashboard extends React.Component {
         super(props);
         this.state = {}
     }
+
     startGame() {
         axios.get('/api/start')
         .catch(err => {
             console.log(err);
         });
     }
+    
     componentDidMount() {
         const socket = connectSocket();
         dispatch(setSocket(socket));
     }
+    
     render() {
         
         return (

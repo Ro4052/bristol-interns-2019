@@ -50,7 +50,11 @@ exports.getRoundNumber = () => roundNum;
 exports.getCurrentPlayer = () => currentPlayer;
 
 /* Get the list of cards for a specific player */
-exports.getCardsByUsername = (username) => players.find(player => player.username === username).cards.filter(card => card.played === false);
+exports.getCardsByUsername = (username) => {
+    let player = players.find(player => player.username === username)
+    if (player) return player.cards.filter(card => card.played === false)
+    else return []
+};
 
 /* Returns true if the player is able to join the game, false otherwise */
 exports.canJoinGame = (username) => (status === statusTypes.NOT_STARTED && !players.some(player => player.username === username));

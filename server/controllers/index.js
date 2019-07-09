@@ -27,7 +27,7 @@ router.post('/auth/login', (req, res) => {
             gameLogic.joinGame(user);
             res.sendStatus(200);
         } else {
-            res.sendStatus(403);
+            res.status(400).json({message: "Game has already started"});
         }
     } else {
         res.sendStatus(409);

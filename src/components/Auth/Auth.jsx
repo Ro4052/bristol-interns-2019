@@ -10,6 +10,7 @@ export default class Auth extends React.Component {
         authenticated: false
         };
     }
+
     componentDidMount() {
         axios.get('/auth', {
         validateStatus: (status) => {
@@ -29,6 +30,7 @@ export default class Auth extends React.Component {
             this.setState({ loading: false, authenticated: false });
         });
     }
+    
     render() {
         const { loading, authenticated } = this.state;
         if (loading) return null;

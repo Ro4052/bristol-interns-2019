@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { fetchCards, requestPlayCard, finishPlayCard } from '../../store/playerActions';
 
 export class PlayerCards extends React.Component {
-
     constructor() {
         super();
         this.state = {};

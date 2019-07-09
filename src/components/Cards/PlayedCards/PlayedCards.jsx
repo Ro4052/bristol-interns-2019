@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import styles from '../Cards.module.css';
 
 export class PlayedCards extends React.Component {
+    
     render() {
         return (
             <ul id="played-cards">
