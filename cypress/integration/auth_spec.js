@@ -3,11 +3,11 @@
 
 describe('No auth cookie', function () {
   it('stops you getting to /dashboard', function () {
-    cy.visit('http://localhost:8080/dashboard') 
+    cy.visit('/dashboard') 
 
 
     // we should not be redirected to /dashboard
-    cy.url().should('include', '/')
+    cy.url().should('eq', Cypress.config().baseUrl)
   }); 
 })
 
@@ -16,7 +16,7 @@ describe('auth cookie', function () {
     cy.request('POST', '/auth/login', {username: 'jane'})
   })
   it('sends you to dashboard', function() {
-    cy.visit('http://localhost:8080/dashboard')
+    cy.visit('/dashboard')
     cy.url().should('include', '/dashboard')
   })
 })
