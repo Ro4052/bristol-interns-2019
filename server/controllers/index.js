@@ -22,9 +22,13 @@ router.post('/auth/login', (req, res) => {
         const user = {
             username: req.body.username
         };
-        currentUsers.push(user);
-        gameLogic.joinGame(user);
-        res.sendStatus(200);
+        if (gameLogic.canJoinGame()) {
+            currentUsers.push(user);
+            gameLogic.joinGame(user);
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(403);
+        }
     } else {
         res.sendStatus(409);
     }

@@ -8,10 +8,28 @@ let sockets = [];
 exports.setupSocket = (server, session) => {
     io = socketio(server);
     io.use(sharedsession(session));
-    io.on('connection', function (socket) {
+    io.on('connection', function (socket) {        
         sockets.push(socket);
         emitPlayers(gameLogic.getPlayers());
+        socket.on('refresh', () => {
+            sendInfoOnRefresh(socket);
+        })
     });
+}
+
+// Check if it's the sender's turn
+const sendInfoOnRefresh = exports.sendInfoOnRefresh = (socket) => {
+    const isPlayerInCurrentGame = gameLogic.getPlayers().some(player => socket.handshake.session.user === player.username);
+    if (isPlayerInCurrentGame) {
+        socket.emit("round info", {
+            status: gameLogic.getStatus(),
+            roundNum: gameLogic.getRoundNumber(),
+            currentPlayer: gameLogic.getCurrentPlayer()
+        });
+    } else {
+        // TODO
+        // What happens if player is not in the current game
+    }
 }
 
 // Check if it's the sender's turn
@@ -42,8 +60,8 @@ exports.emitNewRound = (status, roundNum, currentPlayer) => {
 }
 
 // Emit the new status of the game
-exports.emitStatus = status => {
-    // console.log("emitStatus");
+const emitStatus = exports.emitStatus = status => {
+    // console.log("emitStatus", status);
     io.emit("status", {
         status: status
     });
@@ -57,7 +75,7 @@ exports.emitWord = word => {
 
 // When everyone has played their cards, send them all to the players
 exports.emitPlayedCards = cards => {
-    // console.log("emitPlayedCards");
+    // console.log("emitPlayedCards", cards);
     io.emit("played cards", cards);
 }
 

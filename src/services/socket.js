@@ -17,8 +17,17 @@ const connectSocket = () => {
         upgrade: false
     });
 
+    socket.emit("refresh");
+
     socket.on("players", msg => {
         dispatch(setPlayers(msg.players));
+    });
+
+    socket.on("round info", msg => {
+        console.log("getting info after refresh", msg);
+        dispatch(setStatus(msg.status));
+        dispatch(setRoundNumber(msg.roundNum));
+        dispatch(setCurrentPlayer(msg.currentPlayer));
     });
 
     socket.on("new round", msg => {
@@ -35,7 +44,7 @@ const connectSocket = () => {
     });
 
     socket.on("status", msg => {
-        dispatch(setStatus(msg));
+        dispatch(setStatus(msg.status));
     });
 
     socket.on("played word", msg => {

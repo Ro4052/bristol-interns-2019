@@ -10,7 +10,7 @@ export default class Auth extends React.Component {
       authenticated: false
     };
   }
-  componentWillMount() {
+  componentDidMount() {
     axios.get('/auth', {
       validateStatus: (status) => {
         return status < 500;
@@ -27,7 +27,7 @@ export default class Auth extends React.Component {
       })
       .catch(err => {
         this.setState({ loading: false, authenticated: false });
-      });
+    });
   }
   render() {
     const { loading, authenticated } = this.state;
@@ -35,5 +35,4 @@ export default class Auth extends React.Component {
     if (authenticated) return this.props.render();
     return (<Redirect to='/' />);
   }
-
 }

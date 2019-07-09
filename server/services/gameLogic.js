@@ -37,31 +37,41 @@ let cards = [];
 } */
 let votes = [];
 
-/* Return the list of players, without their assigned cards */
-const getPlayers = exports.getPlayers = () => players.map(player => ({ username: player.username, score: player.score }));
+/* Get the current word of the game */
+exports.getWord = () => currentWord;
 
-/* Return the list of cards played this round, without who played them */
-const getCards = exports.getCards = () => cards.map(card => ({ cardId: card.cardId }));
+/* Get the current status of the game */
+exports.getStatus = () => status;
+
+/* Get the current round number */
+exports.getRoundNumber = () => roundNum;
+
+/* Get the current status of the game */
+exports.getCurrentPlayer = () => currentPlayer;
 
 /* Get the list of cards for a specific player */
 exports.getCardsByUsername = (username) => players.find(player => player.username === username).cards;
 
+/* Returns true if the player is able to join the game, false otherwise */
+exports.canJoinGame = (username) => (status === statusTypes.NOT_STARTED && !players.some(player => player.username === username));
+
+/* Return the list of players, without their assigned cards */
+const getPlayers = () => players.map(player => ({ username: player.username, score: player.score }));
+exports.getPlayers = getPlayers;
+
+/* Return the list of cards played this round, without who played them */
+const getCards = () => cards.map(card => ({ cardId: card.cardId }));
+exports.getCards = getCards;
+
 /* Add the player to the game if possible */
 exports.joinGame = user => {
-    if (status === statusTypes.NOT_STARTED && !players.some(player => player.username === user.username)) {
-        const cards = cardManager.assign(players, rounds);
-        const player = {
-            username: user.username,
-            cards: cards,
-            score: 0
-        }
-        players.push(player);
-    } else {
-        // TODO
-        // - Game has started, player can't join
-        // - Player has already joined
-        // - Max players reached
+    const cards = cardManager.assign(players, rounds);
+    const player = {
+        username: user.username,
+        cards: cards,
+        score: 0
     }
+    players.push(player);
 }
 
 /* Remove player from current game */
