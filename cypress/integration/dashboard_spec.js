@@ -1,13 +1,9 @@
 describe('The Dashboard Page', function () {
     beforeEach(() => {
-        cy.request({
-            url: '/auth/login',
-            method: 'POST',
-            body: {
-                username: 'unicorn'
-            }
-        });
-        cy.visit('/dashboard')
+        cy.visit('/')
+        const username = "unicorn"
+        cy.get('input').type(username)
+        cy.get('button').click() 
     })
 
     afterEach(() => {

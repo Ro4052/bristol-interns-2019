@@ -65,15 +65,10 @@ router.get('/api/start', auth, (req, res) => {
 
 /* Check if player is logged in */
 router.get('/api/end', auth, (req, res) => {
-    const user = currentUsers.find((user) => user.username === req.session.user);
-    currentUsers = currentUsers.filter((otherUser) => otherUser !== user);
-    if (user) {
-        gameLogic.endGame();
-        req.session.destroy();
-        res.sendStatus(200);
-    } else {
-        res.status(404).json({message: "Cannot end game: user does not exist."});
-    }
+    currentUsers = []
+    gameLogic.endGame();
+    req.session.destroy();
+    res.sendStatus(200);
 });
 
 /* Current player plays a card and a word */
