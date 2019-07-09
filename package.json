@@ -35,7 +35,10 @@
     "test:e2e": "concurrently --success first --kill-others \"npm run start\" \"node run-cypress-test.js -r tap\""
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "globals": {
+        "cy": true
+    }
   },
   "browserslist": {
     "production": [
