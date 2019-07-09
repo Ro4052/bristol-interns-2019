@@ -38,7 +38,8 @@ let cards = [];
 let votes = [];
 
 /* Return the list of players, without their assigned cards */
-const getPlayers = exports.getPlayers = () => players.map(player => ({ username: player.username, score: player.score }));
+const getPlayers = () => players.map(player => ({ username: player.username, score: player.score }));
+exports.getPlayers = getPlayers;
 
 /* Return the list of cards played this round, without who played them */
 const getCards = exports.getCards = () => cards.map(card => ({ cardId: card.cardId }));
