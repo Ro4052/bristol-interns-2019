@@ -10,7 +10,7 @@ exports.setupSocket = (server, session) => {
     io.use(sharedsession(session));
     io.on('connection', function (socket) {
         sockets.push(socket);
-        emitAllPlayers(gameLogic.getAllPlayers());
+        emitPlayers(gameLogic.getPlayers());
     });
 }
 
@@ -24,18 +24,10 @@ exports.isCurrentPlayerSocket = (socket) => {
 }
 
 // Emit all the players
-const emitAllPlayers = exports.emitAllPlayers = allPlayers => {
-    // console.log("emitAllPlayers", allPlayers);
-    io.emit("all players", {
-        allPlayers: allPlayers
-    });
-}
-
-// Tell everyone that the game has started
-exports.emitStartGame = (allPlayers, status) => {
-    // console.log("emitStartGame");
-    io.emit("start game", {
-        allPlayers: allPlayers
+const emitPlayers = exports.emitPlayers = players => {
+    // console.log("emitAllPlayers", players);
+    io.emit("players", {
+        players: players
     });
 }
 

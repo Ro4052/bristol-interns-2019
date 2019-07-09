@@ -10,20 +10,20 @@ export default class Auth extends React.Component {
       authenticated: false
     };
   }
-  componentDidMount() {
+  componentWillMount() {
     axios.get('/auth', {
       validateStatus: (status) => {
         return status < 500;
       }})
       .then(res => {            
-          if (res.status === 200) {
-            this.setState({ loading: false, authenticated: true });
-          } else if (res.status === 401) {
-            this.setState({ loading: false, authenticated: false });
-          } else {
-            const error = new Error(res.error);
-            throw error;
-          }
+        if (res.status === 200) {
+          this.setState({ loading: false, authenticated: true });
+        } else if (res.status === 401) {
+          this.setState({ loading: false, authenticated: false });
+        } else {
+          const error = new Error(res.error);
+          throw error;
+        }
       })
       .catch(err => {
         this.setState({ loading: false, authenticated: false });
