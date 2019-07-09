@@ -9,20 +9,15 @@ describe('The Auth Page', function () {
     });
 
     describe('auth cookie', function () {
-        beforeEach(function() {
-            cy.visit('/');
-            const username = 'jane'
-            cy.get('input').type(username)
-            cy.get('button').click() 
-        });
         
+        beforeEach(function() {
+            cy.login('jane');
+        });
+
         afterEach(() => {
-            cy.request({
-                url: '/api/end',
-                method: 'GET'
-            });
-            cy.visit('/')
+            cy.resetGame();
         })
+
         it('sends you to dashboard', function() {
             cy.visit('/dashboard');
             cy.url().should('include', '/dashboard');

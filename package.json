@@ -27,7 +27,7 @@
     "start": "node server.js",
     "start:devserver": "nodemon server.js --watch ./server --watch ./server.js",
     "start:devclient": "react-scripts start",
-    "start:testserver": "npx cross-env PORT=1234 npm start",
+    "start:testserver": "npx cross-env PORT=1234 nodemon server.js",
     "build": "react-scripts build",
     "test:client": "react-scripts test --coverage --watchAll=false",
     "eject": "react-scripts eject",

@@ -23,3 +23,15 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('login', username => {
+    cy.get('input').type(username);
+    cy.get('button').click();
+});
+
+Cypress.Commands.add('resetGame', () => {
+    cy.request({
+        url: '/api/end',
+        method: 'GET'
+    });
+});

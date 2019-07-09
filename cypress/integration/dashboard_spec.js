@@ -1,18 +1,12 @@
 describe('The Dashboard Page', function () {
+    
     beforeEach(() => {
-        cy.visit('/')
-        const username = "unicorn"
-        cy.get('input').type(username)
-        cy.get('button').click() 
+        cy.login('unicorn'); 
     })
 
     afterEach(() => {
-        cy.request({
-            url: '/api/end',
-            method: 'GET'
-        });
-        cy.visit('/')
-    })
+        cy.resetGame();
+    });
 
     /* BEFORE START OF GAME */
     describe('before start of game', () => {
