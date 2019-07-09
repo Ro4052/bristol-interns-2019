@@ -38,7 +38,7 @@ let cards = [];
 let votes = [];
 
 /* Return the list of players, without their assigned cards */
-exports.getPlayers = () => players.map(player => ({ username: player.username, score: player.score }));
+const getPlayers = exports.getPlayers = () => players.map(player => ({ username: player.username, score: player.score }));
 
 /* Return the list of cards played this round, without who played them */
 const getCards = exports.getCards = () => cards.map(card => ({ cardId: card.cardId }));
@@ -68,7 +68,7 @@ exports.joinGame = user => {
 exports.quitGame = player => {
     if (status === statusTypes.NOT_STARTED && !players.includes(player)) {
         players = players.filter((otherPlayer) => otherPlayer !== player);
-        socket.emitPlayers();
+        socket.emitPlayers(getPlayers());
         return true;
     } else {
         // Game has started, player can't quit
@@ -84,6 +84,21 @@ exports.startGame = () => {
     } else {
         // TODO
         // - There aren't yet enough players in the game
+    }
+}
+
+/* Start the game with the players that have joined */
+exports.endGame = () => {
+    if (status !== statusTypes.NOT_STARTED) {
+        status = statusTypes.NOT_STARTED;
+        players = []
+        votes = []
+        card = []
+        currentPlayer = null
+        currentWord = ''
+    } else {
+        // TODO
+        // - Called when the game has not started yet
     }
 }
 

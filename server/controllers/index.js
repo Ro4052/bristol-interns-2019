@@ -58,6 +58,13 @@ router.get('/api/start', auth, (req, res) => {
     res.sendStatus(200);
 });
 
+/* Check if player is logged in */
+router.get('/api/end', auth, (req, res) => {
+    gameLogic.endGame();
+    req.session.destroy();
+    res.sendStatus(200);
+});
+
 /* Current player plays a card and a word */
 router.post('/api/playCardWord', auth, (req, res) => {
     gameLogic.playCardAndWord(req.session.user, req.body.card, req.body.word);
