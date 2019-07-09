@@ -7,18 +7,11 @@ describe('logs in and plays card', function() {
                 username: 'jane'
             }
         });
+    })
+    
+    it('is able to start game', function() {
         cy.visit('/dashboard')
-    })
-
-    after(() => {
-        cy.request({
-            url: '/api/end',
-            method: 'GET'
-        });
-    })
-    it('displays card', function() {
         cy.get('#start-game').click()
-        cy.get('#my-cards').click()
         console.log("dog")
     })
 })
