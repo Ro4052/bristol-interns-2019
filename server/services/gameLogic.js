@@ -87,6 +87,21 @@ exports.startGame = () => {
     }
 }
 
+/* Start the game with the players that have joined */
+exports.endGame = () => {
+    if (status !== statusTypes.NOT_STARTED) {
+        status = statusTypes.NOT_STARTED;
+        players = []
+        votes = []
+        card = []
+        currentPlayer = null
+        currentWord = ''
+    } else {
+        // TODO
+        // - Called when the game has not started yet
+    }
+}
+
 /* Move on to the next round, called when all players have finished their turn */
 const nextRound = () => {
     if (roundNum !== rounds) {

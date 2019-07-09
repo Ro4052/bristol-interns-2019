@@ -62,6 +62,13 @@ describe('The Dashboard Page', function () {
             });
         })
 
+        after(() => {
+            cy.request({
+                url: '/api/end',
+                method: 'GET'
+            });
+        })
+
         it("after start has been pressed", () => {
             cy.get('#start-game').click()
             cy.get('#round-number').should('exist')
