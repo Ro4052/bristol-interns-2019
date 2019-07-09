@@ -103,7 +103,7 @@ exports.endGame = () => {
         status = statusTypes.NOT_STARTED;
         players = []
         votes = []
-        card = []
+        cards = []
         currentPlayer = null
         currentWord = ''
     } else {
