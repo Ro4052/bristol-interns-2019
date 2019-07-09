@@ -37,11 +37,11 @@ export class LogoutButton extends React.Component {
             window.alert('Cannot log out of a current game');
         })
     }
-    
+
     render() {        
         return (
             (this.state.loggedIn) ?
-            <button className={styles.logOutButton} onClick={this.logOut}>Log out</button>
+            <button id='logout-button' className={styles.logOutButton} onClick={this.logOut}>Log out</button>
             : <Redirect to='/'/>
         )
     }

@@ -22,10 +22,11 @@ router.post('/auth/login', (req, res) => {
         const user = {
             username: req.body.username
         };        
-        if (gameLogic.canJoinGame()) {
+        if (gameLogic.canJoinGame(user.username)) {
             currentUsers.push(user);
-            gameLogic.joinGame(user);
-            res.sendStatus(200);
+            gameLogic.joinGame(user, () => {
+                res.sendStatus(200);
+            });
         } else {
             res.status(400).json({message: "Game has already started"});
         }
@@ -64,9 +65,15 @@ router.get('/api/start', auth, (req, res) => {
 
 /* Check if player is logged in */
 router.get('/api/end', auth, (req, res) => {
-    gameLogic.endGame();
-    req.session.destroy();
-    res.sendStatus(200);
+    const user = currentUsers.find((user) => user.username === req.session.user);
+    currentUsers = currentUsers.filter((otherUser) => otherUser !== user);
+    if (user) {
+        gameLogic.endGame();
+        req.session.destroy();
+        res.sendStatus(200);
+    } else {
+        res.status(404).json({message: "Cannot end game: user does not exist."});
+    }
 });
 
 /* Current player plays a card and a word */

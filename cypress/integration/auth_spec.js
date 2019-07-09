@@ -13,12 +13,11 @@ describe('auth cookie', function () {
     beforeEach(function() {
         cy.request('POST', '/auth/login', {username: 'jane'})
     })
+    afterEach(function() {
+        cy.request('POST', '/auth/logout')
+    })
     it('sends you to dashboard', function() {
         cy.visit('/dashboard')
         cy.url().should('include', '/dashboard')
-        cy.request({
-            url: '/auth/logout',
-            method: 'POST'
-        });
     })
 })
