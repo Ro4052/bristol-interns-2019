@@ -33,7 +33,7 @@
     "eject": "react-scripts eject",
     "cy:run": "cypress run",
     "cypress:open": "cypress open",
-    "test:e2e": "concurrently --success first --kill-others \"npm run start\" \"node run-cypress-test.js -r tap\""
+    "test:e2e": "concurrently --success first --kill-others \"npm run start:testserver\" \"node run-cypress-test.js -r tap\""
   },
   "eslintConfig": {
     "extends": "react-app",
