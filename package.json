@@ -31,10 +31,8 @@
     "test:client": "react-scripts test --coverage --watchAll=false",
     "eject": "react-scripts eject",
     "cy:run": "cypress run",
-    "cy:open": "cypress open",
-    "start:instrumented": "npx cross-env PORT=1234 node ./instrumented/server.js",
-    "instrument": "npx nyc instrument --compact=false server instrumented/server && npx nyc instrument --compact=false build instrumented/build && npx nyc instrument --compact=false server.js instrumented",
-    "test:e2e": "npm run build && npm run instrument && concurrently --success first --kill-others \"npm run start:instrumented\" \"node run-cypress-test.js -r tap\""
+    "cypress:open": "cypress open",
+    "test:e2e": "concurrently --success first --kill-others \"npm run start\" \"node run-cypress-test.js -r tap\""
   },
   "eslintConfig": {
     "extends": "react-app"
