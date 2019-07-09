@@ -37,38 +37,49 @@ let cards = [];
 } */
 let votes = [];
 
-/* Return the list of players, without their assigned cards */
-exports.getPlayers = () => players.map(player => ({ username: player.username, score: player.score }));
+/* Get the current word of the game */
+exports.getWord = () => currentWord;
 
-/* Return the list of cards played this round, without who played them */
-const getCards = exports.getCards = () => cards.map(card => ({ cardId: card.cardId }));
+/* Get the current status of the game */
+exports.getStatus = () => status;
+
+/* Get the current round number */
+exports.getRoundNumber = () => roundNum;
+
+/* Get the current status of the game */
+exports.getCurrentPlayer = () => currentPlayer;
 
 /* Get the list of cards for a specific player */
-exports.getCardsByUsername = (username) => players.find(player => player.username === username).cards;
+exports.getCardsByUsername = (username) => players.find(player => player.username === username).cards.filter(card => card.played === false);
+
+/* Returns true if the player is able to join the game, false otherwise */
+exports.canJoinGame = (username) => (status === statusTypes.NOT_STARTED && !players.some(player => player.username === username));
+
+/* Return the list of players, without their assigned cards */
+const getPlayers = () => players.map(player => ({ username: player.username, score: player.score }));
+exports.getPlayers = getPlayers;
+
+/* Return the list of cards played this round, without who played them */
+const getCards = () => cards.map(card => ({ cardId: card.cardId }));
+exports.getCards = getCards;
 
 /* Add the player to the game if possible */
-exports.joinGame = user => {
-    if (status === statusTypes.NOT_STARTED && !players.some(player => player.username === user.username)) {
-        const cards = cardManager.assign(players, rounds);
-        const player = {
-            username: user.username,
-            cards: cards,
-            score: 0
-        }
-        players.push(player);
-    } else {
-        // TODO
-        // - Game has started, player can't join
-        // - Player has already joined
-        // - Max players reached
+exports.joinGame = (user, callback) => {
+    const cards = cardManager.assign(players, rounds);
+    const player = {
+        username: user.username,
+        cards: cards,
+        score: 0
     }
+    players.push(player);
+    callback();
 }
 
 /* Remove player from current game */
 exports.quitGame = player => {
     if (status === statusTypes.NOT_STARTED && !players.includes(player)) {
         players = players.filter((otherPlayer) => otherPlayer !== player);
-        socket.emitPlayers();
+        socket.emitPlayers(getPlayers());
         return true;
     } else {
         // Game has started, player can't quit
@@ -85,6 +96,16 @@ exports.startGame = () => {
         // TODO
         // - There aren't yet enough players in the game
     }
+}
+
+/* Start the game with the players that have joined */
+exports.endGame = () => {
+    status = statusTypes.NOT_STARTED;
+    players = []
+    votes = []
+    cards = []
+    currentPlayer = null
+    currentWord = ''
 }
 
 /* Move on to the next round, called when all players have finished their turn */
@@ -113,6 +134,8 @@ exports.playCardAndWord = (username, cardId, word) => {
             cardId: cardId
         };
         cards.push(card);
+        let playerCards =  players.find(player => player.username === currentPlayer.username).cards;    
+        playerCards.find(playedCard => playedCard.id.toString() === cardId).played = true;
         status = statusTypes.WAITING_FOR_OTHER_PLAYERS;
         socket.emitStatus(status);
         currentWord = word;
@@ -131,6 +154,8 @@ exports.playCard = (username, cardId) => {
             cardId: cardId
         };
         cards.push(card);
+        let playerCards =  players.find(player => player.username === username).cards;    
+        playerCards.find(playedCard => playedCard.id.toString() === cardId).played = true;
         if (allPlayersPlayedCard()) {
             status = statusTypes.WAITING_FOR_VOTES;
             socket.emitPlayedCards(getCards());
