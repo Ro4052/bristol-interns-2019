@@ -1,25 +1,21 @@
 describe('The Dashboard Page', function () {
+    beforeEach(() => {
+        cy.visit('/')
+        const username = "unicorn"
+        cy.get('input').type(username)
+        cy.get('button').click() 
+    })
+
+    afterEach(() => {
+        cy.request({
+            url: '/api/end',
+            method: 'GET'
+        });
+        cy.visit('/')
+    })
 
     /* BEFORE START OF GAME */
     describe('before start of game', () => {
-        before(() => {
-            cy.request({
-                url: '/auth/login',
-                method: 'POST',
-                body: {
-                    username: 'unicorn'
-                }
-            });
-            cy.visit('/dashboard')
-        })
-    
-        after(() => {
-            cy.request({
-                url: '/auth/logout',
-                method: 'POST'
-            });
-        })
-
         it('before the game has started', () => {
             cy.get('#start-game').should('exist');
             cy.get('#round-number').should('not.exist');
@@ -30,23 +26,6 @@ describe('The Dashboard Page', function () {
 
     /* WHEN GAME HAS STARTED */
     describe('after start of game', () => {
-        before(() => {
-            cy.request({
-                url: '/auth/login',
-                method: 'POST',
-                body: {
-                    username: 'unicorn'
-                }
-            });
-        })
-
-        after(() => {
-            cy.request({
-                url: '/api/end',
-                method: 'GET'
-            });
-        })
-
         it("after the start button has been pressed", () => {
             cy.get('#start-game').click()
             cy.get('#round-number').should('exist')

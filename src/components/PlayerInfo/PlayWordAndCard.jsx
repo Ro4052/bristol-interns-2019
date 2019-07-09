@@ -6,7 +6,6 @@ import { finishPlayCard } from '../../store/playerActions';
 import { playWord } from '../../store/playerActions';
 
 export class PlayWordAndCard extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -16,12 +15,15 @@ export class PlayWordAndCard extends React.Component {
         this.sendMessage = this.sendMessage.bind(this);
         this.endTurn = this.endTurn.bind(this);
     }
+
     handleChange(event) {
         this.setState({ currentValue: event.target.value });
     }
+
     sendMessage() {
         this.props.playWord(this.state.currentValue);
     }
+
     endTurn() {        
         if (this.props.myWord && this.props.playedCard) {
             axios.post('/api/playCardWord', {
@@ -36,6 +38,7 @@ export class PlayWordAndCard extends React.Component {
             });
         }
     }
+    
     render() {
         const sendWord = (
             <div className={styles.messageBox}>

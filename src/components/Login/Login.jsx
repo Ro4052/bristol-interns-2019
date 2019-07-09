@@ -80,7 +80,7 @@ export class Login extends React.Component {
                         error: "Username already exists",
                         loggedIn: false
                     })
-                } else if (err.message.includes(403)) {
+                } else if (err.message.includes(400)) {
                     this.setState({
                         error: "Game has already started",
                         loggedIn: false
