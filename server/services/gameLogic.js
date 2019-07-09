@@ -50,7 +50,7 @@ exports.getRoundNumber = () => roundNum;
 exports.getCurrentPlayer = () => currentPlayer;
 
 /* Get the list of cards for a specific player */
-exports.getCardsByUsername = (username) => players.find(player => player.username === username).cards;
+exports.getCardsByUsername = (username) => players.find(player => player.username === username).cards.filter(card => card.played === false);
 
 /* Returns true if the player is able to join the game, false otherwise */
 exports.canJoinGame = (username) => (status === statusTypes.NOT_STARTED && !players.some(player => player.username === username));
@@ -138,6 +138,8 @@ exports.playCardAndWord = (username, cardId, word) => {
             cardId: cardId
         };
         cards.push(card);
+        let playerCards =  players.find(player => player.username === currentPlayer.username).cards;    
+        playerCards.find(playedCard => playedCard.id.toString() === cardId).played = true;
         status = statusTypes.WAITING_FOR_OTHER_PLAYERS;
         socket.emitStatus(status);
         currentWord = word;
@@ -156,6 +158,8 @@ exports.playCard = (username, cardId) => {
             cardId: cardId
         };
         cards.push(card);
+        let playerCards =  players.find(player => player.username === username).cards;    
+        playerCards.find(playedCard => playedCard.id.toString() === cardId).played = true;
         if (allPlayersPlayedCard()) {
             status = statusTypes.WAITING_FOR_VOTES;
             socket.emitPlayedCards(getCards());

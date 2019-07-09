@@ -4,7 +4,6 @@ import styles from '../Cards.module.css';
 
 export class PlayedCards extends React.Component {
     render() {
-        console.log(this.props.cards);
         return (
             <ul id="played-cards">
                 {this.props.cards.map(card => <img id={"card-" + card.cardId} key={card.cardId} className={styles.allCards} alt={"card-" + card.cardId} src={require(`../cards/card (${card.cardId}).jpg`)}/>)}

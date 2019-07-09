@@ -28,6 +28,9 @@ const connectSocket = () => {
         dispatch(setStatus(msg.status));
         dispatch(setRoundNumber(msg.roundNum));
         dispatch(setCurrentPlayer(msg.currentPlayer));
+        dispatch(setCurrentWord(msg.currentWord));
+        dispatch(setCurrentCards(msg.currentCards));
+        dispatch(setPlayedCard(0));
     });
 
     socket.on("new round", msg => {
