@@ -29,6 +29,7 @@ export class Dashboard extends React.Component {
         dispatch(setSocket(socket));
     }
     render() {
+        
         return (
             <div className={style.roundInfo}>
                 {this.props.status === "NOT_STARTED" && <button id="start-game" onClick={this.startGame}>Start game</button>}
