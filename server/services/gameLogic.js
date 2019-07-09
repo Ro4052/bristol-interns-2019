@@ -50,7 +50,7 @@ exports.getRoundNumber = () => roundNum;
 exports.getCurrentPlayer = () => currentPlayer;
 
 /* Get the list of cards for a specific player */
-exports.getCardsByUsername = (username) => players.find(player => player.username === username).cards;
+exports.getCardsByUsername = (username) => players.find(player => player.username === username).cards.filter(card => card.played === false);
 
 /* Returns true if the player is able to join the game, false otherwise */
 exports.canJoinGame = (username) => (status === statusTypes.NOT_STARTED && !players.some(player => player.username === username));
@@ -64,7 +64,7 @@ const getCards = () => cards.map(card => ({ cardId: card.cardId }));
 exports.getCards = getCards;
 
 /* Add the player to the game if possible */
-exports.joinGame = user => {
+exports.joinGame = (user, callback) => {
     const cards = cardManager.assign(players, rounds);
     const player = {
         username: user.username,
@@ -72,6 +72,7 @@ exports.joinGame = user => {
         score: 0
     }
     players.push(player);
+    callback();
 }
 
 /* Remove player from current game */
@@ -99,17 +100,12 @@ exports.startGame = () => {
 
 /* Start the game with the players that have joined */
 exports.endGame = () => {
-    if (status !== statusTypes.NOT_STARTED) {
-        status = statusTypes.NOT_STARTED;
-        players = []
-        votes = []
-        card = []
-        currentPlayer = null
-        currentWord = ''
-    } else {
-        // TODO
-        // - Called when the game has not started yet
-    }
+    status = statusTypes.NOT_STARTED;
+    players = []
+    votes = []
+    cards = []
+    currentPlayer = null
+    currentWord = ''
 }
 
 /* Move on to the next round, called when all players have finished their turn */
@@ -138,6 +134,8 @@ exports.playCardAndWord = (username, cardId, word) => {
             cardId: cardId
         };
         cards.push(card);
+        let playerCards =  players.find(player => player.username === currentPlayer.username).cards;    
+        playerCards.find(playedCard => playedCard.id.toString() === cardId).played = true;
         status = statusTypes.WAITING_FOR_OTHER_PLAYERS;
         socket.emitStatus(status);
         currentWord = word;
@@ -156,6 +154,8 @@ exports.playCard = (username, cardId) => {
             cardId: cardId
         };
         cards.push(card);
+        let playerCards =  players.find(player => player.username === username).cards;    
+        playerCards.find(playedCard => playedCard.id.toString() === cardId).played = true;
         if (allPlayersPlayedCard()) {
             status = statusTypes.WAITING_FOR_VOTES;
             socket.emitPlayedCards(getCards());

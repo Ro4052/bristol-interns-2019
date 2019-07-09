@@ -8,7 +8,7 @@ const connectSocket = () => {
     if (process.env.NODE_ENV === "development") {
         connectionString = "ws://localhost:8080";
     } else {
-        const wsProtocol = window.location.protocol === 'http' ? 'wss' : 'ws';
+        const wsProtocol = window.location.protocol === 'https' ? 'wss' : 'ws';
         connectionString = `${wsProtocol}://${window.location.host}`;
     }
 
@@ -28,6 +28,9 @@ const connectSocket = () => {
         dispatch(setStatus(msg.status));
         dispatch(setRoundNumber(msg.roundNum));
         dispatch(setCurrentPlayer(msg.currentPlayer));
+        dispatch(setCurrentWord(msg.currentWord));
+        dispatch(setCurrentCards(msg.currentCards));
+        dispatch(setPlayedCard(0));
     });
 
     socket.on("new round", msg => {
