@@ -1,10 +1,11 @@
 describe('The Home Page', function() {
     it('successfully loads', function() {
-      cy.visit('http://localhost:1234') // change URL to match your dev URL
+      cy.visit('/') // change URL to match your dev URL
     })
 })
 
 describe('The Login Page', function () {
+
   it('sets auth cookie when logging in via form submission', function () {
     // destructuring assignment of the this.currentUser object
     const username = 'jane'

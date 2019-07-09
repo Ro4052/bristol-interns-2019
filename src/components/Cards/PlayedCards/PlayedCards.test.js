@@ -25,7 +25,7 @@ describe('if given one card', () => {
     });
     it("gives it the correct src", () => {
         const wrapper = shallow(<PlayedCards cards={oneCard} />);
-        expect(wrapper.find('#played-cards img').prop("src")).toEqual('../cards/card (1).jpg');
+        expect(wrapper.find('#played-cards img').prop("src")).toEqual('card (1).jpg');
     });
 });
 

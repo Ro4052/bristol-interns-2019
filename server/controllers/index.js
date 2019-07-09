@@ -21,10 +21,15 @@ router.post('/auth/login', (req, res) => {
         req.session.user = req.body.username;            
         const user = {
             username: req.body.username
-        };
-        currentUsers.push(user);
-        gameLogic.joinGame(user);
-        res.sendStatus(200);
+        };        
+        if (gameLogic.canJoinGame(user.username)) {
+            currentUsers.push(user);
+            gameLogic.joinGame(user, () => {
+                res.sendStatus(200);
+            });
+        } else {
+            res.status(400).json({message: "Game has already started"});
+        }
     } else {
         res.sendStatus(409);
     }
@@ -55,6 +60,14 @@ router.get('/api/cards', auth, (req, res) => {
 /* Start the game */
 router.get('/api/start', auth, (req, res) => {
     gameLogic.startGame();
+    res.sendStatus(200);
+});
+
+/* Check if player is logged in */
+router.get('/api/end', auth, (req, res) => {
+    currentUsers = []
+    gameLogic.endGame();
+    req.session.destroy();
     res.sendStatus(200);
 });
 

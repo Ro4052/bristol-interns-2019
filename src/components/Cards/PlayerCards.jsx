@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { fetchCards, requestPlayCard, finishPlayCard } from '../../store/playerActions';
 
 export class PlayerCards extends React.Component {
-
     constructor() {
         super();
         this.state = {};
@@ -53,7 +52,7 @@ export class PlayerCards extends React.Component {
         return (
             <div className={styles.cardsContainer} id="my-cards">
                 <ul>
-                    {this.props.myCards.map((cardId) => <img id={"card-" + cardId} alt={"card-" + cardId} className={this.getCardClass()} key={cardId} src={require(`./cards/card (${cardId}).jpg`)} onClick={this.handleClickCard} />)}
+                    {this.props.myCards.map(card => <img id={"card-" + card.cardId} alt={"card-" + card.cardId} className={this.getCardClass()} key={card.cardId} src={require(`./cards/card (${card.cardId}).jpg`)} onClick={this.handleClickCard} />)}
                 </ul>
             </div>
         );

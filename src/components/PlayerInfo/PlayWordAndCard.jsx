@@ -6,7 +6,6 @@ import { finishPlayCard } from '../../store/playerActions';
 import { playWord } from '../../store/playerActions';
 
 export class PlayWordAndCard extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
