@@ -21,7 +21,7 @@ describe('The Dashboard Page', function () {
     /* WHEN GAME HAS STARTED */
     describe('after start of game', () => {
         it("after the start button has been pressed", () => {
-            cy.get('#start-game').click()
+            cy.startGame();
             cy.get('#round-number').should('exist')
             cy.get('#current-player').should('exist')
             cy.get('#message').should('not.exist')

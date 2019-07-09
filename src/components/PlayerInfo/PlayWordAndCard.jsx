@@ -48,8 +48,8 @@ export class PlayWordAndCard extends React.Component {
         );
         return (
             <div className={styles.playerInteractions}>
-                {!this.props.myWord && <h3>Type in a word</h3>}
-                {!this.props.playedCard && <h3>Pick a card</h3>}
+                {!this.props.myWord && <h3 data-cy='play-word'>Type in a word</h3>}
+                {!this.props.playedCard && <h3 data-cy='play-card'>Pick a card</h3>}
                 {!this.props.myWord && sendWord}
                 {this.props.myWord && this.props.playedCard && !this.props.finishedRound && <button id="end-turn" onClick={this.endTurn}>End my turn</button>}
             </div>

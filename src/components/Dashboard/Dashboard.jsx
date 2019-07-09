@@ -35,7 +35,7 @@ export class Dashboard extends React.Component {
         
         return (
             <div className={style.roundInfo}>
-                {this.props.status === "NOT_STARTED" && <button id="start-game" onClick={this.startGame}>Start game</button>}
+                {this.props.status === "NOT_STARTED" && <button id="start-game" data-cy="start-game" onClick={this.startGame}>Start game</button>}
                 {this.props.status !== "NOT_STARTED" && <h2>Round: <span id="round-number">{this.props.roundNum}</span></h2>}
                 {this.props.currentPlayer && <h2>Current player: <span id="current-player">{this.props.currentPlayer.username}</span></h2>}
                 {this.props.currentWord !== '' && <h1 id="message">Word: {this.props.currentWord}</h1>}
