@@ -27,6 +27,7 @@
     "start": "node server.js",
     "start:devserver": "nodemon server.js --watch ./server --watch ./server.js",
     "start:devclient": "react-scripts start",
+    "start:testserver": "npx cross-env PORT=1234 npm start",
     "build": "react-scripts build",
     "test:client": "react-scripts test --coverage --watchAll=false",
     "eject": "react-scripts eject",
@@ -37,7 +38,7 @@
   "eslintConfig": {
     "extends": "react-app",
     "globals": {
-        "cy": true
+      "cy": true
     }
   },
   "browserslist": {

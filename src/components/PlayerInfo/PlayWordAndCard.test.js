@@ -1,8 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Players } from './Players';
 import { PlayWordAndCard } from './PlayWordAndCard';
-import { PlayCard } from './PlayCard';
 
 const initialState = {
     myWord: "",
