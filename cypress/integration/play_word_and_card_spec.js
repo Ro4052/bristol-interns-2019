@@ -9,12 +9,12 @@ describe('Play word and card', () => {
     describe('on start game', () => {
         it('prompts user to play a word and a card', () => {
             // Word prompt exists
-            // cy.get('[data-cy=play-card]').should('exist');
+            // cy.get('#play-word');
             // Card prompt exists
-            // cy.get('[data-cy=play-word]').should('exist');
+            cy.get('[data-cy="play-word"]').should('exist');
         });
     });
-    
+
     describe('on send a word and a card', () => {
         it('updates the game status', () => {
             // TODO

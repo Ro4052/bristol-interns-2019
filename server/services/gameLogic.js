@@ -89,7 +89,9 @@ exports.quitGame = player => {
 
 /* Start the game with the players that have joined */
 exports.startGame = () => {
+    console.log("startGame");
     if (status === statusTypes.NOT_STARTED && players.length > minPlayers) {
+        console.log("inside");
         status = statusTypes.STARTED;
         nextRound();
     } else {
@@ -98,19 +100,20 @@ exports.startGame = () => {
     }
 }
 
-/* Start the game with the players that have joined */
+/* End the game */
 exports.endGame = () => {
     status = statusTypes.NOT_STARTED;
-    players = []
-    votes = []
-    cards = []
-    currentPlayer = null
-    currentWord = ''
+    players = [];
+    votes = [];
+    cards = [];
+    currentPlayer = null;
+    currentWord = '';
+    roundNum = 0;
 }
 
 /* Move on to the next round, called when all players have finished their turn */
 const nextRound = () => {
-    if (roundNum !== rounds) {
+    if (roundNum < rounds) {
         status = statusTypes.WAITING_FOR_CURRENT_PLAYER;
         roundNum++;
         currentPlayer = players[roundNum % players.length];

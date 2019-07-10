@@ -59,13 +59,14 @@ router.get('/api/cards', auth, (req, res) => {
 
 /* Start the game */
 router.get('/api/start', auth, (req, res) => {
+    // console.log("called start");
     gameLogic.startGame();
     res.sendStatus(200);
 });
 
 /* Check if player is logged in */
 router.get('/api/end', auth, (req, res) => {
-    currentUsers = []
+    currentUsers = [];
     gameLogic.endGame();
     req.session.destroy();
     res.sendStatus(200);
