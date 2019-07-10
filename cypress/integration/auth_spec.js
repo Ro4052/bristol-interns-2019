@@ -18,7 +18,7 @@ describe('The Auth Page', function () {
         
         afterEach(() => {
             cy.request({
-                url: '/api/end',
+                url: '/api/reset-server',
                 method: 'GET'
             });
             cy.visit('/')
