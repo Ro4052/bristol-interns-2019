@@ -63,13 +63,15 @@ router.get('/api/start', auth, (req, res) => {
     res.sendStatus(200);
 });
 
-/* Check if player is logged in */
-router.get('/api/end', auth, (req, res) => {
-    currentUsers = []
-    gameLogic.endGame();
-    req.session.destroy();
-    res.sendStatus(200);
-});
+/* Check if in dev mode, and enable end game request */
+if (!process.env.NODE_ENV) {
+    router.get('/api/end', (req, res) => {
+        currentUsers = []
+        gameLogic.endGame();
+        req.session.destroy();
+        res.sendStatus(200);
+    });
+}
 
 /* Current player plays a card and a word */
 router.post('/api/playCardWord', auth, (req, res) => {
