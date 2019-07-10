@@ -8,8 +8,8 @@ describe('The Player Cards Component', () => {
     
     afterEach(() => {
         cy.request({
-            url: '/api/end',
-            method: 'GET'
+            url: '/api/reset-server',
+            method: 'POST'
         });
         cy.visit('/');
     });
