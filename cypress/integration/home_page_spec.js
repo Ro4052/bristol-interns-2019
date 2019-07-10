@@ -7,42 +7,42 @@ describe('The Home Page', function() {
 describe('The Login Page', function () {
     afterEach(() => {
     cy.request({
-        url: '/api/end',
+        url: '/api/reset-server',
         method: 'GET'
     });
-    cy.visit('/')
+    cy.visit('/');
     })
     it('sets auth cookie when logging in via form submission', function () {
     // destructuring assignment of the this.currentUser object
     const username = 'jane'
 
-    cy.get('input').type(username)
-    cy.get('button').click() 
+    cy.get('input').type(username);
+    cy.get('button').click() ;
 
     // we should be redirected to /dashboard
-    cy.url().should('include', '/dashboard')
+    cy.url().should('include', '/dashboard');
 
     // our auth cookie should be present
-    cy.getCookie('username').should('exist')
+    cy.getCookie('username').should('exist');
 
     // UI should reflect this user being logged in
-    cy.get('#players').should('contain', 'jane')
-    })
+    cy.get('#players').should('contain', 'jane');
+    });
 })
 describe('Username already exists', function() {
     afterEach(() => {
         cy.request({
-            url: '/api/end',
+            url: '/api/reset-server',
             method: 'GET'
         });
-        cy.visit('/')
-        })
+        cy.visit('/');
+        });
     it('returns error', function () {
         const username = 'Jane'
-        cy.request('POST', '/auth/login', { username: 'Jane' })
-        cy.get('input').type(username)
-        cy.get('button').click()
-        cy.get('h3').should('contain', 'Username already exists')
+        cy.request('POST', '/auth/login', { username: 'Jane' });
+        cy.get('input').type(username);
+        cy.get('button').click();
+        cy.get('h3').should('contain', 'Username already exists');
     })
 })
 // TO BE COMPLETED IN A TIC
@@ -52,14 +52,14 @@ describe('Username already exists', function() {
 //             url: '/api/end',
 //             method: 'GET'
 //         });
-//         cy.visit('/')
-//         })
+//         cy.visit('/');
+//         });
 //     it('returns error', function () { 
 //         const username = 'Jane'
-//         cy.request('POST', '/auth/login', { username: 'Blane' })
+//         cy.request('POST', '/auth/login', { username: 'Blane' });
 //         cy.
-//         cy.get('input').type(username)
-//         cy.get('button').click()
-//         cy.get('h3').should('contain', 'Game has already started')
-//     })
-// })
+//         cy.get('input').type(username);
+//         cy.get('button').click();
+//         cy.get('h3').should('contain', 'Game has already started');
+//     });
+// });
