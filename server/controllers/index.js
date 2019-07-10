@@ -65,7 +65,7 @@ router.get('/api/start', auth, (req, res) => {
 
 /* Check if in dev mode, and enable end game request */
 if (process.env.NODE_ENV === 'testing') {
-    router.get('/api/reset-server', (req, res) => {
+    router.post('/api/reset-server', (req, res) => {
         currentUsers = []
         gameLogic.endGame();
         req.session.destroy();
