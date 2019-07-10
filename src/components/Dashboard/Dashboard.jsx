@@ -26,6 +26,13 @@ export class Dashboard extends React.Component {
         });
     }
     
+    endGame() {
+        axios.get('/api/end')
+        .catch(err => {
+            console.log(err);
+        });
+    }
+
     componentDidMount() {
         const socket = connectSocket();
         dispatch(setSocket(socket));
@@ -45,6 +52,7 @@ export class Dashboard extends React.Component {
                 {this.props.playWordAndCard && <PlayWordAndCard />}
                 {this.props.playCard && <PlayCard />}
                 <LogoutButton />
+                <button onClick={this.endGame}>END GAME</button>
             </div>
         );
     }

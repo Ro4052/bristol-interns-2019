@@ -66,8 +66,8 @@ router.get('/api/start', auth, (req, res) => {
 /* Check if player is logged in */
 router.get('/api/end', auth, (req, res) => {
     currentUsers = []
-    gameLogic.endGame();
     req.session.destroy();
+    gameLogic.endGame();
     res.sendStatus(200);
 });
 
