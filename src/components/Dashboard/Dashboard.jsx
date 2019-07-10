@@ -4,9 +4,6 @@ import PlayerCards from '../Cards/PlayerCards';
 import LogoutButton from '../Login/LogoutButton';
 import Players from '../PlayerInfo/Players';
 import style from './Dashboard.module.css';
-import { setSocket } from '../../store/actions';
-import connectSocket from '../../services/socket';
-import { dispatch } from '../../store/store';
 import { finishPlayCard } from '../../store/playerActions';
 import PlayCard from '../PlayerInfo/PlayCard';
 import PlayWordAndCard from '../PlayerInfo/PlayWordAndCard';
@@ -24,11 +21,6 @@ export class Dashboard extends React.Component {
         .catch(err => {
             console.log(err);
         });
-    }
-    
-    componentDidMount() {
-        const socket = connectSocket();
-        dispatch(setSocket(socket));
     }
     
     render() {

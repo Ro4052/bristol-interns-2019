@@ -16,5 +16,6 @@
 import './commands'
 
 beforeEach(() => {
+    cy.resetGame();
     cy.visit('/');
 });

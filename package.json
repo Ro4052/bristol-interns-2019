@@ -18,6 +18,7 @@
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
     "redux": "^4.0.1",
+    "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
@@ -27,7 +28,7 @@
     "start": "node server.js",
     "start:devserver": "npx cross-env NODE_ENV=testing nodemon server.js --watch ./server --watch ./server.js",
     "start:devclient": "react-scripts start",
-    "start:testserver": "npx cross-env PORT=1234 nodemon server.js",
+    "start:testserver": "npx cross-env PORT=1234 NODE_ENV=testing nodemon --inspect server.js",
     "build": "react-scripts build",
     "test:client": "react-scripts test --coverage --watchAll=false",
     "eject": "react-scripts eject",
@@ -41,7 +42,7 @@
       "cypress/globals": true
     },
     "plugins": [
-        "cypress"
+      "cypress"
     ]
   },
   "browserslist": {

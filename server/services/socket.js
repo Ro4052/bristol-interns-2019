@@ -11,29 +11,15 @@ exports.setupSocket = (server, session) => {
     io.on('connection', function (socket) {
         sockets.push(socket);
         emitPlayers(gameLogic.getPlayers());
-        socket.on('refresh', () => {
-            sendInfoOnRefresh(socket);
-        })
     });
 }
 
-// Check if it's the sender's turn
-const sendInfoOnRefresh = (socket) => {
-    const isPlayerInCurrentGame = gameLogic.getPlayers().some(player => socket.handshake.session.user === player.username);
-    if (isPlayerInCurrentGame) {
-        socket.emit("round info", {
-            status: gameLogic.getStatus(),
-            roundNum: gameLogic.getRoundNumber(),
-            currentPlayer: gameLogic.getCurrentPlayer(),
-            currentWord: gameLogic.getWord(),
-            currentCards: gameLogic.getCards()
-        });
-    } else {
-        // TODO
-        // What happens if player is not in the current game
-    }
+exports.closeSocket = () => {
+    sockets.forEach(socket => {
+        socket.disconnect();
+    });
+    sockets = [];
 }
-exports.sendInfoOnRefresh = sendInfoOnRefresh;
 
 // Check if it's the sender's turn
 exports.isCurrentPlayerSocket = (socket) => {

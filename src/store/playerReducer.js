@@ -1,4 +1,4 @@
-import {FETCH_CARDS_BEGIN, SET_PLAYED_CARD, SET_PLAY_WORD_AND_CARD, SET_PLAY_CARD, FETCH_CARDS_SUCCESS, FETCH_CARDS_FAILURE, REQUEST_PLAY_CARD, FINISH_PLAY_CARD, PLAY_WORD, MY_TURN, OTHERS_TURN} from './playerActions';
+import {RESET_PLAYER_STATE, FETCH_CARDS_BEGIN, SET_PLAYED_CARD, SET_PLAY_WORD_AND_CARD, SET_PLAY_CARD, FETCH_CARDS_SUCCESS, FETCH_CARDS_FAILURE, REQUEST_PLAY_CARD, FINISH_PLAY_CARD, PLAY_WORD, MY_TURN, OTHERS_TURN} from './playerActions';
 
 export const initialState = {
     playWordAndCard: false,
@@ -14,6 +14,8 @@ export const initialState = {
 
 const cardReducer = (state = initialState, action) => {
     switch (action.type) {
+        case RESET_PLAYER_STATE:
+            return initialState;
         case FETCH_CARDS_BEGIN:
             return {
                 ...state,

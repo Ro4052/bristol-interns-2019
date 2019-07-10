@@ -103,12 +103,12 @@ exports.startGame = () => {
 /* End the game */
 exports.endGame = () => {
     status = statusTypes.NOT_STARTED;
-    players = [];
-    votes = [];
-    cards = [];
     currentPlayer = null;
     currentWord = '';
     roundNum = 0;
+    players = [];
+    cards = [];
+    votes = [];
 }
 
 /* Move on to the next round, called when all players have finished their turn */

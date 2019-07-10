@@ -4,14 +4,10 @@ describe('Play word and card', () => {
         cy.startGame();
     });
 
-    afterEach(() => cy.resetGame());
-
     describe('on start game', () => {
         it('prompts user to play a word and a card', () => {
-            // Word prompt exists
-            // cy.get('#play-word');
-            // Card prompt exists
             cy.get('[data-cy="play-word"]').should('exist');
+            cy.get('[data-cy="play-card"]').should('exist');
         });
     });
 

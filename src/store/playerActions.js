@@ -11,7 +11,11 @@ export const OTHERS_TURN  = 'OTHERS_TURN';
 export const SET_PLAY_WORD_AND_CARD = 'SET_PLAY_WORD_AND_CARD';
 export const SET_PLAY_CARD = 'SET_PLAY_CARD';
 export const SET_PLAYED_CARD = "SET_PLAYED_CARD";
+export const RESET_PLAYER_STATE = "RESET_PLAYER_STATE";
 
+export const resetPlayerState = () => ({
+    type: RESET_PLAYER_STATE
+});
 
 export const fetchCardsBegin = () => ({
     type: FETCH_CARDS_BEGIN

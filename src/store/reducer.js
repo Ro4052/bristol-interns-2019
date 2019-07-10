@@ -1,4 +1,5 @@
 import { SET_STATUS, SET_ROUND_NUMBER, SET_CURRENT_PLAYER, SET_PLAYERS, SET_CURRENT_CARDS, SET_CURRENT_WORD, SET_SOCKET} from './actions';
+import { RESET_PLAYER_STATE } from './playerActions';
 
 export const initialState = {
     status: "NOT_STARTED",
@@ -12,6 +13,8 @@ export const initialState = {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
+        case RESET_PLAYER_STATE:
+            return initialState;
         case SET_STATUS:
             return {...state, status: action.status };
         case SET_ROUND_NUMBER:

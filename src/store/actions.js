@@ -6,6 +6,11 @@ export const SET_PLAYERS   = 'SET_PLAYERS';
 export const SET_CURRENT_CARDS   = 'SET_CURRENT_CARDS';
 export const SET_CURRENT_WORD   = 'SET_CURRENT_WORD';
 export const SET_SOCKET   = 'SET_SOCKET';
+export const RESET_STATE = 'RESET_STATE';
+
+export const resetState = () => ({
+    type: RESET_STATE
+});
 
 export const setGameState = gameState => ({
     type: SET_GAME_STATE,
