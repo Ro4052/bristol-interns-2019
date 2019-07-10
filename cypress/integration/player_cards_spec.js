@@ -42,5 +42,4 @@ describe('The Player Cards Component', () => {
             })
         });
     });
-
 })
