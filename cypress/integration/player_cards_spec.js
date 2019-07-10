@@ -32,11 +32,14 @@ describe('The Player Cards Component', () => {
     describe('Player clicks on a card', () => {
         it("is able to click on a card and it is removed from the list", () => {
             cy.get('#start-game').click();
-            cy.wait(200);
-            cy.get('#my-cards').click().children().should('have.class', 'singleCard')
-            cy.get('#my-cards ul').children().should(($ul) => {
-                expect($ul).to.have.length(cardsNumber-1)
-            });
+            cy.get('#my-cards ul').children().then(($li) => {
+                if ($li.hasClass('singleCard')) {
+                    cy.get('#my-cards').click();
+                    cy.get('#my-cards ul').children().should(($ul) => {
+                        expect($ul).to.have.length(cardsNumber-1)
+                    });
+                }
+            })
         });
     });
 
