@@ -25,7 +25,7 @@ export class Dashboard extends React.Component {
             console.log(err);
         });
     }
-    
+
     componentDidMount() {
         const socket = connectSocket();
         dispatch(setSocket(socket));

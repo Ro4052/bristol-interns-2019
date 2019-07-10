@@ -106,6 +106,7 @@ exports.endGame = () => {
     cards = []
     currentPlayer = null
     currentWord = ''
+    roundNum = 0;
 }
 
 /* Move on to the next round, called when all players have finished their turn */
