@@ -20,19 +20,18 @@
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "socket.io": "^2.2.0",
-    "socket.io-client": "^2.2.0",
     "socket.io-mock": "^1.2.3"
   },
   "scripts": {
     "start": "node server.js",
-    "start:devserver": "npx cross-env NODE_ENV=testing nodemon server.js --watch ./server --watch ./server.js",
+    "start:devserver": "concurrently \"nodemon ./server/proxy/server.js\" \"npx cross-env NODE_ENV=testing nodemon --inspect server.js --watch ./server --watch ./server.js\"",
     "start:devclient": "react-scripts start",
     "build": "react-scripts build",
     "test:client": "react-scripts test --coverage --watchAll=false",
     "eject": "react-scripts eject",
     "cy:run": "cypress run",
     "cypress:open": "cypress open",
-    "test:e2e": "concurrently --success first --kill-others \"npx cross-env NODE_ENV=testing node server.js\" \"node run-cypress-test.js -r tap\""
+    "test:e2e": "concurrently --success first --kill-others \"nodemon ./server/proxy/server.js\" \"npx cross-env NODE_ENV=testing node server.js\" \"node run-cypress-test.js -r tap\""
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -57,6 +56,7 @@
     "http-proxy-middleware": "^0.19.1",
     "moxios": "^0.4.0",
     "nodemon": "^1.19.1",
+    "socket.io-client": "^2.2.0",
     "start-server-and-test": "^1.9.1",
     "supertest": "^4.0.2"
   },
