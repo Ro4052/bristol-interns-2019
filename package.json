@@ -25,7 +25,7 @@
   },
   "scripts": {
     "start": "node server.js",
-    "start:devserver": "nodemon server.js --watch ./server --watch ./server.js",
+    "start:devserver": "npx cross-env NODE_ENV=testing nodemon server.js --watch ./server --watch ./server.js",
     "start:devclient": "react-scripts start",
     "start:testserver": "npx cross-env PORT=1234 nodemon server.js",
     "build": "react-scripts build",
@@ -33,7 +33,7 @@
     "eject": "react-scripts eject",
     "cy:run": "cypress run",
     "cypress:open": "cypress open",
-    "test:e2e": "concurrently --success first --kill-others \"npm run start:testserver\" \"node run-cypress-test.js -r tap\""
+    "test:e2e": "concurrently --success first --kill-others \"npx cross-env NODE_ENV=testing nodemon server.js\" \"node run-cypress-test.js -r tap\""
   },
   "eslintConfig": {
     "extends": "react-app",
