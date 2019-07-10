@@ -14,10 +14,6 @@ describe('The Auth Page', function () {
             cy.login('jane');
         });
 
-        afterEach(() => {
-            cy.resetGame();
-        })
-
         it('sends you to dashboard', function() {
             cy.visit('/dashboard');
             cy.url().should('include', '/dashboard');

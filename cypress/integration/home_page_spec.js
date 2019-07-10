@@ -1,9 +1,5 @@
 describe('The Login Page', function () {
 
-    afterEach(() => {
-        cy.resetGame();
-    });
-
     it('sets auth cookie when logging in via form submission', function () {
         // destructuring assignment of the this.currentUser object
         cy.login('jane');

@@ -4,10 +4,6 @@ describe('The Dashboard Page', function () {
         cy.login('unicorn'); 
     })
 
-    afterEach(() => {
-        cy.resetGame();
-    });
-
     /* BEFORE START OF GAME */
     describe('before start of game', () => {
         it('before the game has started', () => {
