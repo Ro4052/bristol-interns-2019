@@ -5,7 +5,7 @@ describe('The Login Page', function () {
         it('should set a cookie', function () {
             cy.login('username');
             cy.url().should('include', '/dashboard');
-            cy.getCookie('username').should('exist');
+            cy.getCookie(username).should('exist');
         });
     });
 
@@ -18,7 +18,7 @@ describe('The Login Page', function () {
     });
 
     describe('on game already started', function() {
-        it('returns error', function () {
+        it('displays an error', function () {
             /* Connect a second user using our fake client */
             const url = Cypress.config().baseUrl;
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)

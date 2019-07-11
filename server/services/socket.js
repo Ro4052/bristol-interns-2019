@@ -9,7 +9,6 @@ exports.setupSocket = (server, session) => {
     io = socketio(server);
     io.use(sharedsession(session));
     io.on('connection', function (socket) {
-        console.log('connection: ', socket.handshake.session.user);
         sockets.push(socket);
         emitPlayers(gameLogic.getPlayers());
     });
