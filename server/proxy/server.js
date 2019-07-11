@@ -22,7 +22,8 @@ app.use(cookieParser());
 
 app.get('/connect-and-play', (req, res) => {
     const url = req.query.url;
-    
+    const connectionString = "ws://localhost:12345/";
+
     const instance = axios.create({
         baseURL: url,
         timeout: 500,
@@ -35,9 +36,15 @@ app.get('/connect-and-play', (req, res) => {
     })
     .then((response) => {
         if (response.status === 200) {
-            socket = client('ws://localhost:8080/', {
+            socket = client(connectionString, {
                 upgrade: false,
-                transports: ['websocket']
+                transportOptions: {
+                    polling: {
+                        extraHeaders: {
+                            cookie: cookieJar.getCookieStringSync(url)
+                        }
+                    }
+                }
             });
             socket.on('connect', () => {
                 instance.get('api/cards')
@@ -58,10 +65,7 @@ app.get('/connect-and-play', (req, res) => {
             });
         }
     })
-    .catch((err) => {
-        console.error(err);
-    });
-    
+    .catch((err) => console.error(err)); 
 });
 
 app.get('/disconnect', (req, res) => {
@@ -71,4 +75,4 @@ app.get('/disconnect', (req, res) => {
     socket.disconnect();
 })
 
-app.listen(port, () => console.log(`Proxy server running on port: ${port}`));
+app.listen(port, () => console.log(`Proxy Server running on port: ${port}`));

@@ -3,7 +3,7 @@ describe('The Played Cards Component', function() {
         cy.login('unicorn');
         /* Connect a second user using our fake client */
         const url = Cypress.config().baseUrl;
-        cy.request(`http://localhost:8081/connect-and-play?url=${encodeURIComponent(url)}`)
+        cy.request(`http://localhost:12346/connect-and-play?url=${encodeURIComponent(url)}`)
     })
 
     const cardsNumber = 3;
