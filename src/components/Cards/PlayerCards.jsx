@@ -51,7 +51,7 @@ export class PlayerCards extends React.Component {
     render() {
         return (
             <div className={styles.cardsContainer} id="my-cards">
-                <ul>
+                <ul data-cy='my-cards'>
                     {this.props.myCards.map(card => <img id={"card-" + card.id} alt={"card-" + card.id} className={this.getCardClass()} key={card.id} src={require(`./cards/card (${card.id}).jpg`)} onClick={this.handleClickCard} />)}
                 </ul>
             </div>
