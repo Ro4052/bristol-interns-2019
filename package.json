@@ -27,7 +27,7 @@
   "scripts": {
     "start": "node server.js",
     "build": "react-scripts build",
-    "start:devserver": "npx cross-env nodemon server.js --watch ./server --watch ./server.js",
+    "start:devserver": "nodemon server.js --watch ./server --watch ./server.js",
     "start:devclient": "react-scripts start",
     "start:testserver": "npx cross-env PORT=1234 NODE_ENV=testing nodemon server.js",
     "cypress:run": "cypress run",
