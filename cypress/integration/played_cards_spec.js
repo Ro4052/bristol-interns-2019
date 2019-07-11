@@ -1,21 +1,10 @@
 describe('The Played Cards Component', function() {
     beforeEach(() => {        
-        cy.visit('/')
-        const username = "unicorn"
-        cy.get('input').type(username)
-        cy.get('button').click()
+        cy.login('unicorn');
         /* Connect a second user using our fake client */
         const url = Cypress.config().baseUrl;
         cy.request(`http://localhost:8081/connect-and-play?url=${encodeURIComponent(url)}`)
     })
-
-    afterEach(() => {
-        cy.request({
-            url: '/api/reset-server',
-            method: 'POST'
-        });
-        cy.visit('/')
-    });
 
     const cardsNumber = 3;
     const numberOfPlayers = 2;

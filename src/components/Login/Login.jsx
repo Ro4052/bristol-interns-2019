@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './Login.module.css';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
+import connectSocket from '../../services/socket';
 
 export class Login extends React.Component {
     constructor(props) {
@@ -67,12 +68,11 @@ export class Login extends React.Component {
             axios.post('/auth/login', {
                 username: this.state.value
             })
-            .then(response => {        
-                if (response.status === 200) {                    
-                    this.setState({
-                        loggedIn: true
-                    })
-                }
+            .then(() => connectSocket())
+            .then(() => {
+                this.setState({
+                    loggedIn: true
+                })
             })
             .catch(err => {                
                 if (err.message.includes(409)) {

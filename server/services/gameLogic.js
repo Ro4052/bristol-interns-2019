@@ -93,25 +93,24 @@ exports.startGame = () => {
         status = statusTypes.STARTED;
         nextRound();
     } else {
-        // TODO
-        // - There aren't yet enough players in the game
+        // TODO: There aren't yet enough players in the game
     }
 }
 
-/* Start the game with the players that have joined */
+/* End the game */
 exports.endGame = () => {
     status = statusTypes.NOT_STARTED;
-    players = []
-    votes = []
-    cards = []
-    currentPlayer = null
-    currentWord = ''
-    roundNum = 0
+    currentPlayer = null;
+    currentWord = '';
+    roundNum = 0;
+    players = [];
+    cards = [];
+    votes = [];
 }
 
 /* Move on to the next round, called when all players have finished their turn */
 const nextRound = () => {
-    if (roundNum !== rounds) {
+    if (roundNum < rounds) {
         status = statusTypes.WAITING_FOR_CURRENT_PLAYER;
         roundNum++;
         currentPlayer = players[roundNum % players.length];
@@ -122,8 +121,7 @@ const nextRound = () => {
         socket.promptCurrentPlayer(currentPlayer);
     } else {
         status = statusTypes.GAME_OVER;
-        // TODO
-        // - Emit game over and final scores/winner
+        // TODO: Emit game over and final scores/winner
     }
 }
 

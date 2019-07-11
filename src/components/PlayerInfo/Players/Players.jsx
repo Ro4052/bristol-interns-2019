@@ -1,5 +1,5 @@
 import React from 'react';
-import style from '../Dashboard/Dashboard.module.css';
+import style from '../../Dashboard/Dashboard.module.css';
 import { connect } from 'react-redux';
 
 export class Players extends React.PureComponent {
@@ -8,7 +8,7 @@ export class Players extends React.PureComponent {
         return (
             <div className={style.currentPlayersBox}>
                 <h3>Players:</h3>
-                <ul id="players">
+                <ul id="players" data-cy='players-list'>
                     {this.props.players.map((player, key) => <li key={key}>{player.username}</li>)}
                 </ul>
             </div>

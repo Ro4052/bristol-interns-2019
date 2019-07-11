@@ -1,52 +1,22 @@
-describe('The Home Page', function() {
-    it('successfully loads', function() {
-      cy.visit('/') // change URL to match your dev URL
-    })
-})
+const username = 'jane';
 
 describe('The Login Page', function () {
-    afterEach(() => {
-        cy.request({
-            url: '/api/reset-server',
-            method: 'GET'
+    describe('on login', () => {
+        it('should set a cookie', function () {
+            cy.login(username);
+            cy.url().should('include', '/dashboard');
+            cy.getCookie('username').should('exist');
         });
-        cy.visit('/');
-    })
-
-    it('sets auth cookie when logging in via form submission', function () {
-        // destructuring assignment of the this.currentUser object
-        const username = 'jane'
-
-        cy.get('input').type(username);
-        cy.get('button').click() ;
-
-        // we should be redirected to /dashboard
-        cy.url().should('include', '/dashboard');
-
-        // our auth cookie should be present
-        cy.getCookie('username').should('exist');
-
-        // UI should reflect this user being logged in
-        cy.get('#players').should('contain', 'jane');
     });
-})
 
-describe('Username already exists', function() {
-    afterEach(() => {
-        cy.request({
-            url: '/api/reset-server',
-            method: 'GET'
+    describe('if username already exists', function() {
+        it('should display an error', function () {
+            cy.request('POST', '/auth/login', { username });
+            cy.login(username);
+            cy.get('h3').should('contain', 'Username already exists');
         });
-        cy.visit('/');
-        });
-    it('returns error', function () {
-        const username = 'Jane'
-        cy.request('POST', '/auth/login', { username: 'Jane' });
-        cy.get('input').type(username);
-        cy.get('button').click();
-        cy.get('h3').should('contain', 'Username already exists');
-    })
-})
+    });
+});
 
 // TO BE COMPLETED IN A TIC
 // describe('Game already started', function() {
