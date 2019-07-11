@@ -1,10 +1,16 @@
 .messageBox {
     margin-right: 1em;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
 .messageBox > input {
-    margin: 10px;
-    padding: 1em 2em;
+    margin-right: 10px;
+    padding: 0 2vmin;
+    height: 6vh;
+    font-size: 2vh;
     background-color: var(--yellow);
     border: 1px solid black;
     border-radius: 15px;
@@ -16,17 +22,18 @@ h1 {
 }
 
 .sendWordButton {
-    padding: 0.8em 1.5em;
-    background-color: var(--orange);
+    padding: 0.5em 1em;
+    background-color: var(--dark-orange);
     border: 1px solid black;
     border-radius: 15px;
+    font-size: 2.8vh;
     font-family: var(--main-font);
     cursor: pointer;
     outline: none;
 }
 
 .playerInteractions {
-    margin: 10px;
+    margin: 4vmin;
     position: absolute;
     bottom: 0;
     right: 0;
@@ -36,8 +43,9 @@ h1 {
 }
 
 .playerInteractions > h3 {
+    color: var(--lighter-black);
     margin-right: 1em;
     text-align: center;
     width: 100%;
-    font-size: 3vmin;
+    font-size: 5vmin;
 }
