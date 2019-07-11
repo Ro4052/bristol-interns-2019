@@ -14,14 +14,16 @@ describe('The Login Page', function () {
     // UI should reflect this user being logged in
     cy.get('#players').should('contain', 'jane');
     });
-})
+});
+
 describe('Username already exists', function() {
     it('returns error', function () {
         cy.request('POST', '/auth/login', { username });
         cy.login(username);
         cy.get('h3').should('contain', 'Username already exists');
-    })
-})
+    });
+});
+
 // TO BE COMPLETED IN A TIC
 // describe('Game already started', function() {
 //     afterEach(() => {
