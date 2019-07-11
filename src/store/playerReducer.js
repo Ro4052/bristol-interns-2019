@@ -1,4 +1,4 @@
-import {RESET_PLAYER_STATE, FETCH_CARDS_BEGIN, SET_PLAYED_CARD, SET_PLAY_WORD_AND_CARD, SET_PLAY_CARD, FETCH_CARDS_SUCCESS, FETCH_CARDS_FAILURE, REQUEST_PLAY_CARD, FINISH_PLAY_CARD, PLAY_WORD, MY_TURN, OTHERS_TURN} from './playerActions';
+import { types } from './playerActions';
 
 export const initialState = {
     playWordAndCard: false,
@@ -14,64 +14,64 @@ export const initialState = {
 
 const cardReducer = (state = initialState, action) => {
     switch (action.type) {
-        case RESET_PLAYER_STATE:
+        case types.RESET_PLAYER_STATE:
             return initialState;
-        case FETCH_CARDS_BEGIN:
+        case types.FETCH_CARDS_BEGIN:
             return {
                 ...state,
                 loading: true,
                 error: null
             };
-        case FETCH_CARDS_SUCCESS:
+        case types.FETCH_CARDS_SUCCESS:
             return {
                 ...state,
                 loading: false,
                 myCards: action.payload.cards
             };
-        case FETCH_CARDS_FAILURE: 
+        case types.FETCH_CARDS_FAILURE: 
             return {
                 ...state,
                 loading: false,
                 error: action.payload.error,
                 myCards: []
             };
-        case REQUEST_PLAY_CARD:
+        case types.REQUEST_PLAY_CARD:
             return {
                 ...state,
                 playedCard: action.id,
                 myCards: state.myCards.filter((card) => card.id.toString() !== action.id)
             }
-        case SET_PLAYED_CARD:
+        case types.SET_PLAYED_CARD:
             return {
                 ...state,
                 playedCard: 0
             }
-        case FINISH_PLAY_CARD:
+        case types.FINISH_PLAY_CARD:
             return {
                 ...state,
                 finishedRound: true
             }
-        case PLAY_WORD:
+        case types.PLAY_WORD:
             return {
                 ...state,
                 myWord: action.word
             };
-        case SET_PLAY_WORD_AND_CARD:
+        case types.SET_PLAY_WORD_AND_CARD:
             return {
                 ...state,
                 playWordAndCard: action.bool
             };
-        case SET_PLAY_CARD:
+        case types.SET_PLAY_CARD:
             return {
                 ...state,
                 playCard: action.bool
             };
-        case MY_TURN:
+        case types.MY_TURN:
             return {
                 ...state,
                 myTurn: true
             };
-        case OTHERS_TURN:
+        case types.OTHERS_TURN:
             return {
                 ...state,
                 myTurn: false,

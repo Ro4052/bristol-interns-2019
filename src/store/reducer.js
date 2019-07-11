@@ -1,5 +1,4 @@
-import { SET_STATUS, SET_ROUND_NUMBER, SET_CURRENT_PLAYER, SET_PLAYERS, SET_CURRENT_CARDS, SET_CURRENT_WORD, SET_SOCKET} from './actions';
-import { RESET_PLAYER_STATE } from './playerActions';
+import { types } from './actions';
 
 export const initialState = {
     status: "NOT_STARTED",
@@ -13,21 +12,21 @@ export const initialState = {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case RESET_PLAYER_STATE:
+        case types.RESET_STATE:
             return initialState;
-        case SET_STATUS:
+        case types.SET_STATUS:
             return {...state, status: action.status };
-        case SET_ROUND_NUMBER:
+        case types.SET_ROUND_NUMBER:
             return {...state, roundNum: action.roundNum };
-        case SET_CURRENT_PLAYER:
+        case types.SET_CURRENT_PLAYER:
             return {...state, currentPlayer: action.currentPlayer };
-        case SET_PLAYERS:
+        case types.SET_PLAYERS:
             return {...state, players: action.players };
-        case SET_CURRENT_CARDS:
+        case types.SET_CURRENT_CARDS:
             return {...state, currentCards: action.currentCards };
-        case SET_CURRENT_WORD:
+        case types.SET_CURRENT_WORD:
             return {...state, currentWord: action.currentWord };
-        case SET_SOCKET:
+        case types.SET_SOCKET:
             return {...state, socket: action.socket };
         default:
             return state;
