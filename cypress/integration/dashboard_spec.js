@@ -11,8 +11,8 @@ describe('The Dashboard Page', function () {
             cy.get('#round-number').should('not.exist');
             cy.get('#current-player').should('not.exist');
             cy.get('#message').should('not.exist');
-        })
-    })
+        });
+    });
 
     /* WHEN GAME HAS STARTED */
     describe('after start of game', () => {

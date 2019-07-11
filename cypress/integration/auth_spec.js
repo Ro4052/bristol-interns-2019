@@ -13,7 +13,6 @@ describe('The Auth Page', function () {
         beforeEach(function() {
             cy.login('jane');
         });
-
         it('sends you to dashboard', function() {
             cy.visit('/dashboard');
             cy.url().should('include', '/dashboard');

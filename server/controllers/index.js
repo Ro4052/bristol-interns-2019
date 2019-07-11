@@ -82,7 +82,7 @@ router.post('/api/playCardWord', auth, (req, res) => {
     res.sendStatus(200);
 });
 
-/* Current player plays a card and a word */
+/* Player plays a card */
 router.post('/api/playCard', auth, (req, res) => {
     gameLogic.playCard(req.session.user, req.body.card);
     res.sendStatus(200);
