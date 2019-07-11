@@ -21,18 +21,20 @@
     "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0",
     "socket.io": "^2.2.0",
-    "socket.io-client": "^2.2.0",
     "socket.io-mock": "^1.2.3"
   },
   "scripts": {
     "start": "node server.js",
-    "build": "react-scripts build",
-    "start:devserver": "nodemon server.js --watch ./server --watch ./server.js",
+    "start:devserver": "concurrently \"nodemon ./server/proxy/server.js\" \"npx cross-env NODE_ENV=testing nodemon --inspect server.js --watch ./server --watch ./server.js\"",
     "start:devclient": "react-scripts start",
-    "start:testserver": "npx cross-env PORT=1234 NODE_ENV=testing nodemon server.js",
+    "build": "react-scripts build",
+    "start:testserver": "npx cross-env PORT=12345 NODE_ENV=testing node server.js",
+    "start:testproxy": "npx cross-env PORT=12346 NODE_ENV=testing node ./server/proxy/server.js",
     "test": "npm run test:client && npm run test:e2e",
     "test:client": "react-scripts test --coverage --watchAll=false",
-    "test:e2e": "concurrently --success first --kill-others \"npm run start:testserver\" \"node run-cypress-test.js -r tap\"",
+    "cy:run": "cypress run",
+    "cypress:open": "cypress open",
+    "test:e2e": "concurrently --success first --kill-others \"npm run start:testproxy\" \"npm run start:testserver\" \"node run-cypress-test.js -r tap\"",
     "test:e2eUI": "concurrently --success first --kill-others \"npm run start:testserver\" \"cypress open\"",
     "eject": "react-scripts eject"
   },
@@ -58,6 +60,7 @@
     ]
   },
   "devDependencies": {
+    "axios-cookiejar-support": "^0.5.0",
     "concurrently": "^4.1.1",
     "cypress": "^3.3.2",
     "enzyme": "^3.10.0",
@@ -66,9 +69,10 @@
     "http-proxy-middleware": "^0.19.1",
     "moxios": "^0.4.0",
     "nodemon": "^1.19.1",
+    "socket.io-client": "^2.2.0",
     "nyc": "^14.1.1",
     "start-server-and-test": "^1.9.1",
-    "supertest": "^4.0.2"
+    "tough-cookie": "^3.0.1"
   },
   "jest": {
     "collectCoverageFrom": [

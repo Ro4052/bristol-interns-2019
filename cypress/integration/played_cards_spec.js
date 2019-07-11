@@ -1,25 +1,26 @@
-// describe('logs in and plays card', function() {
-//     before(() => {
-//         cy.request({
-//             url: '/auth/login',
-//             method: 'POST',
-//             body: {
-//                 username: 'jane'
-//             }
-//         });
-//     })
+describe('The Played Cards Component', function() {
+    beforeEach(() => {        
+        cy.login('unicorn');
+        /* Connect a second user using our fake client */
+        const url = Cypress.config().baseUrl;
+        cy.request(`http://localhost:12346/connect-and-play?url=${encodeURIComponent(url)}`)
+    })
 
-//     after(() => {
-//         cy.request({
-//             url: '/api/end',
-//             method: 'GET'
-//         });
-//     })
-//     it('gives list of played cards', function() {
-//         cy.visit('http://localhost:8080/dashboard')
-    
-//         cy.get('#played-cards')
-//         cy.get('.error').should('eq', ') 
-//     })
-// })
-// des
+    const cardsNumber = 3;
+    const numberOfPlayers = 2;
+
+    /* GAME STARTS AND PLAYERS ARE GIVEN CARDS */
+    describe("on second player's turn, after first player has played", () => {
+        it('player is prompted to pick a card and all the cards are displayed on the end of their turn', () => {
+            cy.get('#round-number');
+            cy.get('h3').contains("Pick a card");
+            cy.get('#my-cards').click();
+            cy.get('#my-cards ul').children().should(($ul) => {
+                expect($ul).to.have.length(cardsNumber-1);
+            });
+            cy.get('#played-cards').children().should(($ul) => {
+                expect($ul).to.have.length(numberOfPlayers);
+            });
+        });
+    });
+});
