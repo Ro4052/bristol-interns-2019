@@ -13,7 +13,7 @@ describe('The Player Cards Component', () => {
 
     describe('when the game has started', () => {
         it("displays the correct number of cards", () => {
-            cy.get('#start-game').click();
+            cy.startGame();
             cy.get('#my-cards ul').children().should(($ul) => {
                 expect($ul).to.have.length(cardsNumber)
             });
@@ -22,7 +22,7 @@ describe('The Player Cards Component', () => {
 
     describe('player clicks on a card', () => {
         it("is removed from the list", () => {
-            cy.get('#start-game').click();
+            cy.startGame();
             cy.get('#my-cards ul').children().then(($li) => {
                 if ($li.hasClass('singleCard')) {
                     cy.get('#my-cards').click();
