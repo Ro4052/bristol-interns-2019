@@ -93,8 +93,7 @@ exports.startGame = () => {
         status = statusTypes.STARTED;
         nextRound();
     } else {
-        // TODO
-        // - There aren't yet enough players in the game
+        // TODO: There aren't yet enough players in the game
     }
 }
 
@@ -122,8 +121,7 @@ const nextRound = () => {
         socket.promptCurrentPlayer(currentPlayer);
     } else {
         status = statusTypes.GAME_OVER;
-        // TODO
-        // - Emit game over and final scores/winner
+        // TODO: Emit game over and final scores/winner
     }
 }
 
