@@ -6,6 +6,10 @@
     justify-content: center;
 }
 
+.cardsContainer > ul {
+    padding: 0;
+}
+
 .singleCard {
     margin: 0 10px;
     border: 2px solid black;
@@ -41,4 +45,8 @@
 .playedCards {
     height: 40vmin;
     padding: 4vmin 0;
+}
+
+ul {
+    padding: 0;
 }
