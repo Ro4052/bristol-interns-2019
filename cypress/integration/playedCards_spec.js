@@ -7,13 +7,6 @@
 //                 username: 'jane'
 //             }
 //         });
-//         cy.request('http://localhost:8081/connect?url=http://localhost:8080')
-
-//         // tell the http server at 8081 to send a message
-//         cy.request('http://localhost:8081/message?m=hello')
-
-//         // tell the http server at 8081 to disconnect
-//         cy.request('http://localhost:8081/disconnect')
 //     })
 
 //     after(() => {
@@ -25,7 +18,8 @@
 //     it('gives list of played cards', function() {
 //         cy.visit('http://localhost:8080/dashboard')
     
-//         console.log(cy.get('#played-cards'))
+//         cy.get('#played-cards')
+//         cy.get('.error').should('eq', ') 
 //     })
 // })
 // des
