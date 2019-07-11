@@ -1,3 +1,21 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:900);
+    *, *:before, *:after{
+    box-sizing: none
+}
+
+@font-face {
+    font-family: 'Dilana';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Dilana'), url('./components/fonts/fuente_dilana.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Cardinal';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Dilana'), url('./components/fonts/Cardinal.ttf') format('truetype');
+}
 
 body {
   height: 100%;
@@ -19,9 +37,14 @@ code {
   --blue: #43BCCD;
   --purple: #662E9B;
   --red: #EA3546;
-  --orange: rgba(223, 109, 15, 0.9);
-  --yellow: #F9C80E;
-  --main-font: 'Acme', sans-serif;
+  --light-orange: rgb(247, 136, 63);
+  --dark-orange: rgba(223, 109, 15, 1);
+  --orange: rgba(255, 126, 5, 0.5);
+  --yellow: #F49100;
+  --golden: rgba(73, 57, 4, 0.8);
+  --lighter-black: rgba(0, 0, 0, 0.8);
+  --main-font: 'Dilana';
+  --secondary-font: 'Cardinal';
 }
 
 #root {
@@ -32,13 +55,13 @@ code {
 }
 
 #end-turn, #start-game {
-  background-color: var(--orange);
-  padding: 1em 3em;
+  background-color: var(--dark-orange);
+  padding: 0.3em 1em;
   outline: none;
   border: 1px solid black;
   font-family: var(--main-font);
   border-radius: 20px;
-  font-size: 1.8vmin;
+  font-size: 2em;
   z-index: 1;
   margin: 1em;
   cursor: pointer;

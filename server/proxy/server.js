@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(cookieParser());
 
-app.get('/connect-and-play', (req, res) => {
+app.get('/connect', (req, res) => {
     const url = req.query.url;
     const connectionString = "ws://localhost:12345/";
 
@@ -48,24 +48,32 @@ app.get('/connect-and-play', (req, res) => {
             });
             socket.on('connect', () => {
                 instance.get('api/cards')
-                .then((response) => Promise.all([
-                    response.data,
-                    instance.get('api/start')
-                ]))
-                .then(([cards, startResponse]) => {
-                    if (startResponse.status === 200) {
-                        return instance.post('api/playCardWord', {
-                            card: cards[0].id.toString(),
-                            word: "Hello"
-                        });
-                    }
+                .then((response) => {
+                    cards = response.data
+                    res.sendStatus(200);
                 })
-                .then(() => res.sendStatus(200))
                 .catch((err) => console.error(err));
             });
         }
     })
     .catch((err) => console.error(err)); 
+});
+
+app.get('/playCardWord', (req, res) => {
+    const url = req.query.url;
+    const instance = axios.create({
+        baseURL: url,
+        timeout: 500,
+        jar: cookieJar,
+        withCredentials: true
+    });
+    
+    instance.post('api/playCardWord', {
+        card: cards[0].id.toString(),
+        word: "Hello"
+    })
+    .then(() => res.sendStatus(200))
+    .catch((err) => console.error(err));
 });
 
 app.get('/disconnect', (req, res) => {
