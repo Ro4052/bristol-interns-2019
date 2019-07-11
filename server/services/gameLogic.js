@@ -89,9 +89,7 @@ exports.quitGame = player => {
 
 /* Start the game with the players that have joined */
 exports.startGame = () => {
-    console.log("startGame");
     if (status === statusTypes.NOT_STARTED && players.length > minPlayers) {
-        console.log("inside");
         status = statusTypes.STARTED;
         nextRound();
     } else {

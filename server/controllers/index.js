@@ -60,7 +60,6 @@ router.get('/api/cards', auth, (req, res) => {
 
 /* Start the game */
 router.get('/api/start', auth, (req, res) => {
-    // console.log("called start");
     gameLogic.startGame();
     res.sendStatus(200);
 });
