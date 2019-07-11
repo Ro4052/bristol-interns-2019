@@ -30,11 +30,10 @@
     "start:devserver": "nodemon server.js --watch ./server --watch ./server.js",
     "start:devclient": "react-scripts start",
     "start:testserver": "npx cross-env PORT=1234 NODE_ENV=testing nodemon server.js",
-    "cypress:run": "cypress run",
-    "cypress:open": "cypress open",
     "test": "npm run test:client && npm run test:e2e",
     "test:client": "react-scripts test --coverage --watchAll=false",
     "test:e2e": "concurrently --success first --kill-others \"npm run start:testserver\" \"node run-cypress-test.js -r tap\"",
+    "test:e2eUI": "concurrently --success first --kill-others \"npm run start:testserver\" \"npm run cypress:open\"",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
