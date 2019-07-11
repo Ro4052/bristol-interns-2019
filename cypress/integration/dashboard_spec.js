@@ -2,7 +2,7 @@ describe('The Dashboard Page', function () {
     
     beforeEach(() => {
         cy.login('unicorn'); 
-    })
+    });
 
     /* BEFORE START OF GAME */
     describe('before start of game', () => {
@@ -18,9 +18,9 @@ describe('The Dashboard Page', function () {
     describe('after start of game', () => {
         it("after the start button has been pressed", () => {
             cy.startGame();
-            cy.get('#round-number').should('exist')
-            cy.get('#current-player').should('exist')
-            cy.get('#message').should('not.exist')
-        })
-    })
-})
+            cy.get('#round-number').should('exist');
+            cy.get('#current-player').should('exist');
+            cy.get('#message').should('not.exist');
+        });
+    });
+});
