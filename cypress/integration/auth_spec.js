@@ -7,22 +7,20 @@ describe('The Auth Page', function () {
             cy.url().should('eq', Cypress.config().baseUrl);
         }); 
     });
-
     describe('auth cookie', function () {
         beforeEach(function() {
             cy.visit('/');
-            const username = 'jane'
-            cy.get('input').type(username)
-            cy.get('button').click() 
+            const username = 'jane';
+            cy.get('input').type(username);
+            cy.get('button').click() ;
         });
-        
         afterEach(() => {
             cy.request({
                 url: '/api/reset-server',
                 method: 'POST'
             });
-            cy.visit('/')
-        })
+            cy.visit('/');
+        });
         it('sends you to dashboard', function() {
             cy.visit('/dashboard');
             cy.url().should('include', '/dashboard');

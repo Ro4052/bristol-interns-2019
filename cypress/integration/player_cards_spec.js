@@ -24,7 +24,7 @@ describe('The Player Cards Component', () => {
         it("displays the correct number of cards when the game has started", () => {
             cy.get('#start-game').click();
             cy.get('#my-cards ul').children().should(($ul) => {
-                expect($ul).to.have.length(cardsNumber)
+                expect($ul).to.have.length(cardsNumber);
             });
         });
     });
@@ -36,10 +36,10 @@ describe('The Player Cards Component', () => {
                 if ($li.hasClass('singleCard')) {
                     cy.get('#my-cards').click();
                     cy.get('#my-cards ul').children().should(($ul) => {
-                        expect($ul).to.have.length(cardsNumber-1)
+                        expect($ul).to.have.length(cardsNumber-1);
                     });
-                }
-            })
+                };
+            });
         });
     });
-})
+});
