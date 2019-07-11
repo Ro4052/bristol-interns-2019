@@ -18,14 +18,10 @@ describe('The Login Page', function () {
     });
 
     describe('on game already started', function() {
-        beforeEach(() => {
-            
-        });
         it('returns error', function () {
             /* Connect a second user using our fake client */
             const url = Cypress.config().baseUrl;
-            cy
-            .request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
+            cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
             .then(() => {
                 cy.request(`http://localhost:12346/startGame?url=${encodeURIComponent(url)}`)
                 .then(() => {
