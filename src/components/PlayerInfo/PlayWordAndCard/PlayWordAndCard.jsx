@@ -51,7 +51,7 @@ export class PlayWordAndCard extends React.Component {
                 {!this.props.myWord && <h3 data-cy='play-word'>Type in a word</h3>}
                 {!this.props.playedCard && <h3 data-cy='play-card'>Pick a card</h3>}
                 {!this.props.myWord && sendWord}
-                {this.props.myWord && this.props.playedCard && !this.props.finishedRound && <button id="end-turn" onClick={this.endTurn} data-cy='end-turn'>End my turn</button>}
+                {(this.props.myWord && this.props.playedCard && !this.props.finishedRound) ? <button id="end-turn" onClick={this.endTurn} data-cy='end-turn'>End my turn</button> : ""}
             </div>
         );
     }

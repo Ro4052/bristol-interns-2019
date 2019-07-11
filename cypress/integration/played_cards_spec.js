@@ -1,10 +1,18 @@
+const url = Cypress.config().baseUrl;
+
 describe('The Played Cards Component', function() {
     beforeEach(() => {        
         cy.login('unicorn');
         /* Connect a second user using our fake client */
-        const url = Cypress.config().baseUrl;
-        cy.request(`http://localhost:12346/connect-and-play?url=${encodeURIComponent(url)}`)
-    })
+        cy
+            .request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    cy.startGame();
+                    cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(url)}`)
+                }
+            });
+    });
 
     const cardsNumber = 3;
     const numberOfPlayers = 2;

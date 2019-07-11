@@ -19,13 +19,20 @@ describe('The Login Page', function () {
 
     describe('on game already started', function() {
         beforeEach(() => {
+            
+        });
+        it('returns error', function () {
             /* Connect a second user using our fake client */
             const url = Cypress.config().baseUrl;
-            cy.request(`http://localhost:12346/connect-and-play?url=${encodeURIComponent(url)}`);
-        });
-        it('returns error', function () { 
-            cy.login(username);
-            cy.get('h3').should('contain', 'Game has already started');
+            cy
+            .request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
+            .then(() => {
+                cy.request(`http://localhost:12346/startGame?url=${encodeURIComponent(url)}`)
+                .then(() => {
+                    cy.login(username);
+                    cy.get('h3').should('contain', 'Game has already started');
+                });
+            }); 
         });
     });
 });
