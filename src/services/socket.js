@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 import { dispatch } from '../store/store';
-import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setPlayers, setCurrentCards } from '../store/actions';
+import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setPlayers, setCurrentCards, setSocket } from '../store/actions';
 import { setPlayWordAndCard, setPlayCard, setPlayedCard } from '../store/playerActions';
 
 const connectSocket = () => {
@@ -55,7 +55,13 @@ const connectSocket = () => {
     socket.on("vote", () => {
     });
 
-    return socket;
+    return new Promise((resolve, reject) => {
+        socket.on('connect', () => {
+            dispatch(setSocket(socket));
+            resolve()
+        });
+        socket.on('error', (err) => reject(err));
+    })
 }
 
 export default connectSocket;
