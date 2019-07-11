@@ -22,7 +22,7 @@ describe('The Played Cards Component', function() {
 
     /* GAME STARTS AND PLAYERS ARE GIVEN CARDS */
     describe("on second player's turn, after first player has played", () => {
-        it('player is prompted to pick a card and all the cards are displayed on the end of his turn', () => {
+        it('player is prompted to pick a card and all the cards are displayed on the end of their turn', () => {
             cy.get('#round-number');
             cy.get('h3').contains("Pick a card");
             cy.get('#my-cards').click();
