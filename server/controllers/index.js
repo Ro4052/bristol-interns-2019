@@ -2,6 +2,7 @@ const router = require('express').Router();
 const path = require('path');
 const auth = require('../services/auth');
 const gameLogic = require('../services/gameLogic');
+const closeSocket = require('../services/socket').closeSocket;
 
 let currentUsers = [];
 
@@ -32,7 +33,7 @@ router.post('/auth/login', (req, res) => {
         }
     } else {
         res.sendStatus(409);
-    }
+    }    
 });
 
 /* Log out the user */
@@ -68,6 +69,7 @@ if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {
         currentUsers = []
         gameLogic.endGame();
+        closeSocket();
         req.session.destroy();
         res.sendStatus(200);
     });

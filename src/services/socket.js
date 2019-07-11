@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 import { dispatch } from '../store/store';
-import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setPlayers, setCurrentCards } from '../store/actions';
+import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setPlayers, setCurrentCards, setSocket } from '../store/actions';
 import { setPlayWordAndCard, setPlayCard, setPlayedCard } from '../store/playerActions';
 
 const connectSocket = () => {
@@ -17,24 +17,11 @@ const connectSocket = () => {
         upgrade: false
     });
 
-    socket.emit("refresh");
-
     socket.on("players", msg => {
         dispatch(setPlayers(msg.players));
     });
 
-    socket.on("round info", msg => {
-        console.log("getting info after refresh", msg);
-        dispatch(setStatus(msg.status));
-        dispatch(setRoundNumber(msg.roundNum));
-        dispatch(setCurrentPlayer(msg.currentPlayer));
-        dispatch(setCurrentWord(msg.currentWord));
-        dispatch(setCurrentCards(msg.currentCards));
-        dispatch(setPlayedCard(0));
-    });
-
-    socket.on("new round", msg => {
-        console.log("new round", msg);
+    socket.on("new round", msg => {""
         dispatch(setStatus(msg.status));
         dispatch(setRoundNumber(msg.roundNum));
         dispatch(setCurrentPlayer(msg.currentPlayer));
@@ -43,7 +30,6 @@ const connectSocket = () => {
         dispatch(setPlayCard(false));
         dispatch(setPlayWordAndCard(false));
         dispatch(setPlayedCard(0));
-        // Reset flags
     });
 
     socket.on("status", msg => {
@@ -63,14 +49,19 @@ const connectSocket = () => {
     });
 
     socket.on("played cards", msg => {
-        console.log("played cards", msg);
         dispatch(setCurrentCards(msg));
     });
 
     socket.on("vote", () => {
     });
 
-    return socket;
+    return new Promise((resolve, reject) => {
+        socket.on('connect', () => {
+            dispatch(setSocket(socket));
+            resolve()
+        });
+        socket.on('error', (err) => reject(err));
+    })
 }
 
 export default connectSocket;

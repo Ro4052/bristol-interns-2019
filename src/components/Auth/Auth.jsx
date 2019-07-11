@@ -1,8 +1,11 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { resetState } from '../../store/actions';
+import { resetPlayerState } from '../../store/playerActions';
 
-export default class Auth extends React.Component {
+export class Auth extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -20,6 +23,8 @@ export default class Auth extends React.Component {
             if (res.status === 200) {
                 this.setState({ loading: false, authenticated: true });
             } else if (res.status === 401) {
+                this.props.resetState();
+                this.props.resetPlayerState();
                 this.setState({ loading: false, authenticated: false });
             } else {
                 const error = new Error(res.error);
@@ -38,3 +43,10 @@ export default class Auth extends React.Component {
         return (<Redirect to='/' />);
     }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+    resetState: (id) => dispatch(resetState),
+    resetPlayerState: (id) => dispatch(resetPlayerState)
+});
+
+export default connect(null, mapDispatchToProps)(Auth);

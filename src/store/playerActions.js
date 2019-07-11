@@ -1,29 +1,35 @@
 import axios from "axios";
 
-export const FETCH_CARDS_BEGIN   = 'FETCH_CARDS_BEGIN';
-export const FETCH_CARDS_SUCCESS = 'FETCH_CARDS_SUCCESS';
-export const FETCH_CARDS_FAILURE = 'FETCH_CARDS_FAILURE';
-export const REQUEST_PLAY_CARD = 'REQUEST_PLAY_CARD';
-export const FINISH_PLAY_CARD = 'FINISH_PLAY_CARD';
-export const PLAY_WORD  = 'PLAY_WORD';
-export const MY_TURN  = 'MY_TURN';
-export const OTHERS_TURN  = 'OTHERS_TURN';
-export const SET_PLAY_WORD_AND_CARD = 'SET_PLAY_WORD_AND_CARD';
-export const SET_PLAY_CARD = 'SET_PLAY_CARD';
-export const SET_PLAYED_CARD = "SET_PLAYED_CARD";
+export const types = {
+    FETCH_CARDS_BEGIN: 'FETCH_CARDS_BEGIN',
+    FETCH_CARDS_SUCCESS: 'FETCH_CARDS_SUCCESS',
+    FETCH_CARDS_FAILURE: 'FETCH_CARDS_FAILURE',
+    REQUEST_PLAY_CARD: 'REQUEST_PLAY_CARD',
+    FINISH_PLAY_CARD: 'FINISH_PLAY_CARD',
+    PLAY_WORD: 'PLAY_WORD',
+    MY_TURN: 'MY_TURN',
+    OTHERS_TURN: 'OTHERS_TURN',
+    SET_PLAY_WORD_AND_CARD: 'SET_PLAY_WORD_AND_CARD',
+    SET_PLAY_CARD: 'SET_PLAY_CARD',
+    SET_PLAYED_CARD: "SET_PLAYED_CARD",
+    RESET_PLAYER_STATE: "RESET_PLAYER_STATE"
+};
 
+export const resetPlayerState = () => ({
+    type: types.RESET_PLAYER_STATE
+});
 
 export const fetchCardsBegin = () => ({
-    type: FETCH_CARDS_BEGIN
+    type: types.FETCH_CARDS_BEGIN
 });
 
 export const fetchCardsSuccess = (cards) => ({
-    type: FETCH_CARDS_SUCCESS,
+    type: types.FETCH_CARDS_SUCCESS,
     payload: { cards }
 });
 
 export const fetchCardsFailure = (error) => ({
-    type: FETCH_CARDS_FAILURE,
+    type: types.FETCH_CARDS_FAILURE,
     payload: { error }
 });
 
@@ -39,31 +45,31 @@ export const fetchCards = () => {
 }
 
 export const requestPlayCard = (id) => ({
-    type: REQUEST_PLAY_CARD,
+    type: types.REQUEST_PLAY_CARD,
     id
 });
 
 export const finishPlayCard = (id) => ({
-    type: FINISH_PLAY_CARD,
+    type: types.FINISH_PLAY_CARD,
     id
 });
 
 export const playWord = (word) => ({
-    type: PLAY_WORD,
+    type: types.PLAY_WORD,
     word
 });
 
 export const setPlayedCard = id => ({
-    type: SET_PLAYED_CARD,
+    type: types.SET_PLAYED_CARD,
     id
 });
 
 export const setPlayWordAndCard = bool => ({
-    type: SET_PLAY_WORD_AND_CARD,
+    type: types.SET_PLAY_WORD_AND_CARD,
     bool
 });
 
 export const setPlayCard = bool => ({
-    type: SET_PLAY_CARD,
+    type: types.SET_PLAY_CARD,
     bool
 });

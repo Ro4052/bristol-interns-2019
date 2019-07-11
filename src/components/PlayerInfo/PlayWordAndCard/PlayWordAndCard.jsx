@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import styles from './PlayWordAndCard.module.css';
-import { finishPlayCard } from '../../store/playerActions';
-import { playWord } from '../../store/playerActions';
+import { finishPlayCard } from '../../../store/playerActions';
+import { playWord } from '../../../store/playerActions';
 
 export class PlayWordAndCard extends React.Component {
     constructor(props) {
@@ -42,16 +42,16 @@ export class PlayWordAndCard extends React.Component {
     render() {
         const sendWord = (
             <div className={styles.messageBox}>
-                <input onChange={this.handleChange} value={this.state.currentValue} placeholder="Type in your word" />
-                <button id="send-message" className={styles.sendWordButton} onClick={this.sendMessage}>Send word</button>
+                <input onChange={this.handleChange} value={this.state.currentValue} placeholder="Type in your word" data-cy='type-word' />
+                <button id="send-message" className={styles.sendWordButton} onClick={this.sendMessage} data-cy='send-word'>Send word</button>
             </div>
         );
         return (
             <div className={styles.playerInteractions}>
-                {!this.props.myWord && <h3>Type in a word</h3>}
-                {!this.props.playedCard && <h3>Pick a card</h3>}
+                {!this.props.myWord && <h3 data-cy='play-word'>Type in a word</h3>}
+                {!this.props.playedCard && <h3 data-cy='play-card'>Pick a card</h3>}
                 {!this.props.myWord && sendWord}
-                {(this.props.myWord && this.props.playedCard && !this.props.finishedRound) ? <button id="end-turn" onClick={this.endTurn}>End my turn</button> : ""}
+                {(this.props.myWord && this.props.playedCard && !this.props.finishedRound) ? <button id="end-turn" onClick={this.endTurn} data-cy='end-turn'>End my turn</button> : ""}
             </div>
         );
     }

@@ -2,14 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PlayerCards from '../Cards/PlayerCards';
 import LogoutButton from '../Login/LogoutButton';
-import Players from '../PlayerInfo/Players';
+import Players from '../PlayerInfo/Players/Players';
 import style from './Dashboard.module.css';
-import { setSocket } from '../../store/actions';
-import connectSocket from '../../services/socket';
-import { dispatch } from '../../store/store';
 import { finishPlayCard } from '../../store/playerActions';
-import PlayCard from '../PlayerInfo/PlayCard';
-import PlayWordAndCard from '../PlayerInfo/PlayWordAndCard';
+import PlayCard from '../PlayerInfo/PlayCard/PlayCard';
+import PlayWordAndCard from '../PlayerInfo/PlayWordAndCard/PlayWordAndCard';
 import PlayedCards from '../Cards/PlayedCards/PlayedCards';
 import axios from 'axios';
 
@@ -26,19 +23,13 @@ export class Dashboard extends React.Component {
         });
     }
 
-    componentDidMount() {
-        const socket = connectSocket();
-        dispatch(setSocket(socket));
-    }
-    
     render() {
-        
         return (
             <div className={style.roundInfo}>
-                {this.props.status === "NOT_STARTED" && <button id="start-game" onClick={this.startGame}>Start game</button>}
+                {this.props.status === "NOT_STARTED" && <button id="start-game" data-cy="start-game" onClick={this.startGame}>Start game</button>}
                 {this.props.status !== "NOT_STARTED" && <h2>Round: <span id="round-number">{this.props.roundNum}</span></h2>}
                 {this.props.currentPlayer && <h2>Current player: <span id="current-player">{this.props.currentPlayer.username}</span></h2>}
-                {this.props.currentWord !== '' && <h1 id="message">Word: {this.props.currentWord}</h1>}
+                {this.props.currentWord !== '' && <h1 id="message">Word: <span data-cy='current-word'>{this.props.currentWord}</span></h1>}
                 <Players />
                 <PlayedCards />
                 <PlayerCards />
