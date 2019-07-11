@@ -40,6 +40,17 @@
     width: 15vmin;
     border: 2px solid black;
     transition: 0.2s;
+    cursor: pointer;
+}
+
+.allCardsDisabled {
+    margin: 0 10px;
+    border-radius: 2vmin;
+    height: 25vmin;
+    width: 15vmin;
+    border: 2px solid black;
+    transition: 0.2s;
+    opacity: 0.7;
 }
 
 .playedCards {

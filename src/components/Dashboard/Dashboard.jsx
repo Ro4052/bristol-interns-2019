@@ -6,6 +6,7 @@ import Players from '../PlayerInfo/Players/Players';
 import style from './Dashboard.module.css';
 import { finishPlayCard } from '../../store/playerActions';
 import PlayCard from '../PlayerInfo/PlayCard/PlayCard';
+import VoteCard from '../PlayerInfo/VoteCard/VoteCard';
 import PlayWordAndCard from '../PlayerInfo/PlayWordAndCard/PlayWordAndCard';
 import PlayedCards from '../Cards/PlayedCards/PlayedCards';
 import axios from 'axios';
@@ -35,6 +36,7 @@ export class Dashboard extends React.Component {
                 <PlayerCards />
                 {this.props.playWordAndCard && <PlayWordAndCard />}
                 {this.props.playCard && <PlayCard />}
+                {this.props.voteCard && <VoteCard />}
                 <LogoutButton />
             </div>
         );
@@ -48,6 +50,7 @@ const mapStateToProps = (state) => {
         currentPlayer: state.reducer.currentPlayer,
         playWordAndCard: state.playerReducer.playWordAndCard,
         playCard: state.playerReducer.playCard,
+        voteCard: state.playerReducer.voteCard,
         currentWord: state.reducer.currentWord
     });
 }

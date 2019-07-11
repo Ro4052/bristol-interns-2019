@@ -9,8 +9,8 @@ export class Auth extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-        loading: true,
-        authenticated: false
+            loading: true,
+            authenticated: false
         };
     }
 
@@ -22,7 +22,7 @@ export class Auth extends React.Component {
         .then(res => {            
             if (res.status === 200) {
                 this.setState({ loading: false, authenticated: true });
-            } else if (res.status === 401) {
+            } else if (res.status === 401) {                
                 this.props.resetState();
                 this.props.resetPlayerState();
                 this.setState({ loading: false, authenticated: false });
@@ -45,8 +45,8 @@ export class Auth extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    resetState: (id) => dispatch(resetState),
-    resetPlayerState: (id) => dispatch(resetPlayerState)
+    resetState: () => dispatch(resetState()),
+    resetPlayerState: () => dispatch(resetPlayerState())
 });
 
 export default connect(null, mapDispatchToProps)(Auth);
