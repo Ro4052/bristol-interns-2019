@@ -7,7 +7,7 @@ import playerReducer from './playerReducer';
 import thunk from 'redux-thunk';
 
 const rootPersistConfig = {
-    key: 'root',
+   key: 'root',
     storage: storage,
     stateReconciler: autoMergeLevel2,
     blacklist: ['reducer']
