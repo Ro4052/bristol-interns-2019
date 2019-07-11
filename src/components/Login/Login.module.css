@@ -7,7 +7,7 @@ div.foo {
     font-family: 'Dilana';
     font-style: normal;
     font-weight: normal;
-    src: local('Dilana'), url('./fuente_dilana.ttf') format('truetype');
+    src: local('Dilana'), url('../fonts/fuente_dilana.ttf') format('truetype');
 }
 @keyframes pulse_animation
 {
