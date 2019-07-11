@@ -46,20 +46,24 @@ describe('Username already exists', function() {
     })
 })
 // TO BE COMPLETED IN A TIC
-// describe('Game already started', function() {
-//     afterEach(() => {
-//         cy.request({
-//             url: '/api/end',
-//             method: 'GET'
-//         });
-//         cy.visit('/');
-//         });
-//     it('returns error', function () { 
-//         const username = 'Jane'
-//         cy.request('POST', '/auth/login', { username: 'Blane' });
-//         cy.
-//         cy.get('input').type(username);
-//         cy.get('button').click();
-//         cy.get('h3').should('contain', 'Game has already started');
-//     });
-// });
+describe('Game already started', function() {
+    afterEach(() => {
+        cy.request({
+            url: '/api/end',
+            method: 'GET'
+        });
+        cy.visit('/');
+        });
+    beforeEach(() => {
+        /* Connect a second user using our fake client */
+        const url = Cypress.config().baseUrl;
+        cy.request(`http://localhost:8081/connect?url=${encodeURIComponent(url)}`)
+        cy.visit('/')
+        })
+    it('returns error', function () { 
+        const username = 'Jane'
+        cy.get('input').type(username);
+        cy.get('button').click();
+        cy.get('h3').should('contain', 'Game has already started');
+    });
+})
