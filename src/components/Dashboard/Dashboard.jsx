@@ -2,11 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PlayerCards from '../Cards/PlayerCards';
 import LogoutButton from '../Login/LogoutButton';
-import Players from '../PlayerInfo/Players';
+import Players from '../PlayerInfo/Players/Players';
 import style from './Dashboard.module.css';
 import { finishPlayCard } from '../../store/playerActions';
-import PlayCard from '../PlayerInfo/PlayCard';
-import PlayWordAndCard from '../PlayerInfo/PlayWordAndCard';
+import PlayCard from '../PlayerInfo/PlayCard/PlayCard';
+import PlayWordAndCard from '../PlayerInfo/PlayWordAndCard/PlayWordAndCard';
 import PlayedCards from '../Cards/PlayedCards/PlayedCards';
 import axios from 'axios';
 
@@ -22,9 +22,8 @@ export class Dashboard extends React.Component {
             console.log(err);
         });
     }
-    
+
     render() {
-        
         return (
             <div className={style.roundInfo}>
                 {this.props.status === "NOT_STARTED" && <button id="start-game" data-cy="start-game" onClick={this.startGame}>Start game</button>}

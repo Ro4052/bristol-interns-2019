@@ -1,5 +1,5 @@
 import React from 'react';
-import style from '../Dashboard/Dashboard.module.css';
+import style from '../../Dashboard/Dashboard.module.css';
 import { connect } from 'react-redux';
 
 export class Players extends React.PureComponent {

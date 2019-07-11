@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import styles from './PlayWordAndCard.module.css';
-import { finishPlayCard } from '../../store/playerActions';
-import { playWord } from '../../store/playerActions';
+import { finishPlayCard } from '../../../store/playerActions';
+import { playWord } from '../../../store/playerActions';
 
 export class PlayWordAndCard extends React.Component {
     constructor(props) {
