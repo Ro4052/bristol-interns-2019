@@ -21,7 +21,7 @@ describe('The Login Page', function () {
         beforeEach(() => {
             /* Connect a second user using our fake client */
             const url = Cypress.config().baseUrl;
-            cy.request(`http://localhost:8081/connect?url=${encodeURIComponent(url)}`);
+            cy.request(`http://localhost:12346/connect-and-play?url=${encodeURIComponent(url)}`);
         });
         it('returns error', function () { 
             cy.login(username);

@@ -33,7 +33,7 @@ router.post('/auth/login', (req, res) => {
         }
     } else {
         res.sendStatus(409);
-    }
+    }    
 });
 
 /* Log out the user */

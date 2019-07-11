@@ -214,9 +214,9 @@ body {
   cursor: grab;
 }
 
-.monster.small {
+/* .monster.small {
   font-size: 4rem;
-}
+} */
 
 .body {
   width: 100%;
@@ -227,7 +227,7 @@ body {
   transform-origin: bottom center;
   animation: bouncebody alternate infinite 400ms 40ms ease-in-out;
 }
-.eyes, .eye-lid {
+.eyes, .eyelid {
   text-align: center;
   display: flex;
   font-size: 0.65em;
@@ -247,7 +247,7 @@ body {
   background-color: black;
   border-radius: 50%;
 }
-.eye-lid{
+.eyelid{
   background-color: white;
   border-radius: 0.5em 0.5em 0.5em 0.5em / 0.6em 0.6em 0.4em 0.4em;
   box-shadow: 0.03em 0.14em rgba(0,0,0,0.1);
@@ -290,7 +290,7 @@ body {
   transform: translateY(-10%) translateX(-50%);
 }
 
-.vampi-mouth {
+.vampimouth {
   position: absolute;
   background: black;
   overflow: hidden;
@@ -303,7 +303,7 @@ body {
   border-radius: 0.7em 0.7em 1.2em 1.2em;
 }
 
-.vampi-mouth::before {
+.vampimouth::before {
   content: '';
   display: block;
   background: #ff8800;
@@ -314,9 +314,9 @@ body {
   border-radius: 50% 50% 0 0;
 }
 
-.vampi-tooth::before,
-.vampi-tooth::after,
-.vampi-tooth {
+.vampitooth::before,
+.vampitooth::after,
+.vampitooth {
   --teeth-size: 0.25em;
   display: block;
   width: 0;
@@ -331,12 +331,12 @@ body {
   transform: translateX(-50%);
 }
 
-.vampi-tooth:before {
+.vampitooth:before {
   content: '';
   transform: translateX(-150%) translateY(-100%);
 }
 
-.vampi-tooth:after {
+.vampitooth:after {
   content: '';
   transform: translateX(50%) translateY(-100%);
 }
