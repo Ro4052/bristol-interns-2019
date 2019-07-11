@@ -1,8 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Players } from './Players';
 import { PlayWordAndCard } from './PlayWordAndCard';
-import { PlayCard } from './PlayCard';
 
 const initialState = {
     myWord: "",
@@ -31,7 +29,6 @@ describe('on start of game', () => {
 });
 
 describe("on current player's turn", () => {
-    // TODO: Setup state for these tests
     it("displays only the 'Play word' text and box if a card has been chosen", () => {
         const wrapper = shallow(<PlayWordAndCard myWord={initialState.myWord} playedCard={finishedState.playedCard} finishedRound={initialState.finishedRound}/>);
         expect(wrapper.find('h3').text()).toEqual("Type in a word");

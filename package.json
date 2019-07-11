@@ -18,6 +18,7 @@
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
     "redux": "^4.0.1",
+    "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
@@ -25,17 +26,24 @@
   },
   "scripts": {
     "start": "node server.js",
-    "start:devserver": "concurrently \"nodemon ./server/proxy/server.js\" \"npx cross-env NODE_ENV=testing nodemon --inspect server.js --watch ./server --watch ./server.js\"",
-    "start:devclient": "react-scripts start",
     "build": "react-scripts build",
+    "start:devserver": "nodemon server.js --watch ./server --watch ./server.js",
+    "start:devclient": "react-scripts start",
+    "start:testserver": "concurrently --success first --kill-others \"npx cross-env PORT=1234 NODE_ENV=testing nodemon server.js\" \"node ./server/proxy/server.js\"",
+    "test": "npm run test:client && npm run test:e2e",
     "test:client": "react-scripts test --coverage --watchAll=false",
-    "eject": "react-scripts eject",
-    "cy:run": "cypress run",
-    "cypress:open": "cypress open",
-    "test:e2e": "concurrently --success first --kill-others \"npx cross-env NODE_ENV=testing node server.js\" \"node run-cypress-test.js -r tap\""
+    "test:e2e": "concurrently --success first --kill-others \"npm run start:testserver\" \"node run-cypress-test.js -r tap\"",
+    "test:e2eUI": "concurrently --success first --kill-others \"npm run start:testserver\" \"cypress open\"",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "env": {
+      "cypress/globals": true
+    },
+    "plugins": [
+      "cypress"
+    ]
   },
   "browserslist": {
     "production": [
@@ -54,10 +62,12 @@
     "cypress": "^3.3.2",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
+    "eslint-plugin-cypress": "^2.2.1",
     "http-proxy-middleware": "^0.19.1",
     "moxios": "^0.4.0",
     "nodemon": "^1.19.1",
     "socket.io-client": "^2.2.0",
+    "nyc": "^14.1.1",
     "start-server-and-test": "^1.9.1",
     "supertest": "^4.0.2"
   },

@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './Login.module.css';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
+import connectSocket from '../../services/socket';
 
 export class Login extends React.Component {
     constructor(props) {
@@ -67,12 +68,11 @@ export class Login extends React.Component {
             axios.post('/auth/login', {
                 username: this.state.value
             })
-            .then(response => {        
-                if (response.status === 200) {                    
-                    this.setState({
-                        loggedIn: true
-                    })
-                }
+            .then(() => connectSocket())
+            .then(() => {
+                this.setState({
+                    loggedIn: true
+                })
             })
             .catch(err => {                
                 if (err.message.includes(409)) {
@@ -102,7 +102,7 @@ export class Login extends React.Component {
         return (
             (!this.state.loggedIn) ?
                 <div>
-                     <div className={styles.foo}>
+                    <div className={styles.foo}>
                         <span className={styles.letter} data-letter="D">D</span>
                         <span className={styles.letter} data-letter="i">i</span>
                         <span className={styles.letter} data-letter="X">X</span>
@@ -110,6 +110,24 @@ export class Login extends React.Component {
                         <span className={styles.letter} data-letter="t">t</span>
 
                     </div>
+                    <div className={styles.ufo}>
+                      <div className={styles.monster} style="color: #7cb342">
+                        <div className={styles.body}>
+                          <div className={styles.ear}></div>
+                          <div className={styles.ear}></div>
+                          <div className={styles.vampi-mouth}>
+                            <div className={styles.vampi-tooth}></div>
+                          </div>
+                        </div>
+                        <div className={styles.eye-lid}>
+                          <div className={styles.eyes}>
+                            <div className={styles.eye}></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
                     <div className={styles.loginPage}>
                         <form className={styles.loginForm} onSubmit={this.sendLogin.bind(this)}>
                             <h3 className={styles.errorText}>{this.state.error}</h3>

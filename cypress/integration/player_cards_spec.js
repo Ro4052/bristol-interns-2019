@@ -1,27 +1,18 @@
+const cardsNumber = 3;
+
 describe('The Player Cards Component', () => {
     beforeEach(() => {
-        cy.visit('/');
-        const username = "unicorn";
-        cy.get('input').type(username);
-        cy.get('button').click();
-    });
-    
-    afterEach(() => {
-        cy.request({
-            url: '/api/reset-server',
-            method: 'POST'
-        });
-        cy.visit('/');
+        cy.login('unicorn');
     });
 
-    const cardsNumber = 3;
-
-    describe('Player starts the game and is given a set of cards', () => {
-        it("doesn't display the cards before the game has started", () => {
+    describe('before the game has started', () => {
+        it("shouldn't display the cards", () => {
             cy.get('#my-cards ul').its('length').should('be', 0);
         });
+    });
 
-        it("displays the correct number of cards when the game has started", () => {
+    describe('when the game has started', () => {
+        it("displays the correct number of cards", () => {
             cy.get('#start-game').click();
             cy.get('#my-cards ul').children().should(($ul) => {
                 expect($ul).to.have.length(cardsNumber);
@@ -29,8 +20,8 @@ describe('The Player Cards Component', () => {
         });
     });
 
-    describe('Player clicks on a card', () => {
-        it("is able to click on a card and it is removed from the list", () => {
+    describe('player clicks on a card', () => {
+        it("is removed from the list", () => {
             cy.get('#start-game').click();
             cy.get('#my-cards ul').children().then(($li) => {
                 if ($li.hasClass('singleCard')) {
