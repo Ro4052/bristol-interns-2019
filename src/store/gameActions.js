@@ -6,6 +6,7 @@ export const types = {
     SET_PLAYERS: 'SET_PLAYERS',
     SET_CURRENT_CARDS: 'SET_CURRENT_CARDS',
     SET_CURRENT_WORD: 'SET_CURRENT_WORD',
+    SET_ALL_VOTES: 'SET_ALL_VOTES',
     SET_SOCKET: 'SET_SOCKET',
     RESET_STATE: 'RESET_STATE'
 };
@@ -47,6 +48,11 @@ export const setCurrentCards = currentCards => ({
 export const setCurrentWord = currentWord => ({
     type: types.SET_CURRENT_WORD,
     currentWord
+});
+
+export const setAllVotes = allVotes => ({
+    type: types.SET_ALL_VOTES,
+    allVotes
 });
 
 /** @param {SocketIOClient.Socket} socket */
