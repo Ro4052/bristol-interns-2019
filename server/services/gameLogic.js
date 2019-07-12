@@ -170,7 +170,7 @@ exports.voteCard = (username, cardId) => {
             username: username,
             cardId: cardId
         };
-        votes.push(vote); 
+        votes.push(vote);
         if (allPlayersVoted()) nextRound();
     }
 }
