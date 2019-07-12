@@ -54,7 +54,7 @@ router.post('/auth/logout', (req, res) => {
 
 /* Get the players list of cards */
 router.get('/api/cards', auth, (req, res) => {
-    const cards = gameLogic.getCardsByUsername(req.session.user);
+    const cards = gameLogic.getUnplayedCardsByUsername(req.session.user);
     res.status(200).json(cards);
 });
 

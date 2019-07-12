@@ -18,50 +18,31 @@ let roundNum = 0;
 let currentPlayer;
 let currentWord = '';
 
-/* {
-    username,
-    cards,
-    score
-} */
+/* { username, cards, score } */
 let players = [];
 
-/* {
-    username,
-    cardId
-} */
-let cards = [];
+/* { username, cardId } */
+let playedCards = [];
 
-/* {
-    username,
-    cardId
-} */
+/* { username, cardId } */
 let votes = [];
 
-/* Get the current word of the game */
-exports.getWord = () => currentWord;
-
-/* Get the current status of the game */
-exports.getStatus = () => status;
-
-/* Get the current round number */
-exports.getRoundNumber = () => roundNum;
-
-/* Get the current status of the game */
-exports.getCurrentPlayer = () => currentPlayer;
-
 /* Get the list of cards for a specific player */
-exports.getCardsByUsername = (username) => players.find(player => player.username === username).cards.filter(card => card.played === false);
+const getCardsByUsername = (username) => players.find(player => player.username === username).cards;
+
+/* Get the list of unplayed cards for a specific player */
+exports.getUnplayedCardsByUsername = (username) => players.find(player => player.username === username).cards.filter(card => card.played === false);
 
 /* Returns true if the player is able to join the game, false otherwise */
 exports.canJoinGame = (username) => (status === statusTypes.NOT_STARTED && !players.some(player => player.username === username));
 
-/* Return the list of players, without their assigned cards */
+/* Return the list of players, hiding their assigned cards */
 const getPlayers = () => players.map(player => ({ username: player.username, score: player.score }));
 exports.getPlayers = getPlayers;
 
-/* Return the list of cards played this round, without who played them */
-const getCards = () => cards.map(card => ({ cardId: card.cardId }));
-exports.getCards = getCards;
+/* Return the list of cards played this round, hiding who played them */
+const getPlayedCards = () => playedCards.map(card => ({ cardId: card.cardId }));
+exports.getPlayedCards = getPlayedCards;
 
 /* Add the player to the game if possible */
 exports.joinGame = (user, callback) => {
@@ -104,7 +85,7 @@ exports.endGame = () => {
     currentWord = '';
     roundNum = 0;
     players = [];
-    cards = [];
+    playedCards = [];
     votes = [];
 }
 
@@ -115,7 +96,7 @@ const nextRound = () => {
         roundNum++;
         currentPlayer = players[roundNum % players.length];
         currentWord = '';
-        cards = [];
+        playedCards = [];
         votes = [];
         socket.emitNewRound(status, roundNum, currentPlayer);
         socket.promptCurrentPlayer(currentPlayer);
@@ -125,16 +106,15 @@ const nextRound = () => {
     }
 }
 
-/* The player whose turn it is plays a card and a word */
+/* The storyteller plays a card and a word */
 exports.playCardAndWord = (username, cardId, word) => {
     if (status === statusTypes.WAITING_FOR_CURRENT_PLAYER && currentPlayer.username === username && !playerHasPlayedCard(username)) {
         const card = {
             username: username,
             cardId: cardId
         };
-        cards.push(card);
-        let playerCards =  players.find(player => player.username === currentPlayer.username).cards;    
-        playerCards.find(playedCard => playedCard.id.toString() === cardId).played = true;
+        playedCards.push(card);
+        getCardsByUsername(username).find(playedCard => playedCard.id.toString() === cardId).played = true;
         status = statusTypes.WAITING_FOR_OTHER_PLAYERS;
         socket.emitStatus(status);
         currentWord = word;
@@ -152,12 +132,11 @@ exports.playCard = (username, cardId) => {
             username: username,
             cardId: cardId
         };
-        cards.push(card);
-        let playerCards =  players.find(player => player.username === username).cards;    
-        playerCards.find(playedCard => playedCard.id.toString() === cardId).played = true;
+        playedCards.push(card);
+        getCardsByUsername(username).find(playedCard => playedCard.id.toString() === cardId).played = true;
         if (allPlayersPlayedCard()) {
             status = statusTypes.WAITING_FOR_VOTES;
-            socket.emitPlayedCards(getCards());
+            socket.emitPlayedCards(getPlayedCards());
             socket.promptPlayersVote(currentPlayer);
         }
     }
@@ -182,9 +161,9 @@ exports.voteCard = (username, cardId) => {
 /* Calculate the scores for this round */
 const calcScores = () => {
     console.log("All votes", votes);
-    console.log("Cards", cards);
+    console.log("Played cards", playedCards);
     console.log("Current player", currentPlayer);
-    const card = cards.find(card => card.userId === currentPlayer.userId);
+    const card = playedCards.find(card => card.userId === currentPlayer.userId);
     console.log("Storytellers card", card);
     const correctVotes = votes.filter(vote => vote.cardId === card.cardId);
     console.log("Correct votes", correctVotes);
@@ -197,13 +176,13 @@ const calcScores = () => {
         // Everyone who voted for the correct answer scores 3
         correctVotes.map(vote => players.find(player => player.username === vote.username)).map(player => ({...player, score: player.score + 3}));
         // Each player score 1 point for every vote for their own card
-        votes.map(vote => cards.find(vote.cardId === card.cardId)).map(card => players.find(player => player.username === card.username)).map(player => ({...player, score: player.score + 2}));
+        votes.map(vote => playedCards.find(vote.cardId === card.cardId)).map(card => players.find(player => player.username === card.username)).map(player => ({...player, score: player.score + 2}));
     }
     console.log("Players", players);
 }
 
 /* Return true if the player has already played this round */
-const playerHasPlayedCard = (username) => cards.some(card => card.username === username);
+const playerHasPlayedCard = (username) => playedCards.some(card => card.username === username);
 
 /* Return true if the player has already voted this round */
 const playerHasVoted = (username) => votes.some(vote => vote.username === username);
