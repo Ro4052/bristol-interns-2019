@@ -9,7 +9,7 @@ export class Players extends React.PureComponent {
             <div className={style.currentPlayersBox}>
                 <h3>Players:</h3>
                 <ul id="players" data-cy='players-list'>
-                    {this.props.players.map((player, key) => <li key={key}>{player.username}</li>)}
+                    {this.props.players.map((player, key) => <li key={key}>{player.username}: {player.score} points</li>)}
                 </ul>
             </div>
         )
