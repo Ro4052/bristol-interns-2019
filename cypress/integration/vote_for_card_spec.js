@@ -1,0 +1,42 @@
+describe('Vote for a card', () => {
+    beforeEach(() => {
+        cy.login('unicorn');
+        /* Connect a second user using our fake client */
+        cy
+            .request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    cy.startGame();
+                    cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
+                }
+            });
+        cy.get('#current-player').then(($player) => {
+            if ($player.text() === 'Current player: unicorn') {
+                cy.get('[data-cy="type-word"]').type('word');
+                cy.get('[data-cy="send-word"]').click();
+                cy.get('[data-cy="my-cards"] > img').first().click();
+            } else {
+                cy.get('[data-cy="my-cards"] > img').first().click(); 
+            }
+        });
+    });
+
+    describe('on send a card and vote for one', () => {
+        it('displays all cards after current player plays their card', () => {
+            cy.get('[data-cy="played-cards"]').children().its('length').should('eq', 2);
+        });
+        it('is prompted to vote for a card', () => {
+            cy.get('[data-cy="vote-card"]');
+        });
+        it("is able to vote for the other player's card only", () => {
+            cy.get('[data-cy="played-cards"] > img').first().then(($img) => {
+                if ($img.hasClass('Cards_allCards__2SdBy')) {
+                    cy.get('[data-cy="played-cards"] > img').first().click()
+                } else {
+                    cy.get('[data-cy="played-cards"] > img').last().click();
+                }
+            })
+            cy.get('[data-cy="played-cards"] > img').should('not.exist');
+        });
+    });
+});
