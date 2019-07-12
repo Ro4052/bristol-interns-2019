@@ -6,12 +6,12 @@ describe('The Auth Page', function () {
         }); 
     });
 
-    describe('auth cookie', function () {
+    describe('if already logged in', function () {
         beforeEach(function() {
             cy.login('jane');
         });
-        it('sends you to dashboard', function() {
-            cy.visit('/dashboard');
+        it('sends you to dashboard if you try to return to login', function() {
+            cy.visit('/');
             cy.url().should('include', '/dashboard');
         });
     });
