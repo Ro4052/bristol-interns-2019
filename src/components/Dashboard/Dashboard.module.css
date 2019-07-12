@@ -232,26 +232,38 @@ h3 {
 }
 
 @keyframes blink {
-90% {
-    transform: none;
-    animation-timing-function: ease-in;
-}
-93% {
-    transform: translateY(30px) scaleY(0);
-}
-100% {
-    animation-timing-function: ease-out;
-}
+    90% {
+        transform: none;
+        animation-timing-function: ease-in;
+    }
+    93% {
+        transform: translateY(30px) scaleY(0);
+    }
+    100% {
+        animation-timing-function: ease-out;
+    }
 }
 
 @keyframes bounce { 
-to { transform: translateY(4%); } 
+    to {
+        transform: translateY(4%);
+    } 
 }
 
 @keyframes bouncebody { 
-to { transform: scaleX(1.03) scaleY(0.97); } 
+    to {
+        transform: scaleX(1.03) scaleY(0.97);
+    } 
 }
 
-@keyframes antena_d { 50% {transform: rotate(30deg);} }
-@keyframes antena_e { 50% {transform: rotate(-40deg);} }
+@keyframes antena_d {
+    50% {
+        transform: rotate(30deg);
+    }
+}
+@keyframes antena_e {
+    50% {
+        transform: rotate(-40deg);
+    }
+}
 
