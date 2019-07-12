@@ -30,7 +30,7 @@ Cypress.Commands.add('login', username => {
 });
 
 Cypress.Commands.add('startGame', () => {
-    cy.get('#start-game').click();
+    cy.get('[data-cy="start-game"]').click();
 });
 
 Cypress.Commands.add('resetGame', () => {
