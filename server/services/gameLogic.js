@@ -155,7 +155,6 @@ exports.voteCard = (username, cardId) => {
         votes.push(vote);
         if (allPlayersVoted()) {
             calcScores();
-            // TODO: Emit players
             nextRound();
         }
     }
@@ -172,6 +171,7 @@ const calcScores = () => {
         correctVotes.forEach(vote => players.find(player => player.username === vote.username).score += 3);
         votes.filter(vote => vote.cardId !== card.cardId).map(vote => playedCards.find(card => vote.cardId === card.cardId)).forEach(card => players.find(player => player.username === card.username).score += 1);
     }
+    socket.emitPlayers(getPlayers());
 }
 
 /* Return true if the player has already played this round */
