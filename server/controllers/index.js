@@ -54,7 +54,7 @@ router.post('/auth/logout', (req, res) => {
 
 /* Get the players list of cards */
 router.get('/api/cards', auth, (req, res) => {
-    const cards = gameLogic.getCardsByUsername(req.session.user);
+    const cards = gameLogic.getUnplayedCardsByUsername(req.session.user);
     res.status(200).json(cards);
 });
 
@@ -97,7 +97,7 @@ router.post('/api/playCard', auth, (req, res) => {
 
 /* Player votes for a card */
 router.post('/api/voteCard', auth, (req, res) => {    
-    if (req.session.user !== gameLogic.getCurrentPlayer().username) {
+    if (!gameLogic.isCurrentPlayer(req.session.user)) {
         gameLogic.voteCard(req.session.user, req.body.card);
         res.sendStatus(200);
     } else {

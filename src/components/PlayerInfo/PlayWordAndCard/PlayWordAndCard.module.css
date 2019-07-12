@@ -1,9 +1,6 @@
 .messageBox {
     margin-right: 1em;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    
 }
 
 .messageBox > input {
@@ -12,7 +9,7 @@
     height: 6vh;
     font-size: 2vh;
     background-color: var(--yellow);
-    border: 1px solid black;
+    border: 3px solid black;
     border-radius: 15px;
     outline: none;
 }
@@ -22,24 +19,33 @@ h1 {
 }
 
 .sendWordButton {
-    padding: 0.5em 1em;
+    padding: 1vmin 2vmin;
     background-color: var(--dark-orange);
-    border: 1px solid black;
+    border: 3px solid black;
     border-radius: 15px;
     font-size: 2.8vh;
     font-family: var(--main-font);
     cursor: pointer;
     outline: none;
+    margin: 2vmin;
 }
 
 .playerInteractions {
-    margin: 4vmin;
+    margin: 2vmin;
     position: absolute;
-    bottom: 0;
-    right: 0;
     display: flex;
+    top: 25%;
     flex-direction: column;
     align-items: flex-end;
+    background: #fac825;
+    border-radius: 15px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2vmin 2vmin;
+    height: 22%;
+    width: 29%;
+    border: 3px solid black;
 }
 
 @media only screen and (max-width: 800px) {
@@ -53,5 +59,6 @@ h1 {
     margin-right: 1em;
     text-align: center;
     width: 100%;
-    font-size: 5vmin;
+    font-size: 3.5vmin;
+    margin-bottom: 0.5em;  
 }

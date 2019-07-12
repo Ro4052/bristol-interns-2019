@@ -1,6 +1,7 @@
 describe('The Player Cards Component', () => {
     beforeEach(() => {
         cy.login('unicorn');
+        cy.wait(500);
         cy.startGame();
     });
 
@@ -19,7 +20,7 @@ describe('The Player Cards Component', () => {
 
     describe('player clicks on a card', () => {
         it("is removed from the list", () => {
-            cy.get('[data-cy="my-cards"] > img').first().click();
+            cy.playCard();
             cy.get('[data-cy="my-cards"]').children().its('length').should('eq', 2);
         });
     });

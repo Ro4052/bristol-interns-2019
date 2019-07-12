@@ -60,10 +60,26 @@ export class Dashboard extends React.Component {
                 <Players />
                 <PlayedCards />
                 <PlayerCards />
-                {this.props.playWordAndCard && <PlayWordAndCard />}
+                {this.props.playWordAndCard && !this.props.finishedRound && <PlayWordAndCard />}
                 {this.props.playCard && <PlayCard />}
                 {this.props.voteCard && this.props.votedCard === 0 && <VoteCard />}
                 <LogoutButton />
+                <div className={style.ufo}>
+                    <div className={style.monster}>
+                        <div className={style.body}>
+                            <div className={style.ear}></div>
+                            <div className={style.ear}></div>
+                            <div className={style.vampimouth}>
+                                <div className={style.vampitooth}></div>
+                            </div>
+                        </div>
+                        <div className={style.eyelid}>
+                            <div className={style.eyes}>
+                                <div className={style.eye}></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -79,7 +95,8 @@ const mapStateToProps = (state) => {
         voteCard: state.playerReducer.voteCard,
         votedCard: state.playerReducer.votedCard,
         currentWord: state.gameReducer.currentWord,
-        winner: state.gameReducer.winner
+        winner: state.gameReducer.winner,
+        finishedRound: state.playerReducer.finishedRound,
     });
 }
 
