@@ -53,7 +53,7 @@ exports.getCurrentPlayer = () => currentPlayer;
 exports.getCardsByUsername = (username) => players.find(player => player.username === username).cards.filter(card => card.played === false);
 
 /* Returns true if the player is able to join the game, false otherwise */
-exports.canJoinGame = (username) => ((status === statusTypes.NOT_STARTED || status === statusTypes.GAME_OVER) && !players.some(player => player.username === username));
+exports.canJoinGame = (username) => (status === statusTypes.NOT_STARTED && !players.some(player => player.username === username));
 
 /* Return the list of players, without their assigned cards */
 const getPlayers = () => players.map(player => ({ username: player.username, score: player.score }));
@@ -77,7 +77,7 @@ exports.joinGame = (user, callback) => {
 
 /* Remove player from current game */
 exports.quitGame = player => {
-    if ((status === statusTypes.NOT_STARTED || status === statusTypes.GAME_OVER) && !players.includes(player)) {
+    if (status === statusTypes.NOT_STARTED && !players.includes(player)) {
         players = players.filter((otherPlayer) => otherPlayer !== player);
         socket.emitPlayers(getPlayers());
         return true;
