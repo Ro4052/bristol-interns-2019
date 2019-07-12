@@ -171,15 +171,18 @@ exports.voteCard = (username, cardId) => {
             cardId: cardId
         };
         votes.push(vote);
-        if (allPlayersVoted()) nextRound();
+        if (allPlayersVoted()) {
+            // TODO: Calculate scores
+            nextRound();
+        }
     }
 }
 
 /* Return true if the player has already played this round */
-const playerHasPlayedCard = (username) => cards.filter(card => card.username === username).length > 0;
+const playerHasPlayedCard = (username) => cards.some(card => card.username === username);
 
 /* Return true if the player has already voted this round */
-const playerHasVoted = (username) => votes.filter(vote => vote.username === username).length > 0;
+const playerHasVoted = (username) => votes.some(vote => vote.username === username);
 
 /* Returns true if all players have played a card this round */
 const allPlayersPlayedCard = () => players.every(player => playerHasPlayedCard(player.username));
