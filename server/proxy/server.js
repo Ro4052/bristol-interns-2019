@@ -16,6 +16,8 @@ const app = express();
 
 let socket;
 
+let cards;
+
 app.use(bodyParser.json());
 app.use(cors());
 app.use(cookieParser());
