@@ -18,13 +18,13 @@ let roundNum = 0;
 let currentPlayer;
 let currentWord = '';
 
-/* { username, cards, score } */
+/** @type {{ username: string, cards: {{ id: number, played: bool }[]}, score: number }[]} */
 let players = [];
 
-/* { username, cardId } */
+/** @type {{ username: string, cardId: number }[]} */
 let playedCards = [];
 
-/* { username, cardId } */
+/** @type {{ username: string, cardId: number }[]} */
 let votes = [];
 
 /* Get the list of cards for a specific player */
@@ -34,7 +34,7 @@ const getCardsByUsername = (username) => players.find(player => player.username 
 exports.isCurrentPlayer = (username) => currentPlayer.username === username;
 
 /* Get the list of unplayed cards for a specific player */
-exports.getUnplayedCardsByUsername = (username) => players.find(player => player.username === username).cards.filter(card => card.played === false);
+exports.getUnplayedCardsByUsername = (username) => players.find(player => player.username === username).cards.filter(card => !card.played);
 
 /* Returns true if the player is able to join the game, false otherwise */
 exports.canJoinGame = (username) => (status === statusTypes.NOT_STARTED && !players.some(player => player.username === username));
@@ -162,6 +162,7 @@ exports.voteCard = (username, cardId) => {
 
 /* Calculate the scores for this round */
 const calcScores = () => {
+    players.forEach(player => console.log(player.cards));
     const correctCard = playedCards.find(card => card.userId === currentPlayer.userId);
     const correctVotes = votes.filter(vote => vote.cardId === correctCard.cardId);
     if ((correctVotes.length % votes.length) === 0) {
@@ -169,7 +170,10 @@ const calcScores = () => {
     } else {
         currentPlayer.score += 3;
         correctVotes.forEach(vote => players.find(player => player.username === vote.username).score += 3);
-        votes.filter(vote => vote.cardId !== correctCard.cardId).map(vote => playedCards.find(card => vote.cardId === card.cardId)).forEach(card => players.find(player => player.username === card.username).score += 1);
+        votes.filter(vote => vote.cardId !== correctCard.cardId).forEach(vote => {
+            const votedCard = playedCards.find(card => card.cardId === vote.cardId);
+            players.find(player => player.username === votedCard.username).score += 1;
+        });
     }
     socket.emitPlayers(getPlayers());
 }
