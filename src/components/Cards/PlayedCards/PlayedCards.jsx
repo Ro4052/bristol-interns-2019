@@ -24,7 +24,7 @@ export class PlayedCards extends React.Component {
     render() {
         return (
             <ul id="played-cards">
-                {this.props.cards.map(card => <img id={"card-" + card.cardId} key={card.cardId} className={this.getCardClass(card.cardId)} alt={"card-" + card.cardId} src={require(`../cards/card (${card.cardId}).jpg`)} onClick={this.voteForCard.bind(this)}/>)}
+                {this.props.cards.map(card => <img id={"card-" + card.cardId} key={card.cardId} className={this.getCardClass(card.cardId)} alt={"card-" + card.cardId} src={require(`../cards/card (${card.cardId}).jpg`)} onClick={this.voteForCard}/>)}
             </ul>
         );
     }
@@ -32,7 +32,7 @@ export class PlayedCards extends React.Component {
 
 const mapStateToProps = (state) => {
     return ({
-        cards: state.reducer.currentCards,
+        cards: state.gameReducer.currentCards,
         voteCard: state.playerReducer.voteCard,
         playedCard: state.playerReducer.playedCard
     });

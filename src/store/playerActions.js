@@ -39,15 +39,13 @@ export const fetchCardsFailure = (error) => ({
     payload: { error }
 });
 
-export const fetchCards = () => {
-    return (dispatch) => {
-        dispatch(fetchCardsBegin());
-        return axios.get('/api/cards')
-        .then(res => {
-            dispatch(fetchCardsSuccess(res.data));
-        })
-        .catch(error => dispatch(fetchCardsFailure(error)));
-    }
+export const fetchCards = () => (dispatch) => {
+    dispatch(fetchCardsBegin());
+    axios.get('/api/cards')
+    .then(res => {
+        dispatch(fetchCardsSuccess(res.data));
+    })
+    .catch(error => dispatch(fetchCardsFailure(error)));
 }
 
 export const requestPlayCard = (id) => ({
@@ -79,17 +77,15 @@ export const voteForCardFailure = (error) => ({
     payload: { error }
 });
 
-export const voteForCard = (id) => {
-    return (dispatch) => {
-        dispatch(voteForCardBegin());
-        return axios.post('/api/voteCard', {
-            card: id
-        })
-        .then(res => {
-            dispatch(voteForCardSuccess(res.data));
-        })
-        .catch(error => dispatch(voteForCardFailure(error)));
-    }
+export const voteForCard = (id) => (dispatch) => {
+    dispatch(voteForCardBegin());
+    axios.post('/api/voteCard', {
+        card: id
+    })
+    .then(res => {
+        dispatch(voteForCardSuccess(id));
+    })
+    .catch(error => dispatch(voteForCardFailure(error)));
 }
 
 export const setPlayedCard = id => ({

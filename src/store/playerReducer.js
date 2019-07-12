@@ -71,6 +71,8 @@ const cardReducer = (state = initialState, action) => {
                 error: null
             };
         case types.VOTE_FOR_CARD_SUCCESS:
+            console.log("Success" + action.payload.card);
+            
             return {
                 ...state,
                 loading: false,

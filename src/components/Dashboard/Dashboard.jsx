@@ -5,8 +5,8 @@ import LogoutButton from '../Login/LogoutButton';
 import Players from '../PlayerInfo/Players/Players';
 import style from './Dashboard.module.css';
 import { finishPlayCard } from '../../store/playerActions';
-import PlayCard from '../PlayerInfo/PlayCard/PlayCard';
-import VoteCard from '../PlayerInfo/VoteCard/VoteCard';
+import { PlayCard } from '../PlayerInfo/PlayCard/PlayCard';
+import { VoteCard } from '../PlayerInfo/VoteCard/VoteCard';
 import PlayWordAndCard from '../PlayerInfo/PlayWordAndCard/PlayWordAndCard';
 import PlayedCards from '../Cards/PlayedCards/PlayedCards';
 import axios from 'axios';
@@ -45,13 +45,13 @@ export class Dashboard extends React.Component {
 
 const mapStateToProps = (state) => {
     return ({
-        status: state.reducer.status,
-        roundNum: state.reducer.roundNum,
-        currentPlayer: state.reducer.currentPlayer,
+        status: state.gameReducer.status,
+        roundNum: state.gameReducer.roundNum,
+        currentPlayer: state.gameReducer.currentPlayer,
         playWordAndCard: state.playerReducer.playWordAndCard,
         playCard: state.playerReducer.playCard,
         voteCard: state.playerReducer.voteCard,
-        currentWord: state.reducer.currentWord
+        currentWord: state.gameReducer.currentWord
     });
 }
 

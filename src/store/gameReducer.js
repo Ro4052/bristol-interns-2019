@@ -1,4 +1,4 @@
-import { types } from './actions';
+import { types } from './gameActions';
 
 export const initialState = {
     status: "NOT_STARTED",
@@ -10,7 +10,7 @@ export const initialState = {
     socket: null
 }
 
-const reducer = (state = initialState, action) => {
+const gameReducer = (state = initialState, action) => {
     switch (action.type) {
         case types.RESET_STATE:
             return initialState;
@@ -33,4 +33,4 @@ const reducer = (state = initialState, action) => {
     }
 }
 
-export default reducer;
+export default gameReducer;
