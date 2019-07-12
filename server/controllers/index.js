@@ -89,7 +89,7 @@ router.post('/api/playCard', auth, (req, res) => {
 
 /* Player votes for a card */
 router.post('/api/voteCard', auth, (req, res) => {    
-    if (req.session.user !== gameLogic.getCurrentPlayer().username) {
+    if (!gameLogic.isCurrentPlayer(req.session.user)) {
         gameLogic.voteCard(req.session.user, req.body.card);
         res.sendStatus(200);
     } else {

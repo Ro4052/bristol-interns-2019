@@ -30,6 +30,9 @@ let votes = [];
 /* Get the list of cards for a specific player */
 const getCardsByUsername = (username) => players.find(player => player.username === username).cards;
 
+/* Returns true if this is the current player */
+exports.isCurrentPlayer = (username) => currentPlayer.username === username;
+
 /* Get the list of unplayed cards for a specific player */
 exports.getUnplayedCardsByUsername = (username) => players.find(player => player.username === username).cards.filter(card => card.played === false);
 
@@ -160,25 +163,15 @@ exports.voteCard = (username, cardId) => {
 
 /* Calculate the scores for this round */
 const calcScores = () => {
-    console.log("All votes", votes);
-    console.log("Played cards", playedCards);
-    console.log("Current player", currentPlayer);
     const card = playedCards.find(card => card.userId === currentPlayer.userId);
-    console.log("Storytellers card", card);
     const correctVotes = votes.filter(vote => vote.cardId === card.cardId);
-    console.log("Correct votes", correctVotes);
-    if (correctVotes.length % players.length === 0) {
-        // Everyone but storyteller score 2
-        players.filter(player => player !== currentPlayer).map(player => ({...player, score: player.score + 2}));
+    if ((correctVotes.length % votes.length) === 0) {
+        players = players.filter(player => player !== currentPlayer).map(player => ({...player, score: player.score + 2}));
     } else {
-        // Storyteller scores 3
         currentPlayer.score = currentPlayer.score + 3;
-        // Everyone who voted for the correct answer scores 3
-        correctVotes.map(vote => players.find(player => player.username === vote.username)).map(player => ({...player, score: player.score + 3}));
-        // Each player score 1 point for every vote for their own card
-        votes.map(vote => playedCards.find(vote.cardId === card.cardId)).map(card => players.find(player => player.username === card.username)).map(player => ({...player, score: player.score + 2}));
+        correctVotes.forEach(vote => players.find(player => player.username === vote.username).score += 3);
+        votes.filter(vote => vote.cardId !== card.cardId).map(vote => playedCards.find(card => vote.cardId === card.cardId)).forEach(card => players.find(player => player.username === card.username).score += 1);
     }
-    console.log("Players", players);
 }
 
 /* Return true if the player has already played this round */
