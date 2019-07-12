@@ -213,6 +213,7 @@ div.foo{
   transform-origin: bottom center;
   animation: bouncebody alternate infinite 400ms 40ms ease-in-out;
 }
+
 .eyes, .eyelid {
   text-align: center;
   display: flex;
@@ -234,7 +235,8 @@ div.foo{
   background-color: black;
   border-radius: 50%;
 }
-.eyelid{
+
+.eyelid {
   background-color: white;
   border-radius: 0.5em 0.5em 0.5em 0.5em / 0.6em 0.6em 0.4em 0.4em;
   box-shadow: 0.03em 0.14em rgba(0,0,0,0.1);
