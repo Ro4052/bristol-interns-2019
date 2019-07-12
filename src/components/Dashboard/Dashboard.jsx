@@ -39,21 +39,21 @@ export class Dashboard extends React.Component {
                 {this.props.voteCard && this.props.votedCard === 0 && <VoteCard />}
                 <LogoutButton />
                 <div className={style.ufo}>
-                        <div className={style.monster}>
-                            <div className={style.body}>
-                                <div className={style.ear}></div>
-                                <div className={style.ear}></div>
-                                <div className={style.vampimouth}>
-                                    <div className={style.vampitooth}></div>
-                                </div>
+                    <div className={style.monster}>
+                        <div className={style.body}>
+                            <div className={style.ear}></div>
+                            <div className={style.ear}></div>
+                            <div className={style.vampimouth}>
+                                <div className={style.vampitooth}></div>
                             </div>
-                            <div className={style.eyelid}>
-                                <div className={style.eyes}>
-                                    <div className={style.eye}></div>
-                                </div>
+                        </div>
+                        <div className={style.eyelid}>
+                            <div className={style.eyes}>
+                                <div className={style.eye}></div>
                             </div>
                         </div>
                     </div>
+                </div>
             </div>
         );
     }
