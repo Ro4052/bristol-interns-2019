@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 import { dispatch } from '../store/store';
-import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setPlayers, setCurrentCards, setAllVotes, setSocket } from '../store/gameActions';
+import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setPlayers, setCurrentCards, setAllVotes, setWinner, setSocket } from '../store/gameActions';
 import { setPlayWordAndCard, setPlayCard, setPlayedCard, setVoteCard, setVotedCard, playWord, resetFinishRound } from '../store/playerActions';
 
 const connectSocket = () => {
@@ -62,6 +62,26 @@ const connectSocket = () => {
 
     socket.on("all votes", (msg) => {
         dispatch(setAllVotes(msg));
+    });
+
+    socket.on("winner", (msg) => {        
+        dispatch(setWinner(msg));
+    });
+
+    socket.on("end", () => {        
+        dispatch(setStatus('NOT_STARTED'));
+        dispatch(setRoundNumber(0));
+        dispatch(setCurrentPlayer(null));
+        dispatch(setCurrentWord(''));
+        dispatch(setCurrentCards([]));
+        dispatch(setPlayCard(false));
+        dispatch(setVoteCard(false));
+        dispatch(setPlayWordAndCard(false));
+        dispatch(setPlayedCard(0));
+        dispatch(setVotedCard(0));
+        dispatch(playWord(""));
+        dispatch(resetFinishRound());
+        dispatch(setWinner(null));
     });
 
     return new Promise((resolve, reject) => {

@@ -64,6 +64,14 @@ router.get('/api/start', auth, (req, res) => {
     res.sendStatus(200);
 });
 
+/* End the game */
+router.get('/api/end', auth, (req, res) => {
+    gameLogic.endGame();
+    closeSocket();
+    req.session.destroy();
+    res.sendStatus(200);
+});
+
 /* Check if in dev mode, and enable end game request */
 if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {

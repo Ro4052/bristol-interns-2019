@@ -7,6 +7,7 @@ export const initialState = {
     players: [], /* [{ username, score }] */
     currentCards: [], /* [{ cardId }] */
     currentWord: '',
+    winner: "",
     socket: null
 }
 
@@ -28,6 +29,8 @@ const gameReducer = (state = initialState, action) => {
             return {...state, currentWord: action.currentWord };
         case types.SET_ALL_VOTES:
             return {...state, allVotes: action.allVotes };
+        case types.SET_WINNER:
+            return {...state, winner: action.player };
         case types.SET_SOCKET:
             return {...state, socket: action.socket };
         default:
