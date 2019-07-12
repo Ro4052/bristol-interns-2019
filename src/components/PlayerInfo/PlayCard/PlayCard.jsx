@@ -6,7 +6,7 @@ export class PlayCard extends React.PureComponent {
     render() {
         return (
             <div className={styles.playerInteractions}>
-                <h3>Pick a card</h3>
+                <h3 data-cy="play-card">Pick a card</h3>
             </div>
         );
     }
