@@ -39,4 +39,20 @@ describe('Vote for a card', () => {
             cy.get('[data-cy="played-cards"] > img').should('not.exist');
         });
     });
+
+    describe('on all players have voted and votes are displayed', () => {
+        it('displays all cards that can be voted for', () => {
+            cy.get('[data-cy="played-cards"]').children().its('length').should('eq', 2);
+        });
+        it("displays votes when all players vote for a card", () => {
+            cy.get('[data-cy="played-cards"] > img').first().then(($img) => {
+                if ($img.hasClass('Cards_allCards__2SdBy')) {
+                    cy.get('[data-cy="played-cards"] > img').first().click()
+                } else {
+                    cy.get('[data-cy="played-cards"] > img').last().click();
+                }
+            })
+            cy.get('[data-cy="played-cards"] > img').should('not.exist');
+        });
+    });
 });
