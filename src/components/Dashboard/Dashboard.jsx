@@ -26,13 +26,12 @@ export class Dashboard extends React.Component {
     }
 
     deleteAllCookies() {
-        var cookies = document.cookie.split(";");
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i];
-            var eqPos = cookie.indexOf("=");
-            var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        let cookies = document.cookie.split(";");
+        cookies.forEach((cookie) => {
+            let eqPos = cookie.indexOf("=");
+            let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
             document.cookie = name + "=;expires=Thu, 01 Jan 1975 00:00:00 GMT";
-        }
+        });
     }
 
     newGame() {
@@ -41,7 +40,7 @@ export class Dashboard extends React.Component {
             console.log(err);
         });
         this.deleteAllCookies();
-        window.location = '/';
+        this.props.history.push('/');
     }
 
     render() {

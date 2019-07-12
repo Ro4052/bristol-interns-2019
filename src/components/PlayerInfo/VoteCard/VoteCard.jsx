@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from '../PlayWordAndCard/PlayWordAndCard.module.css';
 
 export const VoteCard = () => {
     return (
