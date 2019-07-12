@@ -36,7 +36,7 @@ export class Dashboard extends React.Component {
                 <PlayerCards />
                 {this.props.playWordAndCard && <PlayWordAndCard />}
                 {this.props.playCard && <PlayCard />}
-                {this.props.voteCard && <VoteCard />}
+                {this.props.voteCard && this.props.votedCard === 0 && <VoteCard />}
                 <LogoutButton />
             </div>
         );
@@ -51,6 +51,7 @@ const mapStateToProps = (state) => {
         playWordAndCard: state.playerReducer.playWordAndCard,
         playCard: state.playerReducer.playCard,
         voteCard: state.playerReducer.voteCard,
+        votedCard: state.playerReducer.votedCard,
         currentWord: state.gameReducer.currentWord
     });
 }
