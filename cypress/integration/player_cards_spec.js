@@ -23,4 +23,4 @@ describe('The Player Cards Component', () => {
             cy.get('[data-cy="my-cards"]').children().its('length').should('eq', 2);
         });
     });
-})
+});
