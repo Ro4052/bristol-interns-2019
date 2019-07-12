@@ -64,6 +64,11 @@ exports.emitPlayedCards = cards => {
     io.emit("played cards", cards);
 }
 
+// When everyone has played their cards, send them all to the players
+exports.emitAllVotes = votes => {
+    io.emit("all votes", votes);
+}
+
 // Ask the current player for a word and a card
 const promptCurrentPlayer = currentPlayer => {
     sockets.find(socket => socket.handshake.session.user === currentPlayer.username).emit("play word and card");
