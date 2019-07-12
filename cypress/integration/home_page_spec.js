@@ -3,9 +3,9 @@ const username = 'Jane';
 describe('The Login Page', function () {
     describe('on login', () => {
         it('should set a cookie', function () {
-            cy.login('username');
+            cy.login(username);
             cy.url().should('include', '/dashboard');
-            cy.getCookie(username).should('exist');
+            cy.getCookie('username').should('exist');
         });
     });
 
