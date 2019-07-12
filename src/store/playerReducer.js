@@ -16,7 +16,7 @@ export const initialState = {
 
 const cardReducer = (state = initialState, action) => {
     switch (action.type) {
-        case types.RESET_PLAYER_STATE:            
+        case types.RESET_PLAYER_STATE:
             return initialState;
         case types.FETCH_CARDS_BEGIN:
             return {
