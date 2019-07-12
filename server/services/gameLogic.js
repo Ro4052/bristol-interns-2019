@@ -126,7 +126,7 @@ const nextRound = () => {
 }
 
 /* The player whose turn it is plays a card and a word */
-exports.playCardAndWord = (username, cardId, word) => {    
+exports.playCardAndWord = (username, cardId, word) => {
     if (status === statusTypes.WAITING_FOR_CURRENT_PLAYER && currentPlayer.username === username && !playerHasPlayedCard(username)) {
         const card = {
             username: username,
