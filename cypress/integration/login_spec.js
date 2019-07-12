@@ -12,7 +12,7 @@ describe('The Login Page', function () {
         it('returns error', function () {
             cy.request('POST', '/auth/login', { username });
             cy.login(username);
-            cy.get('h3').should('contain', 'Username already exists');
+            cy.get('[data-cy="login-error"]').should('contain', 'Username already exists');
         });
     });
 

@@ -14,17 +14,7 @@ describe('Play word and card', () => {
 
     describe('on send a word and a card', () => {
         it('displays the word', () => {
-            cy.get('[data-cy="type-word"]').type('word');
-            cy.get('[data-cy="send-word"]').click();
-            cy.get('[data-cy="my-cards"] > img').first().click();
-            cy.get('[data-cy="end-turn"]').click();
-            cy.get('[data-cy="current-word"]').should('have.text', 'word');
-        });
-        it('can be done in either order', () => {
-            cy.get('[data-cy="my-cards"] > img').first().click();
-            cy.get('[data-cy="type-word"]').type('word');
-            cy.get('[data-cy="send-word"]').click();
-            cy.get('[data-cy="end-turn"]').click();
+            cy.playWordCard();
             cy.get('[data-cy="current-word"]').should('have.text', 'word');
         });
     });    
