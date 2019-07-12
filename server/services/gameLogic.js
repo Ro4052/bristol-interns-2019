@@ -162,14 +162,14 @@ exports.voteCard = (username, cardId) => {
 
 /* Calculate the scores for this round */
 const calcScores = () => {
-    const card = playedCards.find(card => card.userId === currentPlayer.userId);
-    const correctVotes = votes.filter(vote => vote.cardId === card.cardId);
+    const correctCard = playedCards.find(card => card.userId === currentPlayer.userId);
+    const correctVotes = votes.filter(vote => vote.cardId === correctCard.cardId);
     if ((correctVotes.length % votes.length) === 0) {
         players.forEach(player => {if (player !== currentPlayer) player.score += 2});
     } else {
-        currentPlayer.score = currentPlayer.score + 3;
+        currentPlayer.score += 3;
         correctVotes.forEach(vote => players.find(player => player.username === vote.username).score += 3);
-        votes.filter(vote => vote.cardId !== card.cardId).map(vote => playedCards.find(card => vote.cardId === card.cardId)).forEach(card => players.find(player => player.username === card.username).score += 1);
+        votes.filter(vote => vote.cardId !== correctCard.cardId).map(vote => playedCards.find(card => vote.cardId === card.cardId)).forEach(card => players.find(player => player.username === card.username).score += 1);
     }
     socket.emitPlayers(getPlayers());
 }
