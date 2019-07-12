@@ -1,5 +1,4 @@
 {
     "baseUrl": "http://localhost:12345/",
-    "proxyUrl": "http://localhost:12346/",
     "reporter": "tap"
 }
