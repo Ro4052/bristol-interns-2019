@@ -61,6 +61,22 @@ app.get('/connect', (req, res) => {
     .catch((err) => console.error(err)); 
 });
 
+app.get('/startGame', (req, res) => {
+    const url = req.query.url;
+    const instance = axios.create({
+        baseURL: url,
+        timeout: 500,
+        jar: cookieJar,
+        withCredentials: true
+    });
+    instance.get('api/start')
+        .then(() => {
+            console.log("successful start game");
+            res.sendStatus(200);
+        })
+        .catch((err) => console.error(err));
+});
+
 app.get('/playCardWord', (req, res) => {
     const url = req.query.url;
     const instance = axios.create({

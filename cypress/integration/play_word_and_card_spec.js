@@ -1,6 +1,7 @@
 describe('Play word and card', () => {
     beforeEach(() => {
         cy.login('username');
+        cy.wait(500);
         cy.startGame();
     });
 

@@ -11,20 +11,31 @@ export class PlayedCards extends React.Component {
 
     voteForCard(event) {
         const id = event.target.id.split('-')[1];
-        console.log(id);
         if (this.props.voteCard && id !== this.props.playedCard.toString()) {
             this.props.voteForCard(id);
         }
     }
 
     getCardClass(id) {
-        return (this.props.voteCard && !this.props.votedCard && (id !== this.props.playedCard.toString())) ? styles.allCards : styles.allCardsDisabled;
+        return (this.props.voteCard && (this.props.votedCard === 0) && (id !== this.props.playedCard.toString())) ? styles.allCards : styles.allCardsDisabled;
+    }
+
+    getVotesForCard(id) {
+        let votes = 0;
+        this.props.allVotes.map((vote) => votes += (id === vote.cardId));
+        return votes;
     }
 
     render() {
         return (
-            <ul id="played-cards" data-cy="played-cards">
-                {this.props.cards.map(card => <img id={"card-" + card.cardId} key={card.cardId} className={this.getCardClass(card.cardId)} alt={"card-" + card.cardId} src={require(`../cards/card (${card.cardId}).jpg`)} onClick={this.voteForCard}/>)}
+            <ul id="played-cards" styles={styles.playedCards} data-cy="played-cards">
+                {this.props.cards.map(card => 
+                    <li className={styles.playedCard} key={card.cardId}>
+                        {(this.props.allVotes && this.props.status === 'DISPLAY_ALL_VOTES') && <span>{this.getVotesForCard(card.cardId)}</span>}
+                        <img id={"card-" + card.cardId} className={this.getCardClass(card.cardId)} alt={"card-" + card.cardId}
+                         src={require(`../cards/card (${card.cardId}).jpg`)} onClick={this.voteForCard}/>
+                    </li>
+                )}
             </ul>
         );
     }
@@ -34,7 +45,10 @@ const mapStateToProps = (state) => {
     return ({
         cards: state.gameReducer.currentCards,
         voteCard: state.playerReducer.voteCard,
-        playedCard: state.playerReducer.playedCard
+        votedCard: state.playerReducer.votedCard,
+        playedCard: state.playerReducer.playedCard,
+        allVotes: state.gameReducer.allVotes,
+        status: state.gameReducer.status
     });
 }
 

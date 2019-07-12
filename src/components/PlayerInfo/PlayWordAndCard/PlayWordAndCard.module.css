@@ -42,6 +42,12 @@ h1 {
     align-items: flex-end;
 }
 
+@media only screen and (max-width: 800px) {
+    .playerInteractions {
+        margin-bottom: 50vw;
+    }
+}
+
 .playerInteractions > h3 {
     color: var(--lighter-black);
     margin-right: 1em;

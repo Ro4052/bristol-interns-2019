@@ -22,7 +22,6 @@ const firstRoundGameState = {
     ],
     myTurn: true
 };
-
 describe('on initial render', () => {
     it("doesn't display the current player", () => {
         const wrapper = shallow(<Dashboard status={initialGameState.status} />);
@@ -50,7 +49,6 @@ describe('on initial render', () => {
         });
     });
 });
-
 describe('on start of game', () => {
     it("displays the current player's username", () => {
         const wrapper = shallow(<Dashboard status={firstRoundGameState.status} currentPlayer={firstRoundGameState.currentPlayer} />);
