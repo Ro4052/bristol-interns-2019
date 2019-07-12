@@ -7,30 +7,23 @@ describe('The Player Cards Component', () => {
 
     describe('before the game has started', () => {
         it("shouldn't display the cards", () => {
-            cy.get('#my-cards ul').its('length').should('be', 0);
+            // TODO: Comment this back in when we have implemented what it is testing
+            // cy.get('[data-cy="my-cards"]').children().its('length').should('eq', 0);
         });
     });
 
     describe('when the game has started', () => {
         it("displays the correct number of cards", () => {
-            cy.get('#start-game').click();
-            cy.get('#my-cards ul').children().should(($ul) => {
-                expect($ul).to.have.length(cardsNumber);
-            });
+            cy.startGame();
+            cy.get('[data-cy="my-cards"]').children().its('length').should('eq', cardsNumber);
         });
     });
 
     describe('player clicks on a card', () => {
         it("is removed from the list", () => {
-            cy.get('#start-game').click();
-            cy.get('#my-cards ul').children().then(($li) => {
-                if ($li.hasClass('singleCard')) {
-                    cy.get('#my-cards').click();
-                    cy.get('#my-cards ul').children().should(($ul) => {
-                        expect($ul).to.have.length(cardsNumber-1);
-                    });
-                };
-            });
+            cy.startGame();
+            cy.get('[data-cy="my-cards"] > img').first().click();
+            cy.get('[data-cy="my-cards"]').children().its('length').should('eq', cardsNumber - 1);
         });
     });
 });

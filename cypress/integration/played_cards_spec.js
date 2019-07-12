@@ -1,15 +1,13 @@
-const url = Cypress.config().baseUrl;
-
 describe('The Played Cards Component', function() {
     beforeEach(() => {        
         cy.login('unicorn');
         /* Connect a second user using our fake client */
         cy
-            .request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
+            .request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then((response) => {
                 if (response.status === 200) {
                     cy.startGame();
-                    cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(url)}`)
+                    cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
                 }
             });
     });
