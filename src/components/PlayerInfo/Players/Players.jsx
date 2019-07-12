@@ -17,7 +17,7 @@ export class Players extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => ({
-    players: state.reducer.players
+    players: state.gameReducer.players
 });
 
 export default connect(mapStateToProps)(Players);

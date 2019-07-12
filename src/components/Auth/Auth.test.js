@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { shallow } from 'enzyme';
 import { Auth } from './Auth';
-import PlayCard from '../PlayerInfo/PlayCard/PlayCard';
+import { PlayCard } from '../PlayerInfo/PlayCard/PlayCard';
 
 describe('on initial mount', () => {
     it('returns null if still loading', () => {

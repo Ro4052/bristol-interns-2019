@@ -2,15 +2,15 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { resetState } from '../../store/actions';
+import { resetState } from '../../store/gameActions';
 import { resetPlayerState } from '../../store/playerActions';
 
 export class Auth extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-        loading: true,
-        authenticated: false
+            loading: true,
+            authenticated: false
         };
     }
 
@@ -45,8 +45,8 @@ export class Auth extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    resetState: (id) => dispatch(resetState),
-    resetPlayerState: (id) => dispatch(resetPlayerState)
+    resetState: () => dispatch(resetState()),
+    resetPlayerState: () => dispatch(resetPlayerState())
 });
 
 export default connect(null, mapDispatchToProps)(Auth);

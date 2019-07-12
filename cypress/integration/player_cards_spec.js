@@ -1,8 +1,7 @@
-const cardsNumber = 3;
-
 describe('The Player Cards Component', () => {
     beforeEach(() => {
         cy.login('unicorn');
+        cy.startGame();
     });
 
     describe('before the game has started', () => {
@@ -14,16 +13,14 @@ describe('The Player Cards Component', () => {
 
     describe('when the game has started', () => {
         it("displays the correct number of cards", () => {
-            cy.startGame();
-            cy.get('[data-cy="my-cards"]').children().its('length').should('eq', cardsNumber);
+            cy.get('[data-cy="my-cards"]').children().its('length').should('eq', 3);
         });
     });
 
     describe('player clicks on a card', () => {
         it("is removed from the list", () => {
-            cy.startGame();
             cy.get('[data-cy="my-cards"] > img').first().click();
-            cy.get('[data-cy="my-cards"]').children().its('length').should('eq', cardsNumber - 1);
+            cy.get('[data-cy="my-cards"]').children().its('length').should('eq', 2);
         });
     });
 });
