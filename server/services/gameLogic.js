@@ -185,4 +185,4 @@ const playerHasVoted = (username) => votes.filter(vote => vote.username === user
 const allPlayersPlayedCard = () => players.every(player => playerHasPlayedCard(player.username));
 
 /* Returns true if all players (apart from the current player) have voted this round */
-const allPlayersVoted = () => players.filter(player => player.username !== currentPlayer.username).every(player => playerHasVoted(player.username));
+const allPlayersVoted = () => players.every(player => player.username === currentPlayer.username || playerHasVoted(player.username));
