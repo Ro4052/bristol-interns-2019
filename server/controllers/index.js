@@ -87,6 +87,16 @@ router.post('/api/playCard', auth, (req, res) => {
     res.sendStatus(200);
 });
 
+/* Player votes for a card */
+router.post('/api/voteCard', auth, (req, res) => {    
+    if (req.session.user !== gameLogic.getCurrentPlayer().username) {
+        gameLogic.voteCard(req.session.user, req.body.card);
+        res.sendStatus(200);
+    } else {
+        res.status(400).json({ message: "You cannot vote for a card when it's your turn"} );
+    }
+});
+
 /* Send index file */
 router.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, '../../build/index.html'), (err) => {

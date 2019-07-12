@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from '../PlayWordAndCard/PlayWordAndCard.module.css';
 
-export const PlayCard = () => {
+export const VoteCard = () => {
     return (
         <div className={styles.playerInteractions}>
-            <h3 data-cy="play-card">Pick a card</h3>
+            <h3>Vote for a card</h3>
         </div>
     );
 }

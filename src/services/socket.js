@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
 import { dispatch } from '../store/store';
-import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setPlayers, setCurrentCards, setSocket } from '../store/actions';
-import { setPlayWordAndCard, setPlayCard, setPlayedCard } from '../store/playerActions';
+import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setPlayers, setCurrentCards, setSocket } from '../store/gameActions';
+import { setPlayWordAndCard, setPlayCard, setPlayedCard, setVoteCard, setVotedCard, playWord, resetFinishRound } from '../store/playerActions';
 
 const connectSocket = () => {
     let connectionString;
@@ -21,15 +21,19 @@ const connectSocket = () => {
         dispatch(setPlayers(msg.players));
     });
 
-    socket.on("new round", msg => {""
+    socket.on("new round", msg => {
         dispatch(setStatus(msg.status));
         dispatch(setRoundNumber(msg.roundNum));
         dispatch(setCurrentPlayer(msg.currentPlayer));
         dispatch(setCurrentWord(''));
         dispatch(setCurrentCards([]));
         dispatch(setPlayCard(false));
+        dispatch(setVoteCard(false));
         dispatch(setPlayWordAndCard(false));
         dispatch(setPlayedCard(0));
+        dispatch(setVotedCard(0));
+        dispatch(playWord(""));
+        dispatch(resetFinishRound());
     });
 
     socket.on("status", msg => {
@@ -53,6 +57,7 @@ const connectSocket = () => {
     });
 
     socket.on("vote", () => {
+        dispatch(setVoteCard(true));
     });
 
     return new Promise((resolve, reject) => {

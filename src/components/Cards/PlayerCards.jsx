@@ -62,6 +62,7 @@ export class PlayerCards extends React.Component {
 const mapStateToProps = (state) => ({
     playWordAndCard: state.playerReducer.playWordAndCard,
     playCard: state.playerReducer.playCard,
+    voteCard: state.playerReducer.voteCard,
     myCards: state.playerReducer.myCards,
     playedCard: state.playerReducer.playedCard,
     finishedRound: state.playerReducer.finishedRound
