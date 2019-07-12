@@ -172,10 +172,34 @@ exports.voteCard = (username, cardId) => {
         };
         votes.push(vote);
         if (allPlayersVoted()) {
-            // TODO: Calculate scores
+            calcScores();
+            // TODO: Emit players
             nextRound();
         }
     }
+}
+
+/* Calculate the scores for this round */
+const calcScores = () => {
+    console.log("All votes", votes);
+    console.log("Cards", cards);
+    console.log("Current player", currentPlayer);
+    const card = cards.find(card => card.userId === currentPlayer.userId);
+    console.log("Storytellers card", card);
+    const correctVotes = votes.filter(vote => vote.cardId === card.cardId);
+    console.log("Correct votes", correctVotes);
+    if (correctVotes.length % players.length === 0) {
+        // Everyone but storyteller score 2
+        players.filter(player => player !== currentPlayer).map(player => ({...player, score: player.score + 2}));
+    } else {
+        // Storyteller scores 3
+        currentPlayer.score = currentPlayer.score + 3;
+        // Everyone who voted for the correct answer scores 3
+        correctVotes.map(vote => players.find(player => player.username === vote.username)).map(player => ({...player, score: player.score + 3}));
+        // Each player score 1 point for every vote for their own card
+        votes.map(vote => cards.find(vote.cardId === card.cardId)).map(card => players.find(player => player.username === card.username)).map(player => ({...player, score: player.score + 2}));
+    }
+    console.log("Players", players);
 }
 
 /* Return true if the player has already played this round */
