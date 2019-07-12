@@ -45,7 +45,7 @@ h3 {
     right: 0;
   }
   
-  .monster {
+.monster {
     color: rgb(212, 1, 1);
     font-size: 0.7em;
     margin: 0 auto;
@@ -59,9 +59,9 @@ h3 {
     user-select: none;
     cursor: grab;
     right: 0;
-  }
-  
-  .body {
+}
+
+.body {
     width: 100%;
     height: 100%;
     background-color: currentColor;
@@ -69,9 +69,9 @@ h3 {
     position: relative;
     transform-origin: bottom center;
     animation: bouncebody alternate infinite 400ms 40ms ease-in-out;
-  }
-  
-  .eyes, .eyelid {
+}
+
+.eyes, .eyelid {
     text-align: center;
     display: flex;
     font-size: 0.65em;
@@ -81,9 +81,9 @@ h3 {
     left: 0.25em;
     top: 0.3em;
     animation: blink infinite 4s ;
-  }
-  
-  .eye {
+}
+
+.eye {
     position: relative;
     display: inline-block;
     border-radius: 50%;
@@ -91,15 +91,15 @@ h3 {
     height: 75%;
     background-color: black;
     border-radius: 50%;
-  }
-  
-  .eyelid {
+}
+
+.eyelid {
     background-color: white;
     border-radius: 0.5em 0.5em 0.5em 0.5em / 0.6em 0.6em 0.4em 0.4em;
     box-shadow: 0.03em 0.14em rgba(0,0,0,0.2);
-  }
-  
-  .eye:after { /*pupil*/
+}
+
+.eye:after { /*pupil*/
     --pupil-size: 0.2em;
     position: absolute;
     top: 0.05em;
@@ -109,9 +109,9 @@ h3 {
     background: white;
     border-radius: 50%;
     content: " ";
-  }
-  
-  .mouth {
+}
+
+.mouth {
     font-size: 0.2em;
     width: 1em;
     height: 0.3em;
@@ -121,9 +121,9 @@ h3 {
     bottom: 0.8em;
     left: 50%;
     transform: translateX(-50%);
-  }
-  
-  .mouth::before {
+}
+
+.mouth::before {
     width: 50%;
     height: 30%;
     display: block;
@@ -134,9 +134,9 @@ h3 {
     top: 50%;
     left: 50%;
     transform: translateY(-10%) translateX(-50%);
-  }
-  
-  .vampimouth {
+}
+
+.vampimouth {
     position: absolute;
     background: black;
     overflow: hidden;
@@ -147,9 +147,9 @@ h3 {
     bottom: 0.3em;
     transform: translateX(-50%);
     border-radius: 0.7em 0.7em 1.2em 1.2em;
-  }
-  
-  .vampimouth::before {
+}
+
+.vampimouth::before {
     content: '';
     display: block;
     background: #ff8800;
@@ -158,11 +158,11 @@ h3 {
     position: absolute;
     bottom: 0;
     border-radius: 50% 50% 0 0;
-  }
-  
-  .vampitooth::before,
-  .vampitooth::after,
-  .vampitooth {
+}
+
+.vampitooth::before,
+.vampitooth::after,
+.vampitooth {
     --teeth-size: 0.25em;
     display: block;
     width: 0;
@@ -175,19 +175,19 @@ h3 {
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-  }
-  
-  .vampitooth:before {
+}
+
+.vampitooth:before {
     content: '';
     transform: translateX(-150%) translateY(-100%);
-  }
-  
-  .vampitooth:after {
+}
+
+.vampitooth:after {
     content: '';
     transform: translateX(50%) translateY(-100%);
-  }
-  
-  .ear {
+}
+
+.ear {
     position: absolute;
     top: -1.2em;
     transform-origin: bottom center;
@@ -197,16 +197,16 @@ h3 {
     left: 18%;
     transform: rotate(-10deg);
     animation: antena_e 7s infinite;
-  }
-  
-  .ear + .ear {
+}
+
+.ear + .ear {
     left: auto;
     right: 18%;
     transform: rotate(10deg);
     animation: antena_d 5s infinite;
-  }
-  
-  .ear:before {
+}
+
+.ear:before {
     content: '';
     display: block;
     width: .8em;
@@ -217,9 +217,9 @@ h3 {
     border-radius: 50%;
     background: currentColor;
     box-shadow: inset -.1em -.08em rgba(0,0,0,.2);
-  }
-  
-  .ear:after {
+}
+
+.ear:after {
     content: '';
     display: block;
     width: 0.3em;
@@ -228,29 +228,29 @@ h3 {
     top: .2em;
     left: .3em;
     background: currentColor;
-  }
-  
-  @keyframes blink {
-    90% {
-      transform: none;
-      animation-timing-function: ease-in;
-    }
-    93% {
-      transform: translateY(30px) scaleY(0);
-    }
-    100% {
-      animation-timing-function: ease-out;
-    }
-  }
-  
-  @keyframes bounce { 
-    to { transform: translateY(4%); } 
-  }
-  
-  @keyframes bouncebody { 
-    to { transform: scaleX(1.03) scaleY(0.97); } 
-  }
-  
-  @keyframes antena_d { 50% {transform: rotate(30deg);} }
-  @keyframes antena_e { 50% {transform: rotate(-40deg);} }
-  
+}
+
+@keyframes blink {
+90% {
+    transform: none;
+    animation-timing-function: ease-in;
+}
+93% {
+    transform: translateY(30px) scaleY(0);
+}
+100% {
+    animation-timing-function: ease-out;
+}
+}
+
+@keyframes bounce { 
+to { transform: translateY(4%); } 
+}
+
+@keyframes bouncebody { 
+to { transform: scaleX(1.03) scaleY(0.97); } 
+}
+
+@keyframes antena_d { 50% {transform: rotate(30deg);} }
+@keyframes antena_e { 50% {transform: rotate(-40deg);} }
+

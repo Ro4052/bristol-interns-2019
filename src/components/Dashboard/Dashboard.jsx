@@ -69,6 +69,7 @@ const mapStateToProps = (state) => {
         voteCard: state.playerReducer.voteCard,
         currentWord: state.gameReducer.currentWord,
         finishedRound: state.playerReducer.finishedRound,
+        
 
     });
 }
