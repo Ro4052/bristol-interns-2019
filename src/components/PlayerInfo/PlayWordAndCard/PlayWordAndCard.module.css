@@ -48,6 +48,12 @@ h1 {
     border: 3px solid black;
 }
 
+@media only screen and (max-width: 800px) {
+    .playerInteractions {
+        margin-bottom: 50vw;
+    }
+}
+
 .playerInteractions > h3 {
     color: var(--lighter-black);
     margin-right: 1em;
