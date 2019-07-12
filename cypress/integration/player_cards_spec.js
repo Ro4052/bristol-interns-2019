@@ -19,8 +19,8 @@ describe('The Player Cards Component', () => {
 
     describe('player clicks on a card', () => {
         it("is removed from the list", () => {
-            cy.get('[data-cy="my-cards"] > img').first().click();
+            cy.playCard();
             cy.get('[data-cy="my-cards"]').children().its('length').should('eq', 2);
         });
     });
-})
+});

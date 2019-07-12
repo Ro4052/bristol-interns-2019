@@ -23,7 +23,7 @@ export class PlayedCards extends React.Component {
 
     render() {
         return (
-            <ul id="played-cards">
+            <ul id="played-cards" data-cy="played-cards">
                 {this.props.cards.map(card => <img id={"card-" + card.cardId} key={card.cardId} className={this.getCardClass(card.cardId)} alt={"card-" + card.cardId} src={require(`../cards/card (${card.cardId}).jpg`)} onClick={this.voteForCard}/>)}
             </ul>
         );
