@@ -57,7 +57,7 @@ const connectSocket = () => {
     });
 
     socket.on("vote", () => {
-        dispatch(setVoteCard(true))
+        dispatch(setVoteCard(true));
     });
 
     return new Promise((resolve, reject) => {

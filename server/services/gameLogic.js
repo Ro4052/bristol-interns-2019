@@ -137,7 +137,7 @@ exports.playCardAndWord = (username, cardId, word) => {
         playerCards.find(playedCard => playedCard.id.toString() === cardId).played = true;
         status = statusTypes.WAITING_FOR_OTHER_PLAYERS;
         socket.emitStatus(status);
-        currentWord = word;        
+        currentWord = word;
         socket.emitWord(currentWord);
         socket.promptOtherPlayers(currentPlayer);
     } else {
@@ -170,7 +170,7 @@ exports.voteCard = (username, cardId) => {
             username: username,
             cardId: cardId
         };
-        votes.push(vote);        
+        votes.push(vote); 
         if (allPlayersVoted()) nextRound();
     }
 }

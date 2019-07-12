@@ -7,4 +7,4 @@ describe("on other players' turn", () => {
         const wrapper = shallow(<VoteCard />);
         expect(wrapper.find('h3').text()).toEqual("Vote for a card");
     });
-})
+});
