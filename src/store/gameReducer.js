@@ -26,6 +26,8 @@ const gameReducer = (state = initialState, action) => {
             return {...state, currentCards: action.currentCards };
         case types.SET_CURRENT_WORD:
             return {...state, currentWord: action.currentWord };
+        case types.SET_ALL_VOTES:
+            return {...state, allVotes: action.allVotes };
         case types.SET_SOCKET:
             return {...state, socket: action.socket };
         default:
