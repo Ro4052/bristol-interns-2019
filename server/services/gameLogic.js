@@ -165,7 +165,7 @@ const calcScores = () => {
     const card = playedCards.find(card => card.userId === currentPlayer.userId);
     const correctVotes = votes.filter(vote => vote.cardId === card.cardId);
     if ((correctVotes.length % votes.length) === 0) {
-        players = players.filter(player => player !== currentPlayer).map(player => ({...player, score: player.score + 2}));
+        players.forEach(player => {if (player !== currentPlayer) player.score += 2});
     } else {
         currentPlayer.score = currentPlayer.score + 3;
         correctVotes.forEach(vote => players.find(player => player.username === vote.username).score += 3);
