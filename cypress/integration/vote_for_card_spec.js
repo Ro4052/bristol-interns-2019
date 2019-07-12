@@ -21,14 +21,14 @@ describe('Vote for a card', () => {
         });
     });
 
-    describe('on send a card and vote for one', () => {
-        it('displays all cards after current player plays their card', () => {
+    describe('on player plays a card and then votes for one', () => {
+        it('displays all played cards after current player plays their card', () => {
             cy.get('[data-cy="played-cards"]').children().its('length').should('eq', 2);
         });
-        it('is prompted to vote for a card', () => {
+        it('player is prompted to vote for a card', () => {
             cy.get('[data-cy="vote-card"]');
         });
-        it("is able to vote for the other player's card only", () => {
+        it("player is able to vote for the other player's card only", () => {
             cy.get('[data-cy="played-cards"] > img').first().then(($img) => {
                 if ($img.hasClass('Cards_allCards__2SdBy')) {
                     cy.get('[data-cy="played-cards"] > img').first().click()
