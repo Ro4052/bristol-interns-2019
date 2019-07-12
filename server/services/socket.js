@@ -69,6 +69,16 @@ exports.emitAllVotes = votes => {
     io.emit("all votes", votes);
 }
 
+// When game is over, emit the winner to everyone
+exports.emitWinner = player => {
+    io.emit("winner", player);
+}
+
+// When game is over, tell the users
+exports.emitEnd = () => {
+    io.emit("end");
+}
+
 // Ask the current player for a word and a card
 const promptCurrentPlayer = currentPlayer => {
     sockets.find(socket => socket.handshake.session.user === currentPlayer.username).emit("play word and card");

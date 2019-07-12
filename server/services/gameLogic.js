@@ -106,6 +106,8 @@ const nextRound = () => {
         socket.promptCurrentPlayer(currentPlayer);
     } else {
         status = statusTypes.GAME_OVER;
+        socket.emitStatus(status);
+        socket.emitWinner(players.reduce((prev, current) => (prev.score > current.score) ? prev : current));
         // TODO: Emit game over and final scores/winner
     }
 }
