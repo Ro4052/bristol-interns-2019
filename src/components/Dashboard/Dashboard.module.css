@@ -7,35 +7,9 @@
     font-size: 2vmin;
 }
 
-.currentPlayersBox {
-    width: 20%;
-    position: absolute;
-    padding: 1em;
-    top: 0;
-    left: 0;
-    margin: 1em;
-    background-color: white;
-    text-align: center;
-    border: 3px solid black;
-    border-radius: 20px;
-    font-size: 1.5em;
-}
-
 h3 {
     margin-top: 0;
     color: var(--yellow);
-}
-
-.currentPlayersBox > ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    flex-wrap: wrap;
-    justify-content: space-around;
-}
-
-.currentPlayersBox > li {
-    display: inline-block;
 }
 
 .gameOverBox {
