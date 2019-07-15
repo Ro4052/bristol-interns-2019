@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styles from './Login.module.css';
-import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import { logIn, authenticateUser } from '../../store/playerActions';
 
