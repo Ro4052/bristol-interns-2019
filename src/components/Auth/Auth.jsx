@@ -6,13 +6,6 @@ import { resetState } from '../../store/gameActions';
 import { resetPlayerState, resetCookieSuccess, authenticateUser } from '../../store/playerActions';
 
 export class Auth extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            loading: true,
-            authenticated: false
-        };
-    }
 
     componentDidMount() {
         this.props.authenticateUser();
