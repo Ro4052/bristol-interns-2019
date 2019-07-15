@@ -1,5 +1,5 @@
 import io from 'socket.io-client';
-import history from '../history';
+import history from '../history.js';
 import axios from 'axios';
 import { dispatch } from '../store/store';
 import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setPlayers, setCurrentCards, setAllVotes, setWinner, resetState, setSocket } from '../store/gameActions';

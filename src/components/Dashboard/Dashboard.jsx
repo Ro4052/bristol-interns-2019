@@ -5,8 +5,6 @@ import LogoutButton from '../Login/LogoutButton';
 import Players from '../PlayerInfo/Players/Players';
 import style from './Dashboard.module.css';
 import { finishPlayCard } from '../../store/playerActions';
-import { resetState } from '../../store/gameActions';
-import { resetPlayerState } from '../../store/playerActions';
 import { PlayCard } from '../PlayerInfo/PlayCard/PlayCard';
 import { VoteCard } from '../PlayerInfo/VoteCard/VoteCard';
 import PlayWordAndCard from '../PlayerInfo/PlayWordAndCard/PlayWordAndCard';
