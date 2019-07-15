@@ -77,8 +77,7 @@ export class Dashboard extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return ({
+const mapStateToProps = (state) => ({
         status: state.gameReducer.status,
         roundNum: state.gameReducer.roundNum,
         currentPlayer: state.gameReducer.currentPlayer,
@@ -89,8 +88,7 @@ const mapStateToProps = (state) => {
         currentWord: state.gameReducer.currentWord,
         winner: state.gameReducer.winner,
         finishedRound: state.playerReducer.finishedRound,
-    });
-}
+});
 
 const mapDispatchToProps = (dispatch) => ({
     finishPlayCard: (id) => dispatch(finishPlayCard(id))
