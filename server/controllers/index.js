@@ -67,7 +67,13 @@ router.get('/api/start', auth, (req, res) => {
 /* End the game */
 router.get('/api/end', auth, (req, res) => {
     gameLogic.endGame();
+    currentUsers = [];
     closeSocket();
+    res.sendStatus(200);
+});
+
+/* Resest the cookie and destroy the session */
+router.get('/api/reset-cookie', auth, (req, res) => {
     req.session.destroy();
     res.sendStatus(200);
 });

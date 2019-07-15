@@ -1,7 +1,15 @@
 import io from 'socket.io-client';
+import history from '../history';
+import axios from 'axios';
 import { dispatch } from '../store/store';
-import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setPlayers, setCurrentCards, setAllVotes, setWinner, setSocket } from '../store/gameActions';
-import { setPlayWordAndCard, setPlayCard, setPlayedCard, setVoteCard, setVotedCard, playWord, resetFinishRound } from '../store/playerActions';
+import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setPlayers, setCurrentCards, setAllVotes, setWinner, resetState, setSocket } from '../store/gameActions';
+import { setPlayWordAndCard, setPlayCard, setPlayedCard, setVoteCard, setVotedCard, playWord, resetFinishRound, resetPlayerState } from '../store/playerActions';
+
+const resetMyCookie = () => {
+    axios.get('/api/reset-cookie')
+    .then(() => history.push('/'))
+    .catch(err => console.log(err));
+}
 
 const connectSocket = () => {
     let connectionString;
@@ -82,6 +90,9 @@ const connectSocket = () => {
         dispatch(playWord(""));
         dispatch(resetFinishRound());
         dispatch(setWinner(null));
+        dispatch(resetState());
+        dispatch(resetPlayerState());
+        resetMyCookie();
     });
 
     return new Promise((resolve, reject) => {
