@@ -35,7 +35,13 @@ export class Auth extends React.Component {
             this.setState({ loading: false, authenticated: false });
         });
     }
-    
+
+    componentDidUpdate() {
+        if (this.state.authenticated && !this.props.cookie) {
+            this.props.history.push('/');
+        }
+    }
+
     render() {
         const { loading, authenticated } = this.state;
         if (loading) return null;
@@ -44,9 +50,13 @@ export class Auth extends React.Component {
     }
 }
 
+const mapStateToProps = (state) => ({
+    cookie: state.playerReducer.cookie 
+});
+
 const mapDispatchToProps = (dispatch) => ({
     resetState: () => dispatch(resetState()),
     resetPlayerState: () => dispatch(resetPlayerState())
 });
 
-export default connect(null, mapDispatchToProps)(Auth);
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);

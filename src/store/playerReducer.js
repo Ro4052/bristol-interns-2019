@@ -1,6 +1,7 @@
-import { types } from './playerActions';
+import types from './playerActionTypes';
 
 export const initialState = {
+    cookie: null,
     playWordAndCard: false,
     playCard: false,
     voteCard: false,
@@ -99,10 +100,10 @@ const cardReducer = (state = initialState, action) => {
                 voteCard: action.bool
             };
         case types.RESET_FINISH_ROUND:
-                return {
-                    ...state,
-                    finishedRound: false
-                };
+            return {
+                ...state,
+                finishedRound: false
+            };
         case types.MY_TURN:
             return {
                 ...state,
@@ -113,6 +114,27 @@ const cardReducer = (state = initialState, action) => {
                 ...state,
                 myTurn: false,
                 othersTurn: true
+            };
+        case types.RESET_COOKIE_FAILURE:
+            return {
+                ...state,
+                error: action.payload.error
+            };
+        case types.RESET_COOKIE_SUCCESS:
+            return {
+                ...state,
+                cookie: null
+            };
+        case types.LOG_IN_FAILURE:
+            return {
+                ...state,
+                error: action.payload.error,
+                cookie: null
+            };
+        case types.LOG_IN_SUCCESS:
+            return {
+                ...state,
+                cookie: action.payload.cookie
             };
         default:
             return state;

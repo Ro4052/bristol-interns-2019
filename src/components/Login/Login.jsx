@@ -1,9 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styles from './Login.module.css';
 import axios from 'axios';
-import history from '../../services/history';
 import { Redirect } from 'react-router-dom';
-import connectSocket from '../../services/socket';
+import { logIn } from '../../store/playerActions';
 
 export class Login extends React.Component {
     constructor(props) {
@@ -14,6 +14,7 @@ export class Login extends React.Component {
             loggedIn: false
         }
     }
+
     componentDidMount() {
         axios.get('/auth', {
             validateStatus: (status) => {
@@ -33,12 +34,14 @@ export class Login extends React.Component {
                 this.setState({ loggedIn: false });
             });
     }
+
     handleChange(event) {
         event.preventDefault();
         this.setState({
           value: event.target.value
         })
     }
+
     checkSpecialChar(string) {
         // eslint-disable-next-line
         var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
@@ -48,6 +51,7 @@ export class Login extends React.Component {
             return false;
         }
     }
+    
     checkUsername() {
         if (this.state.value === '') {
             this.setState ({
@@ -63,45 +67,21 @@ export class Login extends React.Component {
         }
         return true;
     }
+
     sendLogin(event) {
         event.preventDefault();
         if (this.checkUsername()) {
-            axios.post('/auth/login', {
-                username: this.state.value
-            })
-            .then(() => {
-                connectSocket((this.props.history) ? this.props.history : history);
-                this.setState({
-                    loggedIn: true
-                });
-            })
-            .catch(err => {                
-                if (err.message.includes(409)) {
-                    this.setState({
-                        error: "Username already exists",
-                        loggedIn: false
-                    })
-                } else if (err.message.includes(400)) {
-                    this.setState({
-                        error: "Game has already started",
-                        loggedIn: false
-                    })
-                } else {
-                    this.setState({
-                        error:  err.message,
-                        loggedIn: false
-                    })
-                }
-            })
+            this.props.logIn(this.state.value);
         }
     }
+
     getInputStyle() {
         return (this.state.error !== '') ? {border: '2px solid #EA3546'} : {};
-            
     }
+
     render() {
         return (
-            (!this.state.loggedIn) ?
+            (!this.props.cookie) ?
                 <div className={styles.loginPage}>
                      <div className={styles.foo}>
                         <span className={styles.letter} data-letter="D">D</span>
@@ -139,4 +119,12 @@ export class Login extends React.Component {
     }
 }
 
-export default Login;
+const mapStateToProps = (state) => ({
+    cookie: state.playerReducer.cookie
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    logIn: (username) => dispatch(logIn(username))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
