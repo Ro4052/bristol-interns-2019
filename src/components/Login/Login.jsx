@@ -68,8 +68,8 @@ export class Login extends React.Component {
             axios.post('/auth/login', {
                 username: this.state.value
             })
-            .then(() => connectSocket())
             .then(() => {
+                connectSocket()
                 this.setState({
                     loggedIn: true
                 })
