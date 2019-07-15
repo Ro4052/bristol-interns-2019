@@ -1,17 +1,16 @@
 import io from 'socket.io-client';
 import axios from 'axios';
 import { dispatch } from '../store/store';
-import history from './history';
 import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setPlayers, setCurrentCards, setAllVotes, setWinner, resetState, setSocket } from '../store/gameActions';
 import { setPlayWordAndCard, setPlayCard, setPlayedCard, setVoteCard, setVotedCard, playWord, resetFinishRound, resetPlayerState } from '../store/playerActions';
 
-const resetMyCookie = () => {
+const resetMyCookie = (history) => {
     axios.get('/api/reset-cookie')
     .then(() => history.push('/'))
     .catch(err => console.log(err));
 }
 
-const connectSocket = () => {
+const connectSocket = (history) => {
     let connectionString;
     if (process.env.NODE_ENV === "development") {
         connectionString = "ws://localhost:8080";
@@ -92,7 +91,7 @@ const connectSocket = () => {
         dispatch(setWinner(null));
         dispatch(resetState());
         dispatch(resetPlayerState());
-        resetMyCookie();
+        resetMyCookie(history);
     });
 
     return new Promise((resolve, reject) => {

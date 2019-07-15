@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './Login.module.css';
 import axios from 'axios';
+import history from '../../services/history';
 import { Redirect } from 'react-router-dom';
 import connectSocket from '../../services/socket';
 
@@ -69,10 +70,10 @@ export class Login extends React.Component {
                 username: this.state.value
             })
             .then(() => {
-                connectSocket()
+                connectSocket((this.props.history) ? this.props.history : history);
                 this.setState({
                     loggedIn: true
-                })
+                });
             })
             .catch(err => {                
                 if (err.message.includes(409)) {
