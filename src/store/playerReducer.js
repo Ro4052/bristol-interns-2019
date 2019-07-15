@@ -136,6 +136,25 @@ const cardReducer = (state = initialState, action) => {
                 ...state,
                 cookie: action.payload.cookie
             };
+        case types.AUTH_BEGIN:
+            return {
+                ...state,
+                loading: true,
+                error: null
+            }
+        case types.AUTH_FAILURE:            
+            return {
+                ...state,
+                error: action.payload.error,
+                cookie: null,
+                loading: false
+            }
+        case types.AUTH_SUCCESS:
+            return {
+                ...state,
+                cookie: action.payload.cookie,
+                loading: false
+            }
         default:
             return state;
     }

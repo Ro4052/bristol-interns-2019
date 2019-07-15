@@ -9,7 +9,7 @@ let currentUsers = [];
 /* Check if player is logged in */
 router.get('/auth', (req, res) => {
     if (req.session.user) {
-        res.sendStatus(200);
+        res.status(200).json({ cookie: req.session.user });
     } else {
         res.sendStatus(401);
     }
@@ -60,6 +60,8 @@ router.get('/api/cards', auth, (req, res) => {
 
 /* Start the game */
 router.get('/api/start', auth, (req, res) => {
+    console.log(currentUsers);
+    
     gameLogic.startGame();
     res.sendStatus(200);
 });

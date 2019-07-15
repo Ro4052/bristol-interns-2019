@@ -1,6 +1,7 @@
 import axios from "axios";
 import connectSocket from '../services/socket';
 import types from './playerActionTypes';
+import { resetState } from "./gameActions";
 
 export const resetPlayerState = () => ({
     type: types.RESET_PLAYER_STATE
@@ -136,5 +137,47 @@ export const logInFailure = (error) => ({
 
 export const logInSuccess = (cookie) => ({
     type: types.LOG_IN_SUCCESS,
+    payload: { cookie }
+});
+
+export const authenticateUser = () => (dispatch) => {
+    dispatch(authBegin());
+    axios.get('/auth', {
+    validateStatus: (status) => {
+        return status < 500;
+    }})
+    .then(res => {            
+        if (res.status === 200) {
+            dispatch(authSuccess(res.data.cookie));
+        } else if (res.status === 401) {
+            dispatch(authFailure());
+            dispatch(resetState());
+            dispatch(resetPlayerState());
+        } else {
+            const error = new Error(res.error);
+            dispatch(authFailure());
+            dispatch(resetState());
+            dispatch(resetPlayerState());
+            throw error;
+        }
+    })
+    .catch(() => {
+        dispatch(authFailure());
+        dispatch(resetState());
+        dispatch(resetPlayerState());
+    });
+}
+
+export const authBegin = () => ({
+    type: types.AUTH_BEGIN
+});
+
+export const authFailure = (error) => ({
+    type: types.AUTH_FAILURE,
+    payload: { error }
+});
+
+export const authSuccess = (cookie) => ({
+    type: types.AUTH_SUCCESS,
     payload: { cookie }
 });

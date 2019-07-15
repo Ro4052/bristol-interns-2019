@@ -3,36 +3,18 @@ import { connect } from 'react-redux';
 import styles from './Login.module.css';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
-import { logIn } from '../../store/playerActions';
+import { logIn, authenticateUser } from '../../store/playerActions';
 
 export class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: "",
-            error: "",
-            loggedIn: false
+            value: ""
         }
     }
 
     componentDidMount() {
-        axios.get('/auth', {
-            validateStatus: (status) => {
-              return status < 500;
-            }})
-            .then(res => {            
-                if (res.status === 200) {
-                    this.setState({ loggedIn: true })
-                } else if (res.status === 401) {
-                    this.setState({ loggedIn: false })
-                } else {
-                    const error = new Error(res.error);
-                    throw error;
-                }
-            })
-            .catch(err => {
-                this.setState({ loggedIn: false });
-            });
+        this.props.authenticateUser();
     }
 
     handleChange(event) {
@@ -75,11 +57,11 @@ export class Login extends React.Component {
         }
     }
 
-    getInputStyle() {
-        return (this.state.error !== '') ? {border: '2px solid #EA3546'} : {};
+    getInputStyle() {        
+        return (this.props.error) ? {border: '2px solid #EA3546'} : {};
     }
 
-    render() {
+    render() {             
         return (
             (!this.props.cookie) ?
                 <div className={styles.loginPage}>
@@ -108,7 +90,7 @@ export class Login extends React.Component {
                         </div>
                     </div>
                     <form className={styles.loginForm} onSubmit={this.sendLogin.bind(this)}>
-                        <h3 data-cy="login-error" className={styles.errorText}>{this.state.error}</h3>
+                        <h3 data-cy="login-error" className={styles.errorText}>{}</h3>
                         <h2 className={styles.formHeader}>Type a username to enter the game:</h2>
                         <input className={styles.loginInput} style={this.getInputStyle()} value={this.state.value} placeholder="Enter username" onChange={this.handleChange.bind(this)} autoFocus/>
                         <button className={styles.loginButton} type="submit">Log in</button>
@@ -120,11 +102,14 @@ export class Login extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    cookie: state.playerReducer.cookie
+    cookie: state.playerReducer.cookie,
+    loading: state.playerReducer.loading,
+    error: state.playerReducer.error
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    logIn: (username) => dispatch(logIn(username))
+    logIn: (username) => dispatch(logIn(username)),
+    authenticateUser: () => dispatch(authenticateUser())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
