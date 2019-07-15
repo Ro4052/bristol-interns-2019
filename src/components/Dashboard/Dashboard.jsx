@@ -5,24 +5,17 @@ import LogoutButton from '../Login/LogoutButton';
 import Players from '../PlayerInfo/Players/Players';
 import style from './Dashboard.module.css';
 import { finishPlayCard } from '../../store/playerActions';
-import { PlayCard } from '../PlayerInfo/PlayCard/PlayCard';
-import { VoteCard } from '../PlayerInfo/VoteCard/VoteCard';
+import { Prompt } from '../Prompt/Prompt';
 import PlayWordAndCard from '../PlayerInfo/PlayWordAndCard/PlayWordAndCard';
 import PlayedCards from '../Cards/PlayedCards/PlayedCards';
 import axios from 'axios';
+import { StartGameButton } from './StartGameButton/StartGameButton';
 
 export class Dashboard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {}
         this.newGame = this.newGame.bind(this);
-    }
-
-    startGame() {
-        axios.get('/api/start')
-        .catch(err => {
-            console.log(err);
-        });
     }
 
     deleteAllCookies() {
@@ -46,7 +39,7 @@ export class Dashboard extends React.Component {
     render() {
         return (
             <div className={style.roundInfo}>
-                {this.props.status === "NOT_STARTED" && <button id="start-game" data-cy="start-game" onClick={this.startGame}>Start game</button>}
+                {this.props.status === "NOT_STARTED" && <StartGameButton />}
                 {this.props.status !== "NOT_STARTED" && <h2>Round: <span id="round-number" data-cy="round-number">{this.props.roundNum}</span></h2>}
                 {this.props.currentPlayer && <h2>Current player: <span id="current-player" data-cy="current-player">{this.props.currentPlayer.username}</span></h2>}
                 {this.props.winner && 
@@ -60,8 +53,8 @@ export class Dashboard extends React.Component {
                 <PlayedCards />
                 <PlayerCards />
                 {this.props.playWordAndCard && !this.props.finishedRound && <PlayWordAndCard />}
-                {this.props.playCard && <PlayCard />}
-                {this.props.voteCard && this.props.votedCard === 0 && <VoteCard />}
+                {this.props.playCard && <Prompt cy="play-card" text="Pick a card" />}
+                {this.props.voteCard && this.props.votedCard === 0 && <Prompt cy="vote-card" text="Vote for a card" />}
                 <LogoutButton />
                 <div className={style.ufo}>
                     <div className={style.monster}>
