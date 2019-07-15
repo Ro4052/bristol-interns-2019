@@ -91,9 +91,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    finishPlayCard: (id) => dispatch(finishPlayCard(id)),
-    resetState: () => dispatch(resetState()),
-    resetPlayerState: () => dispatch(resetPlayerState())
+    finishPlayCard: (id) => dispatch(finishPlayCard(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
