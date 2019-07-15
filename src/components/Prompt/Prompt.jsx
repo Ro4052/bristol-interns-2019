@@ -1,7 +1,6 @@
 import React from 'react';
 
 export class Prompt extends React.Component {
-
     render() {
         return (
             <div>

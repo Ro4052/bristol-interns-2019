@@ -4,6 +4,7 @@ import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 
 export class LogoutButton extends React.Component {
+    
     constructor(props) {
         super(props);
         this.state = {};

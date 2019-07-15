@@ -14,6 +14,7 @@ import EndTurnButton from './EndTurnButton/EndTurnButton';
 import Monster from '../Monster/Monster';
 
 export class Dashboard extends React.Component {
+    
     constructor(props) {
         super(props);
         this.state = {}

@@ -41,16 +41,14 @@ export class PlayedCards extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return ({
-        cards: state.gameReducer.currentCards,
-        voteCard: state.playerReducer.voteCard,
-        votedCard: state.playerReducer.votedCard,
-        playedCard: state.playerReducer.playedCard,
-        allVotes: state.gameReducer.allVotes,
-        status: state.gameReducer.status
-    });
-}
+const mapStateToProps = (state) => ({
+    cards: state.gameReducer.currentCards,
+    voteCard: state.playerReducer.voteCard,
+    votedCard: state.playerReducer.votedCard,
+    playedCard: state.playerReducer.playedCard,
+    allVotes: state.gameReducer.allVotes,
+    status: state.gameReducer.status
+});
 
 const mapDispatchToProps = (dispatch) => ({
     voteForCard: (id) => dispatch(voteForCard(id))

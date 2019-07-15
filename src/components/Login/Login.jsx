@@ -6,6 +6,7 @@ import connectSocket from '../../services/socket';
 import Monster from '../Monster/Monster';
 
 export class Login extends React.Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -14,6 +15,7 @@ export class Login extends React.Component {
             loggedIn: false
         }
     }
+
     componentDidMount() {
         axios.get('/auth', {
             validateStatus: (status) => {
@@ -29,16 +31,18 @@ export class Login extends React.Component {
                     throw error;
                 }
             })
-            .catch(err => {
+            .catch(() => {
                 this.setState({ loggedIn: false });
             });
     }
+
     handleChange(event) {
         event.preventDefault();
         this.setState({
           value: event.target.value
         })
     }
+
     checkSpecialChar(string) {
         // eslint-disable-next-line
         var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
@@ -48,6 +52,7 @@ export class Login extends React.Component {
             return false;
         }
     }
+
     checkUsername() {
         if (this.state.value === '') {
             this.setState ({
@@ -63,6 +68,7 @@ export class Login extends React.Component {
         }
         return true;
     }
+
     sendLogin(event) {
         event.preventDefault();
         if (this.checkUsername()) {
@@ -95,10 +101,11 @@ export class Login extends React.Component {
             })
         }
     }
+
     getInputStyle() {
-        return (this.state.error !== '') ? {border: '2px solid #EA3546'} : {};
-            
+        return (this.state.error !== '') ? {border: '2px solid #EA3546'} : {};   
     }
+    
     render() {
         return (
             (!this.state.loggedIn) ?
