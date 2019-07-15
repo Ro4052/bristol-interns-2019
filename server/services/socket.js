@@ -75,7 +75,7 @@ exports.emitWinner = player => {
 }
 
 // When game is over, tell the users
-exports.emitEnd = () => {
+exports.emitEndGame = () => {
     io.emit("end");
 }
 

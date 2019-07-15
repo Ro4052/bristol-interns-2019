@@ -21,12 +21,10 @@ export class Dashboard extends React.Component {
         this.newGame = this.newGame.bind(this);
     }
 
-    deleteAllCookies() {
-        let cookies = document.cookie.split(";");
-        cookies.forEach((cookie) => {
-            let eqPos = cookie.indexOf("=");
-            let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-            document.cookie = name + "=;expires=Thu, 01 Jan 1975 00:00:00 GMT";
+    startGame() {
+        axios.get('/api/start')
+        .catch(err => {
+            console.log(err);
         });
     }
 
@@ -35,8 +33,6 @@ export class Dashboard extends React.Component {
         .catch(err => {
             console.log(err);
         });
-        this.deleteAllCookies();
-        this.props.history.push('/');
     }
 
     render() {

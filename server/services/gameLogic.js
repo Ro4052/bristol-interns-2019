@@ -84,6 +84,7 @@ exports.startGame = () => {
 
 /* End the game */
 exports.endGame = () => {
+    socket.emitEndGame();
     status = statusTypes.NOT_STARTED;
     currentPlayer = null;
     currentWord = '';

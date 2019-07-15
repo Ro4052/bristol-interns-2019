@@ -1,39 +1,21 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styles from './Login.module.css';
-import axios from 'axios';
 import { Redirect } from 'react-router-dom';
-import connectSocket from '../../services/socket';
 import Monster from '../Monster/Monster';
+import { logIn, authenticateUser } from '../../store/playerActions';
 
 export class Login extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            value: "",
-            error: "",
-            loggedIn: false
+            value: ""
         }
     }
 
     componentDidMount() {
-        axios.get('/auth', {
-            validateStatus: (status) => {
-              return status < 500;
-            }})
-            .then(res => {            
-                if (res.status === 200) {
-                    this.setState({ loggedIn: true })
-                } else if (res.status === 401) {
-                    this.setState({ loggedIn: false })
-                } else {
-                    const error = new Error(res.error);
-                    throw error;
-                }
-            })
-            .catch(() => {
-                this.setState({ loggedIn: false });
-            });
+        this.props.authenticateUser();
     }
 
     handleChange(event) {
@@ -52,7 +34,7 @@ export class Login extends React.Component {
             return false;
         }
     }
-
+    
     checkUsername() {
         if (this.state.value === '') {
             this.setState ({
@@ -72,43 +54,17 @@ export class Login extends React.Component {
     sendLogin(event) {
         event.preventDefault();
         if (this.checkUsername()) {
-            axios.post('/auth/login', {
-                username: this.state.value
-            })
-            .then(() => connectSocket())
-            .then(() => {
-                this.setState({
-                    loggedIn: true
-                })
-            })
-            .catch(err => {                
-                if (err.message.includes(409)) {
-                    this.setState({
-                        error: "Username already exists",
-                        loggedIn: false
-                    })
-                } else if (err.message.includes(400)) {
-                    this.setState({
-                        error: "Game has already started",
-                        loggedIn: false
-                    })
-                } else {
-                    this.setState({
-                        error:  err.message,
-                        loggedIn: false
-                    })
-                }
-            })
+            this.props.logIn(this.state.value);
         }
     }
 
-    getInputStyle() {
-        return (this.state.error !== '') ? {border: '2px solid #EA3546'} : {};   
+    getInputStyle() {        
+        return (this.props.error) ? {border: '2px solid #EA3546'} : {};
     }
-    
-    render() {
+
+    render() {             
         return (
-            (!this.state.loggedIn) ?
+            (!this.props.cookie) ?
                 <div className={styles.loginPage}>
                      <div className={styles.foo}>
                         <span className={styles.letter} data-letter="D">D</span>
@@ -120,7 +76,7 @@ export class Login extends React.Component {
                     </div>
                     <Monster />
                     <form className={styles.loginForm} onSubmit={this.sendLogin.bind(this)}>
-                        <h3 data-cy="login-error" className={styles.errorText}>{this.state.error}</h3>
+                        <h3 data-cy="login-error" className={styles.errorText}>{}</h3>
                         <h2 className={styles.formHeader}>Type a username to enter the game:</h2>
                         <input className={styles.loginInput} style={this.getInputStyle()} value={this.state.value} placeholder="Enter username" onChange={this.handleChange.bind(this)} autoFocus/>
                         <button className={styles.loginButton} type="submit">Log in</button>
@@ -131,4 +87,15 @@ export class Login extends React.Component {
     }
 }
 
-export default Login;
+const mapStateToProps = (state) => ({
+    cookie: state.playerReducer.cookie,
+    loading: state.playerReducer.loading,
+    error: state.playerReducer.error
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    logIn: (username) => dispatch(logIn(username)),
+    authenticateUser: () => dispatch(authenticateUser())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
