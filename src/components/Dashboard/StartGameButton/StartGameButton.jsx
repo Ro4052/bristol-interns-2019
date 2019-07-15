@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import axios from 'axios';
 
 export class StartGameButton extends React.Component {
@@ -18,14 +17,4 @@ export class StartGameButton extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return ({
-//         status: state.gameReducer.status,
-    });
-}
-
-const mapDispatchToProps = (dispatch) => ({
-//     finishPlayCard: (id) => dispatch(finishPlayCard(id))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(StartGameButton);
+export default StartGameButton;
