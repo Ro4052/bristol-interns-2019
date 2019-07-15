@@ -77,7 +77,8 @@ const cardReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                votedCard: action.payload.card
+                votedCard: action.payload.card,
+                voteCard: false
             };
         case types.VOTE_FOR_CARD_FAILURE: 
             return {

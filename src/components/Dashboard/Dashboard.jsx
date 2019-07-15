@@ -11,6 +11,7 @@ import PlayedCards from '../Cards/PlayedCards/PlayedCards';
 import axios from 'axios';
 import { StartGameButton } from './StartGameButton/StartGameButton';
 import EndTurnButton from './EndTurnButton/EndTurnButton';
+import Monster from '../Monster/Monster';
 
 export class Dashboard extends React.Component {
     constructor(props) {
@@ -38,7 +39,6 @@ export class Dashboard extends React.Component {
     }
 
     render() {
-        console.log(this.props.endTurn);
         return (
             <div className={style.roundInfo}>
                 {this.props.status === "NOT_STARTED" && <StartGameButton />}
@@ -60,22 +60,7 @@ export class Dashboard extends React.Component {
                 {this.props.voteCard && <Prompt cy="vote-card" text="Vote for a card" />}
                 {this.props.myWord && this.props.playedCard !== 0 && !this.props.finishedRound && <EndTurnButton />}
                 <LogoutButton />
-                <div className={style.ufo}>
-                    <div className={style.monster}>
-                        <div className={style.body}>
-                            <div className={style.ear}></div>
-                            <div className={style.ear}></div>
-                            <div className={style.vampimouth}>
-                                <div className={style.vampitooth}></div>
-                            </div>
-                        </div>
-                        <div className={style.eyelid}>
-                            <div className={style.eyes}>
-                                <div className={style.eye}></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <Monster />
             </div>
         );
     }
@@ -85,15 +70,12 @@ const mapStateToProps = (state) => ({
     status: state.gameReducer.status,
     roundNum: state.gameReducer.roundNum,
     currentPlayer: state.gameReducer.currentPlayer,
-    playWordAndCard: state.playerReducer.playWordAndCard,
     playCard: state.playerReducer.playCard,
     playWord: state.playerReducer.playWord,
     voteCard: state.playerReducer.voteCard,
-    votedCard: state.playerReducer.votedCard,
     currentWord: state.gameReducer.currentWord,
     winner: state.gameReducer.winner,
     finishedRound: state.playerReducer.finishedRound,
-    endTurn: state.playerReducer.endTurn,
     myWord: state.playerReducer.myWord,
     playedCard: state.playerReducer.playedCard
 });

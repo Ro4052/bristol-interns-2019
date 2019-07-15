@@ -3,6 +3,7 @@ import styles from './Login.module.css';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import connectSocket from '../../services/socket';
+import Monster from '../Monster/Monster';
 
 export class Login extends React.Component {
     constructor(props) {
@@ -110,22 +111,7 @@ export class Login extends React.Component {
                         <span className={styles.letter} data-letter="t">t</span>
 
                     </div>
-                    <div className={styles.ufo}>
-                        <div className={styles.monster}>
-                            <div className={styles.body}>
-                                <div className={styles.ear}></div>
-                                <div className={styles.ear}></div>
-                                <div className={styles.vampimouth}>
-                                    <div className={styles.vampitooth}></div>
-                                </div>
-                            </div>
-                            <div className={styles.eyelid}>
-                                <div className={styles.eyes}>
-                                    <div className={styles.eye}></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <Monster />
                     <form className={styles.loginForm} onSubmit={this.sendLogin.bind(this)}>
                         <h3 data-cy="login-error" className={styles.errorText}>{this.state.error}</h3>
                         <h2 className={styles.formHeader}>Type a username to enter the game:</h2>
