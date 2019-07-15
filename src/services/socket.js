@@ -44,7 +44,7 @@ const connectSocket = () => {
         dispatch(setCurrentWord(msg));
     });
 
-    socket.on("play word and card", () => {
+    socket.on("play word and card", () => {        
         dispatch(setPlayWordAndCard(true));
     });
 

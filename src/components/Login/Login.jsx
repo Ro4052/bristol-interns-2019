@@ -62,7 +62,7 @@ export class Login extends React.Component {
         return (this.props.error) ? {border: '2px solid #EA3546'} : {};
     }
 
-    render() {             
+    render() {                   
         return (
             (!this.props.cookie) ?
                 <div className={styles.loginPage}>
@@ -76,7 +76,7 @@ export class Login extends React.Component {
                     </div>
                     <Monster />
                     <form className={styles.loginForm} onSubmit={this.sendLogin.bind(this)}>
-                        <h3 data-cy="login-error" className={styles.errorText}>{}</h3>
+                        <h3 data-cy="login-error" className={styles.errorText}>{(typeof this.props.error === 'string') ? this.props.error : ""}</h3>
                         <h2 className={styles.formHeader}>Type a username to enter the game:</h2>
                         <input className={styles.loginInput} style={this.getInputStyle()} value={this.state.value} placeholder="Enter username" onChange={this.handleChange.bind(this)} autoFocus/>
                         <button className={styles.loginButton} type="submit">Log in</button>

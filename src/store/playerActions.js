@@ -67,7 +67,7 @@ export const voteForCard = (id) => (dispatch) => {
     .then(() => {
         dispatch(voteForCardSuccess(id));
     })
-    .catch(error => dispatch(voteForCardFailure(error)));
+    .catch(error => dispatch(voteForCardFailure("Cannot vote for card")));
 }
 
 export const setPlayedCard = id => ({
@@ -103,7 +103,7 @@ export const resetFinishRound = bool => ({
 export const resetCookie = () => (dispatch) => {
     axios.get('/api/reset-cookie')
     .then(() => dispatch(resetCookieSuccess()))
-    .catch((err) => dispatch(resetCookieFailure(err)));
+    .catch((err) => dispatch(resetCookieFailure("Cannot reset cookie")));
 };
 
 export const resetCookieFailure = (error) => ({
@@ -126,7 +126,7 @@ export const logIn = (username) => (dispatch) => {
     .catch((err) => {
         if (err.message.includes(409)) dispatch(logInFailure("Username already exists"));
         else if (err.message.includes(400)) dispatch(logInFailure("Game has already started"));
-        else dispatch(logInFailure(err))
+        else dispatch(logInFailure("Cannot log in - Server Error"))
     });
 };
 
@@ -148,21 +148,22 @@ export const authenticateUser = () => (dispatch) => {
     }})
     .then(res => {            
         if (res.status === 200) {
+            connectSocket();
             dispatch(authSuccess(res.data.cookie));
         } else if (res.status === 401) {
-            dispatch(authFailure());
+            dispatch(authFailure("Unauthorised"));
             dispatch(resetState());
             dispatch(resetPlayerState());
         } else {
             const error = new Error(res.error);
-            dispatch(authFailure());
+            dispatch(authFailure(""));
             dispatch(resetState());
             dispatch(resetPlayerState());
             throw error;
         }
     })
     .catch(() => {
-        dispatch(authFailure());
+        dispatch(authFailure(""));
         dispatch(resetState());
         dispatch(resetPlayerState());
     });
