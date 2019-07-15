@@ -7,14 +7,14 @@
     font-family: 'Dilana';
     font-style: normal;
     font-weight: normal;
-    src: local('Dilana'), url('./components/fonts/fuente_dilana.ttf') format('truetype');
+    src: local('Dilana'), url('./fonts/fuente_dilana.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Cardinal';
   font-style: normal;
   font-weight: normal;
-  src: local('Dilana'), url('./components/fonts/Cardinal.ttf') format('truetype');
+  src: local('Dilana'), url('./fonts/Cardinal.ttf') format('truetype');
 }
 
 body {
