@@ -57,3 +57,7 @@ body {
   cursor: pointer;
   transition: 0.2s;
 }
+
+::placeholder {
+    color: var(--golden);
+}

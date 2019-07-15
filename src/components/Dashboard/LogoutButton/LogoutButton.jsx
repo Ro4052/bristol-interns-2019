@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../Login/Login.module.css';
+import styles from './LogoutButton.module.css';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 
@@ -35,7 +35,7 @@ export class LogoutButton extends React.Component {
         })
     }
 
-    render() {        
+    render() {
         return (
             <button id='logout-button' data-cy="logout" className={styles.logOutButton} onClick={this.logOut}>Log out</button>
         );

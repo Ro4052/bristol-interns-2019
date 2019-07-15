@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import styles from './Login.module.css';
 import { Redirect } from 'react-router-dom';
 import Monster from '../Monster/Monster';
+import Dixit from '../Dixit/Dixit';
 import { logIn, authenticateUser } from '../../store/playerActions';
 
 export class Login extends React.Component {
@@ -66,14 +67,7 @@ export class Login extends React.Component {
         return (
             (!this.props.cookie) ?
                 <div className={styles.loginPage}>
-                     <div className={styles.foo}>
-                        <span className={styles.letter} data-letter="D">D</span>
-                        <span className={styles.letter} data-letter="i">i</span>
-                        <span className={styles.letter} data-letter="X">X</span>
-                        <span className={styles.letter} data-letter="i">i</span>
-                        <span className={styles.letter} data-letter="t">t</span>
-
-                    </div>
+                    <Dixit />
                     <Monster />
                     <form className={styles.loginForm} onSubmit={this.sendLogin.bind(this)}>
                         <h3 data-cy="login-error" className={styles.errorText}>{}</h3>
