@@ -28,12 +28,12 @@ export class PlayedCards extends React.Component {
 
     render() {
         return (
-            <ul id="played-cards" styles={styles.playedCards} data-cy="played-cards">
+            <ul id="played-cards" data-cy="played-cards">
                 {this.props.cards.map(card => 
                     <li className={styles.playedCard} key={card.cardId}>
                         {(this.props.allVotes && this.props.status === 'DISPLAY_ALL_VOTES') && <span data-cy='votes'>{this.getVotesForCard(card.cardId)}</span>}
                         <img id={"card-" + card.cardId} className={this.getCardClass(card.cardId)} alt={"card-" + card.cardId}
-                         src={require(`../cards/card (${card.cardId}).jpg`)} onClick={this.voteForCard}/>
+                         src={require(`../../../images/cards/card (${card.cardId}).jpg`)} onClick={this.voteForCard}/>
                     </li>
                 )}
             </ul>
@@ -41,16 +41,14 @@ export class PlayedCards extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return ({
-        cards: state.gameReducer.currentCards,
-        voteCard: state.playerReducer.voteCard,
-        votedCard: state.playerReducer.votedCard,
-        playedCard: state.playerReducer.playedCard,
-        allVotes: state.gameReducer.allVotes,
-        status: state.gameReducer.status
-    });
-}
+const mapStateToProps = (state) => ({
+    cards: state.gameReducer.currentCards,
+    voteCard: state.playerReducer.voteCard,
+    votedCard: state.playerReducer.votedCard,
+    playedCard: state.playerReducer.playedCard,
+    allVotes: state.gameReducer.allVotes,
+    status: state.gameReducer.status
+});
 
 const mapDispatchToProps = (dispatch) => ({
     voteForCard: (id) => dispatch(voteForCard(id))

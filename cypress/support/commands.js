@@ -30,6 +30,7 @@ Cypress.Commands.add('login', username => {
 });
 
 Cypress.Commands.add('startGame', () => {
+    cy.url().should('include', '/dashboard');
     cy.get('[data-cy="start-game"]').click();
 });
 

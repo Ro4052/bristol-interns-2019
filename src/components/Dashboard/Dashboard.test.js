@@ -1,5 +1,6 @@
 import React from 'react';
 import { Dashboard } from './Dashboard';
+import { StartGameButton } from './StartGameButton/StartGameButton';
 import { shallow } from 'enzyme';
 
 const initialGameState = {
@@ -22,6 +23,7 @@ const firstRoundGameState = {
     ],
     myTurn: true
 };
+
 describe('on initial render', () => {
     it("doesn't display the current player", () => {
         const wrapper = shallow(<Dashboard status={initialGameState.status} />);
@@ -37,18 +39,10 @@ describe('on initial render', () => {
     });
     it("displays the start game button", () => {
         const wrapper = shallow(<Dashboard status={initialGameState.status}/>);
-        expect(wrapper.exists({ 'data-cy': 'start-game' })).toEqual(true);
-    });
-    describe('on clicking the start game button', () => {
-        it('calls startGame', () => {
-            const spy = jest.spyOn(Dashboard.prototype, 'startGame');
-            const wrapper = shallow(<Dashboard status={initialGameState.status}/>);
-            wrapper.find({ 'data-cy': 'start-game' }).simulate('click');
-            expect(spy).toHaveBeenCalled();
-            spy.mockRestore();
-        });
+        expect(wrapper.exists(StartGameButton)).toEqual(true);
     });
 });
+
 describe('on start of game', () => {
     it("displays the current player's username", () => {
         const wrapper = shallow(<Dashboard status={firstRoundGameState.status} currentPlayer={firstRoundGameState.currentPlayer} />);

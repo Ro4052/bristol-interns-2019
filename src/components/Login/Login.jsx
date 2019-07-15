@@ -2,9 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styles from './Login.module.css';
 import { Redirect } from 'react-router-dom';
+import Monster from '../Monster/Monster';
 import { logIn, authenticateUser } from '../../store/playerActions';
 
 export class Login extends React.Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -72,22 +74,7 @@ export class Login extends React.Component {
                         <span className={styles.letter} data-letter="t">t</span>
 
                     </div>
-                    <div className={styles.ufo}>
-                        <div className={styles.monster}>
-                            <div className={styles.body}>
-                                <div className={styles.ear}></div>
-                                <div className={styles.ear}></div>
-                                <div className={styles.vampimouth}>
-                                    <div className={styles.vampitooth}></div>
-                                </div>
-                            </div>
-                            <div className={styles.eyelid}>
-                                <div className={styles.eyes}>
-                                    <div className={styles.eye}></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <Monster />
                     <form className={styles.loginForm} onSubmit={this.sendLogin.bind(this)}>
                         <h3 data-cy="login-error" className={styles.errorText}>{}</h3>
                         <h2 className={styles.formHeader}>Type a username to enter the game:</h2>

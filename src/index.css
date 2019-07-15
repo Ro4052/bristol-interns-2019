@@ -1,20 +1,15 @@
-@import url(https://fonts.googleapis.com/css?family=Lato:900);
-    *, *:before, *:after{
-    box-sizing: none
-}
-
 @font-face {
     font-family: 'Dilana';
     font-style: normal;
     font-weight: normal;
-    src: local('Dilana'), url('./components/fonts/fuente_dilana.ttf') format('truetype');
+    src: local('Dilana'), url('./fonts/fuente_dilana.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Cardinal';
   font-style: normal;
   font-weight: normal;
-  src: local('Dilana'), url('./components/fonts/Cardinal.ttf') format('truetype');
+  src: local('Dilana'), url('./fonts/Cardinal.ttf') format('truetype');
 }
 
 body {
@@ -25,11 +20,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
 }
 
 :root {
@@ -50,7 +40,7 @@ code {
 #root {
   height: 100%;
   font-family: var(--main-font);
-  background: url('./components/Dashboard/back.jpg');
+  background: url('./images/back.jpg');
   background-size: cover;
 }
 
