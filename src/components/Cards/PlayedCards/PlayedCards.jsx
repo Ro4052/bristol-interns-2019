@@ -28,7 +28,7 @@ export class PlayedCards extends React.Component {
 
     render() {
         return (
-            <ul id="played-cards" styles={styles.playedCards} data-cy="played-cards">
+            <ul id="played-cards" data-cy="played-cards">
                 {this.props.cards.map(card => 
                     <li className={styles.playedCard} key={card.cardId}>
                         {(this.props.allVotes && this.props.status === 'DISPLAY_ALL_VOTES') && <span data-cy='votes'>{this.getVotesForCard(card.cardId)}</span>}
