@@ -1,14 +1,12 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
-import styles from './Login.module.css';
+import styles from '../../Login/Login.module.css';
 import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 
 export class LogoutButton extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            loggedIn: true
-        }
+        this.state = {};
         this.logOut = this.logOut.bind(this);
     }
 
@@ -27,9 +25,7 @@ export class LogoutButton extends React.Component {
         .then(response => {
             if (response.status === 200) {
                 this.deleteAllCookies();
-                this.setState({
-                    loggedIn: false
-                })
+                this.props.history.push('/');
             }
         })
         .catch((err) => {
@@ -40,11 +36,9 @@ export class LogoutButton extends React.Component {
 
     render() {        
         return (
-            (this.state.loggedIn) ?
-            <button id='logout-button' className={styles.logOutButton} onClick={this.logOut}>Log out</button>
-            : <Redirect to='/'/>
-        )
+            <button id='logout-button' data-cy="logout" className={styles.logOutButton} onClick={this.logOut}>Log out</button>
+        );
     }
 }
 
-export default LogoutButton;
+export default withRouter(LogoutButton);

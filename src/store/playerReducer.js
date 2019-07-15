@@ -2,6 +2,7 @@ import { types } from './playerActions';
 
 export const initialState = {
     playWordAndCard: false,
+    playWord: false,
     playCard: false,
     voteCard: false,
     myCards: [],
@@ -11,7 +12,8 @@ export const initialState = {
     myWord: "",
     loading: true,
     error: null,
-    finishedRound: false
+    finishedRound: false,
+    endTurn: false
 }
 
 const cardReducer = (state = initialState, action) => {
@@ -62,7 +64,8 @@ const cardReducer = (state = initialState, action) => {
         case types.PLAY_WORD:
             return {
                 ...state,
-                myWord: action.word
+                myWord: action.word,
+                playWord: false
             };
         case types.VOTE_FOR_CARD_BEGIN:
             return {
@@ -86,7 +89,9 @@ const cardReducer = (state = initialState, action) => {
         case types.SET_PLAY_WORD_AND_CARD:
             return {
                 ...state,
-                playWordAndCard: action.bool
+                playWordAndCard: action.bool,
+                playWord: action.bool,
+                playCard: action.bool
             };
         case types.SET_PLAY_CARD:
             return {

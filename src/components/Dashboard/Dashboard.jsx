@@ -1,15 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PlayerCards from '../Cards/PlayerCards';
-import LogoutButton from '../Login/LogoutButton';
-import Players from '../PlayerInfo/Players/Players';
+import PlayerCards from '../Cards/PlayerCards/PlayerCards';
+import LogoutButton from './LogoutButton/LogoutButton';
+import Players from '../Players/Players';
 import style from './Dashboard.module.css';
 import { finishPlayCard } from '../../store/playerActions';
 import { Prompt } from '../Prompt/Prompt';
-import PlayWordAndCard from '../PlayerInfo/PlayWordAndCard/PlayWordAndCard';
+import PlayWord from '../PlayWord/PlayWord';
 import PlayedCards from '../Cards/PlayedCards/PlayedCards';
 import axios from 'axios';
 import { StartGameButton } from './StartGameButton/StartGameButton';
+import EndTurnButton from './EndTurnButton/EndTurnButton';
 
 export class Dashboard extends React.Component {
     constructor(props) {
@@ -37,6 +38,7 @@ export class Dashboard extends React.Component {
     }
 
     render() {
+        console.log(this.props.endTurn);
         return (
             <div className={style.roundInfo}>
                 {this.props.status === "NOT_STARTED" && <StartGameButton />}
@@ -52,9 +54,11 @@ export class Dashboard extends React.Component {
                 <Players />
                 <PlayedCards />
                 <PlayerCards />
-                {this.props.playWordAndCard && !this.props.finishedRound && <PlayWordAndCard />}
+                {this.props.playWord && <Prompt cy="play-word" text="Type in a word" />}
                 {this.props.playCard && <Prompt cy="play-card" text="Pick a card" />}
-                {this.props.voteCard && this.props.votedCard === 0 && <Prompt cy="vote-card" text="Vote for a card" />}
+                {this.props.playWord && <PlayWord />}
+                {this.props.voteCard && <Prompt cy="vote-card" text="Vote for a card" />}
+                {this.props.myWord && this.props.playedCard !== 0 && !this.props.finishedRound && <EndTurnButton />}
                 <LogoutButton />
                 <div className={style.ufo}>
                     <div className={style.monster}>
@@ -78,16 +82,20 @@ export class Dashboard extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-        status: state.gameReducer.status,
-        roundNum: state.gameReducer.roundNum,
-        currentPlayer: state.gameReducer.currentPlayer,
-        playWordAndCard: state.playerReducer.playWordAndCard,
-        playCard: state.playerReducer.playCard,
-        voteCard: state.playerReducer.voteCard,
-        votedCard: state.playerReducer.votedCard,
-        currentWord: state.gameReducer.currentWord,
-        winner: state.gameReducer.winner,
-        finishedRound: state.playerReducer.finishedRound,
+    status: state.gameReducer.status,
+    roundNum: state.gameReducer.roundNum,
+    currentPlayer: state.gameReducer.currentPlayer,
+    playWordAndCard: state.playerReducer.playWordAndCard,
+    playCard: state.playerReducer.playCard,
+    playWord: state.playerReducer.playWord,
+    voteCard: state.playerReducer.voteCard,
+    votedCard: state.playerReducer.votedCard,
+    currentWord: state.gameReducer.currentWord,
+    winner: state.gameReducer.winner,
+    finishedRound: state.playerReducer.finishedRound,
+    endTurn: state.playerReducer.endTurn,
+    myWord: state.playerReducer.myWord,
+    playedCard: state.playerReducer.playedCard
 });
 
 const mapDispatchToProps = (dispatch) => ({

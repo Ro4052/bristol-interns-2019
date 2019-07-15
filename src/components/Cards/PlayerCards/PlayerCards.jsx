@@ -1,8 +1,8 @@
 import React from 'react';
 import axios from 'axios';
-import styles from './Cards.module.css';
+import styles from '../Cards.module.css';
 import { connect } from 'react-redux';
-import { fetchCards, requestPlayCard, finishPlayCard } from '../../store/playerActions';
+import { fetchCards, requestPlayCard, finishPlayCard } from '../../../store/playerActions';
 
 export class PlayerCards extends React.Component {
     constructor() {
@@ -52,7 +52,7 @@ export class PlayerCards extends React.Component {
         return (
             <div className={styles.cardsContainer} id="my-cards">
                 <ul data-cy='my-cards'>
-                    {this.props.myCards.map(card => <img id={"card-" + card.id} alt={"card-" + card.id} className={this.getCardClass()} key={card.id} src={require(`./cards/card (${card.id}).jpg`)} onClick={this.handleClickCard} />)}
+                    {this.props.myCards.map(card => <img id={"card-" + card.id} alt={"card-" + card.id} className={this.getCardClass()} key={card.id} src={require(`../../../images/cards/card (${card.id}).jpg`)} onClick={this.handleClickCard} />)}
                 </ul>
             </div>
         );
