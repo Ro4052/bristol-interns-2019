@@ -1,6 +1,7 @@
-import { types } from './playerActions';
+import types from './playerActionTypes';
 
 export const initialState = {
+    cookie: null,
     playWordAndCard: false,
     playCard: false,
     voteCard: false,
@@ -99,10 +100,10 @@ const cardReducer = (state = initialState, action) => {
                 voteCard: action.bool
             };
         case types.RESET_FINISH_ROUND:
-                return {
-                    ...state,
-                    finishedRound: false
-                };
+            return {
+                ...state,
+                finishedRound: false
+            };
         case types.MY_TURN:
             return {
                 ...state,
@@ -114,6 +115,46 @@ const cardReducer = (state = initialState, action) => {
                 myTurn: false,
                 othersTurn: true
             };
+        case types.RESET_COOKIE_FAILURE:
+            return {
+                ...state,
+                error: action.payload.error
+            };
+        case types.RESET_COOKIE_SUCCESS:
+            return {
+                ...state,
+                cookie: null
+            };
+        case types.LOG_IN_FAILURE:
+            return {
+                ...state,
+                error: action.payload.error,
+                cookie: null
+            };
+        case types.LOG_IN_SUCCESS:
+            return {
+                ...state,
+                cookie: action.payload.cookie
+            };
+        case types.AUTH_BEGIN:
+            return {
+                ...state,
+                loading: true,
+                error: null
+            }
+        case types.AUTH_FAILURE:            
+            return {
+                ...state,
+                error: action.payload.error,
+                cookie: null,
+                loading: false
+            }
+        case types.AUTH_SUCCESS:
+            return {
+                ...state,
+                cookie: action.payload.cookie,
+                loading: false
+            }
         default:
             return state;
     }

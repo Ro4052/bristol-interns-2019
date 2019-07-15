@@ -25,22 +25,11 @@ export class Dashboard extends React.Component {
         });
     }
 
-    deleteAllCookies() {
-        let cookies = document.cookie.split(";");
-        cookies.forEach((cookie) => {
-            let eqPos = cookie.indexOf("=");
-            let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-            document.cookie = name + "=;expires=Thu, 01 Jan 1975 00:00:00 GMT";
-        });
-    }
-
     newGame() {
         axios.get('/api/end')
         .catch(err => {
             console.log(err);
         });
-        this.deleteAllCookies();
-        this.props.history.push('/');
     }
 
     render() {
