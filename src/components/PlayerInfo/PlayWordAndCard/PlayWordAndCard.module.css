@@ -28,6 +28,7 @@ h1 {
     cursor: pointer;
     outline: none;
     margin: 2vmin;
+    display: flex;
 }
 
 .playerInteractions {

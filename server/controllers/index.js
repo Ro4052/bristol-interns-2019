@@ -1,3 +1,4 @@
+const profanities = require('../services/profanityCheck');
 const router = require('express').Router();
 const path = require('path');
 const auth = require('../services/auth');
@@ -78,7 +79,13 @@ if (process.env.NODE_ENV === 'testing') {
 /* Current player plays a card and a word */
 router.post('/api/playCardWord', auth, (req, res) => {
     gameLogic.playCardAndWord(req.session.user, req.body.card, req.body.word);
-    res.sendStatus(200);
+    
+    if (!profanities.notProfanity(req.body.word)) {
+        res.sendStatus(200);
+        console.log("Profane");
+    } else {
+        console.log("Not profane");
+    }
 });
 
 /* Player plays a card */

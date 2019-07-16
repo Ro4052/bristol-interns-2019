@@ -103,11 +103,14 @@ export class Login extends React.Component {
             (!this.state.loggedIn) ?
                 <div className={styles.loginPage}>
                      <div className={styles.foo}>
-                        <span className={styles.letter} data-letter="D">D</span>
-                        <span className={styles.letter} data-letter="i">i</span>
-                        <span className={styles.letter} data-letter="X">X</span>
-                        <span className={styles.letter} data-letter="i">i</span>
-                        <span className={styles.letter} data-letter="t">t</span>
+                        <span className={styles.letter} data-letter="T">T</span>
+                        <span className={styles.letter} data-letter="e">e</span>
+                        <span className={styles.letter} data-letter="l">l</span>
+                        <span className={styles.letter} data-letter="l">l</span>
+                        <span className={styles.letter} data-letter="T">T</span>
+                        <span className={styles.letter} data-letter="a">a</span>
+                        <span className={styles.letter} data-letter="l">l</span>
+                        <span className={styles.letter} data-letter="e">e</span>
 
                     </div>
                     <div className={styles.ufo}>
