@@ -92,13 +92,7 @@ exports.startGame = () => {
 exports.endGame = () => {
     if (status === statusTypes.GAME_OVER) {
         socket.emitEndGame();
-        status = statusTypes.NOT_STARTED;
-        currentPlayer = null;
-        currentWord = '';
-        roundNum = 0;
-        players = [];
-        playedCards = [];
-        votes = [];
+        clearGameState();
     } else {
         // Game is currently running and cannot be ended, server is responsible for generating the error
         throw Error("Cannot end game. Game is currently running");
@@ -111,9 +105,7 @@ const nextRound = () => {
         status = statusTypes.WAITING_FOR_CURRENT_PLAYER;
         roundNum++;
         currentPlayer = players[roundNum % players.length];
-        currentWord = '';
-        playedCards = [];
-        votes = [];
+        clearRoundData();
         socket.emitNewRound(status, roundNum, currentPlayer);
         socket.promptCurrentPlayer(currentPlayer);
     } else {
@@ -217,3 +209,19 @@ const allPlayersPlayedCard = () => players.every(player => playerHasPlayedCard(p
 
 /* Returns true if all players (apart from the current player) have voted this round */
 const allPlayersVoted = () => players.every(player => player.username === currentPlayer.username || playerHasVoted(player.username));
+
+/* Clean up stored data */
+const clearRoundData = () => {
+    currentWord = '';
+    playedCards = [];
+    votes = [];
+}
+
+/* Clear entire game state */
+const clearGameState = () => {
+    clearRoundData();
+    status = statusTypes.NOT_STARTED;
+    currentPlayer = null;
+    roundNum = 0;
+    players = [];
+}
