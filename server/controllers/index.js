@@ -52,7 +52,7 @@ router.get('/auth/logout', auth, (req, res) => {
 router.get('/api/cards', auth, (req, res) => {
     const cards = gameLogic.getUnplayedCardsByUsername(req.session.user);
     if (cards) res.status(200).json(cards);
-    else res.status(400).json({message: "Cannot find cards: user does not exist."});
+    else res.status(404).json({message: "Cannot find cards: user does not exist."});
 });
 
 /* Start the game */
