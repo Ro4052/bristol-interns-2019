@@ -70,10 +70,7 @@ app.get('/startGame', (req, res) => {
         withCredentials: true
     });
     instance.get('api/start')
-        .then(() => {
-            console.log("successful start game");
-            res.sendStatus(200);
-        })
+        .then(() => res.sendStatus(200))
         .catch((err) => console.error(err));
 });
 
@@ -87,7 +84,7 @@ app.get('/playCardWord', (req, res) => {
     });
     
     instance.post('api/playCardWord', {
-        card: cards[0].id.toString(),
+        card: cards[0].cardId,
         word: "Hello"
     })
     .then(() => res.sendStatus(200))

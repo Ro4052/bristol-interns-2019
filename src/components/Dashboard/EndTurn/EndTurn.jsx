@@ -14,7 +14,7 @@ export class EndTurn extends React.Component {
 
     endTurn() {
         axios.post('/api/playCardWord', {
-            card: this.props.playedCard,
+            cardId: this.props.playedCard,
             word: this.props.myWord
         })
         .then(() => {
@@ -38,7 +38,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    finishPlayCard: (id) => dispatch(finishPlayCard(id))
+    finishPlayCard: (cardId) => dispatch(finishPlayCard(cardId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EndTurn);

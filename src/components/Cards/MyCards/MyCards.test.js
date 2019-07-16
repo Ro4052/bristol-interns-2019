@@ -1,5 +1,5 @@
 import React from 'react';
-import { PlayerCards } from './PlayerCards';
+import { MyCards } from './MyCards';
 import moxios from 'moxios'
 import axios from 'axios';
 import { shallow } from 'enzyme';
@@ -7,26 +7,26 @@ import SocketMock from 'socket.io-mock';
 
 describe('on initial render', () => {
     it("doesn't display all cards", () => {
-        const wrapper = shallow(<PlayerCards fetchCards={() => {}} myCards={[]} requestPlayCard={() => {}}/>);
+        const wrapper = shallow(<MyCards fetchCards={() => {}} myCards={[]} requestPlayCard={() => {}}/>);
         expect(wrapper.exists('#my-cards li')).toEqual(false)
     })
 })
 
 describe('on given a set of cards', () => {
-    let playerCards = [{id: 1}, {id: 2}, {id: 3}];
+    let playerCards = [{cardId: 1}, {cardId: 2}, {cardId: 3}];
     it('displays the correct number of cards', () => {
-        const wrapper = shallow(<PlayerCards myCards={playerCards} fetchCards={() => {}} requestPlayCard={() => {}}/>);
+        const wrapper = shallow(<MyCards myCards={playerCards} fetchCards={() => {}} requestPlayCard={() => {}}/>);
         expect(wrapper.find('ul').children().length).toEqual(3);
     })
     it('displays the correct card images', () => {
-        const wrapper = shallow(<PlayerCards myCards={playerCards} fetchCards={() => {}} requestPlayCard={() => {}}/>);        
+        const wrapper = shallow(<MyCards myCards={playerCards} fetchCards={() => {}} requestPlayCard={() => {}}/>);        
         expect(wrapper.find('ul').children().length).toEqual(3);
     })
     it('is able to play a chosen card', () => {
         const socket = new SocketMock();
-        const mockedEvent = { target: {id: '1'} }
-        const spy = jest.spyOn(PlayerCards.prototype, 'playCard');
-        const wrapper = shallow(<PlayerCards socket={socket} myCards={playerCards} playedCard={0} fetchCards={() => {}} requestPlayCard={() => {}}/>);
+        const mockedEvent = { target: {cardId: '1'} }
+        const spy = jest.spyOn(MyCards.prototype, 'playCard');
+        const wrapper = shallow(<MyCards socket={socket} myCards={playerCards} playedCard={0} fetchCards={() => {}} requestPlayCard={() => {}}/>);
         wrapper.find('#card-1').simulate('click', mockedEvent);
         expect(spy).toHaveBeenCalled();
         spy.mockRestore();
@@ -67,19 +67,19 @@ describe('moxios', () => {
 
             axios.get('/api/cards').then(response => {
                 let cards = response.data.cards;
-                const wrapper = shallow(<PlayerCards cards={cards} fetchCards={() => {}} playCard={() => {}}/>);
+                const wrapper = shallow(<MyCards cards={cards} fetchCards={() => {}} playCard={() => {}}/>);
                 expect(wrapper.find('ul').children().length).toEqual(3)
             })
             
         })
     })
     describe('when myTurn is true and click', () => {
-        let playerCards = [{id: 1}, {id: 2}, {id: 3}];
+        let playerCards = [{cardId: 1}, {cardId: 2}, {cardId: 3}];
         it('calls sendCard and playCard', () => {
             const socket = new SocketMock();
-            const mockedEvent = { target: {id: '1'} }
-            const spy = jest.spyOn(PlayerCards.prototype, 'playCard')
-            const wrapper = shallow(<PlayerCards socket={socket} myCards={playerCards} playedCard={0} fetchCards={() => {}} requestPlayCard={() => {}} />);
+            const mockedEvent = { target: {cardId: '1'} }
+            const spy = jest.spyOn(MyCards.prototype, 'playCard')
+            const wrapper = shallow(<MyCards socket={socket} myCards={playerCards} playedCard={0} fetchCards={() => {}} requestPlayCard={() => {}} />);
             wrapper.find('#card-1').simulate('click', mockedEvent);
             expect(spy).toHaveBeenCalled();
             spy.mockRestore();

@@ -6,7 +6,7 @@ import Logout from './Logout/Logout';
 import Monster from '../Monster/Monster';
 import NewGame from './NewGame/NewGame';
 import PlayedCards from '../Cards/PlayedCards/PlayedCards';
-import PlayerCards from '../Cards/PlayerCards/PlayerCards';
+import MyCards from '../Cards/MyCards/MyCards';
 import Players from '../Players/Players';
 import PlayWord from '../PlayWord/PlayWord';
 import Prompt from '../Prompt/Prompt';
@@ -28,7 +28,7 @@ export class Dashboard extends React.Component {
                 {this.props.currentWord !== '' && <h1 id="message">Word: <span data-cy='current-word'>{this.props.currentWord}</span></h1>}
                 <Players />
                 <PlayedCards />
-                <PlayerCards />
+                <MyCards />
                 <div className={styles.playerInteractions}>
                     {this.props.playWord && <Prompt cy="play-word" text="Type in a word" />}
                     {this.props.playCard && <Prompt cy="play-card" text="Pick a card" />}

@@ -79,6 +79,28 @@ router.get('/api/reset-cookie', auth, (req, res) => {
     res.sendStatus(200);
 });
 
+/* Current player plays a card and a word */
+router.post('/api/playCardWord', auth, (req, res) => {
+    gameLogic.playCardAndWord(req.session.user, req.body.cardId, req.body.word);
+    res.sendStatus(200);
+});
+
+/* Player plays a card */
+router.post('/api/playCard', auth, (req, res) => {
+    gameLogic.playCard(req.session.user, req.body.cardId);
+    res.sendStatus(200);
+});
+
+/* Player votes for a card */
+router.post('/api/voteCard', auth, (req, res) => {    
+    if (!gameLogic.isCurrentPlayer(req.session.user)) {
+        gameLogic.voteCard(req.session.user, req.body.cardId);
+        res.sendStatus(200);
+    } else {
+        res.status(400).json({ message: "You cannot vote for a card when it's your turn"} );
+    }
+});
+
 /* Check if in dev mode, and enable end game request */
 if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {
@@ -89,28 +111,6 @@ if (process.env.NODE_ENV === 'testing') {
         res.sendStatus(200);
     });
 }
-
-/* Current player plays a card and a word */
-router.post('/api/playCardWord', auth, (req, res) => {
-    gameLogic.playCardAndWord(req.session.user, req.body.card, req.body.word);
-    res.sendStatus(200);
-});
-
-/* Player plays a card */
-router.post('/api/playCard', auth, (req, res) => {
-    gameLogic.playCard(req.session.user, req.body.card);
-    res.sendStatus(200);
-});
-
-/* Player votes for a card */
-router.post('/api/voteCard', auth, (req, res) => {    
-    if (!gameLogic.isCurrentPlayer(req.session.user)) {
-        gameLogic.voteCard(req.session.user, req.body.card);
-        res.sendStatus(200);
-    } else {
-        res.status(400).json({ message: "You cannot vote for a card when it's your turn"} );
-    }
-});
 
 /* Send index file */
 router.get('/*', (req, res) => {

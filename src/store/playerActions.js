@@ -30,14 +30,14 @@ export const fetchCards = () => (dispatch) => {
     .catch(error => dispatch(fetchCardsFailure(error)));
 }
 
-export const requestPlayCard = (id) => ({
+export const requestPlayCard = (cardId) => ({
     type: types.REQUEST_PLAY_CARD,
-    id
+    cardId
 });
 
-export const finishPlayCard = (id) => ({
+export const finishPlayCard = (cardId) => ({
     type: types.FINISH_PLAY_CARD,
-    id
+    cardId
 });
 
 export const playWord = (word) => ({
@@ -59,25 +59,25 @@ export const voteForCardFailure = (error) => ({
     payload: { error }
 });
 
-export const voteForCard = (id) => (dispatch) => {
+export const voteForCard = (cardId) => (dispatch) => {
     dispatch(voteForCardBegin());
     axios.post('/api/voteCard', {
-        card: id
+        cardId
     })
     .then(() => {
-        dispatch(voteForCardSuccess(id));
+        dispatch(voteForCardSuccess(cardId));
     })
     .catch(error => dispatch(voteForCardFailure("Cannot vote for card")));
 }
 
-export const setPlayedCard = id => ({
+export const setPlayedCard = cardId => ({
     type: types.SET_PLAYED_CARD,
-    id
+    cardId
 });
 
-export const setVotedCard = id => ({
+export const setVotedCard = cardId => ({
     type: types.SET_VOTED_CARD,
-    id
+    cardId
 });
 
 export const setPlayWordAndCard = bool => ({

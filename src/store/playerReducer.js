@@ -44,18 +44,18 @@ const cardReducer = (state = initialState, action) => {
             return {
                 ...state,
                 playCard: false,
-                playedCard: action.id,
-                myCards: state.myCards.filter((card) => card.id.toString() !== action.id)
+                playedCard: action.cardId,
+                myCards: state.myCards.filter((card) => card.cardId !== action.cardId)
             }
         case types.SET_PLAYED_CARD:
             return {
                 ...state,
-                playedCard: action.id
+                playedCard: action.cardId
             }
         case types.SET_VOTED_CARD:
             return {
                 ...state,
-                votedCard: action.id
+                votedCard: action.cardId
             }
         case types.FINISH_PLAY_CARD:
             return {
