@@ -81,7 +81,7 @@ router.get('/api/reset-cookie', auth, (req, res) => {
         req.session.destroy();
         res.sendStatus(200);
     } else {
-        res.status(400).json({message: "Cannot destroy session as it does not exist"});
+        res.status(404).json({message: "Cannot destroy session as it does not exist"});
     }
 });
 
