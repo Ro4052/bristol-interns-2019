@@ -12,7 +12,7 @@ const statusTypes = {
 };
 
 const rounds = 3;
-const minPlayers = 3;
+const minPlayers = 0;
 
 let status = statusTypes.NOT_STARTED;
 let roundNum = 0;
@@ -67,14 +67,14 @@ exports.joinGame = (user, callback) => {
 }
 
 /* Remove player from current game */
-exports.quitGame = player => {
-    if (status === statusTypes.NOT_STARTED && !players.includes(player)) {
-        players = players.filter((otherPlayer) => otherPlayer !== player);
+exports.quitGame = username => {    
+    if (status === statusTypes.NOT_STARTED && players.some(player => player.username === username)) {
+        players = players.filter((otherPlayer) => otherPlayer.username !== username);
         socket.emitPlayers(getPlayers());
-        return true;
+    } else {
+        // Game has started, player can't quit, server is responsible for generating the error
+        throw Error("Cannot log out of a running game.");
     }
-    // Game has started, player can't quit, server is responsible for generating the error
-    return false;
 }
 
 /* Start the game with the players that have joined */
@@ -82,10 +82,10 @@ exports.startGame = () => {
     if (status === statusTypes.NOT_STARTED && players.length >= minPlayers) {
         status = statusTypes.STARTED;
         nextRound();
-        return true;
-    } 
-    // There aren't yet enough players in the game, server is responsible for generating the error
-    return false;
+    } else {
+        // There aren't yet enough players in the game, server is responsible for generating the error
+        throw Error("Cannot start game. Insufficient number of players");
+    }
 }
 
 /* End the game */
@@ -99,10 +99,10 @@ exports.endGame = () => {
         players = [];
         playedCards = [];
         votes = [];
-        return true;
+    } else {
+        // Game is currently running and cannot be ended, server is responsible for generating the error
+        throw Error("Cannot end game. Game is currently running");
     } 
-    // Game is currently running and cannot be ended, server is responsible for generating the error
-    return false;
 }
 
 /* Move on to the next round, called when all players have finished their turn */
@@ -138,11 +138,11 @@ exports.playCardAndWord = (username, cardId, word) => {
         currentWord = word;
         socket.emitWord(currentWord);
         socket.promptOtherPlayers(currentPlayer);
-        return true;
+    } else {
+        // Cannot play card and word, the user sending the request is not the current player, the player has already played a card,
+        // or the game status is not appropriate for the request, server is responsible for generating an error
+        throw Error("You cannot play more than one card and one word, or now is not the right time to play a card and a word.");
     }
-    // Cannot play card and word, the user sending the request is not the current player, the player has already played a card,
-    // or the game status is not appropriate for the request, server is responsible for generating an error
-    return false;
 }
 
 /* Adds player's card to list of played cards */
@@ -159,11 +159,11 @@ exports.playCard = (username, cardId) => {
             socket.emitPlayedCards(getPlayedCards());
             socket.promptPlayersVote(currentPlayer);
         }
-        return true;
+    } else {
+        // Cannot play card, the player has already played a card, or the game status is not
+        // appropriate for the request, server is responsible for generating an error.
+        throw Error("You cannot play more than one card, or now is not the right time to play a card.");
     }
-    // Cannot play card, the player has already played a card, or the game status is not
-    // appropriate for the request, server is responsible for generating an error.
-    return false;
 }
 
 /* Vote for a card */
@@ -181,11 +181,11 @@ exports.voteCard = (username, cardId) => {
             calcScores();
             setTimeout(() => nextRound(), 5000);
         }
-        return true;
+    } else {
+        // Cannot vote for card, the player has already voted for a card, or the game status is not
+        // appropriate for the request, server is responsible for generating an error.
+        throw Error("You cannot vote for a card more than once, or now is not the right time to vote.");
     }
-    // Cannot vote for card, the player has already voted for a card, or the game status is not
-    // appropriate for the request, server is responsible for generating an error.
-    return false; 
 }
 
 /* Calculate the scores for this round */

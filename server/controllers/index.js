@@ -8,8 +8,9 @@ let currentUsers = [];
 
 /* Check if player is logged in */
 router.get('/auth', (req, res) => {
-    if (req.session.user) { /* The user session exists, authorised */
-        res.status(200).json({ cookie: req.session.user });
+    const { user } = req.session;
+    if (user) { /* The user session exists, authorised */
+        res.status(200).json({ cookie: user });
     } else { /* The user session does not exist, unauthorised */
         res.status(401).json({ message: "You need to log in with a username to enter the game."});
     }
@@ -17,12 +18,11 @@ router.get('/auth', (req, res) => {
 
 /* Log in the user */
 router.post('/auth/login', (req, res) => {
-    const user = currentUsers.find((user) => user.username === req.body.username);
+    const { username } = req.body;    
+    const user = currentUsers.find((user) => user.username === username);
     if (!user) { /* User does not already exist */
         req.session.user = req.body.username;            
-        const user = {
-            username: req.body.username
-        };        
+        const user = { username };        
         if (gameLogic.canJoinGame(user.username)) { /* Game has not been started yet */
             currentUsers.push(user);
             gameLogic.joinGame(user, () => {
@@ -38,14 +38,15 @@ router.post('/auth/login', (req, res) => {
 
 /* Log out the user */
 router.get('/auth/logout', auth, (req, res) => {
-    if (gameLogic.quitGame(user)) { /* Game has finished, or has not been started yet */
-        currentUsers = currentUsers.filter((otherUser) => otherUser !== user);
+    try { /* Game has finished, or has not been started yet */
+        gameLogic.quitGame(req.session.user);
+        currentUsers = currentUsers.filter((otherUser) => otherUser.username !== req.session.user);
+        gameLogic.removePlayer(req.session.user);
         req.session.destroy();
-        gameLogic.removePlayer(user.username);
         res.sendStatus(200);
-    } else { /* Game has started, method not allowed */
-        res.status(400).json({message: "Cannot log out of a running game."});
-    }
+    } catch (err) { /* Game has started, method not allowed */
+        res.status(400).json({message: err.message});
+    }    
 });
 
 /* Get the players list of cards */
@@ -57,21 +58,23 @@ router.get('/api/cards', auth, (req, res) => {
 
 /* Start the game */
 router.get('/api/start', auth, (req, res) => {
-    if (gameLogic.startGame()) {
+    try {
+        gameLogic.startGame()
         res.sendStatus(200);
-    } else {
-        res.status(400).json({message: "Cannot start game. Insufficient number of players"});
+    } catch (err) {
+        res.status(400).json({message: err.message});
     }
 });
 
 /* End the game */
 router.get('/api/end', auth, (req, res) => {
-    if (gameLogic.endGame()) {
+    try {
+        gameLogic.endGame()
         currentUsers = [];
         closeSocket();
         res.sendStatus(200);
-    } else {
-        res.status(400).json({message: "Cannot end game. Game is currently running"});
+    } catch (err) {
+        res.status(400).json({message: err.message});
     }
 });
 
@@ -99,10 +102,11 @@ if (process.env.NODE_ENV === 'testing') {
 /* Current player plays a card and a word */
 router.post('/api/playCardWord', auth, (req, res) => {
     if (gameLogic.isCurrentPlayer(req.session.user)) { /* Only current player is allowed to play both a word and a card */
-        if (gameLogic.playCardAndWord(req.session.user, req.body.card, req.body.word)) {
+        try {
+            gameLogic.playCardAndWord(req.session.user, req.body.card, req.body.word)
             res.sendStatus(200);
-        } else { /* Player attempts to vote for a card again or game status is not appropriate */
-            res.status(400).json({ message: "You cannot play more than one card and one word, or now is not the right time to play a card and a word."});
+        } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
+            res.status(400).json({ message: err.message});
         }
     } else { /* Current player attempts to vote for their card */
         res.status(400).json({ message: "You cannot play a word and a card when it is not your turn."});
@@ -111,20 +115,22 @@ router.post('/api/playCardWord', auth, (req, res) => {
 
 /* Player plays a card */
 router.post('/api/playCard', auth, (req, res) => {
-    if (gameLogic.playCard(req.session.user, req.body.card)) {
+    try {
+        gameLogic.playCard(req.session.user, req.body.card)
         res.sendStatus(200);
-    } else { /* Player attempts to vote for a card again or game status is not appropriate */
-        res.status(400).json({ message: "You cannot play more than one card, or now is not the right time to play a card."});
+    } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
+        res.status(400).json({ message: err.message});
     }
 });
 
 /* Player votes for a card */
 router.post('/api/voteCard', auth, (req, res) => {    
     if (!gameLogic.isCurrentPlayer(req.session.user)) { /* Any user apart from the current player is allowed to vote for a card */
-        if (gameLogic.voteCard(req.session.user, req.body.card)) {
+        try {
+            gameLogic.voteCard(req.session.user, req.body.card)
             res.sendStatus(200);
-        } else { /* Player attempts to vote for a card again or game status is not appropriate */
-            res.status(400).json({ message: "You cannot vote for a card more than once, or now is not the right time to vote."});
+        } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
+            res.status(400).json({ message: err.message});
         }
     } else { /* Current player attempts to vote for their card */
         res.status(400).json({ message: "You cannot vote for a card when it is your turn."});
