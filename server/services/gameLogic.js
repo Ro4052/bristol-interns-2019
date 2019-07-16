@@ -12,7 +12,7 @@ const statusTypes = {
 };
 
 const rounds = 3;
-const minPlayers = 0;
+const minPlayers = 3;
 
 let status = statusTypes.NOT_STARTED;
 let roundNum = 0;
@@ -27,6 +27,12 @@ let playedCards = [];
 
 /** @type {{ username: string, cardId: number }[]} */
 let votes = [];
+
+/* Remove player from list of players on log out */
+exports.removePlayer = (username) => {
+    players = players.filter(player => player.username !== username);
+    socket.emitPlayers(players);
+};
 
 /* Get the list of cards for a specific player */
 const getCardsByUsername = (username) => players.find(player => player.username === username).cards;
@@ -74,7 +80,7 @@ exports.quitGame = player => {
 
 /* Start the game with the players that have joined */
 exports.startGame = () => {
-    if (status === statusTypes.NOT_STARTED && players.length > minPlayers) {
+    if (status === statusTypes.NOT_STARTED && players.length >= minPlayers) {
         status = statusTypes.STARTED;
         nextRound();
     } else {

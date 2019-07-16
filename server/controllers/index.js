@@ -43,6 +43,7 @@ router.post('/auth/logout', (req, res) => {
         currentUsers = currentUsers.filter((otherUser) => otherUser !== user);
         if (gameLogic.quitGame(user)) {
             req.session.destroy();
+            gameLogic.removePlayer(user.username);
             res.sendStatus(200);
         } else {
             res.sendStatus(400)
@@ -60,8 +61,6 @@ router.get('/api/cards', auth, (req, res) => {
 
 /* Start the game */
 router.get('/api/start', auth, (req, res) => {
-    console.log(currentUsers);
-    
     gameLogic.startGame();
     res.sendStatus(200);
 });
