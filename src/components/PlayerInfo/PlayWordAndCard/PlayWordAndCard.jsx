@@ -21,7 +21,15 @@ export class PlayWordAndCard extends React.Component {
     }
 
     sendMessage() {
-        this.props.playWord(this.state.currentValue);
+        axios.post('/api/validWord', {
+            word: this.state.currentValue
+        })
+        .then(() => {
+            this.props.playWord(this.state.currentValue);
+        })
+        .catch(err => {
+            console.log(err);
+        });
     }
 
     endTurn() {        
