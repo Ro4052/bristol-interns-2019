@@ -1,7 +1,8 @@
 import React from 'react';
 import axios from 'axios';
+import Button from '../../Button/Button';
 
-export class StartGameButton extends React.Component {
+export class StartGame extends React.Component {
 
     startGame() {
         axios.get('/api/start')
@@ -12,9 +13,9 @@ export class StartGameButton extends React.Component {
 
     render() {
         return (
-            <button id="start-game" data-cy="start-game" onClick={this.startGame}>Start game</button>
+            <Button cy="start-game" handleClick={this.startGame} text="Start game" />
         );
     }
 }
 
-export default StartGameButton;
+export default StartGame;

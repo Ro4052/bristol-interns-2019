@@ -35,26 +35,6 @@
     margin: 0.5em;
 }
 
-.loginButton {
-    font-family: 'Dilana';
-    margin: 2vmin;
-    width: 20vh;
-    height: 7vh;
-    color: var(--lighter-black);
-    background-color: var(--yellow);
-    outline: none;
-    border: 2.5px solid var(--lighter-black);
-    border-radius: 15px;
-    font-size: 4vh;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.loginButton:hover {
-    font-size: 4.4vh;
-}
-
 .formHeader {
     font-size: 3vh;
     text-align: center;

@@ -1,8 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { resetState } from '../../store/gameActions';
-import { resetPlayerState, resetCookieSuccess, authenticateUser } from '../../store/playerActions';
+import { authenticateUser } from '../../store/playerActions';
 
 export class Auth extends React.Component {
 
@@ -17,15 +16,11 @@ export class Auth extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    cookie: state.playerReducer.cookie,
-    loading: state.playerReducer.loading
+    cookie: state.playerReducer.cookie
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    resetState: () => dispatch(resetState()),
-    resetPlayerState: () => dispatch(resetPlayerState()),
-    authenticateUser: () => dispatch(authenticateUser()),
-    resetCookieSuccess: () => dispatch(resetCookieSuccess())
+    authenticateUser: () => dispatch(authenticateUser())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Auth);

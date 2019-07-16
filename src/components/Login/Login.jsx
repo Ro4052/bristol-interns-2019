@@ -5,6 +5,7 @@ import { Redirect } from 'react-router-dom';
 import Monster from '../Monster/Monster';
 import Dixit from '../Dixit/Dixit';
 import { logIn, authenticateUser } from '../../store/playerActions';
+import Button from '../Button/Button';
 
 export class Login extends React.Component {
 
@@ -13,6 +14,7 @@ export class Login extends React.Component {
         this.state = {
             value: ""
         }
+        this.sendLogin = this.sendLogin.bind(this);
     }
 
     componentDidMount() {
@@ -69,11 +71,11 @@ export class Login extends React.Component {
                 <div className={styles.loginPage}>
                     <Dixit />
                     <Monster />
-                    <form className={styles.loginForm} onSubmit={this.sendLogin.bind(this)}>
-                        <h3 data-cy="login-error" className={styles.errorText}>{}</h3>
+                    <form className={styles.loginForm} onSubmit={this.sendLogin}>
+                        <h3 data-cy="login-error" className={styles.errorText}>{this.state.error}</h3>
                         <h2 className={styles.formHeader}>Type a username to enter the game:</h2>
                         <input className={styles.loginInput} style={this.getInputStyle()} value={this.state.value} placeholder="Enter username" onChange={this.handleChange.bind(this)} autoFocus/>
-                        <button className={styles.loginButton} type="submit">Log in</button>
+                        <Button cy="login" handeClick={this.sendLogin} type="submit" text="Log in" />
                     </form>
                 </div>
             : <Redirect to='/dashboard' />

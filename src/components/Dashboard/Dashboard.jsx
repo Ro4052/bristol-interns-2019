@@ -1,50 +1,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PlayerCards from '../Cards/PlayerCards/PlayerCards';
-import LogoutButton from './LogoutButton/LogoutButton';
-import Players from '../Players/Players';
 import styles from './Dashboard.module.css';
-import { finishPlayCard } from '../../store/playerActions';
-import { Prompt } from '../Prompt/Prompt';
-import PlayWord from '../PlayWord/PlayWord';
-import PlayedCards from '../Cards/PlayedCards/PlayedCards';
-import axios from 'axios';
-import { StartGameButton } from './StartGameButton/StartGameButton';
-import EndTurnButton from './EndTurnButton/EndTurnButton';
+import EndTurn from './EndTurn/EndTurn';
+import Logout from './Logout/Logout';
 import Monster from '../Monster/Monster';
+import NewGame from './NewGame/NewGame';
+import PlayedCards from '../Cards/PlayedCards/PlayedCards';
+import PlayerCards from '../Cards/PlayerCards/PlayerCards';
+import Players from '../Players/Players';
+import PlayWord from '../PlayWord/PlayWord';
+import Prompt from '../Prompt/Prompt';
+import StartGame from './StartGame/StartGame';
 
 export class Dashboard extends React.Component {
-    
-    constructor(props) {
-        super(props);
-        this.state = {}
-        this.newGame = this.newGame.bind(this);
-    }
-
-    startGame() {
-        axios.get('/api/start')
-        .catch(err => {
-            console.log(err);
-        });
-    }
-
-    newGame() {
-        axios.get('/api/end')
-        .catch(err => {
-            console.log(err);
-        });
-    }
-
     render() {
         return (
             <div className={styles.roundInfo}>
-                {this.props.status === "NOT_STARTED" && <StartGameButton />}
+                {this.props.status === "NOT_STARTED" && <StartGame />}
                 {this.props.status !== "NOT_STARTED" && <h2>Round: <span id="round-number" data-cy="round-number">{this.props.roundNum}</span></h2>}
                 {this.props.currentPlayer && <h2>Current player: <span id="current-player" data-cy="current-player">{this.props.currentPlayer.username}</span></h2>}
                 {this.props.winner && 
                     <div className={styles.gameOverBox}>
                         <h2 className={styles.winnerText}>Winner is: <span>{this.props.winner.username}</span></h2>
-                        <button id="start-game" onClick={this.newGame}>New game</button>
+                        <NewGame />
                     </div>
                 }
                 {this.props.currentWord !== '' && <h1 id="message">Word: <span data-cy='current-word'>{this.props.currentWord}</span></h1>}
@@ -56,9 +34,9 @@ export class Dashboard extends React.Component {
                     {this.props.playCard && <Prompt cy="play-card" text="Pick a card" />}
                     {this.props.playWord && <PlayWord />}
                     {this.props.voteCard && <Prompt cy="vote-card" text="Vote for a card" />}
-                    {this.props.myWord && this.props.playedCard !== 0 && !this.props.finishedRound && <EndTurnButton />}
+                    {this.props.myWord && this.props.playedCard !== 0 && !this.props.finishedRound && <EndTurn />}
                 </div>
-                <LogoutButton />
+                <Logout />
                 <Monster />
             </div>
         );
@@ -79,8 +57,4 @@ const mapStateToProps = (state) => ({
     playedCard: state.playerReducer.playedCard
 });
 
-const mapDispatchToProps = (dispatch) => ({
-    finishPlayCard: (id) => dispatch(finishPlayCard(id))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default connect(mapStateToProps)(Dashboard);

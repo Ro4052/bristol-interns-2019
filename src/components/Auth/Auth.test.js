@@ -5,16 +5,28 @@ import { Auth } from './Auth';
 import { Prompt } from '../Prompt/Prompt';
 
 const historyMock = { push: jest.fn() };
+const authenticateUserMock = jest.fn();
 
 describe('on initial mount', () => {
-    it('redirects if user is unauthenticated', () => {
-        const wrapper = shallow(<Auth history={historyMock} authenticateUser={() => {}}/>);
+    it('calls authenticateUser', () => {
+        shallow(<Auth history={historyMock} authenticateUser={authenticateUserMock}/>);
+        expect(authenticateUserMock).toHaveBeenCalled();
+        authenticateUserMock.mockRestore();
+    });
+});
+
+describe('on unauthenticated', () => {
+    it('redirects', () => {
+        const wrapper = shallow(<Auth history={historyMock} authenticateUser={authenticateUserMock}/>);
         wrapper.setState({ loading: false, authenticated: false });
         expect(wrapper.find(Redirect).length).toEqual(1);
         expect(wrapper.find(Prompt).length).toEqual(0);
     });
-    it('renders the component if stopped loading and authenticated', () => {
-        const wrapper = shallow(<Auth render={() => <Prompt/>} history={historyMock} authenticateUser={() => {}} cookie={"unicorn"}/>);
+});
+
+describe('on authenticated', () => {
+    it('renders the protected component', () => {
+        const wrapper = shallow(<Auth render={() => <Prompt/>} history={historyMock} authenticateUser={authenticateUserMock} cookie={"unicorn"}/>);
         expect(wrapper.find(Prompt).length).toEqual(1);
     });
 });

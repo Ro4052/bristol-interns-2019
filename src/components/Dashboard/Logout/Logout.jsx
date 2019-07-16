@@ -1,9 +1,9 @@
 import React from 'react';
-import styles from './LogoutButton.module.css';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
+import Button from '../../Button/Button';
 
-export class LogoutButton extends React.Component {
+export class Logout extends React.Component {
     
     constructor(props) {
         super(props);
@@ -37,9 +37,9 @@ export class LogoutButton extends React.Component {
 
     render() {
         return (
-            <button id='logout-button' data-cy="logout" className={styles.logOutButton} onClick={this.logOut}>Log out</button>
+            <Button cy="logout" handleClick={this.logOut} text="Log out" />
         );
     }
 }
 
-export default withRouter(LogoutButton);
+export default withRouter(Logout);
