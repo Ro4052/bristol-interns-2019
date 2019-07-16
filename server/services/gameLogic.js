@@ -73,7 +73,7 @@ exports.quitGame = player => {
         socket.emitPlayers(getPlayers());
         return true;
     } else {
-        // Game has started, player can't quit
+        // Game has started, player can't quit, server is responsible for generating the error
         return false;
     }
 }
@@ -83,21 +83,29 @@ exports.startGame = () => {
     if (status === statusTypes.NOT_STARTED && players.length >= minPlayers) {
         status = statusTypes.STARTED;
         nextRound();
+        return true;
     } else {
-        // TODO: There aren't yet enough players in the game
+        // There aren't yet enough players in the game, server is responsible for generating the error
+        return false;
     }
 }
 
 /* End the game */
 exports.endGame = () => {
-    socket.emitEndGame();
-    status = statusTypes.NOT_STARTED;
-    currentPlayer = null;
-    currentWord = '';
-    roundNum = 0;
-    players = [];
-    playedCards = [];
-    votes = [];
+    if (status === statusTypes.GAME_OVER) {
+        socket.emitEndGame();
+        status = statusTypes.NOT_STARTED;
+        currentPlayer = null;
+        currentWord = '';
+        roundNum = 0;
+        players = [];
+        playedCards = [];
+        votes = [];
+        return true;
+    } else {
+        // Game is currently running and cannot be ended, server is responsible for generating the error
+        return false;
+    }
 }
 
 /* Move on to the next round, called when all players have finished their turn */
@@ -121,7 +129,7 @@ const nextRound = () => {
 
 /* The storyteller plays a card and a word */
 exports.playCardAndWord = (username, cardId, word) => {
-    if (status === statusTypes.WAITING_FOR_CURRENT_PLAYER && currentPlayer.username === username && !playerHasPlayedCard(username)) {
+    if (status === statusTypes.WAITING_FOR_CURRENT_PLAYER && !playerHasPlayedCard(username)) {
         const card = {
             username: username,
             cardId: cardId
@@ -133,8 +141,11 @@ exports.playCardAndWord = (username, cardId, word) => {
         currentWord = word;
         socket.emitWord(currentWord);
         socket.promptOtherPlayers(currentPlayer);
+        return true;
     } else {
-        // TODO: Error handling
+        // Cannot play card and word, the user sending the request is not the current player, the player has already played a card,
+        // or the game status is not appropriate for the request, server is responsible for generating an error
+        return false;
     }
 }
 
@@ -152,6 +163,11 @@ exports.playCard = (username, cardId) => {
             socket.emitPlayedCards(getPlayedCards());
             socket.promptPlayersVote(currentPlayer);
         }
+        return true;
+    } else {
+        // Cannot play card, the player has already played a card, or the game status is not
+        // appropriate for the request, server is responsible for generating an error.
+        return false;
     }
 }
 
@@ -168,8 +184,13 @@ exports.voteCard = (username, cardId) => {
             socket.emitStatus(status);
             socket.emitAllVotes(votes);
             calcScores();
-            setTimeout(() => nextRound(), 10000);
+            setTimeout(() => nextRound(), 5000);
         }
+        return true;
+    } else {
+        // Cannot vote for card, the player has already voted for a card, or the game status is not
+        // appropriate for the request, server is responsible for generating an error.
+        return false; 
     }
 }
 

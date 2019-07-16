@@ -80,9 +80,7 @@ exports.emitEndGame = () => {
 }
 
 // Ask the current player for a word and a card
-const promptCurrentPlayer = currentPlayer => {
-    sockets.find(socket => socket.handshake.session.user === currentPlayer.username).emit("play word and card");
-}
+const promptCurrentPlayer = currentPlayer => sockets.find(socket => socket.handshake.session.user === currentPlayer.username).emit("play word and card");
 exports.promptCurrentPlayer = promptCurrentPlayer;
 
 // Ask the other players for a card
