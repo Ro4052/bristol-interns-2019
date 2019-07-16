@@ -62,7 +62,7 @@ export class Login extends React.Component {
         return (this.props.error) ? {border: '2px solid #EA3546'} : {};
     }
 
-    render() {        
+    render() {
         return (
             (!this.props.cookie) ?
                 <div className={styles.loginPage}>

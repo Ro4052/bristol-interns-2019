@@ -72,10 +72,9 @@ exports.quitGame = player => {
         players = players.filter((otherPlayer) => otherPlayer !== player);
         socket.emitPlayers(getPlayers());
         return true;
-    } else {
-        // Game has started, player can't quit, server is responsible for generating the error
-        return false;
     }
+    // Game has started, player can't quit, server is responsible for generating the error
+    return false;
 }
 
 /* Start the game with the players that have joined */
@@ -84,10 +83,9 @@ exports.startGame = () => {
         status = statusTypes.STARTED;
         nextRound();
         return true;
-    } else {
-        // There aren't yet enough players in the game, server is responsible for generating the error
-        return false;
-    }
+    } 
+    // There aren't yet enough players in the game, server is responsible for generating the error
+    return false;
 }
 
 /* End the game */
@@ -102,10 +100,9 @@ exports.endGame = () => {
         playedCards = [];
         votes = [];
         return true;
-    } else {
-        // Game is currently running and cannot be ended, server is responsible for generating the error
-        return false;
-    }
+    } 
+    // Game is currently running and cannot be ended, server is responsible for generating the error
+    return false;
 }
 
 /* Move on to the next round, called when all players have finished their turn */
@@ -142,11 +139,10 @@ exports.playCardAndWord = (username, cardId, word) => {
         socket.emitWord(currentWord);
         socket.promptOtherPlayers(currentPlayer);
         return true;
-    } else {
-        // Cannot play card and word, the user sending the request is not the current player, the player has already played a card,
-        // or the game status is not appropriate for the request, server is responsible for generating an error
-        return false;
     }
+    // Cannot play card and word, the user sending the request is not the current player, the player has already played a card,
+    // or the game status is not appropriate for the request, server is responsible for generating an error
+    return false;
 }
 
 /* Adds player's card to list of played cards */
@@ -164,11 +160,10 @@ exports.playCard = (username, cardId) => {
             socket.promptPlayersVote(currentPlayer);
         }
         return true;
-    } else {
-        // Cannot play card, the player has already played a card, or the game status is not
-        // appropriate for the request, server is responsible for generating an error.
-        return false;
     }
+    // Cannot play card, the player has already played a card, or the game status is not
+    // appropriate for the request, server is responsible for generating an error.
+    return false;
 }
 
 /* Vote for a card */
@@ -187,11 +182,10 @@ exports.voteCard = (username, cardId) => {
             setTimeout(() => nextRound(), 5000);
         }
         return true;
-    } else {
-        // Cannot vote for card, the player has already voted for a card, or the game status is not
-        // appropriate for the request, server is responsible for generating an error.
-        return false; 
     }
+    // Cannot vote for card, the player has already voted for a card, or the game status is not
+    // appropriate for the request, server is responsible for generating an error.
+    return false; 
 }
 
 /* Calculate the scores for this round */
