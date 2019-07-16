@@ -3,6 +3,12 @@ import connectSocket from '../services/socket';
 import types from './playerActionTypes';
 import { resetState } from "./gameActions";
 
+let instance = axios.create({
+    validateStatus: function (status) {
+        return status >= 200 && status < 500;
+    }
+});
+
 export const resetPlayerState = () => ({
     type: types.RESET_PLAYER_STATE
 });
@@ -23,11 +29,15 @@ export const fetchCardsFailure = (error) => ({
 
 export const fetchCards = () => (dispatch) => {
     dispatch(fetchCardsBegin());
-    axios.get('/api/cards')
+    instance.get('/api/cards')
     .then(res => {
-        dispatch(fetchCardsSuccess(res.data));
+        if (res.status === 200) {
+            dispatch(fetchCardsSuccess(res.data));
+        } else {
+            dispatch(fetchCardsFailure(res.data.message));
+        }
     })
-    .catch(error => dispatch(fetchCardsFailure(error)));
+    .catch(err => dispatch(fetchCardsFailure(err.message)));
 }
 
 export const requestPlayCard = (id) => ({
@@ -61,13 +71,17 @@ export const voteForCardFailure = (error) => ({
 
 export const voteForCard = (id) => (dispatch) => {
     dispatch(voteForCardBegin());
-    axios.post('/api/voteCard', {
+    instance.post('/api/voteCard', {
         card: id
     })
-    .then(() => {
-        dispatch(voteForCardSuccess(id));
+    .then((res) => {
+        if (res.status === 200) {
+            dispatch(voteForCardSuccess(id));
+        } else {
+            dispatch(voteForCardFailure(res.data.message));
+        }
     })
-    .catch(error => dispatch(voteForCardFailure("Cannot vote for card")));
+    .catch(err => dispatch(voteForCardFailure(err.message)));
 }
 
 export const setPlayedCard = id => ({
@@ -101,9 +115,15 @@ export const resetFinishRound = bool => ({
 });
 
 export const resetCookie = () => (dispatch) => {
-    axios.get('/api/reset-cookie')
-    .then(() => dispatch(resetCookieSuccess()))
-    .catch((err) => dispatch(resetCookieFailure("Cannot reset cookie")));
+    instance.get('/api/reset-cookie')
+    .then((res) => {
+        if (res.status === 200) {
+            dispatch(resetCookieSuccess());
+        } else {
+            dispatch(resetCookieFailure(res.data.message));
+        }
+    })
+    .catch((err) => dispatch(resetCookieFailure(err.message)));
 };
 
 export const resetCookieFailure = (error) => ({
@@ -116,18 +136,18 @@ export const resetCookieSuccess = () => ({
 });
 
 export const logIn = (username) => (dispatch) => {
-    axios.post('/auth/login', {
+    instance.post('/auth/login', {
         username: username
     })
-    .then(() => {
-        connectSocket();
-        dispatch(logInSuccess(username))
+    .then((res) => {
+        if (res.status === 200) {
+            connectSocket();
+            dispatch(logInSuccess(username))
+        } else {
+            dispatch(logInFailure(res.data.message));
+        }
     })
-    .catch((err) => {
-        if (err.message.includes(409)) dispatch(logInFailure("Username already exists"));
-        else if (err.message.includes(400)) dispatch(logInFailure("Game has already started"));
-        else dispatch(logInFailure("Cannot log in - Server Error"))
-    });
+    .catch((err) => dispatch(logInFailure(err.message)));
 };
 
 export const logInFailure = (error) => ({
@@ -142,30 +162,21 @@ export const logInSuccess = (cookie) => ({
 
 export const authenticateUser = () => (dispatch) => {
     dispatch(authBegin());
-    axios.get('/auth', {
-    validateStatus: (status) => {
-        return status < 500;
-    }})
+    instance.get('/auth')
     .then(res => {            
         if (res.status === 200) {
             connectSocket();
             dispatch(authSuccess(res.data.cookie));
-        } else if (res.status === 401) {
-            dispatch(authFailure("Unauthorised"));
-            dispatch(resetState());
-            dispatch(resetPlayerState());
         } else {
-            const error = new Error(res.error);
-            dispatch(authFailure(""));
             dispatch(resetState());
             dispatch(resetPlayerState());
-            throw error;
+            dispatch(authFailure(res.data.message));
         }
     })
-    .catch(() => {
-        dispatch(authFailure(""));
+    .catch((err) => {
         dispatch(resetState());
         dispatch(resetPlayerState());
+        dispatch(authFailure(err.message));
     });
 }
 
@@ -181,4 +192,31 @@ export const authFailure = (error) => ({
 export const authSuccess = (cookie) => ({
     type: types.AUTH_SUCCESS,
     payload: { cookie }
+});
+
+export const logOutUser = () => (dispatch) => {
+    instance.get('/auth/logout')
+    .then(res => {
+        if (res.status === 200) {
+            dispatch(resetState());
+            dispatch(resetPlayerState());
+            dispatch(logOutSuccess());
+        } else {
+            dispatch(logOutFailure(res.data.message));
+            window.alert(res.data.message);
+        }
+    })
+    .catch((err) => {
+        dispatch(logOutFailure(err.message));
+        window.alert(err.message);
+    })
+}
+
+export const logOutSuccess = () => ({
+    type: types.LOG_OUT_SUCCESS
+});
+
+export const logOutFailure = (error) => ({
+    type: types.LOG_OUT_FAILURE,
+    payload: { error }
 });

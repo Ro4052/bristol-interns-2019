@@ -1,7 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styles from '../../Login/Login.module.css';
-import axios from 'axios';
-import { withRouter } from 'react-router-dom';
+import { logOutUser } from '../../../store/playerActions';
 
 export class LogoutButton extends React.Component {
     
@@ -11,28 +11,8 @@ export class LogoutButton extends React.Component {
         this.logOut = this.logOut.bind(this);
     }
 
-    deleteAllCookies() {
-        var cookies = document.cookie.split(";");
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i];
-            var eqPos = cookie.indexOf("=");
-            var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-            document.cookie = name + "=;expires=Thu, 01 Jan 1975 00:00:00 GMT";
-        }
-    }
-
     logOut() {
-        axios.post('/auth/logout')
-        .then(response => {
-            if (response.status === 200) {
-                this.deleteAllCookies();
-                this.props.history.push('/');
-            }
-        })
-        .catch((err) => {
-            console.log(err);
-            window.alert('Cannot log out of a current game');
-        })
+        this.props.logOutUser();
     }
 
     render() {        
@@ -42,4 +22,14 @@ export class LogoutButton extends React.Component {
     }
 }
 
-export default withRouter(LogoutButton);
+const mapStateToProps = (state) => ({
+    cookie: state.playerReducer.cookie,
+    loading: state.playerReducer.loading,
+    error: state.playerReducer.error
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    logOutUser: () => dispatch(logOutUser())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(LogoutButton);
