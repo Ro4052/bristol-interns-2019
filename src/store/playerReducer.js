@@ -1,7 +1,9 @@
-import { types } from './playerActions';
+import types from './playerActionTypes';
 
 export const initialState = {
+    cookie: null,
     playWordAndCard: false,
+    playWord: false,
     playCard: false,
     voteCard: false,
     myCards: [],
@@ -11,7 +13,8 @@ export const initialState = {
     myWord: "",
     loading: true,
     error: null,
-    finishedRound: false
+    finishedRound: false,
+    endTurn: false
 }
 
 const cardReducer = (state = initialState, action) => {
@@ -62,7 +65,8 @@ const cardReducer = (state = initialState, action) => {
         case types.PLAY_WORD:
             return {
                 ...state,
-                myWord: action.word
+                myWord: action.word,
+                playWord: false
             };
         case types.VOTE_FOR_CARD_BEGIN:
             return {
@@ -74,7 +78,8 @@ const cardReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                votedCard: action.payload.card
+                votedCard: action.payload.card,
+                voteCard: false
             };
         case types.VOTE_FOR_CARD_FAILURE: 
             return {
@@ -86,7 +91,9 @@ const cardReducer = (state = initialState, action) => {
         case types.SET_PLAY_WORD_AND_CARD:
             return {
                 ...state,
-                playWordAndCard: action.bool
+                playWordAndCard: action.bool,
+                playWord: action.bool,
+                playCard: action.bool
             };
         case types.SET_PLAY_CARD:
             return {
@@ -99,10 +106,10 @@ const cardReducer = (state = initialState, action) => {
                 voteCard: action.bool
             };
         case types.RESET_FINISH_ROUND:
-                return {
-                    ...state,
-                    finishedRound: false
-                };
+            return {
+                ...state,
+                finishedRound: false
+            };
         case types.MY_TURN:
             return {
                 ...state,
@@ -114,6 +121,46 @@ const cardReducer = (state = initialState, action) => {
                 myTurn: false,
                 othersTurn: true
             };
+        case types.RESET_COOKIE_FAILURE:
+            return {
+                ...state,
+                error: action.payload.error
+            };
+        case types.RESET_COOKIE_SUCCESS:
+            return {
+                ...state,
+                cookie: null
+            };
+        case types.LOG_IN_FAILURE:
+            return {
+                ...state,
+                error: action.payload.error,
+                cookie: null
+            };
+        case types.LOG_IN_SUCCESS:
+            return {
+                ...state,
+                cookie: action.payload.cookie
+            };
+        case types.AUTH_BEGIN:
+            return {
+                ...state,
+                loading: true,
+                error: null
+            }
+        case types.AUTH_FAILURE:            
+            return {
+                ...state,
+                error: action.payload.error,
+                cookie: null,
+                loading: false
+            }
+        case types.AUTH_SUCCESS:
+            return {
+                ...state,
+                cookie: action.payload.cookie,
+                loading: false
+            }
         default:
             return state;
     }

@@ -19,50 +19,40 @@ let roundNum = 0;
 let currentPlayer;
 let currentWord = '';
 
-/* {
-    username,
-    cards,
-    score
-} */
+/** @type {{ username: string, cards: {{ id: number, played: bool }[]}, score: number }[]} */
 let players = [];
 
-/* {
-    username,
-    cardId
-} */
-let cards = [];
+/** @type {{ username: string, cardId: number }[]} */
+let playedCards = [];
 
-/* {
-    username,
-    cardId
-} */
+/** @type {{ username: string, cardId: number }[]} */
 let votes = [];
 
-/* Get the current word of the game */
-exports.getWord = () => currentWord;
-
-/* Get the current status of the game */
-exports.getStatus = () => status;
-
-/* Get the current round number */
-exports.getRoundNumber = () => roundNum;
-
-/* Get the current status of the game */
-exports.getCurrentPlayer = () => currentPlayer;
+/* Remove player from list of players on log out */
+exports.removePlayer = (username) => {
+    players = players.filter(player => player.username !== username);
+    socket.emitPlayers(players);
+};
 
 /* Get the list of cards for a specific player */
-exports.getCardsByUsername = (username) => players.find(player => player.username === username).cards.filter(card => card.played === false);
+const getCardsByUsername = (username) => players.find(player => player.username === username).cards;
+
+/* Returns true if this is the current player */
+exports.isCurrentPlayer = (username) => currentPlayer.username === username;
+
+/* Get the list of unplayed cards for a specific player */
+exports.getUnplayedCardsByUsername = (username) => players.find(player => player.username === username).cards.filter(card => !card.played);
 
 /* Returns true if the player is able to join the game, false otherwise */
 exports.canJoinGame = (username) => (status === statusTypes.NOT_STARTED && !players.some(player => player.username === username));
 
-/* Return the list of players, without their assigned cards */
+/* Return the list of players, hiding their assigned cards */
 const getPlayers = () => players.map(player => ({ username: player.username, score: player.score }));
 exports.getPlayers = getPlayers;
 
-/* Return the list of cards played this round, without who played them */
-const getCards = () => cards.map(card => ({ cardId: card.cardId }));
-exports.getCards = getCards;
+/* Return the list of cards played this round, hiding who played them */
+const getPlayedCards = () => playedCards.map(card => ({ cardId: card.cardId }));
+exports.getPlayedCards = getPlayedCards;
 
 /* Add the player to the game if possible */
 exports.joinGame = (user, callback) => {
@@ -90,7 +80,7 @@ exports.quitGame = player => {
 
 /* Start the game with the players that have joined */
 exports.startGame = () => {
-    if (status === statusTypes.NOT_STARTED && players.length > minPlayers) {
+    if (status === statusTypes.NOT_STARTED && players.length >= minPlayers) {
         status = statusTypes.STARTED;
         nextRound();
     } else {
@@ -100,12 +90,13 @@ exports.startGame = () => {
 
 /* End the game */
 exports.endGame = () => {
+    socket.emitEndGame();
     status = statusTypes.NOT_STARTED;
     currentPlayer = null;
     currentWord = '';
     roundNum = 0;
     players = [];
-    cards = [];
+    playedCards = [];
     votes = [];
 }
 
@@ -116,26 +107,27 @@ const nextRound = () => {
         roundNum++;
         currentPlayer = players[roundNum % players.length];
         currentWord = '';
-        cards = [];
+        playedCards = [];
         votes = [];
         socket.emitNewRound(status, roundNum, currentPlayer);
         socket.promptCurrentPlayer(currentPlayer);
     } else {
         status = statusTypes.GAME_OVER;
+        socket.emitStatus(status);
+        socket.emitWinner(players.reduce((prev, current) => (prev.score > current.score) ? prev : current));
         // TODO: Emit game over and final scores/winner
     }
 }
 
-/* The player whose turn it is plays a card and a word */
+/* The storyteller plays a card and a word */
 exports.playCardAndWord = (username, cardId, word) => {
     if (status === statusTypes.WAITING_FOR_CURRENT_PLAYER && currentPlayer.username === username && !playerHasPlayedCard(username)) {
         const card = {
             username: username,
             cardId: cardId
         };
-        cards.push(card);
-        let playerCards =  players.find(player => player.username === currentPlayer.username).cards;    
-        playerCards.find(playedCard => playedCard.id.toString() === cardId).played = true;
+        playedCards.push(card);
+        getCardsByUsername(username).find(playedCard => playedCard.id.toString() === cardId).played = true;
         status = statusTypes.WAITING_FOR_OTHER_PLAYERS;
         socket.emitStatus(status);
         currentWord = word;
@@ -153,12 +145,11 @@ exports.playCard = (username, cardId) => {
             username: username,
             cardId: cardId
         };
-        cards.push(card);
-        let playerCards =  players.find(player => player.username === username).cards;    
-        playerCards.find(playedCard => playedCard.id.toString() === cardId).played = true;
+        playedCards.push(card);
+        getCardsByUsername(username).find(playedCard => playedCard.id.toString() === cardId).played = true;
         if (allPlayersPlayedCard()) {
             status = statusTypes.WAITING_FOR_VOTES;
-            socket.emitPlayedCards(getCards());
+            socket.emitPlayedCards(getPlayedCards());
             socket.promptPlayersVote(currentPlayer);
         }
     }
@@ -176,16 +167,35 @@ exports.voteCard = (username, cardId) => {
             status = statusTypes.DISPLAY_ALL_VOTES;
             socket.emitStatus(status);
             socket.emitAllVotes(votes);
+            calcScores();
             setTimeout(() => nextRound(), 10000);
         }
     }
 }
 
+/* Calculate the scores for this round */
+const calcScores = () => {
+    players.forEach(player => console.log(player.cards));
+    const correctCard = playedCards.find(card => card.userId === currentPlayer.userId);
+    const correctVotes = votes.filter(vote => vote.cardId === correctCard.cardId);
+    if ((correctVotes.length % votes.length) === 0) {
+        players.forEach(player => {if (player !== currentPlayer) player.score += 2});
+    } else {
+        currentPlayer.score += 3;
+        correctVotes.forEach(vote => players.find(player => player.username === vote.username).score += 3);
+        votes.filter(vote => vote.cardId !== correctCard.cardId).forEach(vote => {
+            const votedCard = playedCards.find(card => card.cardId === vote.cardId);
+            players.find(player => player.username === votedCard.username).score += 1;
+        });
+    }
+    socket.emitPlayers(getPlayers());
+}
+
 /* Return true if the player has already played this round */
-const playerHasPlayedCard = (username) => cards.filter(card => card.username === username).length > 0;
+const playerHasPlayedCard = (username) => playedCards.some(card => card.username === username);
 
 /* Return true if the player has already voted this round */
-const playerHasVoted = (username) => votes.filter(vote => vote.username === username).length > 0;
+const playerHasVoted = (username) => votes.some(vote => vote.username === username);
 
 /* Returns true if all players have played a card this round */
 const allPlayersPlayedCard = () => players.every(player => playerHasPlayedCard(player.username));

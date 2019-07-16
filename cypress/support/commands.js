@@ -30,7 +30,8 @@ Cypress.Commands.add('login', username => {
 });
 
 Cypress.Commands.add('startGame', () => {
-    cy.get('#start-game').click();
+    cy.url().should('include', '/dashboard');
+    cy.get('[data-cy="start-game"]').click();
 });
 
 Cypress.Commands.add('resetGame', () => {
@@ -38,4 +39,19 @@ Cypress.Commands.add('resetGame', () => {
         url: '/api/reset-server',
         method: 'POST'
     });
+});
+
+Cypress.Commands.add('playWordCard', () => {
+    cy.get('[data-cy="my-cards"] > img').first().click();
+    cy.get('[data-cy="type-word"]').type('word');
+    cy.get('[data-cy="send-word"]').click();
+    cy.get('[data-cy="end-turn"]').click();
+});
+
+Cypress.Commands.add('playCard', () => {
+    cy.get('[data-cy="my-cards"] > img').first().click();
+});
+
+Cypress.Commands.add('voteCard', () => {
+    cy.get('[data-cy="played-cards"] > li > img').first().click();
 });

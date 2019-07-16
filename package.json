@@ -26,7 +26,7 @@
   },
   "scripts": {
     "start": "node server.js",
-    "start:devserver": "npx cross-env NODE_ENV=development nodemon --inspect server.js --watch ./server --watch ./server.js",
+    "start:devserver": "nodemon server.js --watch ./server --watch ./server.js",
     "start:devclient": "react-scripts start",
     "start:testserver": "concurrently --success first --kill-others \"npx cross-env PORT=12345 NODE_ENV=testing node server.js\" \"npx cross-env PORT=12346 NODE_ENV=testing node ./server/proxy/server.js\"",
     "build": "react-scripts build",

@@ -10,7 +10,7 @@ let currentUsers = [];
 /* Check if player is logged in */
 router.get('/auth', (req, res) => {
     if (req.session.user) {
-        res.sendStatus(200);
+        res.status(200).json({ cookie: req.session.user });
     } else {
         res.sendStatus(401);
     }
@@ -44,6 +44,7 @@ router.post('/auth/logout', (req, res) => {
         currentUsers = currentUsers.filter((otherUser) => otherUser !== user);
         if (gameLogic.quitGame(user)) {
             req.session.destroy();
+            gameLogic.removePlayer(user.username);
             res.sendStatus(200);
         } else {
             res.sendStatus(400)
@@ -55,13 +56,27 @@ router.post('/auth/logout', (req, res) => {
 
 /* Get the players list of cards */
 router.get('/api/cards', auth, (req, res) => {
-    const cards = gameLogic.getCardsByUsername(req.session.user);
+    const cards = gameLogic.getUnplayedCardsByUsername(req.session.user);
     res.status(200).json(cards);
 });
 
 /* Start the game */
 router.get('/api/start', auth, (req, res) => {
     gameLogic.startGame();
+    res.sendStatus(200);
+});
+
+/* End the game */
+router.get('/api/end', auth, (req, res) => {
+    gameLogic.endGame();
+    currentUsers = [];
+    closeSocket();
+    res.sendStatus(200);
+});
+
+/* Resest the cookie and destroy the session */
+router.get('/api/reset-cookie', auth, (req, res) => {
+    req.session.destroy();
     res.sendStatus(200);
 });
 
@@ -75,6 +90,7 @@ if (process.env.NODE_ENV === 'testing') {
         res.sendStatus(200);
     });
 }
+
 /* Current player plays word only if it's a valid word */
 router.post('/api/validWord', auth, (req,res) => {
     if (profanityCheck.isValidWord(req.body.word)) {
@@ -89,7 +105,6 @@ router.post('/api/validWord', auth, (req,res) => {
 /* Current player plays a card and a word */
 router.post('/api/playCardWord', auth, (req, res) => {
     gameLogic.playCardAndWord(req.session.user, req.body.card, req.body.word);
-    
     if (profanityCheck.isValidWord(req.body.word)) {
         console.log("Valid");
         res.sendStatus(200);
@@ -107,7 +122,7 @@ router.post('/api/playCard', auth, (req, res) => {
 
 /* Player votes for a card */
 router.post('/api/voteCard', auth, (req, res) => {    
-    if (req.session.user !== gameLogic.getCurrentPlayer().username) {
+    if (!gameLogic.isCurrentPlayer(req.session.user)) {
         gameLogic.voteCard(req.session.user, req.body.card);
         res.sendStatus(200);
     } else {
