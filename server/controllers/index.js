@@ -37,19 +37,14 @@ router.post('/auth/login', (req, res) => {
 });
 
 /* Log out the user */
-router.get('/auth/logout', (req, res) => {
-    const user = currentUsers.find((user) => user.username === req.session.user);
-    if (user) { /* User making the request exists */
-        if (gameLogic.quitGame(user)) { /* Game has finished, or has not been started yet */
-            currentUsers = currentUsers.filter((otherUser) => otherUser !== user);
-            req.session.destroy();
-            gameLogic.removePlayer(user.username);
-            res.sendStatus(200);
-        } else { /* Game has started, method not allowed */
-            res.status(400).json({message: "Cannot log out of a running game."});
-        }
-    } else { /* User making the request does not exist */
-        res.status(404).json({message: "Cannot log out: user does not exist."});
+router.get('/auth/logout', auth, (req, res) => {
+    if (gameLogic.quitGame(user)) { /* Game has finished, or has not been started yet */
+        currentUsers = currentUsers.filter((otherUser) => otherUser !== user);
+        req.session.destroy();
+        gameLogic.removePlayer(user.username);
+        res.sendStatus(200);
+    } else { /* Game has started, method not allowed */
+        res.status(400).json({message: "Cannot log out of a running game."});
     }
 });
 
