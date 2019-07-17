@@ -72,7 +72,7 @@ workflows:
       - deploy-develop:
           requires:
             - test
-            -e2etest
+            - e2etest
           filters:
             branches:
               only:
