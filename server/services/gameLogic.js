@@ -34,6 +34,10 @@ exports.removePlayer = (username) => {
     socket.emitPlayers(players);
 };
 
+/* Set the status of the game */
+const setStatus = (newStatus) => status = newStatus;
+exports.setStatus = setStatus;
+
 /* Get the list of cards for a specific player */
 const getCardsByUsername = (username) => players.find(player => player.username === username).cards;
 
@@ -80,7 +84,7 @@ exports.quitGame = username => {
 /* Start the game with the players that have joined */
 exports.startGame = () => {
     if (status === statusTypes.NOT_STARTED && players.length >= minPlayers) {
-        status = statusTypes.STARTED;
+        setStatus(statusTypes.STARTED);
         nextRound();
     } else {
         // There aren't yet enough players in the game, server is responsible for generating the error
@@ -102,7 +106,7 @@ exports.endGame = () => {
 /* Move on to the next round, called when all players have finished their turn */
 const nextRound = () => {
     if (roundNum < rounds) {
-        status = statusTypes.WAITING_FOR_CURRENT_PLAYER;
+        setStatus(statusTypes.WAITING_FOR_CURRENT_PLAYER);
         roundNum++;
         currentPlayer = players[roundNum % players.length];
         clearRoundData();
@@ -166,7 +170,7 @@ exports.voteCard = (username, cardId) => {
         };
         votes.push(vote);
         if (allPlayersVoted()) {
-            status = statusTypes.DISPLAY_ALL_VOTES;
+            setStatus(statusTypes.DISPLAY_ALL_VOTES);
             socket.emitStatus(status);
             socket.emitAllVotes(votes);
             calcScores();
@@ -219,7 +223,7 @@ const clearRoundData = () => {
 /* Clear entire game state */
 const clearGameState = () => {
     clearRoundData();
-    status = statusTypes.NOT_STARTED;
+    setStatus(statusTypes.NOT_STARTED);
     currentPlayer = null;
     roundNum = 0;
     players = [];
