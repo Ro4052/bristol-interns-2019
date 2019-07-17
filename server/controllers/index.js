@@ -97,6 +97,7 @@ router.get('/api/reset-cookie', auth, (req, res) => {
 if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {
         currentUsers = [];
+        gameLogic.setStatus("GAME_OVER");
         gameLogic.endGame();
         closeSocket();
         req.session.destroy();

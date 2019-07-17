@@ -17,7 +17,4 @@ describe('on click', () => {
         expect(spy).toHaveBeenCalled();
         spy.mockRestore();
     });
-    it('calls the delete all cookies function', () => {
-        // TODO: Figure out how to mock logout request to test deleteAllCookies
-    });
 });
