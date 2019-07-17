@@ -98,7 +98,7 @@ router.post('/api/playCardWord', auth, (req, res) => {
     if (gameLogic.isCurrentPlayer(req.session.user)) { /* Only current player is allowed to play both a word and a card */
         try {
             if (validWord.isValidWord(req.body.word)) {
-                gameLogic.playCardAndWord(req.session.user, req.body.card, req.body.word)
+                gameLogic.playCardAndWord(req.session.user, req.body.cardId, req.body.word);
                 res.sendStatus(200);
             } else {
                 res.status(400).json({message: "Invalid word."});

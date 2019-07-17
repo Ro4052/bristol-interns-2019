@@ -87,7 +87,9 @@ app.get('/playCardWord', (req, res) => {
         cardId: cards[0].cardId,
         word: "Hello"
     })
-    .then(() => res.sendStatus(200))
+    .then(() => {
+        res.sendStatus(200);
+    })
     .catch((err) => res.sendStatus(err.statusCode));
 });
 

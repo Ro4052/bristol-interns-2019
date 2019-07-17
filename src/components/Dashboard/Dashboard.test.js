@@ -1,6 +1,4 @@
 import React from 'react';
-import StartGameButton from './StartGameButton/StartGameButton';
-import { shallow } from 'enzyme';
 import PlayerCards from '../Cards/PlayerCards/PlayerCards';
 import { shallow } from 'enzyme';
 import { Dashboard } from './Dashboard';
