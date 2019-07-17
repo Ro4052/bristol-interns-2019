@@ -55,3 +55,8 @@ Cypress.Commands.add('playCard', () => {
 Cypress.Commands.add('voteCard', () => {
     cy.get('[data-cy="played-cards"] > li > img').first().click();
 });
+
+Cypress.Commands.add('sendWord', () => {
+    cy.get('[data-cy="type-word"]').type('fuck');
+    cy.get('[data-cy="send-word"]').click();
+})

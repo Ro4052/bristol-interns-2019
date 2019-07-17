@@ -37,3 +37,18 @@ describe('on button click', () => {
         spy.mockRestore();
     });
 });
+
+describe('on receive 400 from server due to invalid word entered', () => {
+    it('displays error', () => {
+        const wrapper = shallow(<PlayWord playWord={() => {}}/>);
+        wrapper.setState({error: 'Invalid word'})
+        // wrapper.find({'data-cy' :"send-error"}).text().toEqual('Invalid word');
+        expect(wrapper.find({'data-cy' :"send-error"}).text()).toEqual('Invalid word');
+    });
+})
+describe('on receive 200 form server due to valid word entered', () => {
+    it('does not display error', () => {
+        const wrapper = shallow(<PlayWord playWord={() => {}}/>);
+        expect(wrapper.find({'data-cy' :"send-error"}).text()).toEqual('');
+    });
+})

@@ -30,6 +30,9 @@ h1 {
     display: flex;
 }
 
+.invalidWord {
+    color: red;
+}
 .playerInteractions {
     margin: 2vmin;
     position: relative;

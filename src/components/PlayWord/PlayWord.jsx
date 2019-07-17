@@ -9,7 +9,8 @@ export class PlayWord extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentValue: ''
+            currentValue: '',
+            error: ''
         }
         this.handleChange = this.handleChange.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
@@ -28,6 +29,9 @@ export class PlayWord extends React.Component {
         })
         .catch(err => {
             console.log(err);
+                this.setState( {
+                    error: 'Invalid word'
+                });
         });
     }
     
@@ -35,6 +39,7 @@ export class PlayWord extends React.Component {
         return (
             <div className={styles.messageBox}>
                 <input onChange={this.handleChange} value={this.state.currentValue} placeholder="Type in your word" data-cy='type-word' />
+                <span className={styles.invalidWord} data-cy= 'send-error'>{this.state.error}</span>
                 <button id="send-message" className={styles.sendWordButton} onClick={this.sendMessage} data-cy='send-word'>Send word</button>
             </div>
         );
