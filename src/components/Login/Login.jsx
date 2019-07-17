@@ -63,19 +63,12 @@ export class Login extends React.Component {
     }
 
     render() {
+        const letters = ["T", "e", "l", "l", "T", "a", "l", "e", "s"];
         return (
             (!this.props.cookie) ?
                 <div className={styles.loginPage}>
-                     <div className={styles.foo}>
-                        <span className={styles.letter} data-letter="T">T</span>
-                        <span className={styles.letter} data-letter="e">e</span>
-                        <span className={styles.letter} data-letter="l">l</span>
-                        <span className={styles.letter} data-letter="l">l</span>
-                        <span className={styles.letter} data-letter="T">T</span>
-                        <span className={styles.letter} data-letter="a">a</span>
-                        <span className={styles.letter} data-letter="l">l</span>
-                        <span className={styles.letter} data-letter="e">e</span>
-
+                    <div className={styles.foo}>
+                        {letters.map((letter, key) => <span key={key} className={styles.letter} data-letter={letter}>{letter}</span>)}
                     </div>
                     <Monster />
                     <form className={styles.loginForm} onSubmit={this.sendLogin.bind(this)}>

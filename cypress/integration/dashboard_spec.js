@@ -1,6 +1,7 @@
 describe('The Dashboard Page', function () {
     beforeEach(() => {
-        cy.login('unicorn'); 
+        cy.login('unicorn');
+        cy.url().should('include', '/dashboard');
     });
 
     describe('before start of game', () => {
