@@ -26,7 +26,6 @@ jobs:
       - image: cypress/base:10
     steps:
       - checkout
-      - add_ssh_keys
       - restore_cache:
         key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
@@ -73,7 +72,7 @@ workflows:
       - deploy-develop:
           requires:
             - test
-            - e2etest
+            -e2etest
           filters:
             branches:
               only:
