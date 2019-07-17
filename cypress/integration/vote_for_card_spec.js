@@ -3,11 +3,20 @@ describe('Vote for a card', () => {
         cy.login('unicorn');
         cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
         .then(() => {
+            cy.server();
+            cy.route({
+                method: 'GET',
+                url: '/api/start'
+            }).as('start');
+            cy.get('[data-cy="player-username"]').first().should('have.text', 'unicorn');
+            cy.get('[data-cy="player-username"]').last().should('have.text', 'halfling');
             cy.startGame();
-            cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
-            .then(() => {
-                cy.get('[data-cy="my-cards"] > img').first().click();
-            });
+            cy.wait('@start').then(() => {
+                cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
+                .then(() => {
+                    cy.get('[data-cy="my-cards"] > img').first().click();
+                });
+            })
         });
     });
 
