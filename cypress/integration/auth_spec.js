@@ -7,8 +7,6 @@ describe('The Auth Page', function () {
     });
 
     describe('if already logged in', function () {
-        beforeEach(function() {
-        });
         it('sends you to dashboard if you try to return to login', function() {
             // Initialise a cypress server to stub the login request
             cy.server();

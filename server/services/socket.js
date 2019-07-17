@@ -15,90 +15,46 @@ exports.setupSocket = (server, session) => {
 }
 
 exports.closeSocket = () => {
-    sockets.forEach(socket => {
-        socket.disconnect();
-    });
+    sockets.forEach(socket => socket.disconnect());
     sockets = [];
 }
 
 // Check if it's the sender's turn
-exports.isCurrentPlayerSocket = (socket) => {
-    if (gameLogic.getGameState().currentPlayer) {
-        return (socket.handshake.session.user === gameLogic.getGameState().currentPlayer.username)
-    } else {
-        return false;
-    }
-}
+exports.isCurrentPlayerSocket = (socket) => gameLogic.getGameState().currentPlayer && socket.handshake.session.user === gameLogic.getGameState().currentPlayer.username;
 
 // Emit all the players
-const emitPlayers = players => {
-    io.emit("players", {
-        players: players
-    });
-}
+const emitPlayers = players => io.emit("players", { players });
 exports.emitPlayers = emitPlayers;
 
 // Let the players know about the next round
-exports.emitNewRound = (status, roundNum, currentPlayer) => {
-    io.emit("new round", {
-        status: status,
-        roundNum: roundNum,
-        currentPlayer: currentPlayer
-    });
-}
+exports.emitNewRound = (status, roundNum, currentPlayer) => io.emit("new round", { status, roundNum, currentPlayer });
 
 // Emit the new status of the game
-exports.emitStatus = status => {
-    io.emit("status", {
-        status: status
-    });
-}
+exports.emitStatus = status => io.emit("status", { status });
 
 // Tell all the players what word was played
-exports.emitWord = word => {
-    io.emit("played word", word);
-}
+exports.emitWord = word => io.emit("played word", word);
 
 // When everyone has played their cards, send them all to the players
-exports.emitPlayedCards = cards => {
-    io.emit("played cards", cards);
-}
+exports.emitPlayedCards = cards => io.emit("played cards", cards);
 
 // When everyone has played their cards, send them all to the players
-exports.emitAllVotes = votes => {
-    io.emit("all votes", votes);
-}
+exports.emitAllVotes = votes => io.emit("all votes", votes);
 
 // When game is over, emit the winner to everyone
-exports.emitWinner = player => {
-    io.emit("winner", player);
-}
+exports.emitWinner = player => io.emit("winner", player);
 
 // When game is over, tell the users
-exports.emitEndGame = () => {
-    io.emit("end");
-}
+exports.emitEndGame = () => io.emit("end");
 
 // Ask the current player for a word and a card
 const promptCurrentPlayer = currentPlayer => sockets.find(socket => socket.handshake.session.user === currentPlayer.username).emit("play word and card");
 exports.promptCurrentPlayer = promptCurrentPlayer;
 
 // Ask the other players for a card
-const promptOtherPlayers = currentPlayer => {
-    for (let socket of sockets) {
-        if (socket.handshake.session.user !== currentPlayer.username) {
-            socket.emit("play card");
-        }
-    }
-}
+const promptOtherPlayers = currentPlayer => sockets.filter(socket => socket.handshake.session.user !== currentPlayer.username).forEach(socket => socket.emit("play card"));
 exports.promptOtherPlayers = promptOtherPlayers;
 
 // Ask the other players to vote on the cards
-const promptPlayersVote = currentPlayer => {
-    for (let socket of sockets) {
-        if (socket.handshake.session.user !== currentPlayer.username) {
-            socket.emit("vote");
-        }
-    }
-}
-exports.promptPlayersVote = promptPlayersVote
+const promptPlayersVote = currentPlayer => sockets.filter(socket => socket.handshake.session.user !== currentPlayer.username).forEach(socket => socket.emit("vote"));
+exports.promptPlayersVote = promptPlayersVote;

@@ -40,14 +40,14 @@ export const fetchCards = () => (dispatch) => {
     .catch(err => dispatch(fetchCardsFailure(err.message)));
 }
 
-export const requestPlayCard = (id) => ({
+export const requestPlayCard = (cardId) => ({
     type: types.REQUEST_PLAY_CARD,
-    id
+    cardId
 });
 
-export const finishPlayCard = (id) => ({
+export const finishPlayCard = (cardId) => ({
     type: types.FINISH_PLAY_CARD,
-    id
+    cardId
 });
 
 export const playWord = (word) => ({
@@ -69,14 +69,12 @@ export const voteForCardFailure = (error) => ({
     payload: { error }
 });
 
-export const voteForCard = (id) => (dispatch) => {
+export const voteForCard = (cardId) => (dispatch) => {
     dispatch(voteForCardBegin());
-    instance.post('/api/voteCard', {
-        card: id
-    })
+    instance.post('/api/voteCard', { cardId })
     .then((res) => {
         if (res.status === 200) {
-            dispatch(voteForCardSuccess(id));
+            dispatch(voteForCardSuccess(cardId));
         } else {
             dispatch(voteForCardFailure(res.data.message));
         }
@@ -84,14 +82,14 @@ export const voteForCard = (id) => (dispatch) => {
     .catch(err => dispatch(voteForCardFailure(err.message)));
 }
 
-export const setPlayedCard = id => ({
+export const setPlayedCard = cardId => ({
     type: types.SET_PLAYED_CARD,
-    id
+    cardId
 });
 
-export const setVotedCard = id => ({
+export const setVotedCard = cardId => ({
     type: types.SET_VOTED_CARD,
-    id
+    cardId
 });
 
 export const setPlayWordAndCard = bool => ({

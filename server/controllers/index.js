@@ -92,23 +92,11 @@ router.get('/api/reset-cookie', auth, (req, res) => {
     }
 });
 
-/* Check if in dev mode, and enable end game request */
-if (process.env.NODE_ENV === 'testing') {
-    router.post('/api/reset-server', (req, res) => {
-        currentUsers = [];
-        gameLogic.setStatus("GAME_OVER");
-        gameLogic.endGame();
-        closeSocket();
-        req.session.destroy();
-        res.sendStatus(200);
-    });
-}
-
 /* Current player plays a card and a word */
 router.post('/api/playCardWord', auth, (req, res) => {
     if (gameLogic.isCurrentPlayer(req.session.user)) { /* Only current player is allowed to play both a word and a card */
         try {
-            gameLogic.playCardAndWord(req.session.user, req.body.card, req.body.word)
+            gameLogic.playCardAndWord(req.session.user, req.body.cardId, req.body.word)
             res.sendStatus(200);
         } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
             res.status(400).json({ message: err.message});
@@ -121,7 +109,7 @@ router.post('/api/playCardWord', auth, (req, res) => {
 /* Player plays a card */
 router.post('/api/playCard', auth, (req, res) => {
     try {
-        gameLogic.playCard(req.session.user, req.body.card)
+        gameLogic.playCard(req.session.user, req.body.cardId)
         res.sendStatus(200);
     } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
         res.status(400).json({ message: err.message});
@@ -132,7 +120,7 @@ router.post('/api/playCard', auth, (req, res) => {
 router.post('/api/voteCard', auth, (req, res) => {    
     if (!gameLogic.isCurrentPlayer(req.session.user)) { /* Any user apart from the current player is allowed to vote for a card */
         try {
-            gameLogic.voteCard(req.session.user, req.body.card)
+            gameLogic.voteCard(req.session.user, req.body.cardId)
             res.sendStatus(200);
         } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
             res.status(400).json({ message: err.message});
@@ -141,6 +129,18 @@ router.post('/api/voteCard', auth, (req, res) => {
         res.status(400).json({ message: "You cannot vote for a card when it is your turn."});
     }
 });
+
+/* Check if in dev mode, and enable end game request */
+if (process.env.NODE_ENV === 'testing') {
+    router.post('/api/reset-server', (req, res) => {
+        currentUsers = [];
+        gameLogic.setStatus("GAME_OVER");
+        gameLogic.endGame();
+        closeSocket();
+        req.session.destroy();
+        res.sendStatus(200);
+    });
+}
 
 /* Send index file */
 router.get('/*', (req, res) => {

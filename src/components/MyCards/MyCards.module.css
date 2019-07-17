@@ -1,0 +1,25 @@
+/* .cardsContainer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+} */
+
+/* .cardsContainer > ul {
+    padding: 0;
+} */
+
+/* ul {
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+} */
+
+/* .playedCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+} */

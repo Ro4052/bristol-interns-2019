@@ -19,7 +19,7 @@ let roundNum = 0;
 let currentPlayer;
 let currentWord = '';
 
-/** @type {{ username: string, cards: {{ id: number, played: bool }[]}, score: number }[]} */
+/** @type {{ username: string, cards: {{ cardId: number, played: bool }[]}, score: number }[]} */
 let players = [];
 
 /** @type {{ username: string, cardId: number }[]} */
@@ -122,12 +122,9 @@ const nextRound = () => {
 /* The storyteller plays a card and a word */
 exports.playCardAndWord = (username, cardId, word) => {
     if (status === statusTypes.WAITING_FOR_CURRENT_PLAYER && !playerHasPlayedCard(username)) {
-        const card = {
-            username: username,
-            cardId: cardId
-        };
+        const card = { username, cardId };
         playedCards.push(card);
-        getCardsByUsername(username).find(playedCard => playedCard.id.toString() === cardId).played = true;
+        getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
         status = statusTypes.WAITING_FOR_OTHER_PLAYERS;
         socket.emitStatus(status);
         currentWord = word;
@@ -143,12 +140,9 @@ exports.playCardAndWord = (username, cardId, word) => {
 /* Adds player's card to list of played cards */
 exports.playCard = (username, cardId) => {
     if (status === statusTypes.WAITING_FOR_OTHER_PLAYERS && !playerHasPlayedCard(username)) {
-        const card = {
-            username: username,
-            cardId: cardId
-        };
+        const card = { username, cardId };
         playedCards.push(card);
-        getCardsByUsername(username).find(playedCard => playedCard.id.toString() === cardId).played = true;
+        getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
         if (allPlayersPlayedCard()) {
             status = statusTypes.WAITING_FOR_VOTES;
             socket.emitPlayedCards(getPlayedCards());
@@ -164,10 +158,7 @@ exports.playCard = (username, cardId) => {
 /* Vote for a card */
 exports.voteCard = (username, cardId) => {
     if (status === statusTypes.WAITING_FOR_VOTES && !playerHasVoted(username)) {
-        const vote = {
-            username: username,
-            cardId: cardId
-        };
+        const vote = { username, cardId };
         votes.push(vote);
         if (allPlayersVoted()) {
             setStatus(statusTypes.DISPLAY_ALL_VOTES);
@@ -185,7 +176,6 @@ exports.voteCard = (username, cardId) => {
 
 /* Calculate the scores for this round */
 const calcScores = () => {
-    players.forEach(player => console.log(player.cards));
     const correctCard = playedCards.find(card => card.userId === currentPlayer.userId);
     const correctVotes = votes.filter(vote => vote.cardId === correctCard.cardId);
     if ((correctVotes.length % votes.length) === 0) {

@@ -36,4 +36,11 @@ describe('on button click', () => {
         expect(spy).toHaveBeenCalled();
         spy.mockRestore();
     });
+    it('calls playWord', () => {
+        const playWord = jest.fn();
+        const wrapper = shallow(<PlayWord playWord={playWord}/>);
+        wrapper.find({ 'data-cy': 'send-word' }).simulate('click');
+        expect(playWord).toHaveBeenCalled();
+        playWord.mockRestore();
+    })
 });

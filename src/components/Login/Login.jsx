@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import styles from './Login.module.css';
 import { Redirect } from 'react-router-dom';
 import Monster from '../Monster/Monster';
+import Dixit from '../Dixit/Dixit';
 import { logIn, authenticateUser } from '../../store/playerActions';
+import Button from '../shared/Button/Button';
 
 export class Login extends React.Component {
 
@@ -12,6 +14,7 @@ export class Login extends React.Component {
         this.state = {
             value: ""
         }
+        this.sendLogin = this.sendLogin.bind(this);
     }
 
     componentDidMount() {
@@ -71,21 +74,14 @@ export class Login extends React.Component {
         return (
             (!this.props.cookie) ?
                 <div className={styles.loginPage}>
-                     <div className={styles.foo}>
-                        <span className={styles.letter} data-letter="D">D</span>
-                        <span className={styles.letter} data-letter="i">i</span>
-                        <span className={styles.letter} data-letter="X">X</span>
-                        <span className={styles.letter} data-letter="i">i</span>
-                        <span className={styles.letter} data-letter="t">t</span>
-
-                    </div>
+                    <Dixit />
                     <Monster />
-                    <form className={styles.loginForm} onSubmit={this.sendLogin.bind(this)}>
+                    <form className={styles.loginForm} onSubmit={this.sendLogin}>
                         {this.props.error && (!this.state.error) && <h3 data-cy="login-error" className={styles.errorText}>{this.props.error}</h3>}
                         {this.state.error && <h3 data-cy="username-error" className={styles.errorText}>{this.state.error}</h3>}
                         <h2 className={styles.formHeader}>Type a username to enter the game:</h2>
                         <input className={styles.loginInput} style={this.getInputStyle()} value={this.state.value} placeholder="Enter username" onChange={this.handleChange.bind(this)} autoFocus/>
-                        <button className={styles.loginButton} type="submit">Log in</button>
+                        <Button cy="login" handeClick={this.sendLogin} type="submit" text="Log in" />
                     </form>
                 </div>
             : <Redirect to='/dashboard' />
