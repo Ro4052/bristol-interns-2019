@@ -54,11 +54,11 @@ app.get('/connect', (req, res) => {
                     cards = response.data
                     res.sendStatus(200);
                 })
-                .catch((err) => console.error(err));
+                .catch((err) => res.sendStatus(err.statusCode));
             });
         }
     })
-    .catch((err) => console.error(err)); 
+    .catch((err) => res.sendStatus(err.statusCode)); 
 });
 
 app.get('/startGame', (req, res) => {
@@ -71,7 +71,7 @@ app.get('/startGame', (req, res) => {
     });
     instance.get('api/start')
         .then(() => res.sendStatus(200))
-        .catch((err) => console.error(err));
+        .catch((err) => res.sendStatus(err.statusCode));
 });
 
 app.get('/playCardWord', (req, res) => {
@@ -88,7 +88,7 @@ app.get('/playCardWord', (req, res) => {
         word: "Hello"
     })
     .then(() => res.sendStatus(200))
-    .catch((err) => console.error(err));
+    .catch((err) => res.sendStatus(err.statusCode));
 });
 
 app.get('/disconnect', (req, res) => {
