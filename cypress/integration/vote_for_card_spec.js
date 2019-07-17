@@ -30,12 +30,17 @@ describe('Vote for a card', () => {
     });
 
     describe('on vote for a card', () => {
-        beforeEach(() => {
+        it("displays the votes", () => {
+            cy.server();
+            cy.route({
+                method: 'POST',
+                url: '/api/voteCard'
+            }).as('voteCard');
             cy.voteCard();
+            cy.wait('@voteCard').then(() => {
+                cy.get('[data-cy="vote-card"]').should('not.exist');
+                cy.get('[data-cy="vote"]').should('exist');
+            });
         });
-        // it("displays the votes", () => {
-        //     cy.get('[data-cy="vote-card"]').should('not.exist');
-        //     cy.get('[data-cy="votes"]').should('exist');
-        // });
     });
 });

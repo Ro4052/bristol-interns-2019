@@ -1,13 +1,19 @@
-.card {
+.cardWrapper {
     --width: 20vmin;
     border: calc(var(--width)/30) solid white;
     border-radius: calc(var(--width)/20);
     box-shadow: 0px 0px calc(var(--width)/15) 0px rgba(0, 0, 0, 0.2);
-    display: inline-block;
-    object-fit: cover;
-    width: var(--width);
     height: calc(var(--width)/0.7);
+    width: var(--width);
+    overflow: hidden;
+    position: relative;
     margin: 10px;
+}
+
+.card {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
 }
 
 .enabled {
@@ -21,4 +27,18 @@
 
 .disabled {
     opacity: 0.7;
+}
+
+.vote {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.6);
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    font-weight: bold;
 }
