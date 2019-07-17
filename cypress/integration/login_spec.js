@@ -25,7 +25,7 @@ describe('The Login Page', function () {
                 cy.request(`http://localhost:12346/startGame?url=${encodeURIComponent(url)}`)
                 .then(() => {
                     cy.login(username);
-                    cy.get('h3').should('contain', 'Game has already started');
+                    cy.get('[data-cy="login-error"]').should('contain', 'Game has already started');
                 });
             }); 
         });

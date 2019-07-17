@@ -11,17 +11,13 @@ describe('on initial render', () => {
     });
 });
 
-describe('on given a set of cards', () => {
-    const playerCards = [{cardId: 1}, {cardId: 2}, {cardId: 3}];
-    it('displays the correct number of cards', () => {
-        const wrapper = shallow(<MyCards myCards={playerCards} fetchCards={() => {}} requestPlayCard={() => {}}/>);
-        expect(wrapper.find('ul').children().length).toEqual(3);
-    });
-    it('displays the correct card images', () => {
-        const wrapper = shallow(<MyCards myCards={playerCards} fetchCards={() => {}} requestPlayCard={() => {}}/>);        
-        expect(wrapper.find('ul').children().length).toEqual(3);
-    });
-})
+// describe('on given a set of cards', () => {
+//     const playerCards = [{cardId: 1}, {cardId: 2}, {cardId: 3}];
+//     it('displays the correct number of cards', () => {
+//         const wrapper = shallow(<MyCards myCards={playerCards} fetchCards={() => {}} requestPlayCard={() => {}}/>);
+//         expect(wrapper.find('ul').children().length).toEqual(3);
+//     });
+// })
 
 describe('moxios', () => {
     it('should install', () => {

@@ -1,8 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { fetchCards, requestPlayCard, finishPlayCard } from '../../../store/playerActions';
-import { Card } from '../../shared/Card/Card';
+import { fetchCards, requestPlayCard, finishPlayCard } from '../../store/playerActions';
+import CardList from '../shared/CardList/CardList';
 
 export class MyCards extends React.Component {
     
@@ -11,6 +11,7 @@ export class MyCards extends React.Component {
         this.state = {};
         this.playCard = this.playCard.bind(this);
         this.playCardForWord = this.playCardForWord.bind(this);
+        this.isEnabled = this.isEnabled.bind(this);
     }
 
     componentDidMount() {
@@ -32,12 +33,13 @@ export class MyCards extends React.Component {
         .catch(err => console.log(err));
     }
 
+    isEnabled(cardId) {
+        return (this.props.playWordAndCard || this.props.playCard) && this.props.playedCard === 0;
+    }
+
     render() {
-        const enabled = (this.props.playWordAndCard || this.props.playCard) && this.props.playedCard === 0;
         return (
-            <ul data-cy='my-cards'>
-                {this.props.myCards.map(card => <Card card={card} key={card.cardId} handleClick={this.playCard} enabled={enabled} />)}
-            </ul>
+            <CardList cards={this.props.myCards} handleClick={this.playCard} isEnabled={this.isEnabled} cy={"my-cards"} />
         );
     }
 }

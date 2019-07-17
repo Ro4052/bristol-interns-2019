@@ -17,7 +17,7 @@ export class Card extends React.Component {
     render() {
         const classes = classNames(styles.card, this.props.enabled ? styles.enabled : styles.disabled);
         return (
-            <img data-cy={`card-${this.props.card.cardId}`} className={classes} alt={`card-${this.props.card.cardId}`} src={require(`../../../images/cards/card (${this.props.card.cardId}).jpg`)} onClick={this.handleClick} />
+            <img data-cy={`card-${this.props.card.cardId}`} className={classes} alt={`card-${this.props.card.cardId}`} src={require(`../../../../images/cards/card (${this.props.card.cardId}).jpg`)} onClick={this.handleClick} />
         );
     }
 }
