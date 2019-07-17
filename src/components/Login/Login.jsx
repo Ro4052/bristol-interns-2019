@@ -25,14 +25,13 @@ export class Login extends React.Component {
         })
     }
 
-    checkSpecialChar(string) {
+    checkUsernameAllowed(string) {
         // eslint-disable-next-line
-        var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
-        if (format.test(string)){
+        const allowed = /^[A-Za-z0-9]*$/;
+        if (allowed.test(string)){
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
     
     checkUsername() {
@@ -42,9 +41,15 @@ export class Login extends React.Component {
             })
             return false;
         }
-        if (this.checkSpecialChar(this.state.value)) {
+        if (!this.checkUsernameAllowed(this.state.value)) {
             this.setState({
-                error: "Username cannot contain special characters"
+                error: "Username can be comprised of numbers and latin letters only"
+            })
+            return false;
+        }
+        if (this.state.value.length < 6) {
+            this.setState({
+                error: "Username must be at least 6 characters"
             })
             return false;
         }
@@ -76,7 +81,8 @@ export class Login extends React.Component {
                     </div>
                     <Monster />
                     <form className={styles.loginForm} onSubmit={this.sendLogin.bind(this)}>
-                        <h3 data-cy="login-error" className={styles.errorText}>{this.props.error}</h3>
+                        {this.props.error && (!this.state.error) && <h3 data-cy="login-error" className={styles.errorText}>{this.props.error}</h3>}
+                        {this.state.error && <h3 data-cy="username-error" className={styles.errorText}>{this.state.error}</h3>}
                         <h2 className={styles.formHeader}>Type a username to enter the game:</h2>
                         <input className={styles.loginInput} style={this.getInputStyle()} value={this.state.value} placeholder="Enter username" onChange={this.handleChange.bind(this)} autoFocus/>
                         <button className={styles.loginButton} type="submit">Log in</button>
