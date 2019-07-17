@@ -133,7 +133,8 @@ router.post('/api/voteCard', auth, (req, res) => {
 /* Check if in dev mode, and enable end game request */
 if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {
-        currentUsers = []
+        currentUsers = [];
+        gameLogic.setStatus("GAME_OVER");
         gameLogic.endGame();
         closeSocket();
         req.session.destroy();
