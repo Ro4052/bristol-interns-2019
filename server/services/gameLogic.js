@@ -67,14 +67,13 @@ exports.joinGame = (user, callback) => {
 }
 
 /* Remove player from current game */
-exports.quitGame = player => {
-    if (status === statusTypes.NOT_STARTED && !players.includes(player)) {
-        players = players.filter((otherPlayer) => otherPlayer !== player);
+exports.quitGame = username => {    
+    if (status === statusTypes.NOT_STARTED && players.some(player => player.username === username)) {
+        players = players.filter((otherPlayer) => otherPlayer.username !== username);
         socket.emitPlayers(getPlayers());
-        return true;
     } else {
-        // Game has started, player can't quit
-        return false;
+        // Game has started, player can't quit, server is responsible for generating the error
+        throw Error("Cannot log out of a running game.");
     }
 }
 
@@ -84,20 +83,20 @@ exports.startGame = () => {
         status = statusTypes.STARTED;
         nextRound();
     } else {
-        // TODO: There aren't yet enough players in the game
+        // There aren't yet enough players in the game, server is responsible for generating the error
+        throw Error("Cannot start game. Insufficient number of players");
     }
 }
 
 /* End the game */
 exports.endGame = () => {
-    socket.emitEndGame();
-    status = statusTypes.NOT_STARTED;
-    currentPlayer = null;
-    currentWord = '';
-    roundNum = 0;
-    players = [];
-    playedCards = [];
-    votes = [];
+    if (status === statusTypes.GAME_OVER) {
+        socket.emitEndGame();
+        clearGameState();
+    } else {
+        // Game is currently running and cannot be ended, server is responsible for generating the error
+        throw Error("Cannot end game. Game is currently running");
+    } 
 }
 
 /* Move on to the next round, called when all players have finished their turn */
@@ -106,22 +105,19 @@ const nextRound = () => {
         status = statusTypes.WAITING_FOR_CURRENT_PLAYER;
         roundNum++;
         currentPlayer = players[roundNum % players.length];
-        currentWord = '';
-        playedCards = [];
-        votes = [];
+        clearRoundData();
         socket.emitNewRound(status, roundNum, currentPlayer);
         socket.promptCurrentPlayer(currentPlayer);
     } else {
         status = statusTypes.GAME_OVER;
         socket.emitStatus(status);
         socket.emitWinner(players.reduce((prev, current) => (prev.score > current.score) ? prev : current));
-        // TODO: Emit game over and final scores/winner
     }
 }
 
 /* The storyteller plays a card and a word */
 exports.playCardAndWord = (username, cardId, word) => {
-    if (status === statusTypes.WAITING_FOR_CURRENT_PLAYER && currentPlayer.username === username && !playerHasPlayedCard(username)) {
+    if (status === statusTypes.WAITING_FOR_CURRENT_PLAYER && !playerHasPlayedCard(username)) {
         const card = { username, cardId };
         playedCards.push(card);
         getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
@@ -131,7 +127,9 @@ exports.playCardAndWord = (username, cardId, word) => {
         socket.emitWord(currentWord);
         socket.promptOtherPlayers(currentPlayer);
     } else {
-        // TODO: Error handling
+        // Cannot play card and word, the user sending the request is not the current player, the player has already played a card,
+        // or the game status is not appropriate for the request, server is responsible for generating an error
+        throw Error("You cannot play more than one card and one word, or now is not the right time to play a card and a word.");
     }
 }
 
@@ -146,6 +144,10 @@ exports.playCard = (username, cardId) => {
             socket.emitPlayedCards(getPlayedCards());
             socket.promptPlayersVote(currentPlayer);
         }
+    } else {
+        // Cannot play card, the player has already played a card, or the game status is not
+        // appropriate for the request, server is responsible for generating an error.
+        throw Error("You cannot play more than one card, or now is not the right time to play a card.");
     }
 }
 
@@ -159,8 +161,12 @@ exports.voteCard = (username, cardId) => {
             socket.emitStatus(status);
             socket.emitAllVotes(votes);
             calcScores();
-            setTimeout(() => nextRound(), 10000);
+            setTimeout(() => nextRound(), 5000);
         }
+    } else {
+        // Cannot vote for card, the player has already voted for a card, or the game status is not
+        // appropriate for the request, server is responsible for generating an error.
+        throw Error("You cannot vote for a card more than once, or now is not the right time to vote.");
     }
 }
 
@@ -192,3 +198,19 @@ const allPlayersPlayedCard = () => players.every(player => playerHasPlayedCard(p
 
 /* Returns true if all players (apart from the current player) have voted this round */
 const allPlayersVoted = () => players.every(player => player.username === currentPlayer.username || playerHasVoted(player.username));
+
+/* Clean up stored data */
+const clearRoundData = () => {
+    currentWord = '';
+    playedCards = [];
+    votes = [];
+}
+
+/* Clear entire game state */
+const clearGameState = () => {
+    clearRoundData();
+    status = statusTypes.NOT_STARTED;
+    currentPlayer = null;
+    roundNum = 0;
+    players = [];
+}

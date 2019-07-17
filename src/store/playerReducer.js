@@ -148,7 +148,7 @@ const cardReducer = (state = initialState, action) => {
                 loading: true,
                 error: null
             }
-        case types.AUTH_FAILURE:            
+        case types.AUTH_FAILURE:
             return {
                 ...state,
                 error: action.payload.error,
@@ -160,6 +160,19 @@ const cardReducer = (state = initialState, action) => {
                 ...state,
                 cookie: action.payload.cookie,
                 loading: false
+            }
+        case types.LOG_OUT_FAILURE:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload.error
+            }
+        case types.LOG_OUT_SUCCESS:
+            return {
+                ...state,
+                cookie: null,
+                loading: false,
+                error: null
             }
         default:
             return state;

@@ -17,7 +17,23 @@ describe('on log in', () => {
         const input = wrapper.find('input');
         input.simulate('change', { preventDefault: () => {}, target: { value: 'unicorn_$$1' } });
         wrapper.find('form').simulate('submit', { preventDefault: () => {}});
-        expect(wrapper.state().error).toEqual('Username cannot contain special characters');
+        expect(wrapper.state().error).toEqual('Username can be comprised of numbers and latin letters only');
+    });
+    it('is not able to submit a username from a non-latin alphabet', () => {
+        jest.spyOn(window, 'alert').mockImplementation(() => {});
+        const wrapper = shallow(<Login logIn={() => {}} authenticateUser={() => {}}/>);
+        const input = wrapper.find('input');
+        input.simulate('change', { preventDefault: () => {}, target: { value: 'еднорог' } });
+        wrapper.find('form').simulate('submit', { preventDefault: () => {}});
+        expect(wrapper.state().error).toEqual('Username can be comprised of numbers and latin letters only');
+    });
+    it('is not able to submit a username with less than six characters', () => {
+        jest.spyOn(window, 'alert').mockImplementation(() => {});
+        const wrapper = shallow(<Login logIn={() => {}} authenticateUser={() => {}}/>);
+        const input = wrapper.find('input');
+        input.simulate('change', { preventDefault: () => {}, target: { value: 'dog' } });
+        wrapper.find('form').simulate('submit', { preventDefault: () => {}});
+        expect(wrapper.state().error).toEqual('Username must be at least 6 characters');
     });
     it('is able to input a username', () => {
         const spy = jest.spyOn(Login.prototype, 'sendLogin');
