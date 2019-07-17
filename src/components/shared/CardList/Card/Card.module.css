@@ -1,0 +1,24 @@
+.card {
+    --width: 20vmin;
+    border: calc(var(--width)/30) solid white;
+    border-radius: calc(var(--width)/20);
+    box-shadow: 0px 0px calc(var(--width)/15) 0px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+    object-fit: cover;
+    width: var(--width);
+    height: calc(var(--width)/0.7);
+    margin: 10px;
+}
+
+.enabled {
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.enabled:hover {
+    transform: scale(1.01);
+}
+
+.disabled {
+    opacity: 0.7;
+}

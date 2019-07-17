@@ -7,15 +7,15 @@ module.exports.assign = (users, number_of_cards) => {
         const max = 298;
         let random = Math.floor(Math.random() * (max - min) + min);
         
-        let availableGlobally = allCards.some(card => card.id !== random);
-        let inCurrentHand = cardsSet.some(card => card.id === random);
+        let availableGlobally = allCards.some(card => card.cardId !== random);
+        let inCurrentHand = cardsSet.some(card => card.cardId === random);
         
         while (availableGlobally || inCurrentHand) {            
             random = Math.floor(Math.random() * (max - min) + min);
-            availableGlobally = allCards.some(card => card.id === random);
-            inCurrentHand = cardsSet.some(card => card.id === random);
+            availableGlobally = allCards.some(card => card.cardId === random);
+            inCurrentHand = cardsSet.some(card => card.cardId === random);
         }
-        cardsSet.push({ id: random, played: false });
+        cardsSet.push({ cardId: random, played: false });
     }
 
     return cardsSet;

@@ -1,0 +1,9 @@
+.prompt {
+    margin-right: 1em;
+    text-align: center;
+    width: 100%;
+    font-size: 3.5vmin;
+    margin-bottom: 0.5em;  
+    margin-top: 0;
+    color: var(--yellow);
+}

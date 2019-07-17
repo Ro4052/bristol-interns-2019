@@ -36,6 +36,13 @@ describe('on button click', () => {
         expect(spy).toHaveBeenCalled();
         spy.mockRestore();
     });
+    it('calls playWord', () => {
+        const playWord = jest.fn();
+        const wrapper = shallow(<PlayWord playWord={playWord}/>);
+        wrapper.find({ 'data-cy': 'send-word' }).simulate('click');
+        expect(playWord).toHaveBeenCalled();
+        playWord.mockRestore();
+    })
 });
 
 describe('on receive 400 from server due to invalid word entered', () => {

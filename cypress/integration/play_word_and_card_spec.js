@@ -21,9 +21,9 @@ describe('Play word and card', () => {
             cy.startGame();
             cy.wait('@start').then(() => {
                 cy.get('[data-cy="start-game"]').should('not.exist');
+                cy.get('[data-cy="play-word"]').should('exist');
+                cy.get('[data-cy="play-card"]').should('exist');
             });
-            cy.get('[data-cy="play-word"]').should('exist');
-            cy.get('[data-cy="play-card"]').should('exist');
         });
     });
 

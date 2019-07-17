@@ -14,7 +14,7 @@ describe('Vote for a card', () => {
             cy.wait('@start').then(() => {
                 cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
                 .then(() => {
-                    cy.get('[data-cy="my-cards"] > img').first().click();
+                    cy.playCard();
                 });
             })
         });
@@ -31,18 +31,11 @@ describe('Vote for a card', () => {
 
     describe('on vote for a card', () => {
         beforeEach(() => {
-            cy.get('[data-cy="played-cards"] > li > img').first().click();
+            cy.voteCard();
         });
-        it("displays the votes", () => {
-        //     cy.get('[data-cy="played-cards"] > li > img').first().then(($img) => {
-        //         if ($img.hasClass('Cards_allCards__2SdBy')) {
-        //             cy.get('[data-cy="played-cards"] > li').first().click()
-        //         } else {
-        //             cy.get('[data-cy="played-cards"] > li').last().click();
-        //         }
-        //     });
-            cy.get('[data-cy="vote-card"]').should('not.exist');
+        // it("displays the votes", () => {
+        //     cy.get('[data-cy="vote-card"]').should('not.exist');
         //     cy.get('[data-cy="votes"]').should('exist');
-        });
+        // });
     });
 });
