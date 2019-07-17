@@ -6,9 +6,7 @@ export class NewGame extends React.Component {
 
     newGame() {
         axios.get('/api/end')
-        .catch(err => {
-            console.log(err);
-        });
+        .catch(err => console.log(err));
     }
 
     render() {

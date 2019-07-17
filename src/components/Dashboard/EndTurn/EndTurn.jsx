@@ -17,12 +17,8 @@ export class EndTurn extends React.Component {
             cardId: this.props.playedCard,
             word: this.props.myWord
         })
-        .then(() => {
-            this.props.finishPlayCard(this.props.playedCard);
-        })
-        .catch(err => {
-            console.log(err);
-        });
+        .then(() => this.props.finishPlayCard(this.props.playedCard))
+        .catch(err => console.log(err));
     }
 
     render() {
