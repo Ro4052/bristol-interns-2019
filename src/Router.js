@@ -2,7 +2,7 @@ import React from 'react';
 import { Router, Route } from 'react-router-dom'
 import Dashboard from './components/Dashboard/Dashboard';
 import Login from './components/Login/Login';
-import Auth from './components/Auth/Auth';
+import Auth from './components/shared/Auth/Auth';
 import history from './services/history';
 
 export default class Routes extends React.Component {

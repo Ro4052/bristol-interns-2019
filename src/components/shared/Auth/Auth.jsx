@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { authenticateUser, setPlayCard, setPlayWordAndCard } from '../../store/playerActions';
+import { authenticateUser, setPlayCard, setPlayWordAndCard } from '../../../store/playerActions';
 
 export class Auth extends React.Component {
 

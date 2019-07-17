@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { Dashboard } from './Dashboard';
-import Prompt from '../Prompt/Prompt';
+import Prompt from '../shared/Prompt/Prompt';
 import PlayWord from '../PlayWord/PlayWord';
 import StartGame from './StartGame/StartGame';
 import EndTurn from './EndTurn/EndTurn';
