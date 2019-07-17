@@ -1,4 +1,4 @@
-const username = 'Jane';
+const username = 'username';
 
 describe('The Login Page', function () {
     describe('on login', () => {

@@ -1,6 +1,6 @@
 describe('Play card', () => {
     beforeEach(() => {
-        cy.login('test');
+        cy.login('username');
     });
 
     describe('when first player has played card and word', () => {

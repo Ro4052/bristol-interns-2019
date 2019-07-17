@@ -8,7 +8,7 @@ describe('The Auth Page', function () {
 
     describe('if already logged in', function () {
         beforeEach(function() {
-            cy.login('jane');
+            cy.login('username');
         });
         it('sends you to dashboard if you try to return to login', function() {
             cy.visit('/');

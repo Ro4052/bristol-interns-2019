@@ -84,7 +84,7 @@ app.get('/playCardWord', (req, res) => {
     });
     
     instance.post('api/playCardWord', {
-        card: cards[0].cardId,
+        cardId: cards[0].cardId,
         word: "Hello"
     })
     .then(() => res.sendStatus(200))
