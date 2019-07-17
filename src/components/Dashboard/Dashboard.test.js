@@ -1,7 +1,8 @@
 import React from 'react';
 import { Dashboard } from './Dashboard';
-import { StartGameButton } from './StartGameButton/StartGameButton';
+import StartGameButton from './StartGameButton/StartGameButton';
 import { shallow } from 'enzyme';
+import PlayerCards from '../Cards/PlayerCards/PlayerCards';
 
 const initialGameState = {
     status: "NOT_STARTED",
@@ -41,6 +42,10 @@ describe('on initial render', () => {
         const wrapper = shallow(<Dashboard status={initialGameState.status}/>);
         expect(wrapper.exists(StartGameButton)).toEqual(true);
     });
+    it("doesn't display the cards", () => {
+        const wrapper = shallow(<Dashboard status={initialGameState.status}/>);
+        expect(wrapper.exists(PlayerCards)).toEqual(false);
+    });
 });
 
 describe('on start of game', () => {
@@ -59,5 +64,9 @@ describe('on start of game', () => {
     it("doesn't display the start game button", () => {
         const wrapper = shallow(<Dashboard status={firstRoundGameState.status} />);
         expect(wrapper.exists({ 'data-cy': 'start-game' })).toEqual(false);
+    });
+    it('displays cards', () => {
+        const wrapper = shallow(<Dashboard status={firstRoundGameState.status}/>);
+        expect(wrapper.exists(PlayerCards)).toEqual(true);
     });
 });

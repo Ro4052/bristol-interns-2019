@@ -50,7 +50,7 @@ export class Dashboard extends React.Component {
                 {this.props.currentWord !== '' && <h1 id="message">Word: <span data-cy='current-word'>{this.props.currentWord}</span></h1>}
                 <Players />
                 <PlayedCards />
-                <PlayerCards />
+                {this.props.status !=="NOT_STARTED" && <PlayerCards />}
                 {this.props.playWord && <Prompt cy="play-word" text="Type in a word" />}
                 {this.props.playCard && <Prompt cy="play-card" text="Pick a card" />}
                 {this.props.playWord && <PlayWord />}
