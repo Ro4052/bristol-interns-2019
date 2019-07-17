@@ -1,4 +1,4 @@
-const profanityCheck = require('../services/profanityCheck');
+const validWord = require('../services/validWord');
 const router = require('express').Router();
 const path = require('path');
 const auth = require('../services/auth');
@@ -107,7 +107,7 @@ if (process.env.NODE_ENV === 'testing') {
 
 /* Current player plays word only if it's a valid word */
 router.post('/api/validWord', auth, (req,res) => {
-    if (profanityCheck.isValidWord(req.body.word)) {
+    if (validWord.isValidWord(req.body.word)) {
         console.log("Valid");
         res.sendStatus(200);
     } else {
@@ -120,7 +120,7 @@ router.post('/api/validWord', auth, (req,res) => {
 router.post('/api/playCardWord', auth, (req, res) => {
     if (gameLogic.isCurrentPlayer(req.session.user)) { /* Only current player is allowed to play both a word and a card */
         try {
-            if (profanityCheck.isValidWord(req.body.word)) {
+            if (validWord.isValidWord(req.body.word)) {
                 gameLogic.playCardAndWord(req.session.user, req.body.card, req.body.word)
                 res.sendStatus(200);
             } else {
