@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
-import Button from '../../Button/Button';
+import Button from '../../shared/Button/Button';
 
 export class Logout extends React.Component {
     

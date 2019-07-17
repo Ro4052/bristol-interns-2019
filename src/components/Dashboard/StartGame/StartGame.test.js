@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { StartGame } from './StartGame';
-import Button from '../../Button/Button';
+import Button from '../../shared/Button/Button';
 
 describe('on render', () => {
     it('renders correctly', () => {

@@ -9,7 +9,7 @@ import PlayedCards from '../Cards/PlayedCards/PlayedCards';
 import MyCards from '../Cards/MyCards/MyCards';
 import Players from '../Players/Players';
 import PlayWord from '../PlayWord/PlayWord';
-import Prompt from '../Prompt/Prompt';
+import Prompt from '../shared/Prompt/Prompt';
 import StartGame from './StartGame/StartGame';
 
 export class Dashboard extends React.Component {

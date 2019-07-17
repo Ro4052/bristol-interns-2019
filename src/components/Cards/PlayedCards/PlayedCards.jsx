@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { voteForCard } from '../../../store/playerActions';
-import { Card } from '../Card/Card';
+import { Card } from '../../shared/Card/Card';
 
 export class PlayedCards extends React.Component {
     constructor(props) {

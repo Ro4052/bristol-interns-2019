@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { fetchCards, requestPlayCard, finishPlayCard } from '../../../store/playerActions';
-import { Card } from '../Card/Card';
+import { Card } from '../../shared/Card/Card';
 
 export class MyCards extends React.Component {
     

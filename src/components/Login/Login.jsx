@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 import Monster from '../Monster/Monster';
 import Dixit from '../Dixit/Dixit';
 import { logIn, authenticateUser } from '../../store/playerActions';
-import Button from '../Button/Button';
+import Button from '../shared/Button/Button';
 
 export class Login extends React.Component {
 
