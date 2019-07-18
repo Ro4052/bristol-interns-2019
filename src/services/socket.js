@@ -64,7 +64,8 @@ const connectSocket = () => {
         dispatch(setAllVotes(msg));
     });
 
-    socket.on("winner", (msg) => {        
+    socket.on("winner", (msg) => {    
+        console.log(msg);    
         dispatch(setWinner(msg));
     });
 
