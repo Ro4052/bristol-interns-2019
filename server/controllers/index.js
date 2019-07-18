@@ -64,7 +64,7 @@ router.get('/api/cards', auth, (req, res) => {
 router.get('/api/start', auth, (req, res) => {
     console.log("/api/start");
     try {
-        gameLogic.startGame()
+        gameLogic.startGame();
         res.sendStatus(200);
     } catch (err) {
         console.log(err);
@@ -85,7 +85,7 @@ router.get('/api/end', auth, (req, res) => {
 });
 
 /* Reset the cookie and destroy the session */
-router.get('/api/reset-cookie', auth, (req, res) => {
+router.get('/api/reset-cookie', (req, res) => {
     if (req.session) {
         req.session.destroy();
         res.sendStatus(200);

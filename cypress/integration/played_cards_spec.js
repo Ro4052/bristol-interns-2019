@@ -1,4 +1,4 @@
-describe('The Played Cards Component', function() {
+describe('Played cards', () => {
     const cardsNumber = 3;
     const numberOfPlayers = 2;
 

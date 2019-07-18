@@ -8,9 +8,12 @@ let sockets = [];
 exports.setupSocket = (server, session) => {
     io = socketio(server);
     io.use(sharedsession(session));
-    io.on('connection', function (socket) {
-        sockets.push(socket);
-        emitPlayers(gameLogic.getPlayers());
+    io.on('connection', socket => {
+        if (socket.handshake.session) {
+            sockets = sockets.filter(other => other.handshake.session.user !== socket.handshake.session.user);
+            sockets.push(socket);
+            emitPlayers(gameLogic.getPlayers());
+        }
     });
 }
 
