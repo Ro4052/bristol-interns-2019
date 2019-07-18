@@ -15,9 +15,11 @@ export class Card extends React.Component {
     }
 
     render() {
-        const classes = classNames(styles.card, this.props.enabled ? styles.enabled : styles.disabled);
         return (
-            <img data-cy={'card'} className={classes} alt={`card-${this.props.card.cardId}`} src={require(`../../../../images/cards/card (${this.props.card.cardId}).jpg`)} onClick={this.handleClick} />
+            <div data-cy='card-wrapper' className={classNames(styles.cardWrapper, this.props.enabled ? styles.enabled : styles.disabled)} onClick={this.handleClick}>
+                <img data-cy='card' className={styles.card} alt={`card-${this.props.card.cardId}`} src={require(`../../../../images/cards/card (${this.props.card.cardId}).jpg`)} />
+                {(this.props.card.votes !== undefined) && <div className={styles.vote} data-cy='vote'>Votes: {this.props.card.votes}</div>}
+            </div>
         );
     }
 }

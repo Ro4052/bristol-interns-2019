@@ -35,14 +35,14 @@ Cypress.Commands.add('startGame', () => {
     cy.get('[data-cy="start-game"]').click();
 });
 
-Cypress.Commands.add('resetGame', () => {
+Cypress.Commands.add('resetServer', () => {
     cy.request({
         url: '/api/reset-server',
         method: 'POST'
     });
 });
 
-Cypress.Commands.add('playWordCard', () => {
+Cypress.Commands.add('playCardWord', () => {
     cy.get('[data-cy="my-cards"] [data-cy="card"]').first().click();
     cy.get('[data-cy="type-word"]').type('word');
     cy.get('[data-cy="send-word"]').click();

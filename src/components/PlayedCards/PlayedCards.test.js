@@ -5,7 +5,7 @@ import CardList from '../shared/CardList/CardList';
 
 describe('on render', () => {
     it('renders a CardList', () => {
-        const wrapper = shallow(<PlayedCards />);
+        const wrapper = shallow(<PlayedCards cards={[]} />);
         expect(wrapper.exists(CardList)).toEqual(true);
     });
 });

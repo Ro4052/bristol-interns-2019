@@ -7,8 +7,9 @@ export const initialState = {
     players: [], /* [{ username, score }] */
     currentCards: [], /* [{ cardId }] */
     currentWord: '',
-    winner: "",
+    winner: null, /* { username } */
     socket: null,
+    allVotes: [],
     invalidWord: false
 }
 

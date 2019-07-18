@@ -1,6 +1,7 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { PlayWord } from './PlayWord';
+import Button from '../shared/Button/Button';
 
 describe('on initial render', () => {
     it('the input is empty', () => {
@@ -9,7 +10,7 @@ describe('on initial render', () => {
     });
     it('the submit button is visible', () => {
         const wrapper = shallow(<PlayWord />);
-        expect(wrapper.find({ 'data-cy': 'send-word' }).exists()).toEqual(true);
+        expect(wrapper.find(Button).prop('cy')).toEqual('send-word');
     });
 });
 
@@ -31,14 +32,14 @@ describe('on player types a word', () => {
 describe('on button click', () => {
     it('calls sendMessage', () => {
         const spy = jest.spyOn(PlayWord.prototype, 'sendMessage');
-        const wrapper = shallow(<PlayWord playWord={() => {}}/>);
+        const wrapper = mount(<PlayWord playWord={() => {}}/>);
         wrapper.find({ 'data-cy': 'send-word' }).simulate('click');
         expect(spy).toHaveBeenCalled();
         spy.mockRestore();
     });
     it('calls playWord', () => {
         const playWord = jest.fn();
-        const wrapper = shallow(<PlayWord playWord={playWord}/>);
+        const wrapper = mount(<PlayWord playWord={playWord}/>);
         wrapper.find({ 'data-cy': 'send-word' }).simulate('click');
         expect(playWord).toHaveBeenCalled();
         playWord.mockRestore();

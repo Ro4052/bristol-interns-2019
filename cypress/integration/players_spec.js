@@ -21,7 +21,6 @@ describe('Players', () => {
 
     describe('on another player log in', () => {
         it('their name is added to the players list', () => {
-            cy.server();
             cy.route({
                 method: "POST",
                 url: "/auth/login",
@@ -39,7 +38,6 @@ describe('Players', () => {
 
     describe('on completing a round', () => {
         it('updates the scores', () => {
-            cy.server();
             cy.route({
                 method: "POST",
                 url: "/auth/login",
