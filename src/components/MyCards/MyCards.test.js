@@ -1,8 +1,11 @@
 import React from 'react';
 import { MyCards } from './MyCards';
-import moxios from 'moxios'
-import axios from 'axios';
-import { shallow } from 'enzyme';
+import moxios from 'moxios';
+import { shallow, mount } from 'enzyme';
+
+const cards = [
+    { cardId: 1 }
+];
 
 describe('on initial render', () => {
     it('calls fetchCards', (() => {
@@ -13,42 +16,86 @@ describe('on initial render', () => {
     }));
 });
 
-describe('moxios', () => {
-    it('should install', () => {
-      let defaultAdapter = axios.defaults.adapter;
-      moxios.install();
-      expect(axios.defaults.adapter === defaultAdapter).toEqual(false);
-      moxios.uninstall();
+describe('on clicking an enabled card', () => {
+    it('calls playCard', () => {
+        jest.spyOn(MyCards.prototype, 'isEnabled').mockImplementation(() => true);
+        const playCard = jest.spyOn(MyCards.prototype, 'playCard');
+        const wrapper = mount(<MyCards fetchCards={jest.fn()} myCards={cards} />);
+        wrapper.find({ 'data-cy': 'card' }).first().simulate('click');
+        expect(playCard).toHaveBeenCalled();
+        playCard.mockRestore();
     });
 
-    it('should uninstall', () => {
-        let defaultAdapter = axios.defaults.adapter;
-        moxios.install();
-        moxios.uninstall();
-        expect(axios.defaults.adapter === defaultAdapter).toEqual(true);
+    describe('on playWordAndCard flag true', () => {
+        it('calls requestPlayCard', (() => {
+            jest.spyOn(MyCards.prototype, 'isEnabled').mockImplementation(() => true);
+            const requestPlayCard = jest.fn();
+            const wrapper = mount(<MyCards fetchCards={jest.fn()} myCards={cards} requestPlayCard={requestPlayCard} playWordAndCard={true} />);
+            wrapper.find({ 'data-cy': 'card' }).first().simulate('click');
+            expect(requestPlayCard).toHaveBeenCalled();
+            requestPlayCard.mockRestore();
+        }));
     });
 
-    describe('GET /api/cards', () => {
-        beforeEach(() => {
-            moxios.install();
-        });
-    
-        afterEach(() => {
-            moxios.uninstall();
+    describe('on playCard flag true', () => {
+        beforeEach(() => moxios.install());
+        afterEach(() => moxios.uninstall());
+        it('calls requestPlayCard', (() => {
+            jest.spyOn(MyCards.prototype, 'isEnabled').mockImplementation(() => true);
+            const requestPlayCard = jest.fn();
+            const wrapper = mount(<MyCards fetchCards={jest.fn()} myCards={cards} requestPlayCard={requestPlayCard} playCard={true} />);
+            wrapper.find({ 'data-cy': 'card' }).first().simulate('click');
+            expect(requestPlayCard).toHaveBeenCalled();
+            requestPlayCard.mockRestore();
+        }));
+        it('calls playCardForWord', () => {
+            jest.spyOn(MyCards.prototype, 'isEnabled').mockImplementation(() => true);
+            const playCardForWord = jest.spyOn(MyCards.prototype, 'playCardForWord');
+            const wrapper = mount(<MyCards fetchCards={jest.fn()} myCards={cards} requestPlayCard={jest.fn()} playCard={true} />);
+            wrapper.find({ 'data-cy': 'card' }).first().simulate('click');
+            expect(playCardForWord).toHaveBeenCalled();
+            playCardForWord.mockRestore();
         });
 
-        it('should get cards', () => {
-            moxios.stubRequest('/api/cards', {
-                status: 200,
-                response: {
-                    cards: [1, 2, 3]
-                }
-            });
-            axios.get('/api/cards').then(response => {
-                let cards = response.data.cards;
-                const wrapper = shallow(<MyCards cards={cards} fetchCards={() => {}} playCard={() => {}}/>);
-                expect(wrapper.find('ul').children().length).toEqual(3);
+        describe('on successful api call', () => {
+            it('calls finishPlayCard', (done) => {
+                moxios.stubRequest('/api/playCard', { status: 200 });
+                jest.spyOn(MyCards.prototype, 'isEnabled').mockImplementation(() => true);
+                const finishPlayCard = jest.fn();
+                const wrapper = mount(<MyCards fetchCards={jest.fn()} myCards={cards} requestPlayCard={jest.fn()} finishPlayCard={finishPlayCard} playCard={true} />);  
+                wrapper.find({ 'data-cy': 'card' }).first().simulate('click');
+                moxios.wait(() => {
+                    expect(finishPlayCard).toHaveBeenCalled();
+                    finishPlayCard.mockRestore();
+                    done();
+                });
             });
         });
+
+        describe('on unsuccessful api call', () => {
+            it("doesn't call finishPlayCard", (done) => {
+                moxios.stubRequest('/api/playCard', { status: 400 });
+                jest.spyOn(MyCards.prototype, 'isEnabled').mockImplementation(() => true);
+                const finishPlayCard = jest.fn().mockImplementation(() => console.log('finishPlayCard'));
+                const wrapper = mount(<MyCards fetchCards={jest.fn()} myCards={cards} requestPlayCard={jest.fn()} finishPlayCard={finishPlayCard} playCard={true} />);  
+                wrapper.find({ 'data-cy': 'card' }).first().simulate('click');
+                moxios.wait(() => {
+                    expect(finishPlayCard).not.toHaveBeenCalled();
+                    finishPlayCard.mockRestore();
+                    done();
+                });
+            });
+        });
+    });
+});
+
+describe('on clicking a disabled card', () => {
+    it("doesn't call playCard", () => {
+        jest.spyOn(MyCards.prototype, 'isEnabled').mockImplementation(() => false);
+        const playCard = jest.spyOn(MyCards.prototype, 'playCard');
+        const wrapper = mount(<MyCards fetchCards={jest.fn()} myCards={cards} />);
+        wrapper.find({ 'data-cy': 'card' }).first().simulate('click');
+        expect(playCard).not.toHaveBeenCalled();
+        playCard.mockRestore();
     });
 });

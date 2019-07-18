@@ -33,7 +33,7 @@ export class MyCards extends React.Component {
         .catch(err => console.log(err));
     }
 
-    isEnabled(cardId) {
+    isEnabled() {
         return (this.props.playWordAndCard || this.props.playCard) && this.props.playedCard === 0;
     }
 

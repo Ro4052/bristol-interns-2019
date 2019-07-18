@@ -115,7 +115,8 @@ const nextRound = () => {
     } else {
         status = statusTypes.GAME_OVER;
         socket.emitStatus(status);
-        socket.emitWinner(players.reduce((prev, current) => (prev.score > current.score) ? prev : current));
+        const winner = players.reduce((prev, current) => (prev.score > current.score) ? prev : current);
+        socket.emitWinner({ username: winner.username });
     }
 }
 

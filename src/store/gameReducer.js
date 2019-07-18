@@ -7,8 +7,9 @@ export const initialState = {
     players: [], /* [{ username, score }] */
     currentCards: [], /* [{ cardId }] */
     currentWord: '',
-    winner: "",
-    socket: null
+    winner: null, /* { username } */
+    socket: null,
+    allVotes: []
 }
 
 const gameReducer = (state = initialState, action) => {
