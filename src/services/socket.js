@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
 import { dispatch } from '../store/store';
 import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setPlayers, setCurrentCards, setAllVotes, setWinner, resetState, setSocket } from '../store/gameActions';
-import { setPlayWordAndCard, setPlayCard, setPlayedCard, setVoteCard, setVotedCard, playWord, resetFinishRound, resetPlayerState, resetCookie } from '../store/playerActions';
+import { setPlayWord, setPlayCard, setPlayedCard, setVoteCard, setVotedCard, playWord, resetFinishRound, resetPlayerState, resetCookie } from '../store/playerActions';
 
 const connectSocket = () => {
     let connectionString;
@@ -22,6 +22,7 @@ const connectSocket = () => {
     });
 
     socket.on("new round", msg => {
+        console.log(msg);
         dispatch(setStatus(msg.status));
         dispatch(setRoundNumber(msg.roundNum));
         dispatch(setCurrentPlayer(msg.currentPlayer));
@@ -29,7 +30,7 @@ const connectSocket = () => {
         dispatch(setCurrentCards([]));
         dispatch(setPlayCard(false));
         dispatch(setVoteCard(false));
-        dispatch(setPlayWordAndCard(false));
+        dispatch(setPlayWord(false));
         dispatch(setPlayedCard(0));
         dispatch(setVotedCard(0));
         dispatch(playWord(""));
@@ -45,7 +46,10 @@ const connectSocket = () => {
     });
 
     socket.on("play word and card", () => {
-        dispatch(setPlayWordAndCard(true));
+        console.log("here");
+        
+        dispatch(setPlayWord(true));
+        dispatch(setPlayCard(true));
     });
 
     socket.on("play card", () => {
@@ -77,7 +81,7 @@ const connectSocket = () => {
         dispatch(setCurrentCards([]));
         dispatch(setPlayCard(false));
         dispatch(setVoteCard(false));
-        dispatch(setPlayWordAndCard(false));
+        dispatch(setPlayWord(false));
         dispatch(setPlayedCard(0));
         dispatch(setVotedCard(0));
         dispatch(playWord(""));

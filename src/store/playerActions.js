@@ -92,13 +92,13 @@ export const setVotedCard = cardId => ({
     cardId
 });
 
-export const setPlayWordAndCard = bool => ({
-    type: types.SET_PLAY_WORD_AND_CARD,
+export const setPlayCard = bool => ({
+    type: types.SET_PLAY_CARD,
     bool
 });
 
-export const setPlayCard = bool => ({
-    type: types.SET_PLAY_CARD,
+export const setPlayWord = bool => ({
+    type: types.SET_PLAY_WORD,
     bool
 });
 

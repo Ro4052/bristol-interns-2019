@@ -9,12 +9,20 @@ exports.setupSocket = (server, session) => {
     io = socketio(server);
     io.use(sharedsession(session));
     io.on('connection', function (socket) {
-        sockets.push(socket);
-        emitPlayers(gameLogic.getPlayers());
+        if (socket.handshake.session.user) {
+            if (sockets.some(other => other.handshake.session.user === socket.handshake.session.user)) {
+                sockets = sockets.filter(otherSocket => otherSocket.handshake.session.user !== socket.handshake.session.user);
+            }
+            sockets.push(socket);
+            emitPlayers(gameLogic.getPlayers());
+        }
+    });
+    io.on('disconnect', function (disconnected) {
+        sockets = sockets.filter(socket => socket !== disconnected);
     });
 }
 
-exports.closeSocket = () => {
+exports.closeSocket = () => {    
     sockets.forEach(socket => socket.disconnect());
     sockets = [];
 }

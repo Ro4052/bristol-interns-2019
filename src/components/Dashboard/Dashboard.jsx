@@ -11,6 +11,7 @@ import PlayWord from '../PlayWord/PlayWord';
 import Prompt from '../shared/Prompt/Prompt';
 import StartGame from './StartGame/StartGame';
 import GameOver from '../GameOver/GameOver';
+import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
 
 export class Dashboard extends React.Component {
     render() {
@@ -24,13 +25,7 @@ export class Dashboard extends React.Component {
                 <Players />
                 <PlayedCards />
                 <MyCards />
-                <div className={styles.playerInteractions}>
-                    {this.props.playWord && <Prompt cy="play-word" text="Type in a word" />}
-                    {this.props.playCard && <Prompt cy="play-card" text="Pick a card" />}
-                    {this.props.playWord && <PlayWord />}
-                    {this.props.voteCard && <Prompt cy="vote-card" text="Vote for a card" />}
-                    {this.props.myWord && this.props.playedCard !== 0 && !this.props.finishedRound && <EndTurn />}
-                </div>
+                <PlayerInteractions />
                 <Logout />
                 <Monster />
             </div>

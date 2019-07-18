@@ -18,7 +18,7 @@ export class MyCards extends React.Component {
         this.props.fetchCards();
     }
 
-    playCard(cardId) {
+    playCard(cardId) {        
         if (this.props.playWordAndCard) {
             this.props.requestPlayCard(cardId);
         } else if (this.props.playCard) {
@@ -39,7 +39,7 @@ export class MyCards extends React.Component {
 
     render() {
         return (
-            <CardList cards={this.props.myCards} handleClick={this.playCard} isEnabled={this.isEnabled} cy={"my-cards"} />
+            <CardList cards={this.props.myCards} handleClick={this.playCard} playedCard={this.props.playedCard} isEnabled={this.isEnabled} cy={"my-cards"} />
         );
     }
 }
