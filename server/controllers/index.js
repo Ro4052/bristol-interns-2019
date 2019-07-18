@@ -62,10 +62,12 @@ router.get('/api/cards', auth, (req, res) => {
 
 /* Start the game */
 router.get('/api/start', auth, (req, res) => {
+    console.log("/api/start");
     try {
         gameLogic.startGame()
         res.sendStatus(200);
     } catch (err) {
+        console.log(err);
         res.status(400).json({message: err.message});
     }
 });
@@ -82,7 +84,7 @@ router.get('/api/end', auth, (req, res) => {
     }
 });
 
-/* Resest the cookie and destroy the session */
+/* Reset the cookie and destroy the session */
 router.get('/api/reset-cookie', auth, (req, res) => {
     if (req.session) {
         req.session.destroy();
@@ -93,7 +95,7 @@ router.get('/api/reset-cookie', auth, (req, res) => {
 });
 
 /* Current player plays a card and a word */
-router.post('/api/playCardWord', auth, (req, res) => {
+router.post('/api/playCardWord', (req, res) => {
     if (gameLogic.isCurrentPlayer(req.session.user)) { /* Only current player is allowed to play both a word and a card */
         try {
             gameLogic.playCardAndWord(req.session.user, req.body.cardId, req.body.word)

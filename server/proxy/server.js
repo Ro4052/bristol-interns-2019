@@ -82,7 +82,6 @@ app.get('/playCardWord', (req, res) => {
         jar: cookieJar,
         withCredentials: true
     });
-    
     instance.post('api/playCardWord', {
         cardId: cards[0].cardId,
         word: "Hello"
