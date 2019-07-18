@@ -9,7 +9,8 @@ export const types = {
     SET_ALL_VOTES: 'SET_ALL_VOTES',
     SET_WINNER: 'SET_WINNER',
     SET_SOCKET: 'SET_SOCKET',
-    RESET_STATE: 'RESET_STATE'
+    RESET_STATE: 'RESET_STATE',
+    SET_INVALID_WORD: 'SET_INVALID_WORD'
 };
 
 export const resetState = () => ({
@@ -59,6 +60,11 @@ export const setAllVotes = allVotes => ({
 export const setWinner = player => ({
     type: types.SET_WINNER,
     player
+});
+
+export const setInvalidWord = bool => ({
+    type: types.SET_INVALID_WORD,
+    bool
 });
 
 /** @param {SocketIOClient.Socket} socket */

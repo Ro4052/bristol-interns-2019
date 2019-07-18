@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styles from './PlayWord.module.css';
 import { playWord } from '../../store/playerActions';
+import { setInvalidWord } from '../../store/gameActions';
 import axios from 'axios';
 
 export class PlayWord extends React.Component {
@@ -25,13 +26,15 @@ export class PlayWord extends React.Component {
             word: this.state.currentValue
         })
         .then(() => {
+            this.props.setInvalidWord(false);
             this.props.playWord(this.state.currentValue);
         })
         .catch(err => {
             console.log(err);
-                this.setState( {
-                    error: 'Invalid word'
-                });
+            this.props.setInvalidWord(true);
+            this.setState( {
+                error: 'Invalid word'
+            });
         });
     }
     
@@ -47,7 +50,8 @@ export class PlayWord extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    playWord: (word) => dispatch(playWord(word))
+    playWord: (word) => dispatch(playWord(word)),
+    setInvalidWord: (bool) => dispatch(setInvalidWord(bool))
 });
 
 export default connect(null, mapDispatchToProps)(PlayWord);
