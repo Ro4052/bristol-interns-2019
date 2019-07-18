@@ -5,6 +5,7 @@ import Prompt from '../shared/Prompt/Prompt';
 import PlayWord from '../PlayWord/PlayWord';
 import StartGame from './StartGame/StartGame';
 import EndTurn from './EndTurn/EndTurn';
+import GameOver from '../GameOver/GameOver';
 
 describe('on status NOT_STARTED', () => {
     it('displays the start game component', () => {
@@ -63,5 +64,19 @@ describe('on played turn', () => {
     it('displays end turn button', () => {
         const wrapper = shallow(<Dashboard myWord={'word'} playedCard={1} finishedRound={false} />);
         expect(wrapper.exists(EndTurn)).toEqual(true);
+    });
+});
+
+describe('on winner', () => {
+    it('displays GameOver', () => {
+        const wrapper = shallow(<Dashboard winner={{ username: 'username' }} />);
+        expect(wrapper.exists(GameOver)).toEqual(true);
+    })
+});
+
+describe('on no winner', () => {
+    it("doesn't display GameOver", () => {
+        const wrapper = shallow(<Dashboard />);
+        expect(wrapper.exists(GameOver)).toEqual(false);
     });
 });

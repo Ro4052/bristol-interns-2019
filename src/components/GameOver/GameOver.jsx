@@ -12,10 +12,9 @@ export class GameOver extends React.Component {
     }
 
     render() {
-        console.log(this.props.winner);
         return (
             <div className={styles.gameOverBox}>
-                <h2 className={styles.winnerText}>Winner is: <span>{this.props.winner.username}</span></h2>
+                <h2 className={styles.winnerText}>Winner is: <span data-cy='winner'>{this.props.winner.username}</span></h2>
                 <Button cy="new-game" handleClick={this.newGame} text="New game" />
             </div>
         );
