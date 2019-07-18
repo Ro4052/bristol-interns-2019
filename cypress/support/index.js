@@ -16,7 +16,11 @@
 import './commands'
 
 beforeEach(() => {
-    cy.resetGame();
-    cy.visit('/');
     cy.server();
+    cy.request({
+        url: '/api/reset-server',
+        method: 'POST'
+    }).then(() => {
+        cy.visit('/');
+    });
 });
