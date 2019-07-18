@@ -11,9 +11,9 @@ describe('The Player Cards Component', () => {
     });
 
     describe('player clicks on a card', () => {
-        it("is removed from the list", () => {
+        it("its border becomes red", () => {
             cy.playCard();
-            cy.get('[data-cy="my-cards"]').children().its('length').should('eq', 2);
+            cy.get('[data-cy="my-cards"]').children().first().should('have.class', "Card_cardWrapper__1BfyR Card_disabled__1skTK Card_selected__2XUfm");
         });
     });
 });

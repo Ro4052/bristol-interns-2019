@@ -35,7 +35,7 @@ Cypress.Commands.add('startGame', () => {
     cy.get('[data-cy="start-game"]').click();
 });
 
-Cypress.Commands.add('resetServer', () => {
+Cypress.Commands.add('resetGame', () => {
     cy.request({
         url: '/api/reset-server',
         method: 'POST'
