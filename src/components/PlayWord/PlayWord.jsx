@@ -4,6 +4,7 @@ import { playWord } from '../../store/playerActions';
 import { setInvalidWord } from '../../store/gameActions';
 import axios from 'axios';
 import Button from '../shared/Button/Button';
+import styles from '../PlayWord/PlayWord.module.css'
 
 export class PlayWord extends React.Component {
 
