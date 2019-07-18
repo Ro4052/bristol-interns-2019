@@ -32,7 +32,7 @@ export class Dashboard extends React.Component {
                     {this.props.myWord && this.props.playedCard !== 0 && !this.props.finishedRound && <EndTurn />}
                 </div>
                 <Logout />
-                {<Monster />}
+                <Monster />
             </div>
         );
     }

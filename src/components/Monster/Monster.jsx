@@ -25,7 +25,7 @@ export class Monster extends React.Component {
                             <div className={styles.eyes}>
                                 <div className={styles.eye}>
                                     <div className={cx({ meaneye: this.props.invalidWord})}></div>
-                                    <div className={cx({tear: this.props.error})}></div>
+                                    {/* <div className={cx({tear: this.props.error})}></div> */}
                                 </div>
                             </div>
                         </div>
