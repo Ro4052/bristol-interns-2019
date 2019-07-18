@@ -130,6 +130,8 @@ router.post('/api/voteCard', auth, (req, res) => {
     }
 });
 
+console.log(process.env.NODE_ENV);
+
 /* Check if in dev mode, and enable end game request */
 if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {
