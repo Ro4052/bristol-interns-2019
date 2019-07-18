@@ -41,7 +41,7 @@ Cypress.Commands.add('startGame', () => {
     }).as('start');
     cy.get('[data-cy="start-game"]').click();
     cy.wait('@start').then(() => {
-        cy.get('[data-cy="player-username"]').first().should('have.text', 'unicorn');
+        cy.get('[data-cy="current-player"]').should('exist');
     });
 });
 
