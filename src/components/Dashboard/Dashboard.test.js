@@ -1,5 +1,5 @@
 import React from 'react';
-import PlayerCards from '../Cards/PlayerCards/PlayerCards';
+import PlayerCards from '../MyCards/MyCards';
 import { shallow } from 'enzyme';
 import { Dashboard } from './Dashboard';
 import Prompt from '../shared/Prompt/Prompt';
