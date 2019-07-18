@@ -1,6 +1,5 @@
 describe('Play card', () => {
     beforeEach(() => {
-        cy.server();
         cy.route({
             method: "POST",
             url: "/auth/login",

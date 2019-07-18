@@ -1,6 +1,5 @@
 describe('The Dashboard Page', function () {
     beforeEach(() => {
-        cy.server();
         cy.route({
             method: "POST",
             url: "/auth/login",

@@ -18,7 +18,6 @@ describe('The Login Page', function () {
             const store = mockStore(initialState);
 
             // Initialise a cypress server to stub the login request
-            cy.server();
             cy.route({
                 method: 'POST',
                 url: '/auth/login'
@@ -39,7 +38,6 @@ describe('The Login Page', function () {
             // Connect a user to occupy a username
             cy.request('POST', '/auth/login', { username }).then(() => {
                 // Initialise a cypress server to stub the login request
-                cy.server();
                 cy.route({
                     method: 'POST',
                     url: '/auth/login'

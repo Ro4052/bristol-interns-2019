@@ -1,6 +1,5 @@
 describe('Play word and card', () => {
     beforeEach(() => {
-        cy.server();
         cy.route({
             method: "POST",
             url: "/auth/login",
@@ -35,8 +34,14 @@ describe('Play word and card', () => {
             }).as('start');
             cy.startGame();
             cy.wait('@start').then(() => {
-                cy.playWordCard();
-                cy.get('[data-cy="current-word"]').should('have.text', 'word');
+                cy.route({
+                    method: 'POST',
+                    url: '/api/playCardWord'
+                }).as('playCardWord');
+                cy.playCardWord();
+                cy.wait('@playCardWord').then(() => {
+                    cy.get('[data-cy="current-word"]').should('have.text', 'word');
+                });
             });
         });
     });    

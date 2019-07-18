@@ -3,7 +3,6 @@ describe('Vote for a card', () => {
         cy.login('unicorn');
         cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
         .then(() => {
-            cy.server();
             cy.route({
                 method: 'GET',
                 url: '/api/start'
@@ -31,7 +30,6 @@ describe('Vote for a card', () => {
 
     describe('on vote for a card', () => {
         it("displays the votes", () => {
-            cy.server();
             cy.route({
                 method: 'POST',
                 url: '/api/voteCard'
