@@ -1,5 +1,5 @@
 import React from 'react';
-import PlayerCards from '../MyCards/MyCards';
+import MyCards from '../MyCards/MyCards';
 import { shallow } from 'enzyme';
 import { Dashboard } from './Dashboard';
 import StartGame from './StartGame/StartGame';
@@ -12,7 +12,7 @@ describe('on status NOT_STARTED', () => {
     });
     it("doesn't display the cards", () => {
         const wrapper = shallow(<Dashboard status={"NOT_STARTED"}/>);
-        expect(wrapper.exists(PlayerCards)).toEqual(false);
+        expect(wrapper.exists(MyCards)).toEqual(false);
     });
 });
 
@@ -23,7 +23,7 @@ describe('on any status other than NOT_STARTED', () => {
     });
     it('displays cards', () => {
         const wrapper = shallow(<Dashboard status={"STARTED"}/>);
-        expect(wrapper.exists(PlayerCards)).toEqual(true);
+        expect(wrapper.exists(MyCards)).toEqual(true);
     });
 });
 
