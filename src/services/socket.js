@@ -8,7 +8,7 @@ const connectSocket = () => {
     if (process.env.NODE_ENV === "development") {
         connectionString = "ws://localhost:8080";
     } else {
-        const wsProtocol = window.location.protocol === 'https' ? 'wss' : 'ws';
+        const wsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
         connectionString = `${wsProtocol}://${window.location.host}`;
     }
 
