@@ -1,11 +1,10 @@
-describe('The Played Cards Component', function() {
+describe('Played cards', () => {
     const cardsNumber = 3;
     const numberOfPlayers = 2;
 
     describe("at end of round", () => {
         it('all the played cards are displayed', () => {
             cy.login('unicorn');
-            cy.get('[data-cy="player-username"]').first().should('have.text', 'unicorn');
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => {
                 cy.startGame();

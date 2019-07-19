@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { playWord } from '../../store/playerActions';
 import Button from '../shared/Button/Button';
+import styles from '../PlayerInteractions/PlayerInteractions.module.css'
 
 export class PlayWord extends React.Component {
 
@@ -24,7 +25,7 @@ export class PlayWord extends React.Component {
     
     render() {
         return (
-            <div>
+            <div className={styles.sendWordBox}>
                 <input onChange={this.handleChange} value={this.state.currentValue} placeholder="Type in your word" data-cy='type-word' />
                 <Button cy="send-word" handleClick={this.sendMessage} text="Send word" />
             </div>
