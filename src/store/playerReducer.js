@@ -172,6 +172,16 @@ const cardReducer = (state = initialState, action) => {
                 loading: false,
                 error: null
             }
+        case types.SET_INVALID_WORD:
+            return {
+                ...state, 
+                invalidWord: action.bool
+            }
+        case types.VALIDATE_WORD_FAILURE:
+            return {
+                ...state,
+                error: action.payload.error
+            }
         default:
             return state;
     }

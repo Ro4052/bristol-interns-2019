@@ -35,8 +35,6 @@ const gameReducer = (state = initialState, action) => {
             return {...state, winner: action.player };
         case types.SET_SOCKET:
             return {...state, socket: action.socket };
-        case types.SET_INVALID_WORD:
-            return {...state, invalidWord: action.bool}
         default:
             return state;
     }

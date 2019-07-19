@@ -1,9 +1,15 @@
 .invalidWord {
     color: red;
+    font-size: 5vmin; 
 }
 
 .sendWordBox {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.sendWordBox > input {
+    width: 80%;
 }

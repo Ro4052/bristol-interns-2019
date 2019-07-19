@@ -7,10 +7,9 @@ const cx = classNames.bind(styles);
 
 
 export function Monster(props) {
-
-        let bodyClass = styles.body;
-        if (props.invalidWord) bodyClass = styles.disappointedbody;
-        if (props.winner) bodyClass = styles.victorybody;
+    let bodyClass = styles.body;
+    if (props.invalidWord) bodyClass = styles.disappointedbody;
+    if (props.winner) bodyClass = styles.victorybody;
     return (
         <div className={styles.ufo}>
             <div className={styles.monster}>
@@ -36,7 +35,7 @@ export function Monster(props) {
 }
 
 const mapStateToProps = (state) => ({
-    invalidWord: state.gameReducer.invalidWord,
+    invalidWord: state.playerReducer.invalidWord,
     winner: state.gameReducer.winner,
     error: state.playerReducer.error
 });
