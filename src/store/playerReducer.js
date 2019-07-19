@@ -57,9 +57,6 @@ const cardReducer = (state = initialState, action) => {
                 votedCard: action.cardId
             }
         case types.FINISH_PLAY_CARD:
-            console.log(state.myCards);
-            console.log(action.cardId);
-            
             return {
                 ...state,
                 finishedRound: true,

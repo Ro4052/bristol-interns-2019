@@ -62,7 +62,6 @@ router.get('/api/cards', auth, (req, res) => {
 
 /* Start the game */
 router.get('/api/start', auth, (req, res) => {
-    console.log("/api/start");
     try {
         gameLogic.startGame();
         res.sendStatus(200);
@@ -95,7 +94,7 @@ router.get('/api/reset-cookie', (req, res) => {
 });
 
 /* Current player plays a card and a word */
-router.post('/api/playCardWord', (req, res) => {
+router.post('/api/playCardWord', auth, (req, res) => {
     if (gameLogic.isCurrentPlayer(req.session.user)) { /* Only current player is allowed to play both a word and a card */
         try {
             gameLogic.playCardAndWord(req.session.user, req.body.cardId, req.body.word)
@@ -132,8 +131,6 @@ router.post('/api/voteCard', auth, (req, res) => {
     }
 });
 
-console.log(process.env.NODE_ENV);
-
 /* Check if in dev mode, and enable end game request */
 if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {
@@ -142,6 +139,7 @@ if (process.env.NODE_ENV === 'testing') {
         gameLogic.endGame();
         closeSocket();
         req.session.destroy();
+        gameLogic.setStatus("NOT_STARTED");
         res.sendStatus(200);
     });
 }

@@ -15,3 +15,9 @@
     width: 29%;
     border: 3px solid black;
 }
+
+.sendWordBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

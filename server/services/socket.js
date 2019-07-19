@@ -22,7 +22,7 @@ exports.setupSocket = (server, session) => {
     });
 }
 
-exports.closeSocket = () => {    
+exports.closeSocket = () => {
     sockets.forEach(socket => socket.disconnect());
     sockets = [];
 }
