@@ -10,9 +10,7 @@ exports.setupSocket = (server, session) => {
     io.use(sharedsession(session));
     io.on('connection', function (socket) {
         if (socket.handshake.session.user) {
-            if (sockets.some(other => other.handshake.session.user === socket.handshake.session.user)) {
-                sockets = sockets.filter(otherSocket => otherSocket.handshake.session.user !== socket.handshake.session.user);
-            }
+            sockets = sockets.filter(otherSocket => otherSocket.handshake.session.user !== socket.handshake.session.user);
             sockets.push(socket);
             emitPlayers(gameLogic.getPlayers());
         }

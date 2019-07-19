@@ -12,6 +12,8 @@ import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
 
 export class Dashboard extends React.Component {
     render() {
+        const showPlayerInteractions = (this.props.playCard || this.props.playWord || this.props.voteCard)
+                                    || (!this.props.finishedRound && this.props.status === 'WAITING_FOR_CURRENT_PLAYER' && this.props.playedCard !== 0);
         return (
             <div className={styles.dashboard}>
                 {this.props.status === "NOT_STARTED" && <StartGame />}
@@ -22,7 +24,7 @@ export class Dashboard extends React.Component {
                 <Players />
                 <PlayedCards />
                 <MyCards />
-                <PlayerInteractions />
+                {showPlayerInteractions && <PlayerInteractions />}
                 <Logout />
                 <Monster />
             </div>
