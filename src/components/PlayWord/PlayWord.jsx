@@ -39,8 +39,6 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    playWord: (word) => dispatch(playWord(word)),
-    setInvalidWord: (bool) => dispatch(setInvalidWord(bool)),
     validateWord: (word) => dispatch(validateWord(word))
 });
 
