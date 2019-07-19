@@ -16,7 +16,7 @@ export class Card extends React.Component {
         if (this.props.enabled) this.props.handleClick(this.props.card.cardId);
     }
 
-    render() {        
+    render() {
         return (
             <div data-cy='card-wrapper' className={cx(styles.cardWrapper, { enabled: this.props.enabled }, { disabled: !this.props.enabled }, {selected : this.props.playedCard === this.props.card.cardId})} onClick={this.handleClick}>
                 <img data-cy='card' className={styles.card} alt={`card-${this.props.card.cardId}`} src={require(`../../../../images/cards/card (${this.props.card.cardId}).jpg`)} />
