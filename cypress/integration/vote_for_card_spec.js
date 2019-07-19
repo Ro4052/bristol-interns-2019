@@ -17,9 +17,9 @@ describe('Vote for a card', () => {
             cy.get('[data-cy="played-cards"]').children().its('length').should('eq', 2);
         });
 
-        it('prompts to vote for a card', () => {
-            cy.get('[data-cy="vote-card"]');
-        });
+        // it('prompts to vote for a card', () => {
+        //     cy.get('[data-cy="vote-card"]');
+        // });
 
         describe('on vote for a card', () => {
             beforeEach(() => {
