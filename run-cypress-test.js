@@ -3,11 +3,7 @@ const server = require('./server/server');
 
 cypress.run()
 .then((results) => {
-  console.log(results.totalFailed);
-  if (results.totalFailed > 0) {
-    return server.fail();
-  }
-  return server.stop();
+  return (results.totalFailed > 0) ? server.fail() : server.stop();
 })
 .catch((err) => {
   console.log(err);
