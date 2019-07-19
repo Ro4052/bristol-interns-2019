@@ -4,6 +4,7 @@ import { shallow } from 'enzyme';
 import { Dashboard } from './Dashboard';
 import StartGame from './StartGame/StartGame';
 import GameOver from '../GameOver/GameOver';
+import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
 
 describe('on status NOT_STARTED', () => {
     it('displays the start game component', () => {
@@ -52,5 +53,33 @@ describe('on no winner', () => {
     it("doesn't display GameOver", () => {
         const wrapper = shallow(<Dashboard />);
         expect(wrapper.exists(GameOver)).toEqual(false);
+    });
+});
+
+describe('on play card', () => {
+    it('displays player interaction', () => {
+        const wrapper = shallow(<Dashboard playCard={true} />);
+        expect(wrapper.exists(PlayerInteractions)).toEqual(true);
+    });
+});
+
+describe('on play word', () => {
+    it('displays player interaction', () => {
+        const wrapper = shallow(<Dashboard playWord={true} />);
+        expect(wrapper.exists(PlayerInteractions)).toEqual(true);
+    });
+});
+
+describe('on vote card', () => {
+    it('displays player interaction', () => {
+        const wrapper = shallow(<Dashboard voteCard={true} />);
+        expect(wrapper.exists(PlayerInteractions)).toEqual(true);
+    });
+});
+
+describe('on end of turn', () => {
+    it('displays player interaction', () => {
+        const wrapper = shallow(<Dashboard finishedRound={false} status={'WAITING_FOR_CURRENT_PLAYER'} playedCard={1} />);
+        expect(wrapper.exists(PlayerInteractions)).toEqual(true);
     });
 });
