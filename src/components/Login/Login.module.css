@@ -8,7 +8,7 @@
 }
 
 .loginForm {
-    height: 80%;
+    height: 60%;
     padding: 0 10vmin;
     display: flex;
     flex-direction: column;
@@ -31,7 +31,7 @@
     outline: none;
     background-color: var(--yellow);
     color: black;
-    font-size: 3vh;
+    font-size: 3vmin;
     margin: 0.5em;
 }
 
@@ -44,6 +44,8 @@
 
 .errorText {
     color: red;
+    text-align: center;
+    font-family: var(--secondary-font);
     height: 5%;
-    font-size: 3vh;
+    font-size: 2vh;
 }

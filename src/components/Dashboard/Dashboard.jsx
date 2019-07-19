@@ -13,7 +13,7 @@ import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
 export class Dashboard extends React.Component {
     render() {
         const showPlayerInteractions = (this.props.playCard || this.props.playWord || this.props.voteCard)
-                                    || (!this.props.finishedRound && this.props.status === 'WAITING_FOR_CURRENT_PLAYER' && this.props.playedCard !== 0);
+                                    || (this.props.currentPlayer) && (!this.props.finishedRound && this.props.cookie === this.props.currentPlayer.username && this.props.playedCard !== 0);
         return (
             <div className={styles.dashboard}>
                 {this.props.status === "NOT_STARTED" && <StartGame />}
@@ -23,7 +23,7 @@ export class Dashboard extends React.Component {
                 {this.props.currentWord !== '' && <h1 id="message">Word: <span data-cy='current-word'>{this.props.currentWord}</span></h1>}
                 <Players />
                 <PlayedCards />
-                <MyCards />
+                {this.props.status !== "NOT_STARTED" && <MyCards />}
                 {showPlayerInteractions && <PlayerInteractions />}
                 <Logout />
                 <Monster />
@@ -43,7 +43,8 @@ const mapStateToProps = (state) => ({
     winner: state.gameReducer.winner,
     finishedRound: state.playerReducer.finishedRound,
     myWord: state.playerReducer.myWord,
-    playedCard: state.playerReducer.playedCard
+    playedCard: state.playerReducer.playedCard,
+    cookie: state.playerReducer.cookie
 });
 
 export default connect(mapStateToProps)(Dashboard);
