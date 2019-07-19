@@ -41,7 +41,7 @@ export class PlayWord extends React.Component {
     
     render() {
         return (
-            <div>
+            <div className={styles.sendWordBox}>
                 <input onChange={this.handleChange} value={this.state.currentValue} placeholder="Type in your word" data-cy='type-word' />
                 <span className={styles.invalidWord} data-cy= 'send-error'>{this.state.error}</span>
                 <Button cy="send-word" handleClick={this.sendMessage} text="Send word" />

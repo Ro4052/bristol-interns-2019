@@ -1,3 +1,9 @@
 .invalidWord {
     color: red;
 }
+
+.sendWordBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

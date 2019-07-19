@@ -64,9 +64,10 @@ router.get('/api/cards', auth, (req, res) => {
 /* Start the game */
 router.get('/api/start', auth, (req, res) => {
     try {
-        gameLogic.startGame()
+        gameLogic.startGame();
         res.sendStatus(200);
     } catch (err) {
+        console.log(err);
         res.status(400).json({message: err.message});
     }
 });
@@ -83,8 +84,8 @@ router.get('/api/end', auth, (req, res) => {
     }
 });
 
-/* Resest the cookie and destroy the session */
-router.get('/api/reset-cookie', auth, (req, res) => {
+/* Reset the cookie and destroy the session */
+router.get('/api/reset-cookie', (req, res) => {
     if (req.session) {
         req.session.destroy();
         res.sendStatus(200);
@@ -114,10 +115,8 @@ router.post('/api/playCardWord', auth, (req, res) => {
 /* Current player plays word only if it's a valid word */
 router.post('/api/validWord', auth, (req,res) => {
     if (validWord.isValidWord(req.body.word)) {
-        console.log("Valid");
         res.sendStatus(200);
     } else {
-        console.log("Invalid");
         res.status(400).json({message: "Invalid word"});
     }
 })
@@ -154,6 +153,7 @@ if (process.env.NODE_ENV === 'testing') {
         gameLogic.endGame();
         closeSocket();
         req.session.destroy();
+        gameLogic.setStatus("NOT_STARTED");
         res.sendStatus(200);
     });
 }

@@ -1,0 +1,10 @@
+.myCards {
+    position: fixed;
+    bottom: 0;
+}
+
+@media only screen and (max-width: 500px) {
+    .myCards {
+        bottom: 20vh;
+    }
+}

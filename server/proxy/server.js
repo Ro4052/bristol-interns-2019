@@ -54,11 +54,11 @@ app.get('/connect', (req, res) => {
                     cards = response.data
                     res.sendStatus(200);
                 })
-                .catch((err) => res.sendStatus(err.statusCode));
+                .catch((err) => res.send(err));
             });
         }
     })
-    .catch((err) => res.sendStatus(err.statusCode)); 
+    .catch((err) => res.sendStatus(400)); 
 });
 
 app.get('/startGame', (req, res) => {
@@ -71,7 +71,7 @@ app.get('/startGame', (req, res) => {
     });
     instance.get('api/start')
         .then(() => res.sendStatus(200))
-        .catch((err) => res.sendStatus(err.statusCode));
+        .catch((err) =>  res.send(err));
 });
 
 app.get('/playCardWord', (req, res) => {
@@ -82,15 +82,12 @@ app.get('/playCardWord', (req, res) => {
         jar: cookieJar,
         withCredentials: true
     });
-    
     instance.post('api/playCardWord', {
         cardId: cards[0].cardId,
         word: "Hello"
     })
-    .then(() => {
-        res.sendStatus(200);
-    })
-    .catch((err) => res.sendStatus(err.statusCode));
+    .then(() => res.sendStatus(200))
+    .catch((err) =>  res.send(err));
 });
 
 app.get('/disconnect', (req, res) => {

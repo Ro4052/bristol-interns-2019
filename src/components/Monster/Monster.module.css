@@ -1,12 +1,20 @@
 .ufo {
     font-size: 25vmin;
-    position:absolute;
-    width: 10%;
-    height:10%;
-    bottom: 0.15em;
-    right: 0.15em;
-  }
-  
+    position: absolute;
+    bottom: 0em;
+    width: 20%;
+    height: 20%;
+    right: 0em;
+    margin-right: 12vmin;
+    margin-bottom: 10vmin;
+}
+
+@media only screen and (max-width: 500px) {
+    .ufo {
+        right: 28%;
+    }
+}
+
 .monster {
     color: rgb(212, 1, 1);
     font-size: 0.7em;
@@ -17,9 +25,8 @@
     box-sizing: content-box;
     border: 0.07em solid transparent;
     position: absolute;
-    bottom:0em;
+    bottom: 0em;
     user-select: none;
-    cursor: grab;
     right: 0;
 }
 
@@ -32,17 +39,19 @@
     transform-origin: bottom center;
     animation: bouncebody alternate infinite 400ms 40ms ease-in-out;
 }
+
 .disappointedbody {
     width: 100%;
     height: 100%;
     background-color: rgb(212, 1, 1);
     border-radius: inherit;
-    position: relative;
+    position: absolute;
     transform-origin: bottom center;
     animation: shake_head alternate infinite 200ms 40ms ease-in-out;
 }
 
-.victorybody { width: 100%;
+.victorybody { 
+    width: 100%;
     height: 100%;
     border-radius: inherit;
     background: currentColor;
@@ -62,6 +71,7 @@
     top: 0.3em;
     animation: blink infinite 4s ;
 }
+
 .eyes, .angryeyelid {
     text-align: center;
     display: flex;
@@ -73,7 +83,6 @@
     top: 0.3em;
     animation: bounce;
 }
-
 
 .eye {
     position: relative;
@@ -99,8 +108,8 @@
     border-right: calc(var(--meaneye-size) / 1.25) solid transparent;
     border-top: var(--meaneye-size) solid  rgb(212, 1, 1);
     transform: translateX(5%);
-
 }
+
 .meaneye:before {
     content: '';
     transform: translateX(-150%) translateY(-100%);
@@ -229,23 +238,21 @@
     transform: rotate(10deg);
     animation: antena_d 5s infinite;
 }
+
 .tear {
     width: 0;
     height: 0;
-  
     border-right: 8px solid transparent;
     border-left: 8px solid transparent;
     border-bottom: 24px solid #1ca5e2;
-  
     border-radius: 50%;  
-  
     position: absolute;
     top: 50%;
     left: 0;
-    z-index: 2;  
-  
+    z-index: 2;
     animation: tear 2.5s cubic-bezier(.63, .49, 1, -.15) .2s  both;
-  }
+}
+
 .ear:before {
     content: '';
     display: block;

@@ -31,7 +31,15 @@ module.exports.server = (port) => {
 }
 
 module.exports.stop = () => {
-    server.close();
+    server.close(function() {
+        process.exit(0);
+    });
+}
+
+module.exports.fail = () => {
+    server.close(function() {
+        process.exit(1);
+    });
 }
 
 process.on('SIGTERM', function () {
