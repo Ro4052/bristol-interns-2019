@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { voteForCard } from '../../store/playerActions';
 import { CardList } from '../shared/CardList/CardList';
+import { styles } from 'ansi-colors';
 
 export class PlayedCards extends React.Component {
     
