@@ -14,7 +14,7 @@ describe('The Player Cards Component', () => {
     describe('player clicks on a card', () => {
         it("its border becomes red", () => {
             cy.playCard();
-            cy.get('[data-cy="my-cards"]').children().first().should('have.css', "transform", "translateY(-30px)");
+            cy.get('[data-cy="my-cards"]').children().first().should('have.css', "transform", "matrix(1, 0, 0, 1, 0, -30)");
         });
     });
 });
