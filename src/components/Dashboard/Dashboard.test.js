@@ -79,7 +79,7 @@ describe('on vote card', () => {
 
 describe('on end of turn', () => {
     it('displays player interaction', () => {
-        const wrapper = shallow(<Dashboard finishedRound={false} status={'WAITING_FOR_CURRENT_PLAYER'} playedCard={1} />);
+        const wrapper = shallow(<Dashboard finishedRound={false} cookie={'username'} currentPlayer={{ username: 'username' }} status={'WAITING_FOR_CURRENT_PLAYER'} playedCard={1} />);
         expect(wrapper.exists(PlayerInteractions)).toEqual(true);
     });
 });
