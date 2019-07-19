@@ -76,4 +76,4 @@ Cypress.Commands.add('voteCard', () => {
 Cypress.Commands.add('sendWord', () => {
     cy.get('[data-cy="type-word"]').type('fuck');
     cy.get('[data-cy="send-word"]').click();
-})
+});
