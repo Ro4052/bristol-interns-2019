@@ -9,7 +9,8 @@ export const initialState = {
     currentWord: '',
     winner: null, /* { username } */
     socket: null,
-    allVotes: []
+    allVotes: [],
+    invalidWord: false
 }
 
 const gameReducer = (state = initialState, action) => {

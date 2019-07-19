@@ -4,11 +4,14 @@ import Prompt from '../shared/Prompt/Prompt';
 import PlayWord from '../PlayWord/PlayWord';
 import EndTurn from '../Dashboard/EndTurn/EndTurn';
 import styles from './PlayerInteractions.module.css';
+import classNames from 'classnames/bind';
+
+const cx = classNames.bind(styles);
 
 export class PlayerInteractions extends React.Component {
     render() {
         return (
-            <div className={styles.playerInteractions}>
+            <div className={cx(styles.playerInteractions, {votePrompt: this.props.voteCard})}>
                 {this.props.playWord && <Prompt cy="play-word" text="Type in a word" />}
                 {this.props.playCard && <Prompt cy="play-card" text="Pick a card" />}
                 {this.props.playWord && <PlayWord />}

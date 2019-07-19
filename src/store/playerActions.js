@@ -220,3 +220,38 @@ export const logOutFailure = (error) => ({
     type: types.LOG_OUT_FAILURE,
     payload: { error }
 });
+
+export const setInvalidWord = bool => ({
+    type: types.SET_INVALID_WORD,
+    bool
+});
+
+export const validateWord = (word) => (dispatch) => {
+    instance.post('/api/validWord', {
+        word: word
+    })
+    .then(res => {
+        console.log(res);
+        
+        if (res.status === 200) {
+            dispatch(setInvalidWord(false));
+            dispatch(playWord(word));
+        } else {
+            dispatch(setInvalidWord(true));
+            dispatch(validateWordFailure(res.data.message));
+        }
+    })
+    .catch(err => {
+        dispatch(setInvalidWord(true));
+        dispatch(validateWordFailure(err.message));
+    })
+}
+
+export const validateWordSuccess = () => ({
+    type: types.VALIDATE_WORD_SUCCESS
+});
+
+export const validateWordFailure = (error) => ({
+    type: types.VALIDATE_WORD_FAILURE,
+    payload: { error }
+});

@@ -1,3 +1,4 @@
+const validWord = require('../services/validWord');
 const router = require('express').Router();
 const path = require('path');
 const auth = require('../services/auth');
@@ -97,8 +98,12 @@ router.get('/api/reset-cookie', (req, res) => {
 router.post('/api/playCardWord', auth, (req, res) => {
     if (gameLogic.isCurrentPlayer(req.session.user)) { /* Only current player is allowed to play both a word and a card */
         try {
-            gameLogic.playCardAndWord(req.session.user, req.body.cardId, req.body.word)
-            res.sendStatus(200);
+            if (validWord.isValidWord(req.body.word)) {
+                gameLogic.playCardAndWord(req.session.user, req.body.cardId, req.body.word);
+                res.sendStatus(200);
+            } else {
+                res.status(400).json({message: "Invalid word."});
+            }
         } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
             res.status(400).json({ message: err.message});
         }
@@ -106,6 +111,15 @@ router.post('/api/playCardWord', auth, (req, res) => {
         res.status(400).json({ message: "You cannot play a word and a card when it is not your turn."});
     }
 });
+
+/* Current player plays word only if it's a valid word */
+router.post('/api/validWord', auth, (req,res) => {
+    if (validWord.isValidWord(req.body.word)) {
+        res.sendStatus(200);
+    } else {
+        res.status(400).json({message: "Invalid word"});
+    }
+})
 
 /* Player plays a card */
 router.post('/api/playCard', auth, (req, res) => {

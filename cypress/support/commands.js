@@ -72,3 +72,8 @@ Cypress.Commands.add('voteCard', () => {
     cy.get('[data-cy="played-cards"] [data-cy="card"]').first().click();
     cy.wait('@voteCard');
 });
+
+Cypress.Commands.add('sendWord', () => {
+    cy.get('[data-cy="type-word"]').type('fuck');
+    cy.get('[data-cy="send-word"]').click();
+});
