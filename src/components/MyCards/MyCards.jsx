@@ -3,6 +3,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { fetchCards, requestPlayCard, finishPlayCard } from '../../store/playerActions';
 import CardList from '../shared/CardList/CardList';
+import styles from './MyCards.module.css';
 
 export class MyCards extends React.Component {
     
@@ -39,7 +40,9 @@ export class MyCards extends React.Component {
 
     render() {
         return (
-            <CardList cards={this.props.myCards} handleClick={this.playCard} isEnabled={this.isEnabled} cy={"my-cards"} />
+            <div className={styles.myCards}>
+                <CardList cards={this.props.myCards} handleClick={this.playCard} playedCard={this.props.playedCard} isEnabled={this.isEnabled} cy={"my-cards"} />
+            </div>
         );
     }
 }

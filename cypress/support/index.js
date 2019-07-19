@@ -17,20 +17,10 @@ import './commands'
 
 beforeEach(() => {
     cy.server();
-    
-    cy.route({
-        method: 'POST',
-        url: '/api/reset-server'
-    }).as('reset');
-
-    // cy.resetServer();
-
     cy.request({
         url: '/api/reset-server',
         method: 'POST'
-    });
-
-    cy.wait('@reset').then(() => {
+    }).then(() => {
         cy.visit('/');
     });
 });

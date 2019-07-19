@@ -1,0 +1,23 @@
+.playerInteractions {
+    margin: 2vmin;
+    position: relative;
+    display: flex;
+    top: 25%;
+    flex-direction: column;
+    align-items: flex-end;
+    background: #fac825;
+    border-radius: 15px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2vmin 2vmin;
+    height: 22%;
+    width: 29%;
+    border: 3px solid black;
+}
+
+.sendWordBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

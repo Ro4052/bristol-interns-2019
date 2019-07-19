@@ -63,9 +63,10 @@ router.get('/api/cards', auth, (req, res) => {
 /* Start the game */
 router.get('/api/start', auth, (req, res) => {
     try {
-        gameLogic.startGame()
+        gameLogic.startGame();
         res.sendStatus(200);
     } catch (err) {
+        console.log(err);
         res.status(400).json({message: err.message});
     }
 });
@@ -82,8 +83,8 @@ router.get('/api/end', auth, (req, res) => {
     }
 });
 
-/* Resest the cookie and destroy the session */
-router.get('/api/reset-cookie', auth, (req, res) => {
+/* Reset the cookie and destroy the session */
+router.get('/api/reset-cookie', (req, res) => {
     if (req.session) {
         req.session.destroy();
         res.sendStatus(200);
@@ -138,6 +139,7 @@ if (process.env.NODE_ENV === 'testing') {
         gameLogic.endGame();
         closeSocket();
         req.session.destroy();
+        gameLogic.setStatus("NOT_STARTED");
         res.sendStatus(200);
     });
 }

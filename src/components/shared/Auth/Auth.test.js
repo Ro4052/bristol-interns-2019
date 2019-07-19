@@ -25,7 +25,7 @@ describe('on initial mount', () => {
 
     describe('if currentPlayer', () => {
         it('calls redux actions', (() => {
-            shallow(<Auth currentPlayer={{ username: 'username' }} history={historyMock} authenticateUser={authenticateUserMock} setPlayWordAndCard={setPlayWordAndCard} setPlayCard={setPlayCard}/>);
+            shallow(<Auth currentPlayer={{ username: 'username' }} history={historyMock} authenticateUser={authenticateUserMock} setPlayWord={setPlayWordAndCard} setPlayCard={setPlayCard}/>);
             expect(setPlayWordAndCard).toHaveBeenCalled();
             expect(setPlayCard).toHaveBeenCalled();
             setPlayWordAndCard.mockRestore();

@@ -44,8 +44,7 @@ const cardReducer = (state = initialState, action) => {
             return {
                 ...state,
                 playCard: false,
-                playedCard: action.cardId,
-                myCards: state.myCards.filter((card) => card.cardId !== action.cardId)
+                playedCard: action.cardId
             }
         case types.SET_PLAYED_CARD:
             return {
@@ -60,7 +59,8 @@ const cardReducer = (state = initialState, action) => {
         case types.FINISH_PLAY_CARD:
             return {
                 ...state,
-                finishedRound: true
+                finishedRound: true,
+                myCards: state.myCards.filter(card => card.cardId !== action.cardId)
             }
         case types.PLAY_WORD:
             return {
@@ -88,17 +88,15 @@ const cardReducer = (state = initialState, action) => {
                 error: action.payload.error,
                 votedCard: 0
             };
-        case types.SET_PLAY_WORD_AND_CARD:
-            return {
-                ...state,
-                playWordAndCard: action.bool,
-                playWord: action.bool,
-                playCard: action.bool
-            };
         case types.SET_PLAY_CARD:
             return {
                 ...state,
                 playCard: action.bool
+            };
+        case types.SET_PLAY_WORD:
+            return {
+                ...state,
+                playWord: action.bool
             };
         case types.SET_VOTE_CARD:
             return {
