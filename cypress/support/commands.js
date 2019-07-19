@@ -40,9 +40,7 @@ Cypress.Commands.add('startGame', () => {
         url: "/api/start",
     }).as('start');
     cy.get('[data-cy="start-game"]').click();
-    cy.wait('@start').then(() => {
-        cy.get('[data-cy="player-username"]').should('exist');
-    });
+    cy.wait('@start');
 });
 
 Cypress.Commands.add('playCardWord', () => {
