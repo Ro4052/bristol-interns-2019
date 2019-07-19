@@ -37,7 +37,7 @@ describe('on button click', () => {
         expect(spy).toHaveBeenCalled();
         spy.mockRestore();
     });
-    it('calls playWord', () => {
+    it('calls validateWord', () => {
         const validateWord = jest.fn();
         const wrapper = mount(<PlayWord validateWord={validateWord}/>);
         wrapper.find({ 'data-cy': 'send-word' }).simulate('click');

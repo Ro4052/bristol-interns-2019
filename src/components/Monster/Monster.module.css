@@ -40,7 +40,7 @@
     animation: bouncebody alternate infinite 400ms 40ms ease-in-out;
 }
 
-.disappointedbody {
+.disappointedBody {
     width: 100%;
     height: 100%;
     background-color: rgb(212, 1, 1);
@@ -50,7 +50,7 @@
     animation: shake_head alternate infinite 200ms 40ms ease-in-out;
 }
 
-.victorybody { 
+.victoryBody { 
     width: 100%;
     height: 100%;
     border-radius: inherit;

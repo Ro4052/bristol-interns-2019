@@ -8,8 +8,8 @@ const cx = classNames.bind(styles);
 
 export function Monster(props) {
     let bodyClass = styles.body;
-    if (props.invalidWord) bodyClass = styles.disappointedbody;
-    if (props.winner) bodyClass = styles.victorybody;
+    if (props.invalidWord) bodyClass = styles.disappointedBody;
+    if (props.winner) bodyClass = styles.victoryBody;
     return (
         <div className={styles.ufo}>
             <div className={styles.monster}>

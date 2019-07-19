@@ -15,7 +15,7 @@ export class PlayerInteractions extends React.Component {
                 {this.props.playWord && <Prompt cy="play-word" text="Type in a word" />}
                 {this.props.playCard && <Prompt cy="play-card" text="Pick a card" />}
                 {this.props.playWord && <PlayWord />}
-                    {this.props.voteCard && <Prompt cy="vote-card" text="Vote for a card" />}
+                {this.props.voteCard && <Prompt cy="vote-card" text="Vote for a card" />}
                 {this.props.myWord && this.props.playedCard !== 0 && !this.props.finishedRound && <EndTurn />}
             </div>
         );
