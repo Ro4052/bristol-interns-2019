@@ -11,8 +11,8 @@ describe('Dashboard', () => {
     });
 
     describe('after start of game', () => {
+        beforeEach(() => cy.startGame());
         it("should hide start button and display the round information", () => {
-            cy.startGame();
             cy.get('[data-cy="start-game"]').should('not.exist');
             cy.get('[data-cy="round-number"]').should('exist');
             cy.get('[data-cy="current-player"]').should('exist');
