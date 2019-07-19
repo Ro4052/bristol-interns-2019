@@ -1,0 +1,51 @@
+.loginPage {
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--main-font);
+}
+
+.loginForm {
+    height: 60%;
+    padding: 0 10vmin;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2.5px solid black;
+    border-radius: 15px;
+    opacity: 25%;
+    background: #fac825;
+    margin: 2em;
+}
+
+.loginInput {
+    width: 80%;
+    min-width: 200px;
+    font-family: var(--secondary-font);
+    padding: 0.4em 1em;
+    border: 2.5px solid black;
+    border-radius: 15px;
+    outline: none;
+    background-color: var(--yellow);
+    color: black;
+    font-size: 3vmin;
+    margin: 0.5em;
+}
+
+.formHeader {
+    font-size: 3vh;
+    text-align: center;
+    color: rgb(0, 0, 0);
+    font-family: 'Dilana';
+}
+
+.errorText {
+    color: red;
+    text-align: center;
+    font-family: var(--secondary-font);
+    height: 5%;
+    font-size: 2vh;
+}

@@ -1,0 +1,364 @@
+.ufo {
+    font-size: 25vmin;
+    position: absolute;
+    bottom: 0em;
+    width: 20%;
+    height: 20%;
+    right: 0em;
+    margin-right: 12vmin;
+    margin-bottom: 10vmin;
+}
+
+@media only screen and (max-width: 500px) {
+    .ufo {
+        right: 28%;
+    }
+}
+
+.monster {
+    color: rgb(212, 1, 1);
+    font-size: 0.7em;
+    margin: 0 auto;
+    width: 1em;
+    height: 1.3em;
+    border-radius: 0.5em 0.5em 0em 0em / 0.6em 0.6em 0em 0em;
+    box-sizing: content-box;
+    border: 0.07em solid transparent;
+    position: absolute;
+    bottom: 0em;
+    user-select: none;
+    right: 0;
+}
+
+.body {
+    width: 100%;
+    height: 100%;
+    background-color: currentColor;
+    border-radius: inherit;
+    position: relative;
+    transform-origin: bottom center;
+    animation: bouncebody alternate infinite 400ms 40ms ease-in-out;
+}
+
+.disappointedBody {
+    width: 100%;
+    height: 100%;
+    background-color: rgb(212, 1, 1);
+    border-radius: inherit;
+    position: absolute;
+    transform-origin: bottom center;
+    animation: shake_head alternate infinite 200ms 40ms ease-in-out;
+}
+
+.victoryBody { 
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background: currentColor;
+    position: relative;
+    transform-origin: bottom center;
+    animation: rainbow 4s infinite, victory alternate infinite 400ms 40ms ease-in-out;
+}
+
+.eyes, .eyelid {
+    text-align: center;
+    display: flex;
+    font-size: 0.65em;
+    width: 1em;
+    height: 1em;
+    position: absolute;
+    left: 0.25em;
+    top: 0.3em;
+    animation: blink infinite 4s ;
+}
+
+.eyes, .angryeyelid {
+    text-align: center;
+    display: flex;
+    font-size: 0.65em;
+    width: 1em;
+    height: 1em;
+    position: absolute;
+    left: 0.25em;
+    top: 0.3em;
+    animation: bounce;
+}
+
+.eye {
+    position: relative;
+    display: block;
+    border-radius: 50%;
+    width: 75%;
+    height: 75%;
+    background-color: black;
+    border-radius: 50%;
+}
+
+.meaneye {
+    position: relative;
+    --meaneye-size: 0.5em;
+    display: block;
+    border-radius: 50%;
+    width: 20%;
+    height:0%;
+    top: -50%;
+    background-color:transparent;
+    border-radius: 50%;
+    border-left: calc(var(--meaneye-size) / 1.25) solid transparent;
+    border-right: calc(var(--meaneye-size) / 1.25) solid transparent;
+    border-top: var(--meaneye-size) solid  rgb(212, 1, 1);
+    transform: translateX(5%);
+}
+
+.meaneye:before {
+    content: '';
+    transform: translateX(-150%) translateY(-100%);
+}
+
+.meaneye:after {
+    content: '';
+    transform: translateX(50%) translateY(-100%);
+}
+
+.angryeyelid {
+    background-color: blue;
+    border-radius: 0.5em 0.5em 0.5em 0.5em / 0.6em 0.6em 0.4em 0.4em;
+    box-shadow: 0.03em 0.14em rgba(0,0,0,0.2);
+}
+
+.eyelid {
+    background-color: white;
+    border-radius: 0.5em 0.5em 0.5em 0.5em / 0.6em 0.6em 0.4em 0.4em;
+    box-shadow: 0.03em 0.14em rgba(0,0,0,0.2);
+}
+
+.eye:after { /*pupil*/
+    --pupil-size: 0.2em;
+    position: absolute;
+    top: 0.05em;
+    left: 0.3em;
+    width: var(--pupil-size);
+    height: var(--pupil-size);
+    background: white;
+    border-radius: 50%;
+    content: " ";
+}
+
+.mouth {
+    font-size: 0.2em;
+    width: 1em;
+    height: 0.3em;
+    background: black;
+    border-radius: 1.5em 1.5em 0.5em 0.5em;
+    position: absolute;
+    bottom: 0.8em;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.mouth::before {
+    width: 50%;
+    height: 30%;
+    display: block;
+    content: ' ';
+    background-color: #ff8800;
+    border-radius: 50% / 100% 100% 50% 50%;
+    position:absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-10%) translateX(-50%);
+}
+
+.vampimouth {
+    position: absolute;
+    background: black;
+    overflow: hidden;
+    font-size: 0.3em;
+    width: 1em;
+    height: 0.7em;
+    left: 50%;
+    bottom: 0.3em;
+    transform: translateX(-50%);
+    border-radius: 0.7em 0.7em 1.2em 1.2em;
+}
+
+.vampimouth::before {
+    content: '';
+    display: block;
+    background: #ff8800;
+    width: 100%;
+    height: 0.2em;
+    position: absolute;
+    bottom: 0;
+    border-radius: 50% 50% 0 0;
+}
+
+.vampitooth::before,
+.vampitooth::after,
+.vampitooth {
+    --teeth-size: 0.25em;
+    display: block;
+    width: 0;
+    height: 0;
+    font-size: inherit;
+    border-left: calc(var(--teeth-size) / 2) solid transparent;
+    border-right: calc(var(--teeth-size) / 2) solid transparent;
+    border-top: var(--teeth-size) solid #fff;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.vampitooth:before {
+    content: '';
+    transform: translateX(-150%) translateY(-100%);
+}
+
+.vampitooth:after {
+    content: '';
+    transform: translateX(50%) translateY(-100%);
+}
+
+.ear {
+    position: absolute;
+    top: -1.2em;
+    transform-origin: bottom center;
+    font-size: 0.3em;
+    width: .8em;
+    height: 1.5em;
+    left: 18%;
+    transform: rotate(-10deg);
+    animation: antena_e 7s infinite;
+}
+
+.ear + .ear {
+    left: auto;
+    right: 18%;
+    transform: rotate(10deg);
+    animation: antena_d 5s infinite;
+}
+
+.tear {
+    width: 0;
+    height: 0;
+    border-right: 8px solid transparent;
+    border-left: 8px solid transparent;
+    border-bottom: 24px solid #1ca5e2;
+    border-radius: 50%;  
+    position: absolute;
+    top: 50%;
+    left: 0;
+    z-index: 2;
+    animation: tear 2.5s cubic-bezier(.63, .49, 1, -.15) .2s  both;
+}
+
+.ear:before {
+    content: '';
+    display: block;
+    width: .8em;
+    height: .8em;
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: inset -.1em -.08em rgba(0,0,0,.2);
+}
+
+.ear:after {
+    content: '';
+    display: block;
+    width: 0.3em;
+    height: 100%;
+    position: absolute;
+    top: .2em;
+    left: .3em;
+    background: currentColor;
+}
+
+@keyframes blink {
+    90% {
+        transform: none;
+        animation-timing-function: ease-in;
+    }
+    93% {
+        transform: translateY(30px) scaleY(0);
+    }
+    100% {
+        animation-timing-function: ease-out;
+    }
+}
+
+@keyframes bounce { 
+    to {
+        transform: translateY(4%);
+    } 
+}
+
+@keyframes bouncebody { 
+    to {
+        transform: scaleX(1.03) scaleY(0.97);
+    } 
+}
+
+@keyframes antena_d {
+    50% {
+        transform: rotate(30deg);
+    }
+}
+@keyframes antena_e {
+    50% {
+        transform: rotate(-40deg);
+    }
+}
+@keyframes shake_head {
+    from {
+        transform: rotate(-25deg);
+    }
+    to {
+        transform: rotate(25deg);
+    }
+}
+@keyframes victory {
+    0%   {transform: translate3d(-200%,20%,0) scale3d(1,1,1)}
+    20%  {transform: translate3d(-160%,-50%,0) scale3d(1,1,1);}
+    40% {transform: translate3d(-120%,-80%,0) scale3d(0.7,1.2,1);}
+    60%   {transform: translate3d(-80%,-80%,0) scale3d(0.7,1.2,1)}
+    80%  {transform: translate3d(-40%,-50%,0) scale3d(1.2,0.7,1);}
+    100% {transform: translate3d(0%,20%,0) scale3d(1.2,.7,1);}
+}
+
+@keyframes rainbow{
+    0%{color:#ff2400;}	
+    10%{color: #ff6600;}	
+	20%{color:#ffa013;}
+    30%{color: #e3e81d;}
+    40%{color: #1de840;}
+    50%{color: rgb(9, 161, 9)}
+    60%{color: #1ddde8;}
+	70%{color: #0a8b94;}
+    80%{color: rgb(136, 8, 130);}   
+    90%{color: deeppink;}
+	100%{color: rgb(211, 19, 19);}
+}
+
+@keyframes tear{
+    0% {
+      opacity: 0;
+      transform: translate3d(0, 0, 0) scale(0);
+    }
+  
+    5%{
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(0);
+    }
+  
+    10%{
+      transform: translate3d(0, 25px, 0) scale(1);
+    }
+  
+    100%{
+      transform: translate3d(0, 175px, 0) scale(1);
+    }		
+  }	

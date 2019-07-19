@@ -1,0 +1,4 @@
+{
+    "baseUrl": "http://localhost:12345/",
+    "reporter": "tap"
+}

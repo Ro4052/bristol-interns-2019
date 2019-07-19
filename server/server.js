@@ -1,42 +1,49 @@
 const express = require('express');
-const expressWs = require('express-ws');
-const path = require('path');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser')
+const expressSession = require('express-session');
+const cors = require('cors');
+const socket = require('./services/socket');
 
-const sampleArray = ['Hello', 'World', '!'];
+const app = express();
+const server = require('http').createServer(app);
 
-module.exports = port => {
-  const app = expressWs(express()).app;
+module.exports.server = (port) => {
 
-  app.use(express.static('build'));
-  app.use(bodyParser.json());
-
-  // REST example
-  app.get('/api/hello', (request, response) => {
-    response.json(sampleArray);
-  });
-
-  // WebSocket example
-  app.ws('/socket', (socket, request) => {
-    console.log('Socket opened');
-
-    socket.on('message', message => {
-      // Ping
-      console.log(message);
-      socket.send('pong');
-    })
-  });
-
-  // Send index file
-  app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../build/index.html'), (err) => {
-      if (err) {
-        res.status(500);
-        res.send(err);
-      }
+    app.use(express.static('build'));
+    app.use(bodyParser.json());
+    app.use(cors());
+    app.use(cookieParser());
+    const session = expressSession({
+        name: 'username',
+        secret: 'my-cool-secret',
+        resave: false,
+        saveUninitialized: false,
+        secure: true
     });
-  });
+    app.use(session);
+    
+    socket.setupSocket(server, session);
 
-  return app.listen(port, () => console.log(`Server running on port: ${port}`));
+    app.use(require('./controllers'));
 
+    server.listen(port, () => console.log(`Server running on port: ${port}`));
 }
+
+module.exports.stop = () => {
+    server.close(function() {
+        process.exit(0);
+    });
+}
+
+module.exports.fail = () => {
+    server.close(function() {
+        process.exit(1);
+    });
+}
+
+process.on('SIGTERM', function () {
+    server.close(function () {
+      process.exit(0);
+    });
+}); 

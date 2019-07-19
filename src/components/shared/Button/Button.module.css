@@ -1,0 +1,12 @@
+.button {
+    background-color: var(--dark-orange);
+    border: 2px solid var(--lighter-black);
+    border-radius: 20px;
+    color: var(--lighter-black);
+    cursor: pointer;
+    font-family: var(--main-font);
+    font-size: 5vmin;
+    margin: 2vmin;
+    outline: none;
+    padding: 1vmin 3vmin;
+}
