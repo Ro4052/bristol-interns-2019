@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styles from './Card.module.css';
 import classNames from 'classnames';
 
@@ -24,4 +25,8 @@ export class Card extends React.Component {
     }
 }
 
-export default Card;
+const mapStateToProps = (state) => ({
+    playedCard: state.playerReducer.playedCard
+});
+
+export default connect(mapStateToProps)(Card);
