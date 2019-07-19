@@ -41,7 +41,7 @@ export class MyCards extends React.Component {
     render() {
         return (
             <div className={styles.myCards}>
-                <CardList cards={this.props.myCards} handleClick={this.playCard} playedCard={this.props.playedCard} isEnabled={this.isEnabled} cy={"my-cards"} />
+                <CardList cards={this.props.myCards} handleClick={this.playCard} isEnabled={this.isEnabled} cy={"my-cards"} />
             </div>
         );
     }
