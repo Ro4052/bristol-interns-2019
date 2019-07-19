@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { playWord, setInvalidWord, validateWord } from '../../store/playerActions';
-import axios from 'axios';
 import Button from '../shared/Button/Button';
 import styles from '../PlayWord/PlayWord.module.css'
 
