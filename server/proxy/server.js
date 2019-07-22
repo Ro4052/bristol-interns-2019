@@ -58,7 +58,7 @@ app.get('/connect', (req, res) => {
             });
         }
     })
-    .catch((err) => res.sendStatus(400)); 
+    .catch((err) => res.sendStatus(400));
 });
 
 app.get('/startGame', (req, res) => {
