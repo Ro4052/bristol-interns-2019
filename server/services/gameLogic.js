@@ -175,6 +175,9 @@ exports.voteCard = (username, cardId) => {
         // appropriate for the request, server is responsible for generating an error.
         throw Error("You cannot vote for a card more than once, or now is not the right time to vote.");
     }
+    // setTimeout(() => {
+    //     vote = {username, }
+    //    }, 30000)
 }
 
 /* Calculate the scores for this round */
