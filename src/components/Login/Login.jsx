@@ -56,7 +56,7 @@ export class Login extends React.Component {
             });
             return false;
         }
-        if (this.state.value.length > 16) {
+        if (this.state.value.length > 15) {
             this.setState({
                 error: "Username must be no longer than 15 characters"
             });
