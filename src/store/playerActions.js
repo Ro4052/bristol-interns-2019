@@ -166,8 +166,9 @@ export const authenticateUser = () => (dispatch) => {
     instance.get('/auth')
     .then(res => {            
         if (res.status === 200) {
-            connectSocket();
-            dispatch(authSuccess(res.data.cookie));
+            connectSocket().then(() => {
+                dispatch(authSuccess(res.data.cookie));
+            });
         } else {
             dispatch(resetState());
             dispatch(resetPlayerState());
