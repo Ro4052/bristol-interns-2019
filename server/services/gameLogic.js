@@ -55,8 +55,7 @@ const getPlayers = () => players.map(player => ({ username: player.username, sco
 exports.getPlayers = getPlayers;
 
 /* Return the list of cards played this round, hiding who played them */
-const getPlayedCards = () => playedCards.map(card => ({ cardId: card.cardId })).sort(()
-    => .5 - Math.random());
+const getPlayedCards = () => playedCards.map(card => ({ cardId: card.cardId })).sort(() => .5 - Math.random());
 exports.getPlayedCards = getPlayedCards;
 
 /* Add the player to the game if possible */
