@@ -1,4 +1,4 @@
-import { types } from './playerActions';
+import { types } from './PlayerActionTypes';
 
 export const initialState = {
     cookie: null,
