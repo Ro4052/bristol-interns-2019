@@ -23,21 +23,20 @@ router.get('/auth', (req, res) => {
 router.post('/auth/login', (req, res) => {
     const { username } = req.body;    
     const user = currentUsers.find((user) => user.username === username);
-    // if (!user) { /* User does not already exist */
-    //     req.session.user = req.body.username;            
-    //     const user = { username };        
-    //     if (gameLogic.canJoinGame(user.username)) { /* Game has not been started yet */
-    //         currentUsers.push(user);
-    //         gameLogic.joinGame(user, () => {
-    //             res.sendStatus(200);
-    //         });
-    //     } else { /* Game has already began */
-    //         res.status(400).json({message: "Game has already started."});
-    //     }
-    // } else { /* Username is taken, conflict error */
-    //     res.status(409).json({message: "Username already exists."});
-    // }   
-    res.status(400).json({message: "Game has already started."});
+    if (!user) { /* User does not already exist */
+        req.session.user = req.body.username;            
+        const user = { username };        
+        if (gameLogic.canJoinGame(user.username)) { /* Game has not been started yet */
+            currentUsers.push(user);
+            gameLogic.joinGame(user, () => {
+                res.sendStatus(200);
+            });
+        } else { /* Game has already began */
+            res.status(400).json({message: "Game has already started."});
+        }
+    } else { /* Username is taken, conflict error */
+        res.status(409).json({message: "Username already exists."});
+    }
 });
 
 /* Log out the user */
