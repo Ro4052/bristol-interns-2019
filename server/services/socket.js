@@ -12,6 +12,7 @@ exports.setupSocket = (server, session) => {
         if (socket.handshake.session.user) {
             sockets = sockets.filter(otherSocket => otherSocket.handshake.session.user !== socket.handshake.session.user);
             sockets.push(socket);
+            emitPlayers(gameLogic.getPlayers())
         }        
     });
     io.on('disconnect', function (disconnected) {
@@ -23,7 +24,7 @@ exports.setupSocket = (server, session) => {
 exports.createRoom = (username, roomId) => {    
     let socket = sockets.find(socket => socket.handshake.session.user === username);
     socket.join(`room-${roomId}`);
-    emitPlayers(roomId, gameLogic.getPlayers());
+    emitPlayersInRoom(roomId, gameLogic.getPlayers());
 };
 
 exports.closeSocket = () => {
@@ -35,8 +36,12 @@ exports.closeSocket = () => {
 exports.isCurrentPlayerSocket = (socket) => gameLogic.getGameState().currentPlayer && socket.handshake.session.user === gameLogic.getGameState().currentPlayer.username;
 
 // Emit all the players
-const emitPlayers = (id, players) => io.sockets.in(`room-${id}`).emit("players", { players });
+const emitPlayers = (players) => io.emit("players", { players });
 exports.emitPlayers = emitPlayers;
+
+// Emit all the players in a room
+const emitPlayersInRoom = (id, players) => io.sockets.in(`room-${id}`).emit("players", { players });
+exports.emitPlayersInRoom = emitPlayersInRoom;
 
 // Let the players know about the next round
 exports.emitNewRound = (status, roundNum, currentPlayer) => io.emit("new round", { status, roundNum, currentPlayer });
