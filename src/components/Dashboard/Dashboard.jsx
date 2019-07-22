@@ -10,15 +10,9 @@ import Players from '../Players/Players';
 import StartGame from './StartGame/StartGame';
 import GameOver from '../GameOver/GameOver';
 import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
+import { CreateRoom } from './CreateRoom/CreateRoom';
 
 export class Dashboard extends React.Component {
-    createRoom() {
-        axios.get('/api/room/create')
-        .catch((err) => {
-            console.log(err.message);
-        })
-    }
-
     render() {
         const showPlayerInteractions = (this.props.playCard || this.props.playWord || this.props.voteCard)
                                     || ((this.props.currentPlayer) && 
@@ -27,7 +21,7 @@ export class Dashboard extends React.Component {
                                         this.props.playedCard !== 0));
         return (
             <div className={styles.dashboard}>
-                <button data-cy="create-room" onClick={this.createRoom}>Create Room</button>
+                <CreateRoom />
                 {this.props.status === "NOT_STARTED" && <StartGame />}
                 {this.props.status !== "NOT_STARTED" && <h2>Round: <span id="round-number" data-cy="round-number">{this.props.roundNum}</span></h2>}
                 {this.props.currentPlayer && <h2>Current player: <span id="current-player" data-cy="current-player">{this.props.currentPlayer.username}</span></h2>}

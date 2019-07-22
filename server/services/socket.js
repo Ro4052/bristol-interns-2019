@@ -12,11 +12,10 @@ exports.setupSocket = (server, session) => {
         if (socket.handshake.session.user) {
             sockets = sockets.filter(otherSocket => otherSocket.handshake.session.user !== socket.handshake.session.user);
             sockets.push(socket);
-            emitPlayers(gameLogic.getPlayers())
+            emitPlayers(gameLogic.getPlayers());
         }
         socket.on('disconnect', function (disconnected) {
             sockets = sockets.filter(socket => socket !== disconnected);
-            console.log("Socket with id: " + socket.id + " just disconnected");
         });
     });
 }
@@ -34,10 +33,10 @@ exports.closeSocket = () => {
 }
 
 // Check if it's the sender's turn
-exports.isCurrentPlayerSocket = (socket) => gameLogic.getGameState().currentPlayer && socket.handshake.session.user === gameLogic.getGameState().currentPlayer.username;
+exports.isCurrentPlayerSocket = socket => gameLogic.getGameState().currentPlayer && socket.handshake.session.user === gameLogic.getGameState().currentPlayer.username;
 
 // Emit all the players
-const emitPlayers = (players) => io.emit("players", { players });
+const emitPlayers = players => io.emit("players", { players });
 exports.emitPlayers = emitPlayers;
 
 // Emit all the players in a room

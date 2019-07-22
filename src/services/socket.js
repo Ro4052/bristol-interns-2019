@@ -16,7 +16,7 @@ const connectSocket = () => {
         transports:  ['websocket'],
         upgrade: false
     });
-    
+
     socket.on("players", msg => {
         dispatch(setPlayers(msg.players));
     });
