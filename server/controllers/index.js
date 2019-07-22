@@ -26,13 +26,14 @@ router.post('/auth/login', (req, res) => {
         req.session.user = req.body.username;            
         const user = { username };        
         if (gameLogic.canJoinGame(user.username)) { /* Game has not been started yet */
-            console.log("game not started yet")
+            console.log("can join game true")
             currentUsers.push(user);
             gameLogic.joinGame(user, () => {
+                console.log("sending 200");
                 res.sendStatus(200);
             });
         } else { /* Game has already begun */
-            console.log("game already begun")
+            console.log("cannot join game")
             res.status(400).json({message: "Game has already started."});
         }
     } else { /* Username is taken, conflict error */
