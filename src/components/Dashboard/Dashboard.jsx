@@ -14,9 +14,6 @@ import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
 export class Dashboard extends React.Component {
     createRoom() {
         axios.get('/api/room/create')
-        .then((res) => {
-
-        })
         .catch((err) => {
             console.log(err.message);
         })
