@@ -41,19 +41,25 @@ export class Login extends React.Component {
         if (this.state.value === '') {
             this.setState ({
                 error: "Username cannot be an empty string"
-            })
+            });
             return false;
         }
         if (!this.checkUsernameAllowed(this.state.value)) {
             this.setState({
                 error: "Username can be comprised of numbers and latin letters only"
-            })
+            });
             return false;
         }
         if (this.state.value.length < 3) {
             this.setState({
                 error: "Username must be at least 3 characters"
-            })
+            });
+            return false;
+        }
+        if (this.state.value.length > 15) {
+            this.setState({
+                error: "Username must be no longer than 15 characters"
+            });
             return false;
         }
         return true;
