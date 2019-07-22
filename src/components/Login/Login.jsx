@@ -4,7 +4,8 @@ import styles from './Login.module.css';
 import { Redirect } from 'react-router-dom';
 import Monster from '../Monster/Monster';
 import Dixit from '../Dixit/Dixit';
-import { logIn, authenticateUser } from '../../store/playerActions';
+import { authenticateUser } from '../../store/playerActions';
+import { logIn } from '../../store/LoginActions';
 import Button from '../shared/Button/Button';
 
 export class Login extends React.Component {

@@ -1,6 +1,6 @@
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import { logIn, logInSuccess, logInFailure } from '../../src/store/playerActions';
+import { logIn, logInSuccess, logInFailure } from '../../src/store/LoginActions';
 
 const url = Cypress.config().baseUrl;
 
