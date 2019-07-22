@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 import { dispatch } from '../store/store';
-import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setPlayers, setCurrentCards, setAllVotes, setWinner, resetState, setSocket } from '../store/gameActions';
+import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setPlayers, setCurrentCards, setAllVotes, setWinner, resetState } from '../store/gameActions';
 import { setPlayWord, setPlayCard, setPlayedCard, setVoteCard, setVotedCard, playWord, resetFinishRound, resetPlayerState, resetCookie } from '../store/playerActions';
 
 const connectSocket = () => {
@@ -90,8 +90,7 @@ const connectSocket = () => {
 
     return new Promise((resolve, reject) => {
         socket.on('connect', () => {
-            dispatch(setSocket(socket));
-            resolve()
+            resolve();
         });
         socket.on('error', (err) => reject(err));
     })

@@ -8,7 +8,6 @@ export const types = {
     SET_CURRENT_WORD: 'SET_CURRENT_WORD',
     SET_ALL_VOTES: 'SET_ALL_VOTES',
     SET_WINNER: 'SET_WINNER',
-    SET_SOCKET: 'SET_SOCKET',
     RESET_STATE: 'RESET_STATE'
 };
 
@@ -54,10 +53,4 @@ export const setAllVotes = allVotes => ({
 export const setWinner = player => ({
     type: types.SET_WINNER,
     player
-});
-
-/** @param {SocketIOClient.Socket} socket */
-export const setSocket = socket => ({
-    type: types.SET_SOCKET,
-    socket
 });
