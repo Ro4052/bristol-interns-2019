@@ -14,7 +14,6 @@ describe('Played cards', () => {
                 });
             });
         });
-
         it('all the played cards are displayed', () => {
             cy.get('[data-cy="my-cards"]').children().its('length').should('eq', cardsNumber - 1);
             cy.get('[data-cy="played-cards"]').children().its('length').should('eq', numberOfPlayers);
