@@ -22,7 +22,7 @@ module.exports.server = (port) => {
         secure: true
     });
     app.use(session);
-    
+
     socket.setupSocket(server, session);
 
     app.use(require('./controllers'));
@@ -46,4 +46,4 @@ process.on('SIGTERM', function () {
     server.close(function () {
       process.exit(0);
     });
-}); 
+});
