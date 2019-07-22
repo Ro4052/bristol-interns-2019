@@ -30,7 +30,7 @@ describe('Login', () => {
                 store.dispatch(logIn(username));
                 const actions = store.getActions();
                 // expect(actions[0].type).to.equal(logInFailure().type);
-            })
+            });
         });
     });
 
