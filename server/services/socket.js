@@ -13,7 +13,7 @@ exports.setupSocket = (server, session) => {
             sockets = sockets.filter(otherSocket => otherSocket.handshake.session.user !== socket.handshake.session.user);
             sockets.push(socket);
             emitPlayers(gameLogic.getPlayers())
-        }        
+        }
     });
     io.on('disconnect', function (disconnected) {
         sockets = sockets.filter(socket => socket !== disconnected);
