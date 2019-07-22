@@ -6,31 +6,12 @@ import { Prompt } from '../Prompt/Prompt';
 
 const historyMock = { push: jest.fn() };
 const authenticateUserMock = jest.fn();
-const setPlayWordAndCard = jest.fn();
-const setPlayCard = jest.fn();
 
 describe('on initial mount', () => {
     it('calls authenticateUser', () => {
         shallow(<Auth history={historyMock} authenticateUser={authenticateUserMock}/>);
         expect(authenticateUserMock).toHaveBeenCalled();
         authenticateUserMock.mockRestore();
-    });
-
-    it('calls instructPlayerOnRefresh', () => {
-        const instructPlayerOnRefresh = jest.spyOn(Auth.prototype, 'instructPlayerOnRefresh');
-        shallow(<Auth history={historyMock} authenticateUser={authenticateUserMock}/>);
-        expect(instructPlayerOnRefresh).toHaveBeenCalled();
-        instructPlayerOnRefresh.mockRestore();
-    });
-
-    describe('if currentPlayer', () => {
-        it('calls redux actions', (() => {
-            shallow(<Auth currentPlayer={{ username: 'username' }} history={historyMock} authenticateUser={authenticateUserMock} setPlayWord={setPlayWordAndCard} setPlayCard={setPlayCard}/>);
-            expect(setPlayWordAndCard).toHaveBeenCalled();
-            expect(setPlayCard).toHaveBeenCalled();
-            setPlayWordAndCard.mockRestore();
-            setPlayCard.mockRestore();
-        }));
     });
 });
 
