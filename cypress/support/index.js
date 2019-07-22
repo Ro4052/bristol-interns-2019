@@ -14,7 +14,6 @@
 // ***********************************************************
 
 import './commands'
-require('cypress-plugin-retries');
 
 beforeEach(() => {
     cy.server();
