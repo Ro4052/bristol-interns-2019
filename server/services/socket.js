@@ -14,9 +14,10 @@ exports.setupSocket = (server, session) => {
             sockets.push(socket);
             emitPlayers(gameLogic.getPlayers())
         }
-    });
-    io.on('disconnect', function (disconnected) {
-        sockets = sockets.filter(socket => socket !== disconnected);
+        socket.on('disconnect', function (disconnected) {
+            sockets = sockets.filter(socket => socket !== disconnected);
+            console.log("Socket with id: " + socket.id + " just disconnected");
+        });
     });
 }
 

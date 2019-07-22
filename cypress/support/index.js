@@ -14,13 +14,20 @@
 // ***********************************************************
 
 import './commands'
+require('cypress-plugin-retries');
 
 beforeEach(() => {
     cy.server();
     cy.request({
-        url: '/api/reset-server',
-        method: 'POST'
+        method: 'GET',
+        url: "http://localhost:12346/disconnect",
+        followRedirect: false
     }).then(() => {
-        cy.visit('/');
-    });
+        cy.request({
+            url: '/api/reset-server',
+            method: 'POST'
+        }).then(() => {
+            cy.visit('/');
+        });
+    })
 });
