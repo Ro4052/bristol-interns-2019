@@ -139,9 +139,10 @@ export const logIn = (username) => {
             username: username
         })
         .then((res) => {
-            if (res.status === 200) {            
-                connectSocket();
-                dispatch(logInSuccess(username))
+            if (res.status === 200) {
+                connectSocket().then(() => {
+                    dispatch(logInSuccess(username));
+                });
             } else {
                 dispatch(logInFailure(res.data.message));
             }
