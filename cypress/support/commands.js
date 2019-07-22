@@ -69,7 +69,7 @@ Cypress.Commands.add('voteCard', () => {
         method: 'POST',
         url: '/api/voteCard'
     }).as('voteCard');
-    cy.get('[data-cy="played-cards"] [data-cy="card"]').first().click();
+    cy.get('[data-cy="played-cards"] [data-cy="card-wrapper-enabled"]').first().click();
     cy.wait('@voteCard');
 });
 
