@@ -11,7 +11,6 @@ export const initialState = {
     playedCard: 0,
     votedCard: 0,
     myWord: "",
-    loading: true,
     error: null,
     finishedRound: false,
     endTurn: false
@@ -21,12 +20,6 @@ const cardReducer = (state = initialState, action) => {
     switch (action.type) {
         case types.RESET_PLAYER_STATE:
             return initialState;
-        case types.FETCH_CARDS_BEGIN:
-            return {
-                ...state,
-                loading: true,
-                error: null
-            };
         case types.FETCH_CARDS_SUCCESS:
             return {
                 ...state,

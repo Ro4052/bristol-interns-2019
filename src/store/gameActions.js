@@ -16,11 +16,6 @@ export const resetState = () => ({
     type: types.RESET_STATE
 });
 
-export const setGameState = gameState => ({
-    type: types.SET_GAME_STATE,
-    gameState
-});
-
 export const setStatus = status => ({
     type: types.SET_STATUS,
     status

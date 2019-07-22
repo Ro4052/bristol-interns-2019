@@ -13,10 +13,6 @@ export const resetPlayerState = () => ({
     type: types.RESET_PLAYER_STATE
 });
 
-export const fetchCardsBegin = () => ({
-    type: types.FETCH_CARDS_BEGIN
-});
-
 export const fetchCardsSuccess = (cards) => ({
     type: types.FETCH_CARDS_SUCCESS,
     payload: { cards }
@@ -28,7 +24,6 @@ export const fetchCardsFailure = (error) => ({
 });
 
 export const fetchCards = () => (dispatch) => {
-    dispatch(fetchCardsBegin());
     instance.get('/api/cards')
     .then(res => {
         if (res.status === 200) {

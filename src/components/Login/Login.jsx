@@ -91,7 +91,6 @@ export class Login extends React.Component {
 
 const mapStateToProps = (state) => ({
     cookie: state.playerReducer.cookie,
-    loading: state.playerReducer.loading,
     error: state.playerReducer.error
 });
 
