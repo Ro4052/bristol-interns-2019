@@ -1,19 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styles from './Dashboard.module.css';
-import EndTurn from './EndTurn/EndTurn';
 import Logout from './Logout/Logout';
 import Monster from '../Monster/Monster';
 import PlayedCards from '../PlayedCards/PlayedCards';
 import MyCards from '../MyCards/MyCards';
 import Players from '../Players/Players';
-import PlayWord from '../PlayWord/PlayWord';
-import Prompt from '../shared/Prompt/Prompt';
 import StartGame from './StartGame/StartGame';
 import GameOver from '../GameOver/GameOver';
+import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
 
 export class Dashboard extends React.Component {
     render() {
+        const showPlayerInteractions = (this.props.playCard || this.props.playWord || this.props.voteCard)
+                                    || ((this.props.currentPlayer) && 
+                                        (!this.props.finishedRound && 
+                                        this.props.cookie === this.props.currentPlayer.username && 
+                                        this.props.playedCard !== 0));
         return (
             <div className={styles.dashboard}>
                 {this.props.status === "NOT_STARTED" && <StartGame />}
@@ -23,14 +26,8 @@ export class Dashboard extends React.Component {
                 {this.props.currentWord !== '' && <h1 id="message">Word: <span data-cy='current-word'>{this.props.currentWord}</span></h1>}
                 <Players />
                 <PlayedCards />
-                <MyCards />
-                <div className={styles.playerInteractions}>
-                    {this.props.playWord && <Prompt cy="play-word" text="Type in a word" />}
-                    {this.props.playCard && <Prompt cy="play-card" text="Pick a card" />}
-                    {this.props.playWord && <PlayWord />}
-                    {this.props.voteCard && <Prompt cy="vote-card" text="Vote for a card" />}
-                    {this.props.myWord && this.props.playedCard !== 0 && !this.props.finishedRound && <EndTurn />}
-                </div>
+                {this.props.status !== "NOT_STARTED" && <MyCards />}
+                {showPlayerInteractions && <PlayerInteractions />}
                 <Logout />
                 <Monster />
             </div>
@@ -49,7 +46,8 @@ const mapStateToProps = (state) => ({
     winner: state.gameReducer.winner,
     finishedRound: state.playerReducer.finishedRound,
     myWord: state.playerReducer.myWord,
-    playedCard: state.playerReducer.playedCard
+    playedCard: state.playerReducer.playedCard,
+    cookie: state.playerReducer.cookie
 });
 
 export default connect(mapStateToProps)(Dashboard);

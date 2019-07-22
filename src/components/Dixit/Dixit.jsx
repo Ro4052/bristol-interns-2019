@@ -3,13 +3,10 @@ import styles from './Dixit.module.css';
 
 export class Dixit extends React.Component {
     render() {
+        const letters = ["T", "e", "l", "l", "T", "a", "l", "e", "s"];
         return (
             <div className={styles.foo}>
-                <span className={styles.letter} data-letter="D">D</span>
-                <span className={styles.letter} data-letter="i">i</span>
-                <span className={styles.letter} data-letter="X">X</span>
-                <span className={styles.letter} data-letter="i">i</span>
-                <span className={styles.letter} data-letter="t">t</span>
+                {letters.map((letter, key) => <span key={key} className={styles.letter} data-letter={letter}>{letter}</span>)}
             </div>
         );
     }

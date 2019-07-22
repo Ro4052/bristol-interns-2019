@@ -1,16 +1,19 @@
 import React from 'react';
+import MyCards from '../MyCards/MyCards';
 import { shallow } from 'enzyme';
 import { Dashboard } from './Dashboard';
-import Prompt from '../shared/Prompt/Prompt';
-import PlayWord from '../PlayWord/PlayWord';
 import StartGame from './StartGame/StartGame';
-import EndTurn from './EndTurn/EndTurn';
 import GameOver from '../GameOver/GameOver';
+import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
 
 describe('on status NOT_STARTED', () => {
     it('displays the start game component', () => {
         const wrapper = shallow(<Dashboard status={"NOT_STARTED"} />);
         expect(wrapper.exists(StartGame)).toEqual(true);
+    });
+    it("doesn't display the cards", () => {
+        const wrapper = shallow(<Dashboard status={"NOT_STARTED"}/>);
+        expect(wrapper.exists(MyCards)).toEqual(false);
     });
 });
 
@@ -18,6 +21,10 @@ describe('on any status other than NOT_STARTED', () => {
     it("doesn't display the start game component", () => {
         const wrapper = shallow(<Dashboard status={"STARTED"} />);
         expect(wrapper.exists(StartGame)).toEqual(false);
+    });
+    it('displays cards', () => {
+        const wrapper = shallow(<Dashboard status={"STARTED"}/>);
+        expect(wrapper.exists(MyCards)).toEqual(true);
     });
 });
 
@@ -35,38 +42,6 @@ describe('on given a current player', () => {
     });
 });
 
-describe('on play word flag', () => {
-    it('displays the play word prompt', () => {
-        const wrapper = shallow(<Dashboard playWord={true} />);
-        expect(wrapper.find(Prompt).prop('cy')).toEqual('play-word');
-    });
-    it('displays the play word input', () => {
-        const wrapper = shallow(<Dashboard playWord={true} />);
-        expect(wrapper.exists(PlayWord)).toEqual(true);
-    });
-});
-
-describe('on play card flag', () => {
-    it('displays the play card prompt', () => {
-        const wrapper = shallow(<Dashboard playCard={true} />);
-        expect(wrapper.find(Prompt).prop('cy')).toEqual('play-card');
-    });
-});
-
-describe('on vote card flag', () => {
-    it('displays the vote card prompt', () => {
-        const wrapper = shallow(<Dashboard voteCard={true} />);
-        expect(wrapper.find(Prompt).prop('cy')).toEqual('vote-card');
-    });
-});
-
-describe('on played turn', () => {
-    it('displays end turn button', () => {
-        const wrapper = shallow(<Dashboard myWord={'word'} playedCard={1} finishedRound={false} />);
-        expect(wrapper.exists(EndTurn)).toEqual(true);
-    });
-});
-
 describe('on winner', () => {
     it('displays GameOver', () => {
         const wrapper = shallow(<Dashboard winner={{ username: 'username' }} />);
@@ -78,5 +53,33 @@ describe('on no winner', () => {
     it("doesn't display GameOver", () => {
         const wrapper = shallow(<Dashboard />);
         expect(wrapper.exists(GameOver)).toEqual(false);
+    });
+});
+
+describe('on play card', () => {
+    it('displays player interaction', () => {
+        const wrapper = shallow(<Dashboard playCard={true} />);
+        expect(wrapper.exists(PlayerInteractions)).toEqual(true);
+    });
+});
+
+describe('on play word', () => {
+    it('displays player interaction', () => {
+        const wrapper = shallow(<Dashboard playWord={true} />);
+        expect(wrapper.exists(PlayerInteractions)).toEqual(true);
+    });
+});
+
+describe('on vote card', () => {
+    it('displays player interaction', () => {
+        const wrapper = shallow(<Dashboard voteCard={true} />);
+        expect(wrapper.exists(PlayerInteractions)).toEqual(true);
+    });
+});
+
+describe('on end of turn', () => {
+    it('displays player interaction', () => {
+        const wrapper = shallow(<Dashboard finishedRound={false} cookie={'username'} currentPlayer={{ username: 'username' }} status={'WAITING_FOR_CURRENT_PLAYER'} playedCard={1} />);
+        expect(wrapper.exists(PlayerInteractions)).toEqual(true);
     });
 });

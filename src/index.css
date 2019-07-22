@@ -6,10 +6,10 @@
 }
 
 @font-face {
-  font-family: 'Cardinal';
+  font-family: 'NotoSerif';
   font-style: normal;
   font-weight: normal;
-  src: local('Dilana'), url('./fonts/Cardinal.ttf') format('truetype');
+  src: local('Dilana'), url('./fonts/NotoSerif-Regular.ttf') format('truetype');
 }
 
 body {
@@ -34,7 +34,7 @@ body {
   --golden: rgba(73, 57, 4, 0.8);
   --lighter-black: rgba(0, 0, 0, 0.8);
   --main-font: 'Dilana';
-  --secondary-font: 'Cardinal';
+  --secondary-font: 'NotoSerif';
 }
 
 #root {
@@ -56,7 +56,7 @@ ul {
 
 input {
     padding: 1em;
-    font-size: 2vh;
+    font-size: 3vmin;
     background-color: var(--yellow);
     border: 3px solid black;
     border-radius: 15px;

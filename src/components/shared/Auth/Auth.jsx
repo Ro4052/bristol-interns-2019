@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { authenticateUser, setPlayCard, setPlayWordAndCard } from '../../../store/playerActions';
+import { authenticateUser, setPlayCard, setPlayWord } from '../../../store/playerActions';
 
 export class Auth extends React.Component {
 
@@ -12,8 +12,12 @@ export class Auth extends React.Component {
 
     instructPlayerOnRefresh() {
         if (this.props.currentPlayer) {
-            this.props.setPlayWordAndCard(this.props.currentPlayer.username === this.props.cookie && this.props.status === "WAITING_FOR_CURRENT_PLAYER");
-            this.props.setPlayCard(this.props.currentPlayer.username !== this.props.cookie && this.props.status === "WAITING_FOR_OTHER_PLAYERS")
+            if (this.props.status === "WAITING_FOR_CURRENT_PLAYER") {
+                this.props.setPlayCard(this.props.playedCard === 0 && !this.props.finishedRound && this.props.currentPlayer.username === this.props.cookie);
+            } else {
+                this.props.setPlayCard(this.props.playedCard === 0 && !this.props.finishedRound);
+            }
+            this.props.setPlayWord(this.props.currentPlayer.username === this.props.cookie && this.props.status === "WAITING_FOR_CURRENT_PLAYER" && !this.props.myWord && !this.props.finishedRound);
         }
     }
 
@@ -26,12 +30,15 @@ export class Auth extends React.Component {
 const mapStateToProps = (state) => ({
     cookie: state.playerReducer.cookie,
     currentPlayer: state.gameReducer.currentPlayer,
-    status: state.gameReducer.status
+    status: state.gameReducer.status,
+    finishedRound: state.gameReducer.finishedRound,
+    playedCard: state.playerReducer.playedCard,
+    myWord: state.playerReducer.myWord
 });
 
 const mapDispatchToProps = (dispatch) => ({
     authenticateUser: () => dispatch(authenticateUser()),
-    setPlayWordAndCard: (bool) => dispatch(setPlayWordAndCard(bool)),
+    setPlayWord: (bool) => dispatch(setPlayWord(bool)),
     setPlayCard: (bool) => dispatch(setPlayCard(bool))
 });
 

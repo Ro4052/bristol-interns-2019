@@ -29,6 +29,12 @@
     opacity: 0.7;
 }
 
+.selected {
+    border: calc(var(--width)/30) solid red;
+    transform: translateY(-30px);
+    opacity: 1;
+}
+
 .vote {
     position: absolute;
     background-color: rgba(255, 255, 255, 0.6);

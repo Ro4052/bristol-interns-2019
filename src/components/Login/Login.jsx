@@ -50,9 +50,9 @@ export class Login extends React.Component {
             })
             return false;
         }
-        if (this.state.value.length < 6) {
+        if (this.state.value.length < 3) {
             this.setState({
-                error: "Username must be at least 6 characters"
+                error: "Username must be at least 3 characters"
             })
             return false;
         }

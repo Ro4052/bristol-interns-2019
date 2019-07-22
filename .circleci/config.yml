@@ -7,7 +7,6 @@ jobs:
     parallelism: 4
     steps:
       - checkout
-      - add_ssh_keys
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
