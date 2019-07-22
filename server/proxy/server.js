@@ -38,7 +38,6 @@ app.get('/connect', (req, res) => {
     })
     .then((response) => {
         if (response.status === 200) {
-            console.log("200")
             socket = client(connectionString, {
                 upgrade: false,
                 transportOptions: {

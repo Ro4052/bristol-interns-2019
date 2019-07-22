@@ -1,19 +1,5 @@
 describe('Vote for a card', () => {
     describe('on everyone played cards', () => {
-        // beforeEach(() => {
-        //     cy.login('unicorn');
-        //     cy.request({
-        //         method: 'GET',
-        //         url: `http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`,
-        //         followRedirect: false
-        //     }).then(() => {
-        //         cy.startGame();
-        //         cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
-        //         .then(() => {
-        //             cy.playCard();
-        //         });
-        //     });
-        // });
         beforeEach(() => {
             cy.login('unicorn');
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)

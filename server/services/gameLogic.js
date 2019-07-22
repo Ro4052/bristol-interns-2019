@@ -55,9 +55,8 @@ const getPlayers = () => players.map(player => ({ username: player.username, sco
 exports.getPlayers = getPlayers;
 
 /* Return the list of cards played this round, hiding who played them */
-const getPlayedCards = () => playedCards.map(card => ({ cardId: card.cardId })).sort(function() {
-    return .5 - Math.random();
-});
+const getPlayedCards = () => playedCards.map(card => ({ cardId: card.cardId })).sort(()
+    => .5 - Math.random());
 exports.getPlayedCards = getPlayedCards;
 
 /* Add the player to the game if possible */
@@ -175,9 +174,6 @@ exports.voteCard = (username, cardId) => {
         // appropriate for the request, server is responsible for generating an error.
         throw Error("You cannot vote for a card more than once, or now is not the right time to vote.");
     }
-    // setTimeout(() => {
-    //     vote = {username, }
-    //    }, 30000)
 }
 
 /* Calculate the scores for this round */
