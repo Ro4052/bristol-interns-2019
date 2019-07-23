@@ -6,8 +6,8 @@ import { shallow, mount } from 'enzyme';
 import configureStore from 'redux-mock-store';
 
 const initialState = {
-    playerReducer: {
-        playedCard: 2
+    myCardsReducer: {
+        playedCardId: 2
     }
 };
 const middlewares = [];
@@ -21,7 +21,7 @@ const cards = [
 describe('on initial render', () => {
     it('calls fetchCards', (() => {
         const fetchCards = jest.fn();
-        shallow(<MyCards fetchCards={fetchCards} myCards={[]} requestPlayCard={() => {}}/>);
+        shallow(<MyCards fetchCards={fetchCards} cards={[]} selectCard={() => {}}/>);
         expect(fetchCards).toHaveBeenCalled();
         fetchCards.mockRestore();
     }));
@@ -33,7 +33,7 @@ describe('on clicking an enabled card', () => {
         const playCard = jest.spyOn(MyCards.prototype, 'playCard');
         const wrapper = mount(
             <Provider store={store}>
-                <MyCards fetchCards={jest.fn()} myCards={cards} />
+                <MyCards fetchCards={jest.fn()} cards={cards} />
             </Provider>
         );
         wrapper.find({ 'data-cy': 'card' }).first().simulate('click');
@@ -42,41 +42,41 @@ describe('on clicking an enabled card', () => {
     });
 
     // describe('on playWordAndCard flag true', () => {
-    //     it('calls requestPlayCard', (() => {
+    //     it('calls selectCard', (() => {
     //         jest.spyOn(MyCards.prototype, 'isEnabled').mockImplementation(() => true);
-    //         const requestPlayCard = jest.fn();
+    //         const selectCard = jest.fn();
     //         const wrapper = mount(
     //             <Provider store={store}>
-    //                 <MyCards fetchCards={jest.fn()} myCards={cards} requestPlayCard={requestPlayCard} playWordAndCard={true} />
+    //                 <MyCards fetchCards={jest.fn()} cards={cards} selectCard={selectCard} playWordAndCard={true} />
     //             </Provider>
     //         );
     //         wrapper.find({ 'data-cy': 'card' }).first().simulate('click');
-    //         expect(requestPlayCard).toHaveBeenCalled();
-    //         requestPlayCard.mockRestore();
+    //         expect(selectCard).toHaveBeenCalled();
+    //         selectCard.mockRestore();
     //     }));
     // });
 
     describe('on playCard flag true', () => {
         beforeEach(() => moxios.install());
         afterEach(() => moxios.uninstall());
-        it('calls requestPlayCard', (() => {
+        it('calls selectCard', (() => {
             jest.spyOn(MyCards.prototype, 'isEnabled').mockImplementation(() => true);
-            const requestPlayCard = jest.fn();
+            const selectCard = jest.fn();
             const wrapper = mount(
                 <Provider store={store}>
-                    <MyCards fetchCards={jest.fn()} myCards={cards} requestPlayCard={requestPlayCard} playCard={true} />
+                    <MyCards fetchCards={jest.fn()} cards={cards} selectCard={selectCard} playCard={true} />
                 </Provider>
             );
             wrapper.find({ 'data-cy': 'card' }).first().simulate('click');
-            expect(requestPlayCard).toHaveBeenCalled();
-            requestPlayCard.mockRestore();
+            expect(selectCard).toHaveBeenCalled();
+            selectCard.mockRestore();
         }));
         it('calls playCardForWord', () => {
             jest.spyOn(MyCards.prototype, 'isEnabled').mockImplementation(() => true);
             const playCardForWord = jest.spyOn(MyCards.prototype, 'playCardForWord');
             const wrapper = mount(
                 <Provider store={store}>
-                    <MyCards fetchCards={jest.fn()} myCards={cards} requestPlayCard={jest.fn()} playCard={true} />
+                    <MyCards fetchCards={jest.fn()} cards={cards} selectCard={jest.fn()} playCard={true} />
                 </Provider>
             );
             wrapper.find({ 'data-cy': 'card' }).first().simulate('click');
@@ -91,7 +91,7 @@ describe('on clicking an enabled card', () => {
                 const finishPlayCard = jest.fn();
                 const wrapper = mount(
                     <Provider store={store}>
-                        <MyCards fetchCards={jest.fn()} myCards={cards} requestPlayCard={jest.fn()} finishPlayCard={finishPlayCard} playCard={true} />
+                        <MyCards fetchCards={jest.fn()} cards={cards} selectCard={jest.fn()} finishPlayCard={finishPlayCard} playCard={true} />
                     </Provider>
                 );
                 wrapper.find({ 'data-cy': 'card' }).first().simulate('click');
@@ -110,7 +110,7 @@ describe('on clicking an enabled card', () => {
                 const finishPlayCard = jest.fn().mockImplementation(() => console.log('finishPlayCard'));
                 const wrapper = mount(
                     <Provider store={store}>
-                        <MyCards fetchCards={jest.fn()} myCards={cards} requestPlayCard={jest.fn()} finishPlayCard={finishPlayCard} playCard={true} />
+                        <MyCards fetchCards={jest.fn()} cards={cards} selectCard={jest.fn()} finishPlayCard={finishPlayCard} playCard={true} />
                     </Provider>
                 );
                 wrapper.find({ 'data-cy': 'card' }).first().simulate('click');
@@ -131,7 +131,7 @@ describe('on clicking a disabled card', () => {
         
         const wrapper = mount(
             <Provider store={store}>
-                <MyCards fetchCards={jest.fn()} myCards={cards} />
+                <MyCards fetchCards={jest.fn()} cards={cards} />
             </Provider>
         );
         wrapper.find({ 'data-cy': 'card' }).first().simulate('click');

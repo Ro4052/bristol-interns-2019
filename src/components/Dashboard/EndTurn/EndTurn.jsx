@@ -14,10 +14,10 @@ export class EndTurn extends React.Component {
 
     endTurn() {
         axios.post('/api/playCardWord', {
-            cardId: this.props.playedCard,
-            word: this.props.myWord
+            cardId: this.props.playedCardId,
+            word: this.props.word
         })
-        .then(() => this.props.finishPlayCard(this.props.playedCard))
+        .then(() => this.props.finishPlayCard(this.props.playedCardId))
         .catch(err => console.log(err));
     }
 
@@ -29,8 +29,8 @@ export class EndTurn extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    myWord: state.playerReducer.myWord,
-    playedCard: state.playerReducer.playedCard
+    word: state.playWordReducer.word,
+    playedCardId: state.myCardsReducer.playedCardId
 });
 
 const mapDispatchToProps = (dispatch) => ({

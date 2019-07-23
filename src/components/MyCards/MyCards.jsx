@@ -23,7 +23,9 @@ export class MyCards extends React.Component {
     playCard(cardId) {
         if (this.props.playCard) {
             this.props.selectCard(cardId);
-            // this.playCardForWord(cardId);
+            if (this.props.status === "WAITING_FOR_OTHER_PLAYERS") {
+                this.playCardForWord(cardId);
+            }
         }
     }
 
@@ -47,6 +49,7 @@ export class MyCards extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+    status: state.dashboardReducer.status,
     playCard: state.myCardsReducer.playCard,
     cards: state.myCardsReducer.cards,
     playedCardId: state.myCardsReducer.playedCardId

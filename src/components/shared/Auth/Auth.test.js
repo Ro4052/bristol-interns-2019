@@ -26,7 +26,7 @@ describe('on unauthenticated', () => {
 
 describe('on authenticated', () => {
     it('renders the protected component', () => {
-        const wrapper = shallow(<Auth render={() => <Prompt/>} history={historyMock} authenticateUser={authenticateUserMock} cookie={"unicorn"}/>);
+        const wrapper = shallow(<Auth render={() => <Prompt/>} history={historyMock} authenticateUser={authenticateUserMock} username={"unicorn"}/>);
         expect(wrapper.find(Prompt).length).toEqual(1);
     });
 });

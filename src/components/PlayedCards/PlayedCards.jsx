@@ -12,11 +12,11 @@ export class PlayedCards extends React.Component {
     }
 
     getVotesForCard(card) {
-        return this.props.allVotes.reduce((sum, vote) => sum + (vote.cardId === card.cardId), 0)
+        return this.props.votes.reduce((sum, vote) => sum + (vote.cardId === card.cardId), 0)
     }
 
     isEnabled(cardId) {
-        return this.props.voteCard && (cardId !== this.props.playedCard);
+        return this.props.voteCard && (cardId !== this.props.playedCardId);
     }
 
     render() {
@@ -30,9 +30,9 @@ export class PlayedCards extends React.Component {
 const mapStateToProps = (state) => ({
     cards: state.playedCardsReducer.cards,
     voteCard: state.playedCardsReducer.voteCard,
-    // playedCard: state.playerReducer.playedCard,
-    // allVotes: state.playerReducer.allVotes,
-    // status: state.playerReducer.status
+    playedCardId: state.myCardsReducer.playedCardId,
+    votes: state.playedCardsReducer.votes,
+    status: state.dashboardReducer.status
 });
 
 const mapDispatchToProps = (dispatch) => ({

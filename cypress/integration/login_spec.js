@@ -1,11 +1,11 @@
-import configureStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+// import configureStore from 'redux-mock-store';
+// import thunk from 'redux-thunk';
 // import { logIn, logInSuccess, logInFailure } from '../../src/store/AuthActions';
 
 const url = Cypress.config().baseUrl;
 
-const middlewares = [thunk];
-const mockStore = configureStore(middlewares);
+// const middlewares = [thunk];
+// const mockStore = configureStore(middlewares);
 const username = 'unicorn';
 
 describe('Login', () => {
@@ -36,8 +36,8 @@ describe('Login', () => {
 
     describe('on username already exists', () => {
         it('returns error', () => {
-            cy.request('POST', '/auth/login', { username });
-            cy.login(username);
+            cy.request('POST', '/auth/login', { username })
+            .then(() => cy.login(username));
             cy.get('[data-cy="login-error"]').should('contain', 'Username already exists');
         });
     });

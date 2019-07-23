@@ -16,7 +16,7 @@ export class PlayerInteractions extends React.Component {
                 {this.props.playCard && <Prompt cy="play-card" text="Pick a card" />}
                 {this.props.playWord && <PlayWord />}
                 {this.props.voteCard && <Prompt cy="vote-card" text="Vote for a card" />}
-                {this.props.myWord && this.props.playedCard !== 0 && !this.props.finishedRound && <EndTurn />}
+                {this.props.word && this.props.playedCardId && !this.props.finishedRound && <EndTurn />}
             </div>
         );
     }
@@ -26,14 +26,14 @@ const mapStateToProps = (state) => ({
     status: state.dashboardReducer.status,
     // roundNum: state.playerReducer.roundNum,
     // currentPlayer: state.playerReducer.currentPlayer,
-    // playCard: state.playerReducer.playCard,
-    // playWord: state.playWordReducer.playWord,
-    // voteCard: state.playerReducer.voteCard,
+    playCard: state.myCardsReducer.playCard,
+    playWord: state.playWordReducer.playWord,
+    voteCard: state.playedCardsReducer.voteCard,
     // currentWord: state.playerReducer.currentWord,
     // winner: state.playerReducer.winner,
-    // finishedRound: state.playerReducer.finishedRound,
-    // myWord: state.playerReducer.myWord,
-    // playedCard: state.playerReducer.playedCard
+    finishedRound: state.myCardsReducer.finishedRound,
+    word: state.playWordReducer.word,
+    playedCardId: state.myCardsReducer.playedCardId
 });
 
 export default connect(mapStateToProps)(PlayerInteractions);

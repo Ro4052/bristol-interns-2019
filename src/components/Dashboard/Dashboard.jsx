@@ -15,8 +15,8 @@ export class Dashboard extends React.Component {
         const showPlayerInteractions = (this.props.playCard || this.props.playWord || this.props.voteCard)
                                     || ((this.props.currentPlayer) && 
                                         (!this.props.finishedRound && 
-                                        this.props.cookie === this.props.currentPlayer.username && 
-                                        this.props.playedCard !== 0));
+                                        this.props.username === this.props.currentPlayer.username && 
+                                        this.props.playedCardId));
         return (
             <div className={styles.dashboard}>
                 {this.props.status === "NOT_STARTED" && <StartGame />}
@@ -45,9 +45,9 @@ const mapStateToProps = (state) => ({
     voteCard: state.playedCardsReducer.voteCard,
     winner: state.gameOverReducer.winner,
     finishedRound: state.myCardsReducer.finishedRound,
-    // myWord: state.playerReducer.myWord,
-    // playedCard: state.playerReducer.playedCard,
-    // cookie: state.playerReducer.cookie
+    myWord: state.playWordReducer.word,
+    playedCardId: state.myCardsReducer.playedCardId,
+    username: state.authReducer.username
 });
 
 export default connect(mapStateToProps)(Dashboard);

@@ -1,4 +1,4 @@
-describe('The Player Cards Component', () => {
+describe('My Cards', () => {
     beforeEach(() => {
         cy.login('unicorn');
         cy.startGame();
