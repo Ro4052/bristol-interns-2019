@@ -82,3 +82,12 @@ Cypress.Commands.add('sendWord', () => {
     cy.get('[data-cy="send-word"]').click();
     cy.wait('@validWord');
 });
+
+Cypress.Commands.add('createRoom', () => {
+    cy.route({
+        method: 'GET',
+        url: '/api/room/create'
+    }).as('createRoom');
+    cy.get('[data-cy="create-room"]').click();
+    cy.wait('@createRoom');
+});

@@ -58,7 +58,10 @@ app.get('/connect', (req, res) => {
             });
         }
     })
-    .catch((err) => res.sendStatus(400)); 
+    .catch((err) => {
+        console.error(err);
+        res.status(err.response.status).json(err.response.data);
+    }); 
 });
 
 app.get('/startGame', (req, res) => {
@@ -91,10 +94,8 @@ app.get('/playCardWord', (req, res) => {
 });
 
 app.get('/disconnect', (req, res) => {
-    socket.on('disconnect', () => {
-        res.sendStatus(200);
-    });
-    socket.disconnect();
+    if (socket) socket.disconnect(); // Needed because this is called in the before each, and socket is not set up yet in the first test
+    res.sendStatus(200);
 })
 
 app.listen(port, () => console.log(`Proxy Server running on port: ${port}`));
