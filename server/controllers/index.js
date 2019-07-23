@@ -20,7 +20,7 @@ router.get('/auth', (req, res) => {
 });
 
 /* Log in the user */
-router.post('/auth/login', (req, res) => {
+router.post('/auth/login', (req, res) => {    
     const { username } = req.body;    
     const user = currentUsers.find((user) => user.username === username);
     if (!user) { /* User does not already exist */
