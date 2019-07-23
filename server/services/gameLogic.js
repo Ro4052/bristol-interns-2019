@@ -48,7 +48,7 @@ exports.isCurrentPlayer = (username) => currentPlayer.username === username;
 exports.getUnplayedCardsByUsername = (username) => players.find(player => player.username === username).cards.filter(card => !card.played);
 
 /* Returns true if the player is able to join the game, false otherwise */
-exports.canJoinGame = (username) => (status === statusTypes.NOT_STARTED && !players.some(player => player.username === username));
+// exports.canJoinGame = (username) => (status === statusTypes.NOT_STARTED && !players.some(player => player.username === username));
 
 /* Return the list of players, hiding their assigned cards */
 const getPlayers = () => players.map(player => ({ username: player.username, score: player.score }));
@@ -59,15 +59,14 @@ const getPlayedCards = () => playedCards.map(card => ({ cardId: card.cardId })).
 exports.getPlayedCards = getPlayedCards;
 
 /* Add the player to the game if possible */
-exports.joinGame = (user, callback) => {
-    const cards = cardManager.assign(players, rounds);
-    const player = {
-        username: user.username,
-        cards: cards,
-        score: 0
+exports.joinGame = (username) => {
+    if (status !== statusTypes.NOT_STARTED) throw Error("Game has already started");
+    else if (players.some(player => player.username === username)) throw Error("You already joined this game");
+    else {
+        const cards = cardManager.assign(players, rounds);
+        const player = { username, cards, score: 0 };
+        players.push(player);
     }
-    players.push(player);
-    callback();
 }
 
 /* Remove player from current game */
@@ -214,8 +213,9 @@ const clearRoundData = () => {
 /* Clear entire game state */
 const clearGameState = () => {
     clearRoundData();
-    setStatus(statusTypes.NOT_STARTED);
+    status = statusTypes.NOT_STARTED;
     currentPlayer = null;
     roundNum = 0;
     players = [];
 }
+exports.clearGameState = clearGameState;
