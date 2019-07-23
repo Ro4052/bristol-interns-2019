@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import { PlayerInteractions } from './PlayerInteractions';
 import Prompt from '../shared/Prompt/Prompt';
 import PlayWord from '../PlayWord/PlayWord';
-import EndTurn from '../Dashboard/EndTurn/EndTurn';
+import EndTurn from '../EndTurn/EndTurn';
 
 describe('on play word flag', () => {
     it('displays the play word prompt', () => {
