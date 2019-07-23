@@ -32,7 +32,6 @@ router.post('/auth/login', (req, res) => {
             currentUsers.push(user);
             res.sendStatus(200);
         } catch (err) {
-            
             res.status(400).json({ message: err.message });
         };
     }
@@ -156,9 +155,9 @@ router.post('/api/voteCard', auth, (req, res) => {
 /* Check if in dev mode, and enable end game request */
 if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {
-        closeSocket();
         gameLogic.clearGameState();
-        req.session.destroy(); // Need to destroy all sessions?
+        closeSocket();
+        req.session.destroy();
         currentUsers = [];
         res.sendStatus(200);
     });
