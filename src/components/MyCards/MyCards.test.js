@@ -41,20 +41,20 @@ describe('on clicking an enabled card', () => {
         playCard.mockRestore();
     });
 
-    describe('on playWordAndCard flag true', () => {
-        it('calls requestPlayCard', (() => {
-            jest.spyOn(MyCards.prototype, 'isEnabled').mockImplementation(() => true);
-            const requestPlayCard = jest.fn();
-            const wrapper = mount(
-                <Provider store={store}>
-                    <MyCards fetchCards={jest.fn()} myCards={cards} requestPlayCard={requestPlayCard} playWordAndCard={true} />
-                </Provider>
-            );
-            wrapper.find({ 'data-cy': 'card' }).first().simulate('click');
-            expect(requestPlayCard).toHaveBeenCalled();
-            requestPlayCard.mockRestore();
-        }));
-    });
+    // describe('on playWordAndCard flag true', () => {
+    //     it('calls requestPlayCard', (() => {
+    //         jest.spyOn(MyCards.prototype, 'isEnabled').mockImplementation(() => true);
+    //         const requestPlayCard = jest.fn();
+    //         const wrapper = mount(
+    //             <Provider store={store}>
+    //                 <MyCards fetchCards={jest.fn()} myCards={cards} requestPlayCard={requestPlayCard} playWordAndCard={true} />
+    //             </Provider>
+    //         );
+    //         wrapper.find({ 'data-cy': 'card' }).first().simulate('click');
+    //         expect(requestPlayCard).toHaveBeenCalled();
+    //         requestPlayCard.mockRestore();
+    //     }));
+    // });
 
     describe('on playCard flag true', () => {
         beforeEach(() => moxios.install());

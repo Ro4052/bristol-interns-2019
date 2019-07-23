@@ -36,18 +36,18 @@ export class Dashboard extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    status: state.gameReducer.status,
-    roundNum: state.gameReducer.roundNum,
-    currentPlayer: state.gameReducer.currentPlayer,
-    playCard: state.playerReducer.playCard,
-    playWord: state.playerReducer.playWord,
-    voteCard: state.playerReducer.voteCard,
-    currentWord: state.gameReducer.currentWord,
-    winner: state.gameReducer.winner,
-    finishedRound: state.playerReducer.finishedRound,
-    myWord: state.playerReducer.myWord,
-    playedCard: state.playerReducer.playedCard,
-    cookie: state.playerReducer.cookie
+    status: state.dashboardReducer.status,
+    roundNum: state.dashboardReducer.roundNum,
+    currentWord: state.dashboardReducer.currentWord,
+    currentPlayer: state.playersReducer.currentPlayer,
+    playCard: state.myCardsReducer.playCard,
+    playWord: state.playWordReducer.playWord,
+    voteCard: state.playedCardsReducer.voteCard,
+    winner: state.gameOverReducer.winner,
+    finishedRound: state.myCardsReducer.finishedRound,
+    // myWord: state.playerReducer.myWord,
+    // playedCard: state.playerReducer.playedCard,
+    // cookie: state.playerReducer.cookie
 });
 
 export default connect(mapStateToProps)(Dashboard);

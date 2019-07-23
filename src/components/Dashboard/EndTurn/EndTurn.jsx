@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { finishPlayCard } from '../../../store/playerActions';
+import { finishPlayCard } from '../../MyCards/MyCardsActions';
 import Button from '../../shared/Button/Button';
 
 export class EndTurn extends React.Component {

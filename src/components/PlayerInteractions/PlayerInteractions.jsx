@@ -23,17 +23,17 @@ export class PlayerInteractions extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    status: state.gameReducer.status,
-    roundNum: state.gameReducer.roundNum,
-    currentPlayer: state.gameReducer.currentPlayer,
-    playCard: state.playerReducer.playCard,
-    playWord: state.playerReducer.playWord,
-    voteCard: state.playerReducer.voteCard,
-    currentWord: state.gameReducer.currentWord,
-    winner: state.gameReducer.winner,
-    finishedRound: state.playerReducer.finishedRound,
-    myWord: state.playerReducer.myWord,
-    playedCard: state.playerReducer.playedCard
+    status: state.dashboardReducer.status,
+    // roundNum: state.playerReducer.roundNum,
+    // currentPlayer: state.playerReducer.currentPlayer,
+    // playCard: state.playerReducer.playCard,
+    // playWord: state.playWordReducer.playWord,
+    // voteCard: state.playerReducer.voteCard,
+    // currentWord: state.playerReducer.currentWord,
+    // winner: state.playerReducer.winner,
+    // finishedRound: state.playerReducer.finishedRound,
+    // myWord: state.playerReducer.myWord,
+    // playedCard: state.playerReducer.playedCard
 });
 
 export default connect(mapStateToProps)(PlayerInteractions);

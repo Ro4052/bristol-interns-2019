@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { voteForCard } from '../../store/playerActions';
+import { voteForCard } from './PlayedCardsActions';
 import { CardList } from '../shared/CardList/CardList';
 
 export class PlayedCards extends React.Component {
@@ -28,11 +28,11 @@ export class PlayedCards extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    cards: state.gameReducer.currentCards,
-    voteCard: state.playerReducer.voteCard,
-    playedCard: state.playerReducer.playedCard,
-    allVotes: state.gameReducer.allVotes,
-    status: state.gameReducer.status
+    cards: state.playedCardsReducer.cards,
+    voteCard: state.playedCardsReducer.voteCard,
+    // playedCard: state.playerReducer.playedCard,
+    // allVotes: state.playerReducer.allVotes,
+    // status: state.playerReducer.status
 });
 
 const mapDispatchToProps = (dispatch) => ({

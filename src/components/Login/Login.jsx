@@ -1,12 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import styles from './Login.module.css';
 import { Redirect } from 'react-router-dom';
+import styles from './Login.module.css';
 import Monster from '../Monster/Monster';
 import Dixit from '../Dixit/Dixit';
-import { authenticateUser } from '../../store/playerActions';
-import { logIn } from '../../store/AuthActions';
 import Button from '../shared/Button/Button';
+import { authenticateUser, logIn } from '../shared/Auth/AuthActions';
 
 export class Login extends React.Component {
 
@@ -32,9 +31,7 @@ export class Login extends React.Component {
     checkUsernameAllowed(string) {
         // eslint-disable-next-line
         const allowed = /^[A-Za-z0-9]*$/;
-        if (allowed.test(string)){
-            return true;
-        }
+        if (allowed.test(string)) return true;
         return false;
     }
     
@@ -73,7 +70,7 @@ export class Login extends React.Component {
 
     render() {
         return (
-            (!this.props.cookie) ?
+            (!this.props.username) ?
                 <div className={styles.loginPage}>
                     <Dixit />
                     <Monster />
@@ -91,8 +88,8 @@ export class Login extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    cookie: state.playerReducer.cookie,
-    error: state.playerReducer.error
+    username: state.authReducer.username,
+    error: state.authReducer.error
 });
 
 const mapDispatchToProps = (dispatch) => ({

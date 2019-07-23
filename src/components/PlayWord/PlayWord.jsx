@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { validateWord } from '../../store/playerActions';
+import { validateWord } from './PlayWordActions';
 import Button from '../shared/Button/Button';
 import styles from '../PlayWord/PlayWord.module.css'
 
@@ -35,7 +35,7 @@ export class PlayWord extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    error: state.playerReducer.error
+    error: state.playWordReducer.error
 });
 
 const mapDispatchToProps = (dispatch) => ({

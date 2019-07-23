@@ -1,7 +1,12 @@
 import io from 'socket.io-client';
 import { dispatch } from '../store/store';
-import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setPlayers, setCurrentCards, setAllVotes, setWinner, resetState } from '../store/gameActions';
-import { setPlayWord, setPlayCard, setPlayedCard, setVoteCard, setVotedCard, playWord, resetFinishRound, resetPlayerState, resetCookie } from '../store/playerActions';
+import { setPlayedCards, setVoteCard, setVotedCard, setAllVotes } from '../components/PlayedCards/PlayedCardsActions';
+import { resetCookie } from '../components/shared/Auth/AuthActions';
+import { setPlayCard, resetFinishRound } from '../components/MyCards/MyCardsActions';
+import { playWord, setPlayWord } from '../components/PlayWord/PlayWordActions';
+import { setPlayers, setCurrentPlayer } from '../components/Players/PlayersActions';
+import { setWinner } from '../components/GameOver/GameOverActions';
+import  { setCurrentWord, setStatus, setRoundNumber } from '../components/Dashboard/DashboardActions';
 
 const connectSocket = () => {
     let connectionString;
@@ -26,11 +31,10 @@ const connectSocket = () => {
         dispatch(setRoundNumber(msg.roundNum));
         dispatch(setCurrentPlayer(msg.currentPlayer));
         dispatch(setCurrentWord(''));
-        dispatch(setCurrentCards([]));
+        dispatch(setPlayedCards([]));
         dispatch(setPlayCard(false));
         dispatch(setVoteCard(false));
         dispatch(setPlayWord(false));
-        dispatch(setPlayedCard(0));
         dispatch(setVotedCard(0));
         dispatch(playWord(""));
         dispatch(resetFinishRound());
@@ -54,7 +58,7 @@ const connectSocket = () => {
     });
 
     socket.on("played cards", msg => {
-        dispatch(setCurrentCards(msg));
+        dispatch(setPlayedCards(msg));
     });
 
     socket.on("vote", () => {
@@ -74,17 +78,14 @@ const connectSocket = () => {
         dispatch(setRoundNumber(0));
         dispatch(setCurrentPlayer(null));
         dispatch(setCurrentWord(''));
-        dispatch(setCurrentCards([]));
+        dispatch(setPlayedCards([]));
         dispatch(setPlayCard(false));
         dispatch(setVoteCard(false));
         dispatch(setPlayWord(false));
-        dispatch(setPlayedCard(0));
         dispatch(setVotedCard(0));
         dispatch(playWord(""));
         dispatch(resetFinishRound());
         dispatch(setWinner(null));
-        dispatch(resetState());
-        dispatch(resetPlayerState());
         dispatch(resetCookie());
     });
 
