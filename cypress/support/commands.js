@@ -69,16 +69,25 @@ Cypress.Commands.add('voteCard', () => {
         method: 'POST',
         url: '/api/voteCard'
     }).as('voteCard');
-    cy.get('[data-cy="played-cards"] [data-cy="card"]').first().click();
+    cy.get('[data-cy="played-cards"] [data-cy="card-wrapper-enabled"]').first().click();
     cy.wait('@voteCard');
 });
 
 Cypress.Commands.add('sendWord', () => {
     cy.route({
         method: 'POST',
-        url: '/api/sendWord'
-    }).as('sendWord');
+        url: '/api/validWord'
+    }).as('validWord');
     cy.get('[data-cy="type-word"]').type('fuck');
     cy.get('[data-cy="send-word"]').click();
-    cy.wait('@sendWord');
+    cy.wait('@validWord');
+});
+
+Cypress.Commands.add('createRoom', () => {
+    cy.route({
+        method: 'GET',
+        url: '/api/room/create'
+    }).as('createRoom');
+    cy.get('[data-cy="create-room"]').click();
+    cy.wait('@createRoom');
 });

@@ -1,16 +1,14 @@
 describe('Vote for a card', () => {
     beforeEach(() => {
         cy.login('unicorn');
-        cy.request({
-            method: 'GET',
-            url: `http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`,
-            followRedirect: false
-        }).then(() => {
+        cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
+        .then(() => {
             cy.startGame();
             cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => cy.playCard());
         });
     });
+
     describe('on everyone played cards', () => {
         it('displays all played cards', () => {
             cy.get('[data-cy="played-cards"]').children().its('length').should('eq', 2);

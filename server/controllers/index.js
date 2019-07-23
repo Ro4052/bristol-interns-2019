@@ -4,8 +4,10 @@ const path = require('path');
 const auth = require('../services/auth');
 const gameLogic = require('../services/gameLogic');
 const closeSocket = require('../services/socket').closeSocket;
+const createRoom = require('../services/socket').createRoom;
 
 let currentUsers = [];
+let roomId = 0;
 
 /* Check if player is logged in */
 router.get('/auth', (req, res) => {
@@ -34,7 +36,7 @@ router.post('/auth/login', (req, res) => {
         }
     } else { /* Username is taken, conflict error */
         res.status(409).json({message: "Username already exists."});
-    }    
+    }
 });
 
 /* Log out the user */
@@ -48,6 +50,13 @@ router.get('/auth/logout', auth, (req, res) => {
     } catch (err) { /* Game has started, method not allowed */
         res.status(400).json({message: err.message});
     }    
+});
+
+/* Create a room (a single instance of a game) */
+router.get('/api/room/create', auth, (req, res) => {
+    createRoom(req.session.user, roomId);
+    res.status(200).json({roomId: roomId});
+    roomId++;
 });
 
 /* Get the players list of cards */

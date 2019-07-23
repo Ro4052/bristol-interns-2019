@@ -19,7 +19,7 @@ export class Card extends React.Component {
 
     render() {
         return (
-            <div data-cy='card-wrapper' className={cx(styles.cardWrapper, { enabled: this.props.enabled }, { disabled: !this.props.enabled }, {selected : this.props.playedCardId === this.props.card.cardId})} onClick={this.handleClick}>
+            <div data-cy={`card-wrapper-${this.props.enabled ? 'enabled' : 'disabled'}`} className={cx(styles.cardWrapper, { enabled: this.props.enabled }, { disabled: !this.props.enabled }, {selected : this.props.playedCardId === this.props.card.cardId})} onClick={this.handleClick}>
                 <img data-cy='card' className={styles.card} alt={`card-${this.props.card.cardId}`} src={require(`../../../../images/cards/card (${this.props.card.cardId}).jpg`)} />
                 {(this.props.card.votes !== undefined) && <div className={styles.vote} data-cy='vote'>Votes: {this.props.card.votes}</div>}
             </div>

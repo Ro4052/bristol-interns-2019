@@ -9,6 +9,7 @@ import Players from '../Players/Players';
 import StartGame from './StartGame/StartGame';
 import GameOver from '../GameOver/GameOver';
 import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
+import { CreateRoom } from './CreateRoom/CreateRoom';
 
 export class Dashboard extends React.Component {
     render() {
@@ -19,6 +20,7 @@ export class Dashboard extends React.Component {
                                         this.props.playedCardId));
         return (
             <div className={styles.dashboard}>
+                <CreateRoom />
                 {this.props.status === "NOT_STARTED" && <StartGame />}
                 {this.props.status !== "NOT_STARTED" && <h2>Round: <span id="round-number" data-cy="round-number">{this.props.roundNum}</span></h2>}
                 {this.props.currentPlayer && <h2>Current player: <span id="current-player" data-cy="current-player">{this.props.currentPlayer.username}</span></h2>}
