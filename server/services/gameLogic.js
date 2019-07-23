@@ -1,7 +1,5 @@
 const socket = require('./socket');
-const cardManagerClass = require('./cardManager');
-const cardManager = new cardManagerClass();
-
+const cardManager = require('./cards');
 const statusTypes = {
     NOT_STARTED: "NOT_STARTED",
     STARTED: "STARTED",
@@ -61,8 +59,7 @@ exports.getPlayedCards = getPlayedCards;
 
 /* Add the player to the game if possible */
 exports.joinGame = (user, callback) => {
-    cardManager.assign(players, rounds);
-    const cards = cardManager.getCardSet();
+    const cards = cardManager.assign(players, rounds);
     const player = {
         username: user.username,
         cards: cards,
