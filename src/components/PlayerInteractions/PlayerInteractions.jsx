@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Prompt from '../shared/Prompt/Prompt';
 import PlayWord from '../PlayWord/PlayWord';
-import EndTurn from '../Dashboard/EndTurn/EndTurn';
+import EndTurn from '../EndTurn/EndTurn';
 import styles from './PlayerInteractions.module.css';
 import classNames from 'classnames/bind';
 

@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styles from './Dashboard.module.css';
-import Logout from './Logout/Logout';
+import Logout from '../Logout/Logout';
 import Monster from '../Monster/Monster';
 import PlayedCards from '../PlayedCards/PlayedCards';
 import MyCards from '../MyCards/MyCards';
 import Players from '../Players/Players';
-import StartGame from './StartGame/StartGame';
+import StartGame from '../StartGame/StartGame';
 import GameOver from '../GameOver/GameOver';
 import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
-import { CreateRoom } from './CreateRoom/CreateRoom';
+import CreateRoom from '../CreateRoom/CreateRoom';
 
 export class Dashboard extends React.Component {
     render() {
