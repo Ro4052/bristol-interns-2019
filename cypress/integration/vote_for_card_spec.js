@@ -7,7 +7,6 @@ describe('Vote for a card', () => {
             cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => {
                 cy.playCard();
-                cy.get('[data-cy="played-cards"]').children().its('length').should('eq', 2);
             });
         });
     });
