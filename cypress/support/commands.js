@@ -24,6 +24,15 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
+Cypress.Commands.add('createRoom', () => {
+    cy.route({
+        method: 'GET',
+        url: '/api/room/create'
+    }).as('createRoom');
+    cy.get('[data-cy="create-room"]').click();
+    cy.wait('@createRoom');
+});
+
 Cypress.Commands.add('login', username => {
     cy.route({
         method: 'POST',
@@ -81,13 +90,4 @@ Cypress.Commands.add('sendWord', () => {
     cy.get('[data-cy="type-word"]').type('fuck');
     cy.get('[data-cy="send-word"]').click();
     cy.wait('@validWord');
-});
-
-Cypress.Commands.add('createRoom', () => {
-    cy.route({
-        method: 'GET',
-        url: '/api/room/create'
-    }).as('createRoom');
-    cy.get('[data-cy="create-room"]').click();
-    cy.wait('@createRoom');
 });

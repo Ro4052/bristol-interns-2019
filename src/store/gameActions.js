@@ -4,6 +4,7 @@ export const types = {
     SET_ROUND_NUMBER: 'SET_ROUND_NUMBER',
     SET_CURRENT_PLAYER: 'SET_CURRENT_PLAYER',
     SET_PLAYERS: 'SET_PLAYERS',
+    SET_ROOMS: 'SET_ROOMS',
     SET_CURRENT_CARDS: 'SET_CURRENT_CARDS',
     SET_CURRENT_WORD: 'SET_CURRENT_WORD',
     SET_ALL_VOTES: 'SET_ALL_VOTES',
@@ -39,6 +40,11 @@ export const setCurrentPlayer = currentPlayer => ({
 export const setPlayers = players => ({
     type: types.SET_PLAYERS,
     players
+});
+
+export const setRooms = rooms => ({
+    type: types.SET_ROOMS,
+    rooms
 });
 
 export const setCurrentCards = currentCards => ({

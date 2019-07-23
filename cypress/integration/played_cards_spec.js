@@ -5,6 +5,7 @@ describe('Played cards', () => {
     describe("at end of round", () => {
         beforeEach(() => {
             cy.login('unicorn');
+            cy.createRoom();
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => {
                 cy.startGame();

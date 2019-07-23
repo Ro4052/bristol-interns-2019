@@ -1,6 +1,7 @@
 describe('The Player Cards Component', () => {
     beforeEach(() => {
         cy.login('unicorn');
+        cy.createRoom();
         cy.startGame();
     });
     

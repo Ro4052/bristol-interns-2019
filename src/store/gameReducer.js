@@ -10,7 +10,8 @@ export const initialState = {
     winner: null, /* { username } */
     socket: null,
     allVotes: [],
-    invalidWord: false
+    invalidWord: false,
+    rooms: []
 }
 
 const gameReducer = (state = initialState, action) => {
@@ -25,6 +26,8 @@ const gameReducer = (state = initialState, action) => {
             return {...state, currentPlayer: action.currentPlayer };
         case types.SET_PLAYERS:
             return {...state, players: action.players };
+        case types.SET_ROOMS:         
+            return {...state, rooms: action.rooms };
         case types.SET_CURRENT_CARDS:
             return {...state, currentCards: action.currentCards };
         case types.SET_CURRENT_WORD:

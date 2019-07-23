@@ -2,6 +2,7 @@ describe('Valid word', () => {
     describe('on submit a bad word', () => {
         beforeEach(() => {
             cy.login('username');
+            cy.createRoom();
             cy.startGame();
         });
         it('displays an error', () => {

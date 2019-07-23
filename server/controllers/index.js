@@ -60,7 +60,7 @@ router.get('/api/room/create', auth, (req, res) => {
     if (newGameState.canJoinGame(user)) { /* Game has not been started yet */
         newGameState.joinGame(user, () => {
             req.session.roomId = roomId;    
-            res.status(200).json({roomId: roomId});
+            res.sendStatus(200);
             roomId++;
         });
     } else { /* Game has already began */
@@ -167,13 +167,20 @@ router.post('/api/voteCard', auth, (req, res) => {
 /* Check if in dev mode, and enable end game request */
 if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {
-        currentUsers = [];
-        getGameStateById(req.session.roomId).setStatus("GAME_OVER");
-        getGameStateById(req.session.roomId).endGame();
-        closeSocket();
-        req.session.destroy();
-        getGameStateById(req.session.roomId).setStatus("NOT_STARTED");
-        res.sendStatus(200);
+        try {
+            currentUsers = [];
+            if (req.session.roomId) {
+                getGameStateById(req.session.roomId).setStatus("GAME_OVER");
+                getGameStateById(req.session.roomId).endGame();
+                getGameStateById(req.session.roomId).setStatus("NOT_STARTED");
+            }
+            closeSocket();
+            req.session.destroy();
+            res.sendStatus(200);
+        } catch (err) {
+            console.log(err);
+            res.status(400).json({ message: err.message});
+        }
     });
 }
 

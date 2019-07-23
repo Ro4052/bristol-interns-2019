@@ -42,16 +42,17 @@ describe('Login', () => {
         });
     });
 
-    describe('on game already started', () => {
-        it('displays an error', () => {
-            cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
-            .then(() => {
-                cy.request(`http://localhost:12346/startGame?url=${encodeURIComponent(url)}`)
-                .then(() => {
-                    cy.login(username);
-                    cy.get('[data-cy="login-error"]').should('contain', 'Game has already started');
-                });
-            }); 
-        });
-    });
+    /* TODO: comment back in when you add join functionality */
+    // describe('on game already started', () => {
+    //     it('displays an error', () => {
+    //         cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
+    //         .then(() => {
+    //             cy.request(`http://localhost:12346/startGame?url=${encodeURIComponent(url)}`)
+    //             .then(() => {
+    //                 cy.login(username);
+    //                 cy.get('[data-cy="login-error"]').should('contain', 'Game has already started');
+    //             });
+    //         }); 
+    //     });
+    // });
 });

@@ -1,5 +1,8 @@
 describe('Play card', () => {
-    beforeEach(() => cy.login('unicorn'));
+    beforeEach(() => {
+        cy.login('unicorn')
+        cy.createRoom();
+    });
 
     describe('when first player has played card and word', () => {
         it('is prompted to play a card', () => {

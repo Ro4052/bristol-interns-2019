@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 import { dispatch } from '../store/store';
-import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setPlayers, setCurrentCards, setAllVotes, setWinner, resetState, setSocket } from '../store/gameActions';
+import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setPlayers, setRooms, setCurrentCards, setAllVotes, setWinner, resetState, setSocket } from '../store/gameActions';
 import { setPlayWord, setPlayCard, setPlayedCard, setVoteCard, setVotedCard, playWord, resetFinishRound, resetPlayerState, resetCookie } from '../store/playerActions';
 
 const connectSocket = () => {
@@ -19,6 +19,10 @@ const connectSocket = () => {
 
     socket.on("players", msg => {
         dispatch(setPlayers(msg.players));
+    });
+
+    socket.on("rooms", msg => {
+        dispatch(setRooms(msg));
     });
 
     socket.on("new round", msg => {
