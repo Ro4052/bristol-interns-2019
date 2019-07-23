@@ -1,12 +1,13 @@
 describe('Vote for a card', () => {
     beforeEach(() => {
-        cy.login('unicorn');
-        cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
-        .then(() => {
-            cy.startGame();
-            cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
+        cy.login('unicorn').then(() => {
+            cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => {
-                cy.playCard();
+                cy.startGame();
+                cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
+                .then(() => {
+                    cy.playCard();
+                });
             });
         });
     });
