@@ -32,7 +32,7 @@ describe('on vote card flag', () => {
 
 describe('on played turn', () => {
     it('displays end turn button', () => {
-        const wrapper = shallow(<PlayerInteractions myWord={'word'} playedCard={1} finishedRound={false} />);
+        const wrapper = shallow(<PlayerInteractions word={'word'} playedCardId={1} finishedRound={false} />);
         expect(wrapper.exists(EndTurn)).toEqual(true);
     });
 });

@@ -56,7 +56,7 @@ describe('on clicking an enabled card', () => {
     //     }));
     // });
 
-    describe('on playCard flag true', () => {
+    describe('on playCard flag true and waiting for other players', () => {
         beforeEach(() => moxios.install());
         afterEach(() => moxios.uninstall());
         it('calls selectCard', (() => {
@@ -76,7 +76,7 @@ describe('on clicking an enabled card', () => {
             const playCardForWord = jest.spyOn(MyCards.prototype, 'playCardForWord');
             const wrapper = mount(
                 <Provider store={store}>
-                    <MyCards fetchCards={jest.fn()} cards={cards} selectCard={jest.fn()} playCard={true} />
+                    <MyCards fetchCards={jest.fn()} status={"WAITING_FOR_OTHER_PLAYERS"} cards={cards} selectCard={jest.fn()} playCard={true} />
                 </Provider>
             );
             wrapper.find({ 'data-cy': 'card' }).first().simulate('click');
@@ -91,7 +91,7 @@ describe('on clicking an enabled card', () => {
                 const finishPlayCard = jest.fn();
                 const wrapper = mount(
                     <Provider store={store}>
-                        <MyCards fetchCards={jest.fn()} cards={cards} selectCard={jest.fn()} finishPlayCard={finishPlayCard} playCard={true} />
+                        <MyCards fetchCards={jest.fn()} status={"WAITING_FOR_OTHER_PLAYERS"} cards={cards} selectCard={jest.fn()} finishPlayCard={finishPlayCard} playCard={true} />
                     </Provider>
                 );
                 wrapper.find({ 'data-cy': 'card' }).first().simulate('click');
