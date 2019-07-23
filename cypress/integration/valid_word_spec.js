@@ -1,6 +1,5 @@
 describe('Valid word', () => {
     describe('on submit a bad word', () => {
-        console.log('bean')
         beforeEach(() => {
             cy.login('username');
             cy.startGame();

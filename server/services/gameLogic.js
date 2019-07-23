@@ -49,10 +49,6 @@ exports.getUnplayedCardsByUsername = (username) => players.find(player => player
 
 /* Returns true if the player is able to join the game, false otherwise */
 exports.canJoinGame = (username) => {
-    console.log("gameLogic.canJoinGame");
-    console.log("status: ", status);
-    console.log("players: ", players);
-    console.log("username: ", username);
     return (status === statusTypes.NOT_STARTED && !players.some(player => player.username === username));
 }
 

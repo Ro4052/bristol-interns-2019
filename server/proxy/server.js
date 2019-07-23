@@ -37,7 +37,6 @@ app.get('/connect', (req, res) => {
         username: "halfling" 
     })
     .then((response) => {
-        console.log(response)
         if (response.status === 200) {
             socket = client(connectionString, {
                 upgrade: false,
