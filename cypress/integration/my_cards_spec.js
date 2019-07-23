@@ -10,10 +10,9 @@ describe('My Cards', () => {
         });
     });
 
-    /* TODO: figure out how to test border */
     describe('player clicks on a card', () => {
         it("its highlighted by being moved upwards on the y axis", () => {
-            cy.playCard();
+            cy.get('[data-cy="my-cards"] [data-cy="card"]').first().click();
             cy.get('[data-cy="my-cards"]').children().first().should('have.css', "transform", "matrix(1, 0, 0, 1, 0, -30)");
         });
     });
