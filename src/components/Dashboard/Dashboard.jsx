@@ -9,7 +9,7 @@ import Players from '../Players/Players';
 import StartGame from '../StartGame/StartGame';
 import GameOver from '../GameOver/GameOver';
 import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
-import { CreateRoom } from './CreateRoom/CreateRoom';
+import { CreateRoom } from '../CreateRoom/CreateRoom';
 import Timer from '../Timer/Timer';
 
 export class Dashboard extends React.Component {
