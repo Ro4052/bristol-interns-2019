@@ -29,10 +29,7 @@ export class Lobby extends React.Component {
         axios.post('/api/room/join', {
             roomId: id
         })
-        .then(() => {})
-        .catch((err) => {
-            window.alert(err.message);
-        })
+        .catch((err) => console.log(err.message));
     }
 
     render() {

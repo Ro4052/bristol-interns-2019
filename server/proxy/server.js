@@ -74,13 +74,13 @@ app.get('/startGame', (req, res) => {
 
 app.get('/createRoom', (req, res) => {
     const url = req.query.url;
-    const instance = axios.create({
+    const axiosInstance = axios.create({
         baseURL: url,
         timeout: 500,
         jar: cookieJar,
         withCredentials: true
     });
-    instance.get('api/room/create')
+    axiosInstance.get('api/room/create')
     .then(() => res.sendStatus(200))
     .catch((err) => {
         console.log(err);
@@ -91,16 +91,16 @@ app.get('/createRoom', (req, res) => {
 app.get('/joinRoom', (req, res) => {
     const url = req.query.url;
     const roomId = req.query.roomId;
-    const instance = axios.create({
+    const axiosInstance = axios.create({
         baseURL: url,
         timeout: 500,
         jar: cookieJar,
         withCredentials: true
     });
     const body = { roomId: parseInt(roomId) };
-    instance.post('api/room/join', body)
+    axiosInstance.post('api/room/join', body)
     .then(() => {
-        instance.get('api/cards')
+        axiosInstance.get('api/cards')
         .then((response) => {
             cards = response.data;
             res.sendStatus(200);

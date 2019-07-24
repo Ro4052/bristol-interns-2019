@@ -10,26 +10,32 @@ const room = {
 };
 
 const initialState = {
-    gameReducer: {
+    lobbyReducer: {
         rooms: []
+    },
+    dashboardReducer: {
+        status: "NOT_STARTED"
     }
 };
 
 const afterClickState = {
-    gameReducer: {
+    lobbyReducer: {
         rooms: [room]
+    },
+    dashboardReducer: {
+        status: "NOT_STARTED"
     }
 };
 
 const middlewares = [];
 const mockStore = configureStore(middlewares);
-const intialStore = mockStore(initialState);
+const initialStore = mockStore(initialState);
 const afterClickStore = mockStore(afterClickState);
 
 describe('on initial render', () => {
     it('displays no rooms', () => {
         const wrapper = mount(
-            <Provider store={intialStore}>
+            <Provider store={initialStore}>
                 <Lobby rooms={[]}/>
             </Provider>
         );
