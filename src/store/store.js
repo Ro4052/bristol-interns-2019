@@ -11,6 +11,7 @@ import playWordReducer from '../components/PlayWord/PlayWordReducer';
 import playersReducer from '../components/Players/PlayersReducer';
 import gameOverReducer from '../components/GameOver/GameOverReducer';
 import dashboardReducer from '../components/Dashboard/DashboardReducer';
+import playerInteractionsReducer from '../components/PlayerInteractions/PlayerInteractionsReducer';
 
 // Combine all reducers
 const allReducers = combineReducers({
@@ -20,7 +21,8 @@ const allReducers = combineReducers({
     playWordReducer,
     playersReducer,
     gameOverReducer,
-    dashboardReducer
+    dashboardReducer,
+    playerInteractionsReducer
 });
 
 // Wrap in reset functionality

@@ -22,7 +22,7 @@ export class GameOver extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    winner: state.playerReducer.winner
+    winner: state.gameOverReducer.winner
 });
 
 export default connect(mapStateToProps)(GameOver);

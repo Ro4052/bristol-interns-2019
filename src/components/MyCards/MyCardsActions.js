@@ -3,6 +3,11 @@ import axios from "axios";
 
 let instance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
+export const setPlayCard = playCard => ({
+    type: types.SET_PLAY_CARD,
+    playCard
+});
+
 export const fetchCardsSuccess = cards => ({
     type: types.FETCH_CARDS_SUCCESS,
     cards
@@ -13,25 +18,33 @@ export const fetchCardsFailure = error => ({
     error
 });
 
-export const setPlayCard = playCard => ({
-    type: types.SET_PLAY_CARD,
-    playCard
-});
-
-export const selectCard = cardId => ({
-    type: types.SELECT_CARD,
+export const selectCardSuccess = cardId => ({
+    type: types.SELECT_CARD_SUCCESS,
     cardId
 });
 
-export const finishPlayCard = (cardId) => ({
-    type: types.FINISH_PLAY_CARD,
+export const removeCard = cardId => ({
+    type: types.REMOVE_CARD,
     cardId
 });
 
-export const resetFinishRound = finishedRound => ({
-    type: types.RESET_FINISH_ROUND,
-    finishedRound
-});
+export const selectCard = cardId => (dispatch, getState) => {
+    const status = getState().dashboardReducer.status;
+    if (status === "WAITING_FOR_CURRENT_PLAYER") {
+        dispatch(selectCardSuccess(cardId));
+    } else if (status === "WAITING_FOR_OTHER_PLAYERS") {
+        instance.post('/api/playCard', { cardId })
+        .then(res => {
+            if (res.status === 200) {
+                console.log("success");
+                dispatch(selectCardSuccess(cardId));
+                dispatch(removeCard(cardId));
+            } else {
+                console.log("fail");
+            }
+        });
+    }
+};
 
 export const fetchCards = () => dispatch => {
     instance.get('/api/cards')
@@ -41,4 +54,4 @@ export const fetchCards = () => dispatch => {
         dispatch(fetchCardsFailure(res.data.message));
     })
     .catch(err => dispatch(fetchCardsFailure(err.message)));
-}
+};
