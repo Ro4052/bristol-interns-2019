@@ -30,7 +30,7 @@ exports.createRoom = (username, roomId) => {
 exports.closeSocket = () => {
     sockets.forEach(socket => socket.disconnect());
     sockets = [];
-}
+};
 
 // Check if it's the sender's turn
 exports.isCurrentPlayerSocket = socket => gameLogic.getGameState().currentPlayer && socket.handshake.session.user === gameLogic.getGameState().currentPlayer.username;

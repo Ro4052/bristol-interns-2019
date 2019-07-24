@@ -2,7 +2,7 @@ import React from 'react';
 import MyCards from '../MyCards/MyCards';
 import { shallow } from 'enzyme';
 import { Dashboard } from './Dashboard';
-import StartGame from './StartGame/StartGame';
+import StartGame from '../StartGame/StartGame';
 import GameOver from '../GameOver/GameOver';
 import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
 
@@ -79,7 +79,7 @@ describe('on vote card', () => {
 
 describe('on end of turn', () => {
     it('displays player interaction', () => {
-        const wrapper = shallow(<Dashboard finishedRound={false} cookie={'username'} currentPlayer={{ username: 'username' }} status={'WAITING_FOR_CURRENT_PLAYER'} playedCard={1} />);
+        const wrapper = shallow(<Dashboard finishedRound={false} username={'username'} currentPlayer={{ username: 'username' }} status={'WAITING_FOR_CURRENT_PLAYER'} playedCardId={1} />);
         expect(wrapper.exists(PlayerInteractions)).toEqual(true);
     });
 });

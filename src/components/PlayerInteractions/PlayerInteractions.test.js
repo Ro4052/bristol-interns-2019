@@ -1,9 +1,8 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { PlayerInteractions } from './PlayerInteractions';
 import Prompt from '../shared/Prompt/Prompt';
 import PlayWord from '../PlayWord/PlayWord';
-import EndTurn from '../Dashboard/EndTurn/EndTurn';
 
 describe('on play word flag', () => {
     it('displays the play word prompt', () => {
@@ -32,7 +31,7 @@ describe('on vote card flag', () => {
 
 describe('on played turn', () => {
     it('displays end turn button', () => {
-        const wrapper = shallow(<PlayerInteractions myWord={'word'} playedCard={1} finishedRound={false} />);
-        expect(wrapper.exists(EndTurn)).toEqual(true);
+        const wrapper = mount(<PlayerInteractions word={'word'} playedCardId={1} finishedRound={false} />);
+        expect(wrapper.exists({ 'data-cy': 'end-turn' })).toEqual(true);
     });
 });

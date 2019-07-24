@@ -28,35 +28,3 @@ describe('on given a list of cards', () => {
         expect(wrapper.find({ 'data-cy': 'test-cy' }).children().length).toEqual(3);
     });
 });
-
-// describe('on enabled', () => {
-//     it("has the correct className", () => {
-//         const wrapper = shallow(<CardList card={card1} enabled={true}/>);
-//         expect(wrapper.find({ 'data-cy': `card-${card1.cardId}` }).prop('className')).toEqual('card enabled');
-//     });
-// });
-
-// describe('on not enabled', () => {
-//     it("has the correct className", () => {
-//         const wrapper = shallow(<CardList card={card1} enabled={false}/>);
-//         expect(wrapper.find({ 'data-cy': `card-${card1.cardId}` }).prop('className')).toEqual('card disabled');
-//     });
-
-// });
-
-// describe('on click', () => {
-//     it('calls the handleClick function', () => {
-//         const spy = jest.spyOn(CardList.prototype, 'handleClick');
-//         const wrapper = shallow(<CardList card={card1} enabled={false} />);
-//         wrapper.find({ 'data-cy': `card-${card1.cardId}` }).simulate('click');
-//         expect(spy).toHaveBeenCalled();
-//         spy.mockRestore();
-//     });
-//     it('calls the handleClick function from props', () => {
-//         const spy = jest.fn();
-//         const wrapper = shallow(<CardList card={card1} enabled={true} handleClick={spy} />);
-//         wrapper.find({ 'data-cy': `card-${card1.cardId}` }).simulate('click');
-//         expect(spy).toHaveBeenCalled();
-//         spy.mockRestore();
-//     });
-// });

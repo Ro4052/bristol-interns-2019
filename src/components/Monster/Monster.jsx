@@ -8,7 +8,7 @@ const cx = classNames.bind(styles);
 
 export function Monster(props) {
     let bodyClass = styles.body;
-    if (props.invalidWord) bodyClass = styles.disappointedBody;
+    if (props.error) bodyClass = styles.disappointedBody;
     if (props.winner) bodyClass = styles.victoryBody;
     return (
         <div className={styles.ufo}>
@@ -20,10 +20,10 @@ export function Monster(props) {
                         <div className={styles.vampitooth}></div>
                     </div>
                 
-                    <div className={props.invalidWord ? styles.angryeyelid : styles.eyelid}>
+                    <div className={props.error ? styles.angryeyelid : styles.eyelid}>
                         <div className={styles.eyes}>
                             <div className={styles.eye}>
-                                <div className={cx({ meaneye: props.invalidWord})}></div>
+                                <div className={cx({ meaneye: props.error})}></div>
                                 {/* <div className={cx({tear: props.error})}></div> */}
                             </div>
                         </div>
@@ -35,9 +35,8 @@ export function Monster(props) {
 }
 
 const mapStateToProps = (state) => ({
-    invalidWord: state.playerReducer.invalidWord,
-    winner: state.gameReducer.winner,
-    error: state.playerReducer.error
+    winner: state.gameOverReducer.winner,
+    error: state.playWordReducer.error
 });
 
 export default connect(mapStateToProps)(Monster);

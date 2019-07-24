@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import Button from '../../shared/Button/Button';
+import Button from '../shared/Button/Button';
 
 export class CreateRoom extends React.Component {
     createRoom() {
