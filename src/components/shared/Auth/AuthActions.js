@@ -2,11 +2,7 @@ import axios from "axios";
 import connectSocket from '../../../services/socket';
 import { types } from './AuthActionTypes';
 
-let instance = axios.create({
-    validateStatus: function (status) {
-        return status >= 200 && status < 500;
-    }
-});
+const instance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
 export const resetStore = () => ({
     type: types.RESET_STORE

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { types } from './PlayWordActionTypes';
 
-let instance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
+const instance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
 export const setPlayWord = playWord => ({
     type: types.SET_PLAY_WORD,

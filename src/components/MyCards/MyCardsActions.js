@@ -1,7 +1,7 @@
 import { types } from './MyCardsActionTypes';
 import axios from "axios";
 
-let instance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
+const instance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
 export const setPlayCard = playCard => ({
     type: types.SET_PLAY_CARD,
