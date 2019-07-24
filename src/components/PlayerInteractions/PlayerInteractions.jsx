@@ -23,7 +23,6 @@ export class PlayerInteractions extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    status: state.dashboardReducer.status,
     playCard: state.myCardsReducer.playCard,
     playWord: state.playWordReducer.playWord,
     voteCard: state.playedCardsReducer.voteCard,

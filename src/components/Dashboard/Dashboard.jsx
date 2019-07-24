@@ -47,7 +47,6 @@ const mapStateToProps = (state) => ({
     voteCard: state.playedCardsReducer.voteCard,
     winner: state.gameOverReducer.winner,
     finishedRound: state.myCardsReducer.finishedRound,
-    myWord: state.playWordReducer.word,
     playedCardId: state.myCardsReducer.playedCardId,
     username: state.authReducer.username
 });
