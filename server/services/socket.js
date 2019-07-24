@@ -5,9 +5,6 @@ let io;
 let sockets = [];
 let rooms = [];
 
-let playCardTimeout;
-let voteTimeout;
-
 exports.setupSocket = (server, session) => {
     io = socketio(server);
     io.use(sharedsession(session));
@@ -108,14 +105,12 @@ exports.promptCurrentPlayer = promptCurrentPlayer;
 
 const promptOtherPlayers = (roomId, currentPlayer) => {
     sockets.forEach(socket => socket.handshake.session.user !== currentPlayer.username && socket.handshake.session.roomId === roomId && socket.emit("play card"));
-    playCardTimeout = setTimeout(gameLogic.playRandomCard, 3000);
 };
 exports.promptOtherPlayers = promptOtherPlayers;
 
 // Ask the other players to vote on the cards
 const promptPlayersVote = (roomId, currentPlayer) => {
     sockets.forEach(socket => socket.handshake.session.user !== currentPlayer.username && socket.handshake.session.roomId === roomId && socket.emit("vote"));
-    voteTimeout = setTimeout(gameLogic.emitVotes, 30000);
 };
 exports.promptPlayersVote = promptPlayersVote;
 

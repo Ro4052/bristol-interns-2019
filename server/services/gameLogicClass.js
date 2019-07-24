@@ -17,6 +17,8 @@ module.exports = class GameLogic {
         this.playedCards = [];
         /** @type {{ username: string, cardId: number }[]} */
         this.votes = [];
+        this.playCardTimeout = 0;
+        this.voteTimeout = 0;
     }
 
     /* Remove player from list of this.players on log out */
@@ -122,6 +124,8 @@ module.exports = class GameLogic {
             this.currentWord = word;
             socket.emitWord(this.roomId, this.currentWord);
             socket.promptOtherPlayers(this.roomId, this.currentPlayer);
+            playCardTimeout = setTimeout(gameLogic.playRandomCard, 3000);
+
         } else {
             // Cannot play card and word, the user sending the request is not the current player, the player has already played a card,
             // or the game status is not appropriate for the request, server is responsible for generating an error
@@ -153,6 +157,7 @@ module.exports = class GameLogic {
                 this.setStatus(statusTypes.WAITING_FOR_VOTES);
                 socket.emitPlayedCards(this.roomId, this.getPlayedCards());
                 socket.promptPlayersVote(this.roomId, this.currentPlayer);
+                voteTimeout = setTimeout(gameLogic.emitVotes, 30000);
             }
         } else {
             // Cannot play card, the player has already played a card, or the game status is not
@@ -194,6 +199,7 @@ module.exports = class GameLogic {
         status = statusTypes.WAITING_FOR_VOTES;
         socket.emitPlayedCards(getPlayedCards());
         socket.promptPlayersVote(currentPlayer);
+        voteTimeout = setTimeout(gameLogic.emitVotes, 30000);
     };
 
     /* Calculate the scores for this round */
