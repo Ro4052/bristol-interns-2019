@@ -17,9 +17,8 @@ export class Timer extends React.Component {
     
     decrement() {
         if (this.state.seconds>0) {
-            this.state.seconds--;
             this.setState({
-                    seconds : this.state.seconds
+                    seconds : this.state.seconds-1
             });
             setTimeout(this.decrement,1000)
         }
