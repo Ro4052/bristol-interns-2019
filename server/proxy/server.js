@@ -23,7 +23,6 @@ app.use(cors());
 app.use(cookieParser());
 
 app.get('/connect', (req, res) => {
-    console.log('connects')
     const url = req.query.url;
     const connectionString = "ws://localhost:12345/";
     const instance = axios.create({

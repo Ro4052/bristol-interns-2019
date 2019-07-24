@@ -8,20 +8,19 @@ export class Timer extends React.Component {
         this.state = {
             seconds: 30
         };
-
     }
 
     componentDidMount() {
-        setTimeout(this.decrement, 1000)
+        setTimeout(this.decrement, 1000);
     }
     
     decrement() {
-        if (this.state.seconds>0) {
+        if (this.state.seconds > 0) {
             this.setState({
-                    seconds : this.state.seconds-1
+                seconds: this.state.seconds - 1
             });
-            setTimeout(this.decrement,1000)
-        }
+            setTimeout(this.decrement, 1000);
+        };
     }
 
     render() {
@@ -30,7 +29,7 @@ export class Timer extends React.Component {
                 <span>{this.state.seconds}</span>
             </div>
         );
-    }
+    };
 }
 
 export default Timer;

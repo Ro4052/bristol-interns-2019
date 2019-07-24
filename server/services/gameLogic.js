@@ -48,9 +48,7 @@ exports.isCurrentPlayer = (username) => currentPlayer.username === username;
 exports.getUnplayedCardsByUsername = (username) => players.find(player => player.username === username).cards.filter(card => !card.played);
 
 /* Returns true if the player is able to join the game, false otherwise */
-exports.canJoinGame = (username) => {
-    return (status === statusTypes.NOT_STARTED && !players.some(player => player.username === username));
-}
+exports.canJoinGame = (username) => (status === statusTypes.NOT_STARTED && !players.some(player => player.username === username));
 
 /* Return the list of players, hiding their assigned cards */
 const getPlayers = () => players.map(player => ({ username: player.username, score: player.score }));
