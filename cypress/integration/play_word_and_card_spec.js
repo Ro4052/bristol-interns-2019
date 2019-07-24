@@ -1,5 +1,6 @@
 describe('Play word and card', () => {
     beforeEach(() => cy.login('unicorn'));
+
     describe('on start game', () => {
         it('prompts user to play a word and a card', () => {
             cy.startGame();

@@ -12,7 +12,7 @@ export class PlayedCards extends React.Component {
     }
 
     getVotesForCard(card) {
-        return this.props.votes.reduce((sum, vote) => sum + (vote.cardId === card.cardId), 0)
+        return this.props.votes.reduce((sum, vote) => sum + (vote.cardId === card.cardId), 0);
     }
 
     isEnabled(cardId) {
