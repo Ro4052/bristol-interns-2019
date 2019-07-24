@@ -24,13 +24,9 @@ export class PlayerInteractions extends React.Component {
 
 const mapStateToProps = (state) => ({
     status: state.dashboardReducer.status,
-    // roundNum: state.playerReducer.roundNum,
-    // currentPlayer: state.playerReducer.currentPlayer,
     playCard: state.myCardsReducer.playCard,
     playWord: state.playWordReducer.playWord,
     voteCard: state.playedCardsReducer.voteCard,
-    // currentWord: state.playerReducer.currentWord,
-    // winner: state.playerReducer.winner,
     finishedRound: state.myCardsReducer.finishedRound,
     word: state.playWordReducer.word,
     playedCardId: state.myCardsReducer.playedCardId

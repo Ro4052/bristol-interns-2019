@@ -1,11 +1,4 @@
-// import configureStore from 'redux-mock-store';
-// import thunk from 'redux-thunk';
-// import { logIn, logInSuccess, logInFailure } from '../../src/store/AuthActions';
-
 const url = Cypress.config().baseUrl;
-
-// const middlewares = [thunk];
-// const mockStore = configureStore(middlewares);
 const username = 'unicorn';
 
 describe('Login', () => {
@@ -14,24 +7,6 @@ describe('Login', () => {
             cy.login(username);
             cy.getCookie('username').should('exist');
         });
-        // it('dispatches a log in success action if user has succesfully logged in', () => {
-        //     const initialState = {cookie: null};
-        //     const store = mockStore(initialState);
-        //     cy.login(username);
-        //     store.dispatch(logIn(username));
-        //     const actions = store.getActions();
-        //     expect(actions[0].type).to.equal(logInSuccess().type);
-        // });
-        // it('dispatches a log in failure action if user cannot log in', () => {
-        //     const initialState = {cookie: null};
-        //     const store = mockStore(initialState);
-        //     cy.request('POST', '/auth/login', { username }).then(() => {
-        //         cy.login(username)
-        //         store.dispatch(logIn(username));
-        //         const actions = store.getActions();
-        //         expect(actions[0].type).to.equal(logInFailure().type);
-        //     })
-        // });
     });
 
     describe('on username already exists', () => {

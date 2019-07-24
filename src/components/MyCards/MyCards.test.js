@@ -41,21 +41,6 @@ describe('on clicking an enabled card', () => {
         playCard.mockRestore();
     });
 
-    // describe('on playWordAndCard flag true', () => {
-    //     it('calls selectCard', (() => {
-    //         jest.spyOn(MyCards.prototype, 'isEnabled').mockImplementation(() => true);
-    //         const selectCard = jest.fn();
-    //         const wrapper = mount(
-    //             <Provider store={store}>
-    //                 <MyCards fetchCards={jest.fn()} cards={cards} selectCard={selectCard} playWordAndCard={true} />
-    //             </Provider>
-    //         );
-    //         wrapper.find({ 'data-cy': 'card' }).first().simulate('click');
-    //         expect(selectCard).toHaveBeenCalled();
-    //         selectCard.mockRestore();
-    //     }));
-    // });
-
     describe('on playCard flag true and waiting for other players', () => {
         beforeEach(() => moxios.install());
         afterEach(() => moxios.uninstall());
