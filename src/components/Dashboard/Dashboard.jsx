@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styles from './Dashboard.module.css';
-import Logout from './Logout/Logout';
+import Logout from '../Logout/Logout';
 import Monster from '../Monster/Monster';
 import PlayedCards from '../PlayedCards/PlayedCards';
 import MyCards from '../MyCards/MyCards';
 import Players from '../Players/Players';
-import StartGame from './StartGame/StartGame';
+import StartGame from '../StartGame/StartGame';
 import GameOver from '../GameOver/GameOver';
 import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
 import { CreateRoom } from './CreateRoom/CreateRoom';
@@ -17,9 +17,8 @@ export class Dashboard extends React.Component {
         const showPlayerInteractions = (this.props.playCard || this.props.playWord || this.props.voteCard)
                                     || ((this.props.currentPlayer) && 
                                         (!this.props.finishedRound && 
-                                        this.props.cookie === this.props.currentPlayer.username && 
-                                        this.props.playedCard !== 0));
-       
+                                        this.props.username === this.props.currentPlayer.username && 
+                                        this.props.playedCardId));
         return (
             <div className={styles.dashboard}>
                 <CreateRoom />
@@ -41,18 +40,17 @@ export class Dashboard extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    status: state.gameReducer.status,
-    roundNum: state.gameReducer.roundNum,
-    currentPlayer: state.gameReducer.currentPlayer,
-    playCard: state.playerReducer.playCard,
-    playWord: state.playerReducer.playWord,
-    voteCard: state.playerReducer.voteCard,
-    currentWord: state.gameReducer.currentWord,
-    winner: state.gameReducer.winner,
-    finishedRound: state.playerReducer.finishedRound,
-    myWord: state.playerReducer.myWord,
-    playedCard: state.playerReducer.playedCard,
-    cookie: state.playerReducer.cookie
+    status: state.dashboardReducer.status,
+    roundNum: state.dashboardReducer.roundNum,
+    currentWord: state.dashboardReducer.currentWord,
+    currentPlayer: state.playersReducer.currentPlayer,
+    playCard: state.myCardsReducer.playCard,
+    playWord: state.playWordReducer.playWord,
+    voteCard: state.playedCardsReducer.voteCard,
+    winner: state.gameOverReducer.winner,
+    finishedRound: state.playerInteractionsReducer.finishedRound,
+    playedCardId: state.myCardsReducer.playedCardId,
+    username: state.authReducer.username
 });
 
 export default connect(mapStateToProps)(Dashboard);

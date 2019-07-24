@@ -27,16 +27,13 @@ let playedCards = [];
 
 /** @type {{ username: string, cardId: number }[]} */
 let votes = [];
+let nextRoundTimeout;
 
 /* Remove player from list of players on log out */
 exports.removePlayer = (username) => {
     players = players.filter(player => player.username !== username);
     socket.emitPlayers(players);
 };
-
-/* Set the status of the game */
-const setStatus = (newStatus) => status = newStatus;
-exports.setStatus = setStatus;
 
 /* Get the list of cards for a specific player */
 const getCardsByUsername = (username) => players.find(player => player.username === username).cards;
@@ -47,9 +44,6 @@ exports.isCurrentPlayer = (username) => currentPlayer.username === username;
 /* Get the list of unplayed cards for a specific player */
 exports.getUnplayedCardsByUsername = (username) => players.find(player => player.username === username).cards.filter(card => !card.played);
 
-/* Returns true if the player is able to join the game, false otherwise */
-exports.canJoinGame = (username) => (status === statusTypes.NOT_STARTED && !players.some(player => player.username === username));
-
 /* Return the list of players, hiding their assigned cards */
 const getPlayers = () => players.map(player => ({ username: player.username, score: player.score }));
 exports.getPlayers = getPlayers;
@@ -59,15 +53,16 @@ const getPlayedCards = () => playedCards.map(card => ({ cardId: card.cardId })).
 exports.getPlayedCards = getPlayedCards;
 
 /* Add the player to the game if possible */
-exports.joinGame = (user, callback) => {
-    const cards = cardManager.assign(players, rounds);
-    const player = {
-        username: user.username,
-        cards: cards,
-        score: 0
+exports.joinGame = (username) => {
+    if (status !== statusTypes.NOT_STARTED) {
+        throw Error("Game has already started");
+    } else if (players.some(player => player.username === username)) {
+        throw Error("You already joined this game");
+    } else {
+        const cards = cardManager.assign(players, rounds);
+        const player = { username, cards, score: 0 };
+        players.push(player);
     }
-    players.push(player);
-    callback();
 }
 
 /* Remove player from current game */
@@ -84,7 +79,7 @@ exports.quitGame = username => {
 /* Start the game with the players that have joined */
 exports.startGame = () => {
     if (status === statusTypes.NOT_STARTED && players.length >= minPlayers) {
-        setStatus(statusTypes.STARTED);
+        status = statusTypes.STARTED;
         nextRound();
     } else {
         // There aren't yet enough players in the game, server is responsible for generating the error
@@ -106,7 +101,7 @@ exports.endGame = () => {
 /* Move on to the next round, called when all players have finished their turn */
 const nextRound = () => {
     if (roundNum < rounds) {
-        setStatus(statusTypes.WAITING_FOR_CURRENT_PLAYER);
+        status = statusTypes.WAITING_FOR_CURRENT_PLAYER;
         roundNum++;
         currentPlayer = players[roundNum % players.length];
         clearRoundData();
@@ -228,9 +223,11 @@ const clearRoundData = () => {
 
 /* Clear entire game state */
 const clearGameState = () => {
+    clearTimeout(nextRoundTimeout);
     clearRoundData();
-    setStatus(statusTypes.NOT_STARTED);
+    status = statusTypes.NOT_STARTED;
     currentPlayer = null;
     roundNum = 0;
     players = [];
 }
+exports.clearGameState = clearGameState;

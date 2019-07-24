@@ -1,0 +1,5 @@
+export const types = {
+    SET_STATUS: 'SET_STATUS',
+    SET_ROUND_NUMBER: 'SET_ROUND_NUMBER',
+    SET_CURRENT_WORD: 'SET_CURRENT_WORD',
+};

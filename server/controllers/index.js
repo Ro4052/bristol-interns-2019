@@ -21,21 +21,19 @@ router.get('/auth', (req, res) => {
 
 /* Log in the user */
 router.post('/auth/login', (req, res) => {
-    const { username } = req.body;    
-    const user = currentUsers.find((user) => user.username === username);
-    if (!user) { /* User does not already exist */
-        req.session.user = req.body.username;            
-        const user = { username };        
-        if (gameLogic.canJoinGame(user.username)) { /* Game has not been started yet */
-            currentUsers.push(user);
-            gameLogic.joinGame(user, () => {
-                res.sendStatus(200);
-            });
-        } else { /* Game has already begun */
-            res.status(400).json({message: "Game has already started."});
-        }
-    } else { /* Username is taken, conflict error */
+    const { username } = req.body;
+    if (currentUsers.find((user) => user.username === username)) {
         res.status(409).json({message: "Username already exists."});
+    } else {
+        req.session.user = username;
+        const user = { username };
+        try {
+            gameLogic.joinGame(username);
+            currentUsers.push(user);
+            res.sendStatus(200);
+        } catch (err) {
+            res.status(400).json({ message: err.message });
+        };
     }
 });
 
@@ -84,7 +82,7 @@ router.get('/api/start', auth, (req, res) => {
 /* End the game */
 router.get('/api/end', auth, (req, res) => {
     try {
-        gameLogic.endGame()
+        gameLogic.endGame();
         currentUsers = [];
         closeSocket();
         res.sendStatus(200);
@@ -158,12 +156,10 @@ router.post('/api/voteCard', auth, (req, res) => {
 /* Check if in dev mode, and enable end game request */
 if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {
-        currentUsers = [];
-        gameLogic.setStatus("GAME_OVER");
-        gameLogic.endGame();
+        gameLogic.clearGameState();
         closeSocket();
         req.session.destroy();
-        gameLogic.setStatus("NOT_STARTED");
+        currentUsers = [];
         res.sendStatus(200);
     });
 }
