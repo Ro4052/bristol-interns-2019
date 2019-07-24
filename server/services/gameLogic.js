@@ -187,6 +187,7 @@ exports.voteCard = (username, cardId) => {
 
 
 const emitVotes = () => {
+    socket.clearTimeouts();
     status = statusTypes.DISPLAY_ALL_VOTES;
     socket.emitStatus(status);
     socket.emitAllVotes(votes);
@@ -196,6 +197,7 @@ const emitVotes = () => {
 exports.emitVotes = emitVotes;
 
 const emitPlayedCards = () => {
+    socket.clearTimeouts();
     status = statusTypes.WAITING_FOR_VOTES;
     socket.emitPlayedCards(getPlayedCards());
     socket.promptPlayersVote(currentPlayer);

@@ -11,9 +11,6 @@ const cx = classNames.bind(styles);
 
 export class PlayerInteractions extends React.Component {
     render() {
-        console.log("word", this.props.word);
-        console.log("playedCardId", this.props.playedCardId);
-        console.log("finishedRound", this.props.finishedRound);
         return (
             <div className={cx(styles.playerInteractions, {votePrompt: this.props.voteCard})}>
                 {this.props.playWord && <Prompt cy="play-word" text="Type in a word" />}

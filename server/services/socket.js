@@ -53,9 +53,7 @@ exports.emitNewRound = (status, roundNum, currentPlayer) => io.emit("new round",
 exports.emitStatus = status => io.emit("status", { status });
 
 // Tell all the players what word was played
-exports.emitWord = word => {
-    io.emit("played word", word);
-}
+exports.emitWord = word => io.emit("played word", word);
 
 exports.emitPlayedCard = (username, card) => {
     const socket = sockets.find(socket => socket.handshake.session.user === username);
@@ -83,16 +81,14 @@ exports.promptCurrentPlayer = promptCurrentPlayer;
 
 // Ask the other players for a card
 const promptOtherPlayers = currentPlayer => {
-    sockets.filter(socket => socket.handshake.session.user !== currentPlayer.username)
-    .forEach(socket => socket.emit("play card"));
+    sockets.forEach(socket => socket.handshake.session.user !== currentPlayer.username && socket.emit("play card"))
     playCardTimeout = setTimeout(gameLogic.playRandomCard, 3000);
 };
 exports.promptOtherPlayers = promptOtherPlayers;
 
 // Ask the other players to vote on the cards
 const promptPlayersVote = currentPlayer => {
-    sockets.filter(socket => socket.handshake.session.user !== currentPlayer.username)
-    .forEach(socket => socket.emit("vote"));
+    sockets.forEach(socket => socket.handshake.session.user !== currentPlayer.username && socket.emit("vote"));
     voteTimeout = setTimeout(gameLogic.emitVotes, 30000);
 };
 exports.promptPlayersVote = promptPlayersVote;
