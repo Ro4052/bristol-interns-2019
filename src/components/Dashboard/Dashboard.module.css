@@ -1,15 +1,52 @@
 .dashboard {
-    height: 50%;
+    /* border: 1px solid red; */
+    height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    font-family: 'Dilana';
-    font-size: 2vmin;
 }
 
-@media only screen and (max-width: 800px) {
-    .playerInteractions {
-        margin-bottom: 50vw;
-    }
+.header {
+    /* border: 1px solid blue; */
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+}
+
+.logo {
+    flex-grow: 1;
+    padding: 1em;
+}
+
+.main {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    /* border: 1px solid blue; */
+    
+}
+
+.gameInfo {
+    /* border: 1px solid red; */
+    padding: 1em;
+    margin: 1em;
+    background-color: white;
+    border: 3px solid black;
+    border-radius: 20px;
+    font-size: 1.5em;
+}
+
+.right {
+    /* border: 1px solid red; */
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.interactions {
+    /* border: 1px solid blue; */
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
