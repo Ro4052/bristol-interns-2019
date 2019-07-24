@@ -142,6 +142,7 @@ router.post('/api/playCard', auth, (req, res) => {
 
 /* Player votes for a card */
 router.post('/api/voteCard', auth, (req, res) => {    
+    console.log(req.session.user)
     if (!gameLogic.isCurrentPlayer(req.session.user)) { /* Any user apart from the current player is allowed to vote for a card */
         try {
             gameLogic.voteCard(req.session.user, req.body.cardId)

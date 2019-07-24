@@ -51,8 +51,8 @@ exports.emitStatus = status => io.emit("status", { status });
 
 // Tell all the players what word was played
 exports.emitWord = word => {
-     io.emit("played word", word);
-     setTimeout(gameLogic.emitPlayedCards, 3000);
+    io.emit("played word", word);
+    setTimeout(gameLogic.emitPlayedCards, 3000);
 }
 
 // When everyone has played their cards, send them all to the players

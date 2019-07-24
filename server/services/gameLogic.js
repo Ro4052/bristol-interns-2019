@@ -140,14 +140,18 @@ exports.playCardAndWord = (username, cardId, word) => {
 
 /* Adds player's card to list of played cards */
 exports.playCard = (username, cardId) => {
+    console.log(playerHasPlayedCard(username))
+    console.log(status)
     if (status === statusTypes.WAITING_FOR_OTHER_PLAYERS && !playerHasPlayedCard(username)) {
         const card = { username, cardId };
         playedCards.push(card);
         getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
         if (allPlayersPlayedCard()) {
+            console.log("all played")
             emitPlayedCards();
         }
     } else {
+        console.log("bad")
         // Cannot play card, the player has already played a card, or the game status is not
         // appropriate for the request, server is responsible for generating an error.
         throw Error("You cannot play more than one card, or now is not the right time to play a card.");
@@ -156,6 +160,8 @@ exports.playCard = (username, cardId) => {
 
 /* Vote for a card */
 exports.voteCard = (username, cardId) => {
+    console.log({WAITING_FOR_OTHER_PLAYERS})
+    console.log(playerHasVoted(username))
     if (status === statusTypes.WAITING_FOR_VOTES && !playerHasVoted(username)) {
         const vote = { username, cardId };
         votes.push(vote);
