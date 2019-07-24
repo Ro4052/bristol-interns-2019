@@ -23,6 +23,7 @@ export class Dashboard extends React.Component {
             <div className={styles.dashboard}>
                 <div className={styles.header}>
                     <Logout />
+                    <CreateRoom />
                     <div className={styles.logo}>
                         <Dixit />
                     </div>
