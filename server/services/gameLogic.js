@@ -1,5 +1,5 @@
 const socket = require('./socket');
-const cardManager = require('../services/cards');
+const cardManager = require('./cards');
 const statusTypes = {
     NOT_STARTED: "NOT_STARTED",
     STARTED: "STARTED",
@@ -138,7 +138,6 @@ exports.playCardAndWord = (username, cardId, word) => {
 }
 /* Random card pushed if player does not submit in time*/
 exports.playRandomCard = () => {
-    console.log("played random card");
     players.forEach(player => {
         if(!isCurrentPlayer(player.username) && !playerHasPlayedCard(player.username)) {
             const cards = getCardsByUsername(player.username)
@@ -184,7 +183,6 @@ exports.voteCard = (username, cardId) => {
         throw Error("You cannot vote for a card more than once, or now is not the right time to vote.");
     }
 }
-
 
 const emitVotes = () => {
     socket.clearTimeouts();

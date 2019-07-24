@@ -12,6 +12,7 @@ import playersReducer from '../components/Players/PlayersReducer';
 import gameOverReducer from '../components/GameOver/GameOverReducer';
 import dashboardReducer from '../components/Dashboard/DashboardReducer';
 import playerInteractionsReducer from '../components/PlayerInteractions/PlayerInteractionsReducer';
+import lobbyReducer from '../components/Lobby/LobbyReducer';
 
 // Combine all reducers
 const allReducers = combineReducers({
@@ -22,7 +23,8 @@ const allReducers = combineReducers({
     playersReducer,
     gameOverReducer,
     dashboardReducer,
-    playerInteractionsReducer
+    playerInteractionsReducer,
+    lobbyReducer
 });
 
 // Wrap in reset functionality

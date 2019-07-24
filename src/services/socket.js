@@ -1,4 +1,5 @@
 import io from 'socket.io-client';
+import history from './history';
 import { dispatch } from '../store/store';
 import { setPlayedCards, setVoteCard, setVotedCard, setAllVotes } from '../components/PlayedCards/PlayedCardsActions';
 import { resetCookie } from '../components/shared/Auth/AuthActions';
@@ -9,6 +10,7 @@ import { setWinner } from '../components/GameOver/GameOverActions';
 import { setCurrentWord, setStatus, setRoundNumber } from '../components/Dashboard/DashboardActions';
 import { resetFinishRound } from '../components/PlayerInteractions/PlayerInteractionsActions';
 import { removeCard } from '../components/MyCards/MyCardsActions';
+import { setRooms } from '../components/Lobby/LobbyActions.js';
 
 const connectSocket = () => {
     let connectionString;
@@ -26,6 +28,14 @@ const connectSocket = () => {
 
     socket.on("players", msg => {
         dispatch(setPlayers(msg.players));
+    });
+
+    socket.on("rooms", msg => {
+        dispatch(setRooms(msg));
+    });
+
+    socket.on("start", () => {
+        history.push('/dashboard');
     });
 
     socket.on("new round", msg => {

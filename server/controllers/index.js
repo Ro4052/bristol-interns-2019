@@ -2,12 +2,13 @@ const validWord = require('../services/validWord');
 const router = require('express').Router();
 const path = require('path');
 const auth = require('../services/auth');
-const gameLogic = require('../services/gameLogic');
-const closeSocket = require('../services/socket').closeSocket;
-const createRoom = require('../services/socket').createRoom;
+const gameLogicClass = require('../services/gameLogicClass');
+const { closeSocket, createRoom, joinRoom, getRooms } = require('../services/socket');
 
 let currentUsers = [];
 let roomId = 0;
+/** @type {{ roomId: number, gameState: gameLogicClass }[]} */
+let games = [];
 
 /* Check if player is logged in */
 router.get('/auth', (req, res) => {
@@ -28,9 +29,8 @@ router.post('/auth/login', (req, res) => {
         req.session.user = username;
         const user = { username };
         try {
-            gameLogic.joinGame(username);
             currentUsers.push(user);
-            res.sendStatus(200);
+            res.status(200).json({rooms: getRooms()});
         } catch (err) {
             res.status(400).json({ message: err.message });
         };
@@ -40,9 +40,9 @@ router.post('/auth/login', (req, res) => {
 /* Log out the user */
 router.get('/auth/logout', auth, (req, res) => {
     try { /* Game has finished, or has not been started yet */
-        gameLogic.quitGame(req.session.user);
+        getGameStateById(req.session.roomId).quitGame(req.session.user);
         currentUsers = currentUsers.filter((otherUser) => otherUser.username !== req.session.user);
-        gameLogic.removePlayer(req.session.user);
+        getGameStateById(req.session.roomId).removePlayer(req.session.user);
         req.session.destroy();
         res.sendStatus(200);
     } catch (err) { /* Game has started, method not allowed */
@@ -52,14 +52,51 @@ router.get('/auth/logout', auth, (req, res) => {
 
 /* Create a room (a single instance of a game) */
 router.get('/api/room/create', auth, (req, res) => {
-    createRoom(req.session.user, roomId);
-    res.status(200).json({roomId: roomId});
-    roomId++;
+    const { user } = req.session;
+    /* TODO: add check for when a room cannot be created and return an error */
+    try {
+        let newGameState = new gameLogicClass(roomId);
+        let newGameRoom = {roomId, gameState: newGameState}
+        createRoom(user, roomId);
+        games.push(newGameRoom);
+        // Add the creator to the room
+        if (newGameState.canJoinGame(user)) { /* Game has not been started yet */
+            newGameState.joinGame(user, () => {
+                req.session.roomId = roomId;    
+                res.sendStatus(200);
+                roomId++;
+            });
+        } else { /* Game has already began */
+            res.status(400).json({message: "Game has already started."});
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({message: err.message});
+    }
+});
+
+router.post('/api/room/join', auth, (req, res) => {
+    const { user } = req.session;
+    const { roomId } = req.body;
+    try {
+        joinRoom(user, roomId);
+        if (getGameStateById(roomId).canJoinGame(user)) {
+            getGameStateById(roomId).joinGame(user, () => {
+                req.session.roomId = roomId; 
+                res.sendStatus(200);
+            });
+        } else { /* Game has already began */
+            res.status(400).json({message: "Game has already started."});
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({message: err.message})
+    }
 });
 
 /* Get the players list of cards */
 router.get('/api/cards', auth, (req, res) => {
-    const cards = gameLogic.getUnplayedCardsByUsername(req.session.user);
+    const cards = getGameStateById(req.session.roomId).getUnplayedCardsByUsername(req.session.user);
     if (cards) {
         res.status(200).json(cards);
     }
@@ -71,7 +108,7 @@ router.get('/api/cards', auth, (req, res) => {
 /* Start the game */
 router.get('/api/start', auth, (req, res) => {
     try {
-        gameLogic.startGame();
+        getGameStateById(req.session.roomId).startGame();
         res.sendStatus(200);
     } catch (err) {
         console.log(err);
@@ -82,7 +119,7 @@ router.get('/api/start', auth, (req, res) => {
 /* End the game */
 router.get('/api/end', auth, (req, res) => {
     try {
-        gameLogic.endGame();
+        getGameStateById(req.session.roomId).endGame();
         currentUsers = [];
         closeSocket();
         res.sendStatus(200);
@@ -103,15 +140,16 @@ router.get('/api/reset-cookie', (req, res) => {
 
 /* Current player plays a card and a word */
 router.post('/api/playCardWord', auth, (req, res) => {
-    if (gameLogic.isCurrentPlayer(req.session.user)) { /* Only current player is allowed to play both a word and a card */
+    if (getGameStateById(req.session.roomId).isCurrentPlayer(req.session.user)) { /* Only current player is allowed to play both a word and a card */
         try {
             if (validWord.isValidWord(req.body.word)) {
-                gameLogic.playCardAndWord(req.session.user, req.body.cardId, req.body.word);
+                getGameStateById(req.session.roomId).playCardAndWord(req.session.user, req.body.cardId, req.body.word); 
                 res.sendStatus(200);
-            } else {
+            } else { 
                 res.status(400).json({message: "Invalid word."});
             }
         } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
+            console.log(err);
             res.status(400).json({ message: err.message});
         }
     } else { /* Current player attempts to vote for their card */
@@ -131,7 +169,7 @@ router.post('/api/validWord', auth, (req,res) => {
 /* Player plays a card */
 router.post('/api/playCard', auth, (req, res) => {
     try {
-        gameLogic.playCard(req.session.user, req.body.cardId)
+        getGameStateById(req.session.roomId).playCard(req.session.user, req.body.cardId)
         res.sendStatus(200);
     } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
         res.status(400).json({ message: err.message});
@@ -139,13 +177,13 @@ router.post('/api/playCard', auth, (req, res) => {
 });
 
 /* Player votes for a card */
-router.post('/api/voteCard', auth, (req, res) => {    
-    console.log(req.session.user)
-    if (!gameLogic.isCurrentPlayer(req.session.user)) { /* Any user apart from the current player is allowed to vote for a card */
+router.post('/api/voteCard', auth, (req, res) => { 
+    if (!getGameStateById(req.session.roomId).isCurrentPlayer(req.session.user)) { /* Any user apart from the current player is allowed to vote for a card */
         try {
-            gameLogic.voteCard(req.session.user, req.body.cardId)
+            getGameStateById(req.session.roomId).voteCard(req.session.user, req.body.cardId)
             res.sendStatus(200);
         } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
+            console.log(err);
             res.status(400).json({ message: err.message});
             console.log("one")
         }
@@ -157,11 +195,21 @@ router.post('/api/voteCard', auth, (req, res) => {
 /* Check if in dev mode, and enable end game request */
 if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {
-        gameLogic.clearGameState();
-        closeSocket();
-        req.session.destroy();
-        currentUsers = [];
-        res.sendStatus(200);
+        try {
+            if (req.session.roomId) {
+                getGameStateById(req.session.roomId).clearGameState();
+            }
+            currentUsers = [];
+            roomId = 0;
+            games = [];
+            res.sendStatus(200);
+        } catch (err) {
+            console.log(err);
+            res.status(400).json({ message: err.message});
+        } finally {
+            closeSocket();
+            req.session.destroy();
+        }
     });
 }
 
@@ -174,5 +222,7 @@ router.get('/*', (req, res) => {
         }
     });
 });
+
+const getGameStateById = (roomId) => games.find(game => game.roomId === roomId).gameState;
 
 module.exports = router;
