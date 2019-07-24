@@ -50,7 +50,7 @@ export class Lobby extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    rooms: state.gameReducer.rooms
+    rooms: state.lobbyReducer.rooms
 });
 
 export default connect(mapStateToProps)(Lobby);

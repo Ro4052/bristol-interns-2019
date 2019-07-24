@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styles from '../Lobby.module.css';
-import StartGame from '../../Dashboard/StartGame/StartGame';
+import StartGame from '../../StartGame/StartGame';
 
 export class Room extends React.Component {
 
@@ -29,7 +29,7 @@ export class Room extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    status: state.gameReducer.status
+    status: state.dashboardReducer.status
 });
 
 export default connect(mapStateToProps)(Room);

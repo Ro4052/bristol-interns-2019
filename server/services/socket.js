@@ -52,7 +52,7 @@ exports.closeSocket = () => {
     this.emitRooms();
     sockets.forEach(socket => socket.disconnect());
     sockets = [];
-}
+};
 
 // Check if it's the sender's turn
 exports.isCurrentPlayerSocket = (socket, state) => state.currentPlayer && socket.handshake.session.user === state.currentPlayer.username;

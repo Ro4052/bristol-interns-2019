@@ -3,7 +3,7 @@ const router = require('express').Router();
 const path = require('path');
 const auth = require('../services/auth');
 const gameLogicClass = require('../services/gameLogicClass');
-const { closeSocket, createRoom, joinRoom, getRooms, emitRooms } = require('../services/socket');
+const { closeSocket, createRoom, joinRoom, getRooms } = require('../services/socket');
 
 let currentUsers = [];
 let roomId = 0;
@@ -21,16 +21,19 @@ router.get('/auth', (req, res) => {
 });
 
 /* Log in the user */
-router.post('/auth/login', (req, res) => {    
-    const { username } = req.body;    
-    const user = currentUsers.find((user) => user.username === username);
-    if (!user) { /* User does not already exist */
-        req.session.user = req.body.username; 
-        const user = { username };
-        currentUsers.push(user);
-        res.status(200).json(getRooms());
-    } else { /* Username is taken, conflict error */
+router.post('/auth/login', (req, res) => {
+    const { username } = req.body;
+    if (currentUsers.find((user) => user.username === username)) {
         res.status(409).json({message: "Username already exists."});
+    } else {
+        req.session.user = username;
+        const user = { username };
+        try {
+            currentUsers.push(user);
+            res.status(200).json({rooms: getRooms()});
+        } catch (err) {
+            res.status(400).json({ message: err.message });
+        };
     }
 });
 
@@ -192,14 +195,12 @@ router.post('/api/voteCard', auth, (req, res) => {
 if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {
         try {
-            currentUsers = [];
             if (req.session.roomId) {
-                getGameStateById(req.session.roomId).setStatus("GAME_OVER");
-                getGameStateById(req.session.roomId).endGame();
-                getGameStateById(req.session.roomId).setStatus("NOT_STARTED");
+                getGameStateById(req.session.roomId).clearGameState();
             }
             closeSocket();
             req.session.destroy();
+            currentUsers = [];
             res.sendStatus(200);
         } catch (err) {
             console.log(err);

@@ -1,0 +1,4 @@
+export const types = {
+    SET_PLAYERS: 'SET_PLAYERS',
+    SET_CURRENT_PLAYER: 'SET_CURRENT_PLAYER'
+};

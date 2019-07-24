@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { voteForCard } from '../../store/playerActions';
+import { voteForCard } from './PlayedCardsActions';
 import { CardList } from '../shared/CardList/CardList';
 
 export class PlayedCards extends React.Component {
@@ -12,11 +12,11 @@ export class PlayedCards extends React.Component {
     }
 
     getVotesForCard(card) {
-        return this.props.allVotes.reduce((sum, vote) => sum + (vote.cardId === card.cardId), 0)
+        return this.props.votes.reduce((sum, vote) => sum + (vote.cardId === card.cardId), 0);
     }
 
     isEnabled(cardId) {
-        return this.props.voteCard && (cardId !== this.props.playedCard);
+        return this.props.voteCard && (cardId !== this.props.playedCardId);
     }
 
     render() {
@@ -28,11 +28,11 @@ export class PlayedCards extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    cards: state.gameReducer.currentCards,
-    voteCard: state.playerReducer.voteCard,
-    playedCard: state.playerReducer.playedCard,
-    allVotes: state.gameReducer.allVotes,
-    status: state.gameReducer.status
+    cards: state.playedCardsReducer.cards,
+    voteCard: state.playedCardsReducer.voteCard,
+    playedCardId: state.myCardsReducer.playedCardId,
+    votes: state.playedCardsReducer.votes,
+    status: state.dashboardReducer.status
 });
 
 const mapDispatchToProps = (dispatch) => ({
