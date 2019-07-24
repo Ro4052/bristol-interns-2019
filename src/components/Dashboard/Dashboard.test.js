@@ -28,20 +28,6 @@ describe('on any status other than NOT_STARTED', () => {
     });
 });
 
-describe('on not given a current player', () => {
-    it("doesn't display a current player", () => {
-        const wrapper = shallow(<Dashboard />);
-        expect(wrapper.exists({ 'data-cy': 'current-player' })).toEqual(false);
-    });
-});
-
-describe('on given a current player', () => {
-    it("displays a current player", () => {
-        const wrapper = shallow(<Dashboard currentPlayer={{ username: "username"}} />);
-        expect(wrapper.find({ 'data-cy': 'current-player' }).text()).toEqual("username");
-    });
-});
-
 describe('on winner', () => {
     it('displays GameOver', () => {
         const wrapper = shallow(<Dashboard winner={{ username: 'username' }} />);
