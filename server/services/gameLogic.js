@@ -54,9 +54,11 @@ exports.getPlayedCards = getPlayedCards;
 
 /* Add the player to the game if possible */
 exports.joinGame = (username) => {
-    if (status !== statusTypes.NOT_STARTED) throw Error("Game has already started");
-    else if (players.some(player => player.username === username)) throw Error("You already joined this game");
-    else {
+    if (status !== statusTypes.NOT_STARTED) {
+        throw Error("Game has already started");
+    } else if (players.some(player => player.username === username)) {
+        throw Error("You already joined this game");
+    } else {
         const cards = cardManager.assign(players, rounds);
         const player = { username, cards, score: 0 };
         players.push(player);

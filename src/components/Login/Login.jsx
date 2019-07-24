@@ -31,10 +31,9 @@ export class Login extends React.Component {
     checkUsernameAllowed(string) {
         // eslint-disable-next-line
         const allowed = /^[A-Za-z0-9]*$/;
-        if (allowed.test(string)) return true;
-        return false;
+        return allowed.test(string);
     }
-    
+
     checkUsername() {
         if (this.state.value === '') {
             this.setState ({
