@@ -1,23 +1,10 @@
 .playerInteractions {
-    position: absolute;
-    top: 30%;
-    width: 40vw;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    background: #fac825;
+    background-color: #fac825;
     border-radius: 15px;
-    padding: 2vmin 2vmin;
+    padding: 0.5em 1em;
+    margin: 2em;
     border: 3px solid black;
-}
-
-.votePrompt {
-    top: 80%;
-}
-
-@media only screen and (max-width: 500px) {
-    .votePrompt {
-        top: 40%;
-    }
 }
