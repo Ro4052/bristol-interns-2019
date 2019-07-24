@@ -1,6 +1,5 @@
 const socket = require('./socket');
 const cardManager = require('../services/cards');
-
 const statusTypes = {
     NOT_STARTED: "NOT_STARTED",
     STARTED: "STARTED",
@@ -36,10 +35,15 @@ exports.removePlayer = (username) => {
 };
 
 /* Get the list of cards for a specific player */
-const getCardsByUsername = (username) => players.find(player => player.username === username).cards;
+const getCardsByUsername = (username) => {
+    console.log(username)
+    console.log(players)
+    return players.find(player => player.username === username).cards;
+}
 
 /* Returns true if this is the current player */
-exports.isCurrentPlayer = (username) => currentPlayer.username === username;
+const isCurrentPlayer = (username) => currentPlayer.username === username;
+exports.isCurrentPlayer = isCurrentPlayer;
 
 /* Get the list of unplayed cards for a specific player */
 exports.getUnplayedCardsByUsername = (username) => players.find(player => player.username === username).cards.filter(card => !card.played);
@@ -132,21 +136,31 @@ exports.playCardAndWord = (username, cardId, word) => {
         throw Error("You cannot play more than one card and one word, or now is not the right time to play a card and a word.");
     }
 }
+/* Random card pushed if player does not submit in time*/
+exports.playRandomCard = () => {
+    console.log("played random card");
+    players.forEach(player => {
+        if(!isCurrentPlayer(player.username) && !playerHasPlayedCard(player.username)) {
+            const cards = getCardsByUsername(player.username)
+            const randomCard = (cards[Math.floor(Math.random()*cards.length)])
+            playedCards.push(randomCard);
+            cards.find(card => card.cardId === randomCard.cardId).played = true;
+            socket.emitPlayedCard(player.username, randomCard);
+        }
+    })
+    emitPlayedCards();
+}
 
 /* Adds player's card to list of played cards */
 exports.playCard = (username, cardId) => {
-    console.log(playerHasPlayedCard(username))
-    console.log(status)
     if (status === statusTypes.WAITING_FOR_OTHER_PLAYERS && !playerHasPlayedCard(username)) {
         const card = { username, cardId };
         playedCards.push(card);
         getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
         if (allPlayersPlayedCard()) {
-            console.log("all played")
             emitPlayedCards();
         }
     } else {
-        console.log("bad")
         // Cannot play card, the player has already played a card, or the game status is not
         // appropriate for the request, server is responsible for generating an error.
         throw Error("You cannot play more than one card, or now is not the right time to play a card.");
@@ -155,10 +169,11 @@ exports.playCard = (username, cardId) => {
 
 /* Vote for a card */
 exports.voteCard = (username, cardId) => {
-    console.log({WAITING_FOR_OTHER_PLAYERS})
+    console.log(status)
     console.log(playerHasVoted(username))
     if (status === statusTypes.WAITING_FOR_VOTES && !playerHasVoted(username)) {
         const vote = { username, cardId };
+        console.log("two")
         votes.push(vote);
         if (allPlayersVoted()) {
             emitVotes();
@@ -170,20 +185,22 @@ exports.voteCard = (username, cardId) => {
     }
 }
 
-/*  */
-exports.emitVotes = () => {
-    setStatus(statusTypes.DISPLAY_ALL_VOTES);
+
+const emitVotes = () => {
+    status = statusTypes.DISPLAY_ALL_VOTES;
     socket.emitStatus(status);
     socket.emitAllVotes(votes);
     calcScores();
-    setTimeout(() => nextRound(), 5000);
+    nextRoundTimeout = setTimeout(() => nextRound(), 5000);
 };
+exports.emitVotes = emitVotes;
 
-exports.emitPlayedCards = () => {
+const emitPlayedCards = () => {
     status = statusTypes.WAITING_FOR_VOTES;
     socket.emitPlayedCards(getPlayedCards());
     socket.promptPlayersVote(currentPlayer);
 };
+exports.emitPlayedCards = this.emitPlayedCards;
 
 /* Calculate the scores for this round */
 const calcScores = () => {
@@ -224,6 +241,7 @@ const clearRoundData = () => {
 /* Clear entire game state */
 const clearGameState = () => {
     clearTimeout(nextRoundTimeout);
+    socket.clearTimeouts();
     clearRoundData();
     status = statusTypes.NOT_STARTED;
     currentPlayer = null;

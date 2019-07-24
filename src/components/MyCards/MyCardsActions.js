@@ -3,6 +3,10 @@ import axios from "axios";
 
 const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
+export const resetPlayedCardId = () => ({
+    type: types.RESET_PLAYED_CARD
+});
+
 export const setPlayCard = playCard => ({
     type: types.SET_PLAY_CARD,
     playCard

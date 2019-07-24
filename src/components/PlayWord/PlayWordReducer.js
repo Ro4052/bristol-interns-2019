@@ -16,6 +16,8 @@ const playWordReducer = (state = initialState, action) => {
             return {...state, word: action.word, playWord: false };
         case types.SET_PLAY_WORD:
             return {...state, playWord: action.playWord };
+        case types.RESET_PLAY_WORD:
+            return {...state, word: null};
         default:
             return state;
     }

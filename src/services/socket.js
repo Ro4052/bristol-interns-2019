@@ -2,12 +2,13 @@ import io from 'socket.io-client';
 import { dispatch } from '../store/store';
 import { setPlayedCards, setVoteCard, setVotedCard, setAllVotes } from '../components/PlayedCards/PlayedCardsActions';
 import { resetCookie } from '../components/shared/Auth/AuthActions';
-import { setPlayCard } from '../components/MyCards/MyCardsActions';
-import { playWord, setPlayWord } from '../components/PlayWord/PlayWordActions';
+import { setPlayCard, resetPlayedCardId, selectCardSuccess } from '../components/MyCards/MyCardsActions';
+import { playWord, setPlayWord, resetWord } from '../components/PlayWord/PlayWordActions';
 import { setPlayers, setCurrentPlayer } from '../components/Players/PlayersActions';
 import { setWinner } from '../components/GameOver/GameOverActions';
 import { setCurrentWord, setStatus, setRoundNumber } from '../components/Dashboard/DashboardActions';
 import { resetFinishRound } from '../components/PlayerInteractions/PlayerInteractionsActions';
+import { removeCard } from '../components/MyCards/MyCardsActions';
 
 const connectSocket = () => {
     let connectionString;
@@ -36,6 +37,8 @@ const connectSocket = () => {
         dispatch(setPlayCard(false));
         dispatch(setVoteCard(false));
         dispatch(setPlayWord(false));
+        dispatch(resetWord());
+        dispatch(resetPlayedCardId());
         dispatch(setVotedCard(0));
         dispatch(playWord(""));
         dispatch(resetFinishRound());
@@ -56,6 +59,13 @@ const connectSocket = () => {
 
     socket.on("play card", () => {
         dispatch(setPlayCard(true));
+    });
+
+    socket.on("played card", card => {
+        // console.log();
+        dispatch(selectCardSuccess(card.cardId));
+        dispatch(removeCard(card.cardId));
+        // dispatch(setPlayCard(false));
     });
 
     socket.on("played cards", msg => {
