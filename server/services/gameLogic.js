@@ -147,9 +147,7 @@ exports.playCard = (username, cardId) => {
         playedCards.push(card);
         getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
         if (allPlayersPlayedCard()) {
-            status = statusTypes.WAITING_FOR_VOTES;
-            socket.emitPlayedCards(getPlayedCards());
-            socket.promptPlayersVote(currentPlayer);
+            emitPlayedCards();
         }
     } else {
         // Cannot play card, the player has already played a card, or the game status is not
@@ -164,11 +162,7 @@ exports.voteCard = (username, cardId) => {
         const vote = { username, cardId };
         votes.push(vote);
         if (allPlayersVoted()) {
-            setStatus(statusTypes.DISPLAY_ALL_VOTES);
-            socket.emitStatus(status);
-            socket.emitAllVotes(votes);
-            calcScores();
-            setTimeout(() => nextRound(), 5000);
+            emitVotes();
         }
     } else {
         // Cannot vote for card, the player has already voted for a card, or the game status is not
@@ -176,6 +170,21 @@ exports.voteCard = (username, cardId) => {
         throw Error("You cannot vote for a card more than once, or now is not the right time to vote.");
     }
 }
+
+/*  */
+exports.emitVotes = () => {
+    setStatus(statusTypes.DISPLAY_ALL_VOTES);
+    socket.emitStatus(status);
+    socket.emitAllVotes(votes);
+    calcScores();
+    setTimeout(() => nextRound(), 5000);
+};
+
+exports.emitPlayedCards = () => {
+    status = statusTypes.WAITING_FOR_VOTES;
+    socket.emitPlayedCards(getPlayedCards());
+    socket.promptPlayersVote(currentPlayer);
+};
 
 /* Calculate the scores for this round */
 const calcScores = () => {

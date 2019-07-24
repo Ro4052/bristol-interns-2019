@@ -1,12 +1,12 @@
 import React from 'react';
-// import styles from './Timer.module.css';
+import styles from './Timer.module.css';
 
 export class Timer extends React.Component {
     constructor() {
         super();
         this.decrement = this.decrement.bind(this);
         this.state = {
-            seconds: 3
+            seconds: 30
         };
 
     }
@@ -26,7 +26,7 @@ export class Timer extends React.Component {
 
     render() {
         return(
-            <div id="timer">
+            <div className={styles.timer}>
                 <span>{this.state.seconds}</span>
             </div>
         );

@@ -10,6 +10,7 @@
     border-radius: 15px;
     padding: 2vmin 2vmin;
     border: 3px solid black;
+    font-size: 1.5em;
 }
 
 .votePrompt {
