@@ -11,7 +11,7 @@ export default class Routes extends React.Component {
         return (
             <Router history={history}>
                 <Route exact path='/' component={Login}/>
-                <Route path='/lobby' render={(props) => <Auth {...props} render={() => <Lobby/>}/>}/>
+                <Route path='/lobby' render={(props) => <Auth {...props} render={() => <Lobby history={history}/>}/>}/>
                 <Route path='/dashboard' render={(props) => <Auth {...props} render={() => <Dashboard/>}/>}/>
             </Router>
         );

@@ -26,7 +26,7 @@ const gameReducer = (state = initialState, action) => {
             return {...state, currentPlayer: action.currentPlayer };
         case types.SET_PLAYERS:
             return {...state, players: action.players };
-        case types.SET_ROOMS:         
+        case types.SET_ROOMS:                    
             return {...state, rooms: action.rooms };
         case types.SET_CURRENT_CARDS:
             return {...state, currentCards: action.currentCards };

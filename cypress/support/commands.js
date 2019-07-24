@@ -33,6 +33,15 @@ Cypress.Commands.add('createRoom', () => {
     cy.wait('@createRoom');
 });
 
+Cypress.Commands.add('joinRoom', () => {
+    cy.route({
+        method: 'POST',
+        url: '/api/room/join'
+    }).as('joinRoom');
+    cy.get('[data-cy="room-title"]').click();
+    cy.wait('@joinRoom');
+});
+
 Cypress.Commands.add('login', username => {
     cy.route({
         method: 'POST',

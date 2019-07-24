@@ -1,15 +1,13 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import { CreateRoom } from './CreateRoom';
+import Button from '../../shared/Button/Button';
 
-describe('on click', () => {
+describe('on initial render', () => {
     
-    it('calls createRoom', () => {
-        const createRoom = jest.spyOn(CreateRoom.prototype, 'createRoom');
-        const wrapper = mount(<CreateRoom />);
-        wrapper.find({ 'data-cy': 'create-room' }).simulate('click');
-        expect(createRoom).toHaveBeenCalled();
-        createRoom.mockRestore();
+    it('create room button is displayed', () => {
+        const wrapper = shallow(<CreateRoom />);
+        expect(wrapper.exists(Button)).toEqual(true);
     });
 
    /* TODO: moxios when createRoom is moved into actions */

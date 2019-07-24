@@ -1,4 +1,5 @@
 import io from 'socket.io-client';
+import history from './history';
 import { dispatch } from '../store/store';
 import { setCurrentWord, setStatus, setRoundNumber, setCurrentPlayer, setPlayers, setRooms, setCurrentCards, setAllVotes, setWinner, resetState, setSocket } from '../store/gameActions';
 import { setPlayWord, setPlayCard, setPlayedCard, setVoteCard, setVotedCard, playWord, resetFinishRound, resetPlayerState, resetCookie } from '../store/playerActions';
@@ -23,6 +24,10 @@ const connectSocket = () => {
 
     socket.on("rooms", msg => {
         dispatch(setRooms(msg));
+    });
+
+    socket.on("start", () => {
+        history.push('/dashboard');
     });
 
     socket.on("new round", msg => {
@@ -89,7 +94,6 @@ const connectSocket = () => {
         dispatch(setWinner(null));
         dispatch(resetState());
         dispatch(resetPlayerState());
-        dispatch(resetCookie());
     });
 
     return new Promise((resolve, reject) => {

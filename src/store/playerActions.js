@@ -1,7 +1,7 @@
 import axios from "axios";
 import connectSocket from '../services/socket';
 import types from './playerActionTypes';
-import { resetState } from "./gameActions";
+import { resetState, setRooms } from "./gameActions";
 
 let instance = axios.create({
     validateStatus: function (status) {
@@ -141,6 +141,7 @@ export const logIn = (username) => {
         .then((res) => {
             if (res.status === 200) {
                 connectSocket().then(() => {
+                    dispatch(setRooms(res.data));
                     dispatch(logInSuccess(username));
                 });
             } else {
@@ -232,9 +233,7 @@ export const validateWord = (word) => (dispatch) => {
     instance.post('/api/validWord', {
         word: word
     })
-    .then(res => {
-        console.log(res);
-        
+    .then(res => {        
         if (res.status === 200) {
             dispatch(setInvalidWord(false));
             dispatch(playWord(word));

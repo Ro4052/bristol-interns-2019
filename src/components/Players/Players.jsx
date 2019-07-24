@@ -3,9 +3,7 @@ import styles from './Players.module.css';
 import { connect } from 'react-redux';
 
 export class Players extends React.PureComponent {
-    render() {
-        console.log(this.props.players);
-        
+    render() {        
         return (
             <div className={styles.currentPlayersBox}>
                 <h3 data-cy="players-heading">Players:</h3>

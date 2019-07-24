@@ -79,11 +79,12 @@ module.exports = class GameLogic {
     }
 
     /* Start the game with the players that have joined */
-    startGame() {
+    startGame() {        
         if (this.status === this.statusTypes.NOT_STARTED && this.players.length >= this.minPlayers) {
             this.setStatus(this.statusTypes.STARTED);
             this.nextRound();
             socket.emitPlayers(this.roomId, this.players);
+            socket.emitStartGame(this.roomId);
         } else {
             // There aren't yet enough players in the game, server is responsible for generating the error
             throw Error("Cannot start game. Insufficient number of players");
@@ -137,12 +138,12 @@ module.exports = class GameLogic {
     }
 
     /* Adds player's card to list of played cards */
-    playCard (username, cardId) {
+    playCard (username, cardId) {      
         if (this.status === this.statusTypes.WAITING_FOR_OTHER_PLAYERS && !this.playerHasPlayedCard(username)) {
             const card = { username, cardId };
-            this.playedCards.push(card);
+            this.playedCards.push(card);            
             this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
-            if (allPlayersPlayedCard()) {
+            if (this.allPlayersPlayedCard()) {
                 this.setStatus(this.statusTypes.WAITING_FOR_VOTES);
                 socket.emitPlayedCards(this.roomId, this.getPlayedCards());
                 socket.promptPlayersVote(this.roomId, this.currentPlayer);
@@ -156,7 +157,7 @@ module.exports = class GameLogic {
 
     /* Vote for a card */
     voteCard(username, cardId) {
-        if (this.status === this.statusTypes.WAITING_FOR_VOTES && !playerHasVoted(username)) {
+        if (this.status === this.statusTypes.WAITING_FOR_VOTES && !this.playerHasVoted(username)) {
             const vote = { username, cardId };
             this.votes.push(vote);
             if (this.allPlayersVoted()) {
@@ -164,7 +165,7 @@ module.exports = class GameLogic {
                 socket.emitStatus(this.roomId, this.status);
                 socket.emitAllVotes(this.roomId, this.votes);
                 this.calcScores();
-                setTimeout(() => nextRound(), 5000);
+                setTimeout(() => this.nextRound(), 5000);
             }
         } else {
             // Cannot vote for card, the player has already voted for a card, or the game status is not
@@ -175,10 +176,10 @@ module.exports = class GameLogic {
 
     /* Calculate the scores for this round */
     calcScores () {
-        const correctCard = this.playedCards.find(card => card.userId === currentPlayer.userId);
+        const correctCard = this.playedCards.find(card => card.userId === this.currentPlayer.userId);
         const correctVotes = this.votes.filter(vote => vote.cardId === correctCard.cardId);
-        if ((correctVotes.length % votes.length) === 0) {
-            this.players.forEach(player => {if (player !== currentPlayer) player.score += 2});
+        if ((correctVotes.length % this.votes.length) === 0) {
+            this.players.forEach(player => {if (player !== this.currentPlayer) player.score += 2});
         } else {
             this.currentPlayer.score += 3;
             correctVotes.forEach(vote => this.players.find(player => player.username === vote.username).score += 3);
@@ -200,7 +201,7 @@ module.exports = class GameLogic {
     allPlayersPlayedCard () { return this.players.every(player => this.playerHasPlayedCard(player.username)) };
 
     /* Returns true if all players (apart from the current player) have voted this round */
-    allPlayersVoted() { return this.players.every(player => player.username === currentPlayer.username || this.playerHasVoted(player.username)) };
+    allPlayersVoted() { return this.players.every(player => player.username === this.currentPlayer.username || this.playerHasVoted(player.username)) };
 
     /* Clean up stored data */
     clearRoundData() {

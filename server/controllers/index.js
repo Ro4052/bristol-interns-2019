@@ -3,8 +3,7 @@ const router = require('express').Router();
 const path = require('path');
 const auth = require('../services/auth');
 const gameLogicClass = require('../services/gameLogicClass');
-const closeSocket = require('../services/socket').closeSocket;
-const createRoom = require('../services/socket').createRoom;
+const { closeSocket, createRoom, joinRoom, getRooms, emitRooms } = require('../services/socket');
 
 let currentUsers = [];
 let roomId = 0;
@@ -29,7 +28,7 @@ router.post('/auth/login', (req, res) => {
         req.session.user = req.body.username; 
         const user = { username };
         currentUsers.push(user);
-        res.sendStatus(200);
+        res.status(200).json(getRooms());
     } else { /* Username is taken, conflict error */
         res.status(409).json({message: "Username already exists."});
     }
@@ -52,19 +51,43 @@ router.get('/auth/logout', auth, (req, res) => {
 router.get('/api/room/create', auth, (req, res) => {
     const { user } = req.session;
     /* TODO: add check for when a room cannot be created and return an error */
-    let newGameState = new gameLogicClass(roomId);
-    let newGameRoom = {roomId, gameState: newGameState}
-    createRoom(req.session.user, roomId, newGameState.getPlayers());
-    games.push(newGameRoom);
-    // Add the creator to the room
-    if (newGameState.canJoinGame(user)) { /* Game has not been started yet */
-        newGameState.joinGame(user, () => {
-            req.session.roomId = roomId;    
-            res.sendStatus(200);
-            roomId++;
-        });
-    } else { /* Game has already began */
-        res.status(400).json({message: "Game has already started."});
+    try {
+        let newGameState = new gameLogicClass(roomId);
+        let newGameRoom = {roomId, gameState: newGameState}
+        createRoom(user, roomId);
+        games.push(newGameRoom);
+        // Add the creator to the room
+        if (newGameState.canJoinGame(user)) { /* Game has not been started yet */
+            newGameState.joinGame(user, () => {
+                req.session.roomId = roomId;    
+                res.sendStatus(200);
+                roomId++;
+            });
+        } else { /* Game has already began */
+            res.status(400).json({message: "Game has already started."});
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({message: err.message});
+    }
+});
+
+router.post('/api/room/join', auth, (req, res) => {
+    const { user } = req.session;
+    const { roomId } = req.body;
+    try {
+        joinRoom(user, roomId);
+        if (getGameStateById(roomId).canJoinGame(user)) {
+            getGameStateById(roomId).joinGame(user, () => {
+                req.session.roomId = roomId; 
+                res.sendStatus(200);
+            });
+        } else { /* Game has already began */
+            res.status(400).json({message: "Game has already started."});
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({message: err.message})
     }
 });
 
@@ -157,6 +180,7 @@ router.post('/api/voteCard', auth, (req, res) => {
             getGameStateById(req.session.roomId).voteCard(req.session.user, req.body.cardId)
             res.sendStatus(200);
         } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
+            console.log(err);
             res.status(400).json({ message: err.message});
         }
     } else { /* Current player attempts to vote for their card */

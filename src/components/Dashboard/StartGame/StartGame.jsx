@@ -3,6 +3,10 @@ import axios from 'axios';
 import Button from '../../shared/Button/Button';
 
 export class StartGame extends React.Component {
+    constructor(props) {
+        super(props);
+        this.startGame = this.startGame.bind(this);
+    }
 
     startGame() {
         axios.get('/api/start')

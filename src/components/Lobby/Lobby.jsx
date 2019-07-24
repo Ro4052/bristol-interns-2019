@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import styles from './Lobby.module.css';
 import { CreateRoom } from './CreateRoom/CreateRoom';
+import Room from './Room/Room';
 
 export class Lobby extends React.Component {
     constructor(props) {
@@ -11,6 +12,7 @@ export class Lobby extends React.Component {
             joined: false
         };
         this.createRoom = this.createRoom.bind(this);
+        this.joinRoom = this.joinRoom.bind(this);
     }
 
     createRoom() {
@@ -19,23 +21,27 @@ export class Lobby extends React.Component {
             this.setState({joined: true});
         })
         .catch((err) => {
-            console.log(err.message);
+            window.alert(err.message);
+        })
+    }
+
+    joinRoom(id) {
+        axios.post('/api/room/join', {
+            roomId: id
+        })
+        .then(() => {})
+        .catch((err) => {
+            window.alert(err.message);
         })
     }
 
     render() {
-        console.log(this.props.rooms);
         return (
             <div className={styles.lobbyPage}>
                 <CreateRoom createRoom={this.createRoom}/>
-                <ul className={styles.currentRooms}>
+                <ul className={styles.currentRooms} data-cy="current-rooms">
                     {this.props.rooms.map((room) => 
-                        <li className={styles.singleRoom} key={room.id}>
-                            <h2>{"Room: " + room.id}</h2>
-                            <ul id="players" data-cy='players-list'>
-                                {room.players.map((player, key) => <li key={key}><span data-cy='player-username'>{player}</span></li>)}
-                            </ul>
-                        </li>
+                        <Room room={room} key={room.id} handleClick={this.joinRoom} history={this.props.history} />
                     )}
                 </ul>
             </div>
@@ -43,11 +49,8 @@ export class Lobby extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        players: state.gameReducer.players,
-        rooms: state.gameReducer.rooms
-    }
-};
+const mapStateToProps = (state) => ({
+    rooms: state.gameReducer.rooms
+});
 
 export default connect(mapStateToProps)(Lobby);
