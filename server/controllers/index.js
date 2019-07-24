@@ -143,9 +143,9 @@ router.post('/api/playCardWord', auth, (req, res) => {
     if (getGameStateById(req.session.roomId).isCurrentPlayer(req.session.user)) { /* Only current player is allowed to play both a word and a card */
         try {
             if (validWord.isValidWord(req.body.word)) {
-                getGameStateById(req.session.roomId).playCardAndWord(req.session.user, req.body.cardId, req.body.word);                
+                getGameStateById(req.session.roomId).playCardAndWord(req.session.user, req.body.cardId, req.body.word); 
                 res.sendStatus(200);
-            } else {                
+            } else { 
                 res.status(400).json({message: "Invalid word."});
             }
         } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
@@ -201,10 +201,14 @@ if (process.env.NODE_ENV === 'testing') {
             closeSocket();
             req.session.destroy();
             currentUsers = [];
+            roomId = 0;
+            games = [];
             res.sendStatus(200);
         } catch (err) {
             console.log(err);
             res.status(400).json({ message: err.message});
+        } finally {
+            
         }
     });
 }

@@ -1,5 +1,4 @@
 describe('Players', () => {
-    /* TODO: comment back in when join functionality is integrated */
     describe('on login', () => {
         it('your name appears in the players list', () => {
             cy.login('player1');
@@ -25,6 +24,7 @@ describe('Players', () => {
                 });
             });
         });
+        
         it('displays the players who have already joined', () => {
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => {

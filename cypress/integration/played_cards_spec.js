@@ -2,7 +2,6 @@ describe('Played cards', () => {
     const cardsNumber = 3;
     const numberOfPlayers = 2;
 
-    /* TODO: comment back in when join functionality is integrated */
     describe("at end of round", () => {
         beforeEach(() => {
             cy.login('unicorn');

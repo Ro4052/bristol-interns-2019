@@ -42,7 +42,7 @@ exports.joinRoom = (username, roomId) => {
         room.players.push(username);
         this.emitRooms();
     } else {
-        throw new Error("You cannot join your the room again.");
+        throw new Error("You cannot join the room again.");
     }
 };
 
