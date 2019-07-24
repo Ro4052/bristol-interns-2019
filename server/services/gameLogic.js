@@ -1,6 +1,5 @@
 const socket = require('./socket');
-const cardManager = require('../services/cards');
-
+const cardManager = require('./cards');
 const statusTypes = {
     NOT_STARTED: "NOT_STARTED",
     STARTED: "STARTED",

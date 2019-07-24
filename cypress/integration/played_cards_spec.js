@@ -7,11 +7,17 @@ describe('Played cards', () => {
             cy.login('unicorn');
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => {
-                cy.startGame();
-                cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
+                cy.createRoom();
+                cy.get('[data-cy="room-title"]')
+                .then(($title) => {
+                    const id = $title.text().split(" ")[1];
+                    return cy.request(`http://localhost:12346/joinRoom?roomId=${id}&url=${encodeURIComponent(Cypress.config().baseUrl)}`)
+                })
                 .then(() => {
-                    cy.playCard();
-                });
+                    cy.startGame();
+                    return cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
+                })
+                .then(() => cy.playCard());
             });
         });
         it('all the played cards are displayed', () => {

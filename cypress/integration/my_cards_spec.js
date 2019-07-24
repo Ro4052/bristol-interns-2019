@@ -1,6 +1,7 @@
 describe('My Cards', () => {
     beforeEach(() => {
         cy.login('unicorn');
+        cy.createRoom();
         cy.startGame();
     });
     
