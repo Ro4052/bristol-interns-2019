@@ -1,7 +1,7 @@
 import { types } from './PlayedCardsActionTypes';
 import axios from "axios";
 
-const instance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
+const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
 export const setPlayedCards = cards => ({
     type: types.SET_PLAYED_CARDS,
@@ -10,7 +10,7 @@ export const setPlayedCards = cards => ({
 
 export const voteForCard = cardId => dispatch => {
     dispatch(voteForCardBegin());
-    instance.post('/api/voteCard', { cardId })
+    axiosInstance.post('/api/voteCard', { cardId })
     .then(res => {
         if (res.status === 200) {
             dispatch(voteForCardSuccess(cardId));

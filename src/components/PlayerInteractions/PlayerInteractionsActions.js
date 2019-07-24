@@ -2,13 +2,13 @@ import { types } from './PlayerInteractionsActionTypes';
 import axios from "axios";
 import { removeCard } from '../MyCards/MyCardsActions';
 
-const instance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
+const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
 export const endTurn = () => (dispatch, getState) => {
     const state = getState();
     const cardId = state.myCardsReducer.playedCardId;
     const word = state.playWordReducer.word;
-    instance.post('/api/playCardWord', { cardId, word })
+    axiosInstance.post('/api/playCardWord', { cardId, word })
     .then(res => {
         if (res.status === 200) {
             dispatch(finishPlayCard());

@@ -26,14 +26,14 @@ app.get('/connect', (req, res) => {
     const url = req.query.url;
     const connectionString = "ws://localhost:12345/";
 
-    const instance = axios.create({
+    const axiosInstance = axios.create({
         baseURL: url,
         timeout: 500,
         jar: cookieJar,
         withCredentials: true
     });
     
-    instance.post('auth/login', { 
+    axiosInstance.post('auth/login', { 
         username: "halfling" 
     })
     .then((response) => {
@@ -49,7 +49,7 @@ app.get('/connect', (req, res) => {
                 }
             });
             socket.on('connect', () => {
-                instance.get('api/cards')
+                axiosInstance.get('api/cards')
                 .then((response) => {
                     cards = response.data
                     res.sendStatus(200);
@@ -66,26 +66,26 @@ app.get('/connect', (req, res) => {
 
 app.get('/startGame', (req, res) => {
     const url = req.query.url;
-    const instance = axios.create({
+    const axiosInstance = axios.create({
         baseURL: url,
         timeout: 500,
         jar: cookieJar,
         withCredentials: true
     });
-    instance.get('api/start')
+    axiosInstance.get('api/start')
         .then(() => res.sendStatus(200))
         .catch((err) =>  res.send(err));
 });
 
 app.get('/playCardWord', (req, res) => {
     const url = req.query.url;
-    const instance = axios.create({
+    const axiosInstance = axios.create({
         baseURL: url,
         timeout: 500,
         jar: cookieJar,
         withCredentials: true
     });
-    instance.post('api/playCardWord', {
+    axiosInstance.post('api/playCardWord', {
         cardId: cards[0].cardId,
         word: "Hello"
     })

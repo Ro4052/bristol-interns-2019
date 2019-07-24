@@ -1,7 +1,7 @@
 import axios from "axios";
 import { types } from './PlayWordActionTypes';
 
-const instance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
+const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
 export const setPlayWord = playWord => ({
     type: types.SET_PLAY_WORD,
@@ -23,7 +23,7 @@ export const playWord = word => ({
 });
 
 export const validateWord = word => dispatch => {
-    instance.post('/api/validWord', { word })
+    axiosInstance.post('/api/validWord', { word })
     .then(res => {
         if (res.status === 200) {
             dispatch(validateWordSuccess());

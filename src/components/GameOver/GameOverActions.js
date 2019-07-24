@@ -1,7 +1,7 @@
 import { types } from './GameOverActionTypes';
 import axios from "axios";
 
-const instance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
+const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
 export const setWinner = winner => ({
     type: types.SET_WINNER,
@@ -9,6 +9,6 @@ export const setWinner = winner => ({
 });
 
 export const endGame = () => dispatch => {
-    instance.get('/api/end');
+    axiosInstance.get('/api/end');
     // .catch(err => console.log(err));
 };

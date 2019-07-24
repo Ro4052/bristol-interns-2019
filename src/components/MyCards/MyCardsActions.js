@@ -1,7 +1,7 @@
 import { types } from './MyCardsActionTypes';
 import axios from "axios";
 
-const instance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
+const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
 export const setPlayCard = playCard => ({
     type: types.SET_PLAY_CARD,
@@ -33,7 +33,7 @@ export const selectCard = cardId => (dispatch, getState) => {
     if (status === "WAITING_FOR_CURRENT_PLAYER") {
         dispatch(selectCardSuccess(cardId));
     } else if (status === "WAITING_FOR_OTHER_PLAYERS") {
-        instance.post('/api/playCard', { cardId })
+        axiosInstance.post('/api/playCard', { cardId })
         .then(res => {
             if (res.status === 200) {
                 console.log("success");
@@ -47,7 +47,7 @@ export const selectCard = cardId => (dispatch, getState) => {
 };
 
 export const fetchCards = () => dispatch => {
-    instance.get('/api/cards')
+    axiosInstance.get('/api/cards')
     .then(res => {
         res.status === 200 ?
         dispatch(fetchCardsSuccess(res.data)) :

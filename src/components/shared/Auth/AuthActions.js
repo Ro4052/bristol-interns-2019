@@ -2,7 +2,7 @@ import axios from "axios";
 import connectSocket from '../../../services/socket';
 import { types } from './AuthActionTypes';
 
-const instance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
+const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
 export const resetStore = () => ({
     type: types.RESET_STORE
@@ -28,7 +28,7 @@ export const logOutFailure = error => ({
 });
 
 export const authenticateUser = () => dispatch => {
-    instance.get('/auth')
+    axiosInstance.get('/auth')
     .then(res => {            
         if (res.status === 200) {
             connectSocket()
@@ -42,7 +42,7 @@ export const authenticateUser = () => dispatch => {
 }
 
 export const logIn = username => dispatch => {
-    instance.post('/auth/login', { username })
+    axiosInstance.post('/auth/login', { username })
     .then(res => {
         if (res.status === 200) {
             connectSocket()
@@ -53,7 +53,7 @@ export const logIn = username => dispatch => {
 };
 
 export const logOutUser = () => dispatch => {
-    instance.get('/auth/logout')
+    axiosInstance.get('/auth/logout')
     .then(res => {
         res.status === 200 ?
         dispatch(resetStore()) :
@@ -63,7 +63,7 @@ export const logOutUser = () => dispatch => {
 }
 
 export const resetCookie = () => (dispatch) => {
-    instance.get('/api/reset-cookie')
+    axiosInstance.get('/api/reset-cookie')
     .then((res) => {
         res.status === 200 ?
         dispatch(authReset()) :
