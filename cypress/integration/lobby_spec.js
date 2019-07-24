@@ -19,16 +19,15 @@ describe('Lobby', () => {
         it('is able to join an existing room', () => {
             cy.createRoom();
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
-            .then(() => {
-                cy.get('[data-cy="room-title"]').then(($title) => {
-                    let id = $title.text().split(" ")[1];
-                    cy.request(`http://localhost:12346/joinRoom?roomId=${id}&url=${encodeURIComponent(Cypress.config().baseUrl)}`)
-                    .then(() => {
-                        cy.get('[data-cy="player-username"]').first().should('have.text', 'unicorn');
-                        cy.get('[data-cy="player-username"]').last().should('have.text', 'halfling');
-                    });
-                });
+            .then(() => cy.get('[data-cy="room-title"]'))
+            .then(($title) => {
+                const id = $title.text().split(" ")[1];
+                return cy.request(`http://localhost:12346/joinRoom?roomId=${id}&url=${encodeURIComponent(Cypress.config().baseUrl)}`);
             })
+            .then(() => {
+                cy.get('[data-cy="player-username"]').first().should('have.text', 'unicorn');
+                cy.get('[data-cy="player-username"]').last().should('have.text', 'halfling');
+            });
         });
     });
 });

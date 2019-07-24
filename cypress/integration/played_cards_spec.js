@@ -8,17 +8,16 @@ describe('Played cards', () => {
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => {
                 cy.createRoom();
-                cy.get('[data-cy="room-title"]').then(($title) => {
-                    let id = $title.text().split(" ")[1];
-                    cy.request(`http://localhost:12346/joinRoom?roomId=${id}&url=${encodeURIComponent(Cypress.config().baseUrl)}`)
-                    .then(() => {
-                        cy.startGame();
-                        cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
-                        .then(() => {
-                            cy.playCard();
-                        });
-                    })
-                });
+                cy.get('[data-cy="room-title"]')
+                .then(($title) => {
+                    const id = $title.text().split(" ")[1];
+                    return cy.request(`http://localhost:12346/joinRoom?roomId=${id}&url=${encodeURIComponent(Cypress.config().baseUrl)}`)
+                })
+                .then(() => {
+                    cy.startGame();
+                    return cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
+                })
+                .then(() => cy.playCard());
             });
         });
         it('all the played cards are displayed', () => {

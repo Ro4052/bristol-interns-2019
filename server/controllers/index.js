@@ -198,8 +198,6 @@ if (process.env.NODE_ENV === 'testing') {
             if (req.session.roomId) {
                 getGameStateById(req.session.roomId).clearGameState();
             }
-            closeSocket();
-            req.session.destroy();
             currentUsers = [];
             roomId = 0;
             games = [];
@@ -208,7 +206,8 @@ if (process.env.NODE_ENV === 'testing') {
             console.log(err);
             res.status(400).json({ message: err.message});
         } finally {
-            
+            closeSocket();
+            req.session.destroy();
         }
     });
 }
