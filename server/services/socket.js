@@ -103,10 +103,7 @@ const promptCurrentPlayer = (roomId, currentPlayer) => {
 };
 exports.promptCurrentPlayer = promptCurrentPlayer;
 
-const promptOtherPlayers = (roomId, currentPlayer, timeoutDuration) => {
-    console.log(timeoutDuration)
-    sockets.forEach(socket => socket.handshake.session.user !== currentPlayer.username && socket.handshake.session.roomId === roomId && socket.emit("play card", timeoutDuration/1000));
-}
+const promptOtherPlayers = (roomId, currentPlayer, timeoutDuration) => sockets.forEach(socket => socket.handshake.session.user !== currentPlayer.username && socket.handshake.session.roomId === roomId && socket.emit("play card", timeoutDuration/1000));
 exports.promptOtherPlayers = promptOtherPlayers;
 
 // Ask the other players to vote on the cards
