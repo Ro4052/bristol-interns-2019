@@ -185,7 +185,6 @@ router.post('/api/voteCard', auth, (req, res) => {
         } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
             console.log(err);
             res.status(400).json({ message: err.message});
-            console.log("one")
         }
     } else { /* Current player attempts to vote for their card */
         res.status(400).json({ message: "You cannot vote for a card when it is your turn."});

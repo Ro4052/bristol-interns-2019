@@ -103,14 +103,10 @@ const promptCurrentPlayer = (roomId, currentPlayer) => {
 };
 exports.promptCurrentPlayer = promptCurrentPlayer;
 
-const promptOtherPlayers = (roomId, currentPlayer) => {
-    sockets.forEach(socket => socket.handshake.session.user !== currentPlayer.username && socket.handshake.session.roomId === roomId && socket.emit("play card"));
-};
+const promptOtherPlayers = (roomId, currentPlayer) => sockets.forEach(socket => socket.handshake.session.user !== currentPlayer.username && socket.handshake.session.roomId === roomId && socket.emit("play card"));
 exports.promptOtherPlayers = promptOtherPlayers;
 
 // Ask the other players to vote on the cards
-const promptPlayersVote = (roomId, currentPlayer) => {
-    sockets.forEach(socket => socket.handshake.session.user !== currentPlayer.username && socket.handshake.session.roomId === roomId && socket.emit("vote"));
-};
+const promptPlayersVote = (roomId, currentPlayer) => sockets.forEach(socket => socket.handshake.session.user !== currentPlayer.username && socket.handshake.session.roomId === roomId && socket.emit("vote"));
 exports.promptPlayersVote = promptPlayersVote;
 

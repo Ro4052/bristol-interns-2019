@@ -1,13 +1,8 @@
-.lobbyPage {
-    
-}
-
 .currentRooms {
     display: flex;
 }
 
 .singleRoom {
-    width: 20vmin;
     display: flex;
     flex-direction: column;
     justify-content: center;

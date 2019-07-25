@@ -72,10 +72,8 @@ const connectSocket = () => {
     });
 
     socket.on("played card", card => {
-        // console.log();
         dispatch(selectCardSuccess(card.cardId));
         dispatch(removeCard(card.cardId));
-        // dispatch(setPlayCard(false));
     });
 
     socket.on("played cards", msg => {

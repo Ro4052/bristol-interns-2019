@@ -35,11 +35,7 @@ exports.removePlayer = (username) => {
 };
 
 /* Get the list of cards for a specific player */
-const getCardsByUsername = (username) => {
-    console.log(username)
-    console.log(players)
-    return players.find(player => player.username === username).cards;
-}
+const getCardsByUsername = (username) => players.find(player => player.username === username).cards;
 
 /* Returns true if this is the current player */
 const isCurrentPlayer = (username) => currentPlayer.username === username;
@@ -168,11 +164,8 @@ exports.playCard = (username, cardId) => {
 
 /* Vote for a card */
 exports.voteCard = (username, cardId) => {
-    console.log(status)
-    console.log(playerHasVoted(username))
     if (status === statusTypes.WAITING_FOR_VOTES && !playerHasVoted(username)) {
         const vote = { username, cardId };
-        console.log("two")
         votes.push(vote);
         if (allPlayersVoted()) {
             emitVotes();

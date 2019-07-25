@@ -1,12 +1,9 @@
 .ufo {
-    font-size: 25vmin;
+    font-size: 18vmin;
     position: absolute;
     bottom: 0em;
-    width: 20%;
-    height: 20%;
     right: 0em;
-    margin-right: 12vmin;
-    margin-bottom: 10vmin;
+    margin: 0.2em;
 }
 
 @media only screen and (max-width: 500px) {
