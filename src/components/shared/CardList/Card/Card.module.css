@@ -31,7 +31,8 @@
 
 .selected {
     border: calc(var(--width)/30) solid red;
-    transform: translateY(-30px);
+    box-shadow: 0px 0px calc(var(--width)/5) 0px rgba(0, 0, 0, 0.4);
+    margin-bottom: 2em;
     opacity: 1;
 }
 

@@ -34,14 +34,14 @@ export class Lobby extends React.Component {
 
     render() {
         return (
-            <div className={styles.lobbyPage}>
+            <>
                 <CreateRoom createRoom={this.createRoom}/>
                 <ul className={styles.currentRooms} data-cy="current-rooms">
-                    {this.props.rooms.map((room) => 
+                    {this.props.rooms.map(room => 
                         <Room room={room} key={room.id} handleClick={this.joinRoom} history={this.props.history} />
                     )}
                 </ul>
-            </div>
+            </>
         )
     }
 }

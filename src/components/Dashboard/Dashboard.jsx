@@ -6,9 +6,9 @@ import Monster from '../Monster/Monster';
 import PlayedCards from '../PlayedCards/PlayedCards';
 import MyCards from '../MyCards/MyCards';
 import Players from '../Players/Players';
-import StartGame from '../StartGame/StartGame';
 import GameOver from '../GameOver/GameOver';
 import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
+import Dixit from '../Dixit/Dixit';
 
 export class Dashboard extends React.Component {
     render() {
@@ -19,16 +19,29 @@ export class Dashboard extends React.Component {
                                         this.props.playedCardId));
         return (
             <div className={styles.dashboard}>
-                {this.props.status === "NOT_STARTED" && <StartGame />}
-                {this.props.status !== "NOT_STARTED" && <h2>Round: <span id="round-number" data-cy="round-number">{this.props.roundNum}</span></h2>}
-                {this.props.currentPlayer && <h2>Current player: <span id="current-player" data-cy="current-player">{this.props.currentPlayer.username}</span></h2>}
-                {this.props.winner && <GameOver />}
-                {this.props.currentWord !== '' && <h1 id="message">Word: <span data-cy='current-word'>{this.props.currentWord}</span></h1>}
-                <Players />
-                <PlayedCards />
-                {this.props.status !== "NOT_STARTED" && <MyCards />}
-                {showPlayerInteractions && <PlayerInteractions />}
-                <Logout />
+                <div className={styles.header}>
+                    <Logout />
+                    <div className={styles.logo}>
+                        <Dixit />
+                    </div>
+                </div>
+                <div className={styles.main}>
+                    <div className={styles.left}>
+                        <div className={styles.gameInfo}>
+                            {this.props.status !== "NOT_STARTED" && <h2>Round: <span id="round-number" data-cy="round-number">{this.props.roundNum}</span></h2>}
+                            {this.props.currentWord !== '' && <h2 id="message">Word: <span data-cy='current-word'>{this.props.currentWord}</span></h2>}
+                            <Players />
+                        </div>
+                    </div>
+                    <div className={styles.right}>
+                        <div className={styles.interactions}>
+                            {showPlayerInteractions && <PlayerInteractions />}
+                            {this.props.winner && <GameOver />}
+                            {this.props.status !== "GAME_OVER" && <PlayedCards />}
+                        </div>
+                        {this.props.status !== "NOT_STARTED" && this.props.status !== "GAME_OVER" && <MyCards />}
+                    </div>
+                </div>
                 <Monster />
             </div>
         );
@@ -43,10 +56,10 @@ const mapStateToProps = (state) => ({
     playCard: state.myCardsReducer.playCard,
     playWord: state.playWordReducer.playWord,
     voteCard: state.playedCardsReducer.voteCard,
-    winner: state.gameOverReducer.winner,
     finishedRound: state.playerInteractionsReducer.finishedRound,
     playedCardId: state.myCardsReducer.playedCardId,
-    username: state.authReducer.username
+    username: state.authReducer.username,
+    winner: state.gameOverReducer.winner
 });
 
 export default connect(mapStateToProps)(Dashboard);
