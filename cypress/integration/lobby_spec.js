@@ -6,13 +6,13 @@ describe('Lobby', () => {
     describe('when a player has successfully logged in', () => {
         it('is able to create a new room and is then added to that room', () => {
             cy.createRoom();
-            cy.get('[data-cy="single-room"]').should('exist');
+            cy.get('[data-cy="room"]').should('exist');
             cy.get('[data-cy="player-username"]').first().should('have.text', 'unicorn');
         });
 
         it('is not able to create a room twice', () => {
             cy.createRoom();
-            cy.get('[data-cy="single-room"]').first().should('exist');
+            cy.get('[data-cy="room"]').first().should('exist');
             cy.get('[data-cy="current-rooms"]').children().its('length').should('equal', 1);
         });
 
