@@ -10,7 +10,8 @@ import { setWinner } from '../components/GameOver/GameOverActions';
 import { setCurrentWord, setStatus, setRoundNumber } from '../components/Dashboard/DashboardActions';
 import { resetFinishRound } from '../components/PlayerInteractions/PlayerInteractionsActions';
 import { removeCard } from '../components/MyCards/MyCardsActions';
-import { setRooms } from '../components/Lobby/LobbyActions.js';
+import { setRooms } from '../components/Lobby/LobbyActions';
+import { setVoteCardTimer, setPlayCardTimer } from '../components/Timer/TimerActions';
 
 const connectSocket = () => {
     let connectionString;
@@ -67,8 +68,10 @@ const connectSocket = () => {
         dispatch(setPlayCard(true));
     });
 
-    socket.on("play card", () => {
+    socket.on("play card", (timeoutDuration) => {
+        console.log(timeoutDuration)
         dispatch(setPlayCard(true));
+        dispatch(setPlayCardTimer(timeoutDuration));
     });
 
     socket.on("played card", card => {
@@ -80,12 +83,14 @@ const connectSocket = () => {
         dispatch(setPlayedCards(msg));
     });
 
-    socket.on("vote", () => {
+    socket.on("vote", (timeoutDuration) => {
         dispatch(setVoteCard(true));
+        dispatch(setVoteCardTimer(timeoutDuration));
     });
 
     socket.on("all votes", (msg) => {
         dispatch(setAllVotes(msg));
+        dispatch(setVoteCard(false));
     });
 
     socket.on("winner", (msg) => {

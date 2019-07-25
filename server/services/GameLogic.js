@@ -17,9 +17,14 @@ module.exports = class GameLogic {
         this.playedCards = [];
         /** @type {{ username: string, cardId: number }[]} */
         this.votes = [];
-        this.playCardTimeout = 0;
-        this.voteTimeout = 0;
-        this.timeoutDuration = 30000;
+
+        // Initialise timers
+        this.playCardTimeout = null;
+        this.voteTimeout = null;
+        this.nextRoundTimeout = null;
+
+        // Set durations
+        this.timeoutDuration = 37000;
         this.nextRoundTimeoutDuration = 5000;
     }
 
@@ -125,7 +130,8 @@ module.exports = class GameLogic {
             socket.emitStatus(this.roomId, this.status);
             this.currentWord = word;
             socket.emitWord(this.roomId, this.currentWord);
-            socket.promptOtherPlayers(this.roomId, this.currentPlayer);
+            console.log("good")
+            socket.promptOtherPlayers(this.roomId, this.currentPlayer, this.timeoutDuration);
             this.playCardTimeout = setTimeout(() => this.playRandomCard(), this.timeoutDuration);
         } else {
             // Cannot play card and word, the user sending the request is not the current player, the player has already played a card,
@@ -155,9 +161,10 @@ module.exports = class GameLogic {
             this.playedCards.push(card);            
             this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
             if (this.allPlayersPlayedCard()) {
+                this.clearTimeouts();
                 this.setStatus(statusTypes.WAITING_FOR_VOTES);
                 socket.emitPlayedCards(this.roomId, this.getPlayedCards());
-                socket.promptPlayersVote(this.roomId, this.currentPlayer);
+                socket.promptPlayersVote(this.roomId, this.currentPlayer, this.timeoutDuration);
                 this.voteTimeout = setTimeout(() => this.emitVotes(), this.timeoutDuration);
             }
         } else {
@@ -173,6 +180,7 @@ module.exports = class GameLogic {
             const vote = { username, cardId };
             this.votes.push(vote);
             if (this.allPlayersVoted()) {
+                this.clearTimeouts();
                 this.setStatus(statusTypes.DISPLAY_ALL_VOTES);
                 socket.emitStatus(this.roomId, this.status);
                 socket.emitAllVotes(this.roomId, this.votes);
@@ -199,7 +207,7 @@ module.exports = class GameLogic {
         this.clearTimeouts();
         this.status = statusTypes.WAITING_FOR_VOTES;
         socket.emitPlayedCards(this.roomId, this.getPlayedCards());
-        socket.promptPlayersVote(this.roomId, this.currentPlayer);
+        socket.promptPlayersVote(this.roomId, this.currentPlayer, this.timeoutDuration);
         this.voteTimeout = setTimeout(() => this.emitVotes(), this.timeoutDuration);
     };
 

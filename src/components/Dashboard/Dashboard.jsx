@@ -9,6 +9,7 @@ import Players from '../Players/Players';
 import GameOver from '../GameOver/GameOver';
 import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
 import Timer from '../Timer/Timer';
+import { setVoteCardTimer, setPlayCardTimer} from '../Timer/TimerActions';
 import Dixit from '../Dixit/Dixit';
 
 export class Dashboard extends React.Component {
@@ -18,6 +19,7 @@ export class Dashboard extends React.Component {
                                         (!this.props.finishedRound && 
                                         this.props.username === this.props.currentPlayer.username && 
                                         this.props.playedCardId));
+        console.log(this.props.duration)
         return (
             <div className={styles.dashboard}>
                 <div className={styles.header}>
@@ -37,7 +39,8 @@ export class Dashboard extends React.Component {
                     <div className={styles.right}>
                         <div className={styles.interactions}>
                             {showPlayerInteractions && <PlayerInteractions />}
-                            {(this.props.voteCard || this.props.playCard) && <Timer />}
+                            {(this.props.voteCard) && this.props.voteCardDuration && <Timer reset={() => this.props.setVoteCardTimer(0)} duration={this.props.voteCardDuration} />}
+                            {(this.props.playCard) && this.props.playCardDuration && <Timer reset={() => this.props.setPlayCardTimer(0)} duration={this.props.playCardDuration} />}
                             {this.props.winner && <GameOver />}
                             {this.props.status !== "GAME_OVER" && <PlayedCards />}
                         </div>
@@ -61,7 +64,14 @@ const mapStateToProps = (state) => ({
     finishedRound: state.playerInteractionsReducer.finishedRound,
     playedCardId: state.myCardsReducer.playedCardId,
     username: state.authReducer.username,
-    winner: state.gameOverReducer.winner
+    winner: state.gameOverReducer.winner,
+    playCardDuration: state.timerReducer.playCardDuration,
+    voteCardDuration: state.timerReducer.voteCardDuration
 });
 
-export default connect(mapStateToProps)(Dashboard);
+const mapDispatchToProps = (dispatch) => ({
+    setPlayCardTimer: duration => dispatch(setPlayCardTimer(duration)),
+    setVoteCardTimer: duration => dispatch(setVoteCardTimer(duration))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
