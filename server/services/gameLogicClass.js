@@ -157,7 +157,7 @@ module.exports = class GameLogic {
                 socket.emitStatus(this.roomId, this.status);
                 socket.emitAllVotes(this.roomId, this.votes);
                 this.calcScores();
-                setTimeout(() => this.nextRound(), 5000);
+                setTimeout(() => this.nextRound(), (process.env.NODE_ENV === 'testing') ? 500 : 5000);
             }
         } else {
             // Cannot vote for card, the player has already voted for a card, or the game status is not
