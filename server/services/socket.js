@@ -114,7 +114,3 @@ const promptPlayersVote = (roomId, currentPlayer) => {
 };
 exports.promptPlayersVote = promptPlayersVote;
 
-exports.clearTimeouts = () => {
-    clearTimeout(playCardTimeout);
-    clearTimeout(voteTimeout);
-};

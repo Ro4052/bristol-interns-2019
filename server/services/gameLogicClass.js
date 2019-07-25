@@ -19,6 +19,7 @@ module.exports = class GameLogic {
         this.votes = [];
         this.playCardTimeout = 0;
         this.voteTimeout = 0;
+        this.timeoutDuration = 30000;
     }
 
     /* Remove player from list of this.players on log out */
@@ -124,8 +125,7 @@ module.exports = class GameLogic {
             this.currentWord = word;
             socket.emitWord(this.roomId, this.currentWord);
             socket.promptOtherPlayers(this.roomId, this.currentPlayer);
-            playCardTimeout = setTimeout(playRandomCard, 3000);
-
+            this.playCardTimeout = setTimeout(() => this.playRandomCard(), this.timeoutDuration);
         } else {
             // Cannot play card and word, the user sending the request is not the current player, the player has already played a card,
             // or the game status is not appropriate for the request, server is responsible for generating an error
@@ -135,16 +135,16 @@ module.exports = class GameLogic {
 
     /* Random card pushed if player does not submit in time*/
     playRandomCard() {
-        players.forEach(player => {
-            if(!isCurrentPlayer(player.username) && !playerHasPlayedCard(player.username)) {
-                const cards = getCardsByUsername(player.username)
-                const randomCard = (cards[Math.floor(Math.random()*cards.length)])
-                playedCards.push(randomCard);
+        this.players.forEach(player => {
+            if(!this.isCurrentPlayer(player.username) && !this.playerHasPlayedCard(player.username)) {
+                const cards = this.getCardsByUsername(player.username);
+                const randomCard = (cards[Math.floor(Math.random()*cards.length)]);
+                this.playedCards.push(randomCard);
                 cards.find(card => card.cardId === randomCard.cardId).played = true;
                 socket.emitPlayedCard(player.username, randomCard);
             }
-        })
-        emitPlayedCards();
+        });
+        this.emitPlayedCards();
     }
     
     /* Adds player's card to list of played cards */
@@ -157,7 +157,7 @@ module.exports = class GameLogic {
                 this.setStatus(statusTypes.WAITING_FOR_VOTES);
                 socket.emitPlayedCards(this.roomId, this.getPlayedCards());
                 socket.promptPlayersVote(this.roomId, this.currentPlayer);
-                voteTimeout = setTimeout(emitVotes, 30000);
+                this.voteTimeout = setTimeout(() => this.emitVotes(), this.timeoutDuration);
             }
         } else {
             // Cannot play card, the player has already played a card, or the game status is not
@@ -186,20 +186,20 @@ module.exports = class GameLogic {
     }
     
     emitVotes() {
-        socket.clearTimeouts();
-        status = statusTypes.DISPLAY_ALL_VOTES;
-        socket.emitStatus(status);
-        socket.emitAllVotes(votes);
-        calcScores();
-        nextRoundTimeout = setTimeout(() => nextRound(), 5000);
+        this.clearTimeouts();
+        this.status = statusTypes.DISPLAY_ALL_VOTES;
+        socket.emitStatus(this.roomId, this.status);
+        socket.emitAllVotes(this.roomId, this.votes);
+        this.calcScores();
+        this.nextRoundTimeout = setTimeout(() => this.nextRound(), this.timeoutDuration);
     };
 
     emitPlayedCards() {
-        socket.clearTimeouts();
-        status = statusTypes.WAITING_FOR_VOTES;
-        socket.emitPlayedCards(getPlayedCards());
-        socket.promptPlayersVote(currentPlayer);
-        voteTimeout = setTimeout(emitVotes, 30000);
+        this.clearTimeouts();
+        this.status = statusTypes.WAITING_FOR_VOTES;
+        socket.emitPlayedCards(this.roomId, this.getPlayedCards());
+        socket.promptPlayersVote(this.roomId, this.currentPlayer);
+        this.voteTimeout = setTimeout(() => this.emitVotes(), this.timeoutDuration);
     };
 
     /* Calculate the scores for this round */
@@ -245,5 +245,9 @@ module.exports = class GameLogic {
         this.currentPlayer = null;
         this.roundNum = 0;
         this.players = [];
+    }
+    clearTimeouts() {
+        clearTimeout(this.playCardTimeout);
+        clearTimeout(this.voteTimeout);
     }
 }
