@@ -36,7 +36,11 @@ const authenticateUserMock = jest.fn();
 
 describe('on initial render', () => {
     it('calls authenticateUser', () => {
-        mount(<Lobby rooms={[]} authenticateUser={authenticateUserMock}/>);
+        mount(
+            <Provider store={initialStore}>
+                <Lobby rooms={[]} authenticateUser={authenticateUserMock}/>
+            </Provider>
+        );
         expect(authenticateUserMock).toHaveBeenCalled();
         authenticateUserMock.mockRestore();
     });
@@ -52,10 +56,13 @@ describe('on initial render', () => {
 });
 
 describe('on click', () => {
-    
     it('calls createRoom', () => {
         const createRoom = jest.spyOn(Lobby.prototype, 'createRoom');
-        const wrapper = mount(<Lobby rooms={[]} authenticateUser={authenticateUserMock}/>);
+        const wrapper = mount(
+            <Provider store={afterClickStore}>
+                <Lobby rooms={[room]} authenticateUser={authenticateUserMock}/>
+            </Provider>
+        );
         wrapper.find({ 'data-cy': 'create-room' }).simulate('click');
         expect(createRoom).toHaveBeenCalled();
         createRoom.mockRestore();
