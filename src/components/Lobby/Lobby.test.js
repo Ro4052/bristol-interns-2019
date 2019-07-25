@@ -36,7 +36,11 @@ const authenticateUserMock = jest.fn();
 
 describe('on initial render', () => {
     it('calls authenticateUser', () => {
-        mount(<Lobby rooms={[]} authenticateUser={authenticateUserMock}/>);
+        mount(
+            <Provider store={initialStore}>
+                <Lobby rooms={[]} authenticateUser={authenticateUserMock}/>
+            </Provider>
+        );
         expect(authenticateUserMock).toHaveBeenCalled();
         authenticateUserMock.mockRestore();
     });
