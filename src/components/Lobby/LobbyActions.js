@@ -8,6 +8,11 @@ export const setRooms = rooms => ({
     rooms
 });
 
+export const createRoomFailure = error => ({
+    type: types.CREATE_ROOM_FAILURE,
+    error
+});
+
 export const joinRoomFailure = error => ({
     type: types.JOIN_ROOM_FAILURE,
     error
@@ -17,6 +22,14 @@ export const leaveRoomFailure = error => ({
     type: types.LEAVE_ROOM_FAILURE,
     error
 });
+
+export const createRoom = () => dispatch => {
+    axiosInstance.post('/api/room/create')
+    .then(res => {
+        if (res.status !== 200) throw Error(res.data.message);
+    })
+    .catch(err => dispatch(createRoomFailure(err.message)));
+};
 
 export const joinRoom = roomId => dispatch => {
     axiosInstance.post('/api/room/join', { roomId })

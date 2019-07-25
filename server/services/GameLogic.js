@@ -6,7 +6,7 @@ module.exports = class GameLogic {
     constructor(roomId) {
         this.roomId = roomId;
         this.rounds = 3;
-        this.minPlayers = 3;
+        this.minPlayers = 2;
         this.status = statusTypes.NOT_STARTED;
         this.roundNum = 0;
         this.currentPlayer = null;

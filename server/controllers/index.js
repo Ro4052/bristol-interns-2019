@@ -51,7 +51,7 @@ router.get('/auth/logout', auth, (req, res) => {
 });
 
 /* Create a room (a single instance of a game) */
-router.get('/api/room/create', auth, (req, res) => {
+router.post('/api/room/create', auth, (req, res) => {
     const { user } = req.session;
     /* TODO: add check for when a room cannot be created and return an error */
     try {
@@ -100,17 +100,12 @@ router.post('/api/room/leave', auth, (req, res) => {
     const { user } = req.session;
     const { roomId } = req.body;
     try {
-        getGameStateById(roomId).quitGame(user);
+        const game = getGameStateById(roomId);
+        game.quitGame(user);
+        if (game.getPlayers().length <= 0) games = games.filter(otherGame => otherGame !== game);
         leaveRoom(user, roomId);
         req.session.roomId = undefined;
-    //     if (getGameStateById(roomId).canJoinGame(user)) {
-    //         getGameStateById(roomId).joinGame(user, () => {
-    //             req.session.roomId = roomId; 
-                res.sendStatus(200);
-    //         });
-    //     } else { /* Game has already began */
-    //         res.status(400).json({message: "Game has already started."});
-    //     }
+        res.sendStatus(200);
     } catch (err) {
         console.log(err);
         res.status(400).json({message: err.message})

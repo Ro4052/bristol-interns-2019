@@ -37,7 +37,7 @@ exports.createRoom = (username, roomId, minPlayers) => {
 // Join an existing room
 exports.joinRoom = (username, roomId) => {
     let room = rooms.find((room) => room.roomId === roomId);
-    if (username !== room.creator.username && !room.players.some(player => player.username === username)) {
+    if (!room.players.some(player => player.username === username)) {
         let socket = sockets.find(socket => socket.handshake.session.user === username);
         socket.join(`room-${roomId}`);
         socket.handshake.session.roomId = roomId;
@@ -51,15 +51,12 @@ exports.joinRoom = (username, roomId) => {
 // Leave a room
 exports.leaveRoom = (username, roomId) => {
     let room = rooms.find((room) => room.roomId === roomId);
-    // if (username !== room.creator.username && !room.players.some(player => player.username === username)) {
-        let socket = sockets.find(socket => socket.handshake.session.user === username);
-        socket.leave(`room-${roomId}`);
-        socket.handshake.session.roomId = undefined;
-        room.players = room.players.filter(player => player.username !== username );
-        this.emitRooms();
-    // } else {
-    //     throw new Error("You cannot join the room again.");
-    // }
+    let socket = sockets.find(socket => socket.handshake.session.user === username);
+    socket.leave(`room-${roomId}`);
+    socket.handshake.session.roomId = undefined;
+    room.players = room.players.filter(player => player.username !== username );
+    if (room.players.length <= 0) rooms = rooms.filter(otherRoom => otherRoom !== room);
+    this.emitRooms();
 };
 
 // Cloase the existing socket

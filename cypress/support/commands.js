@@ -26,7 +26,7 @@
 
 Cypress.Commands.add('createRoom', () => {
     cy.route({
-        method: 'GET',
+        method: 'POST',
         url: '/api/room/create'
     }).as('createRoom');
     cy.get('[data-cy="create-room"]').click();
