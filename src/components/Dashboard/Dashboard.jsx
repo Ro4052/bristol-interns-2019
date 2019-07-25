@@ -36,7 +36,6 @@ export class Dashboard extends React.Component {
                     </div>
                     <div className={styles.right}>
                         <div className={styles.interactions}>
-                            {this.props.status === "NOT_STARTED" && <StartGame />}
                             {showPlayerInteractions && <PlayerInteractions />}
                             {this.props.winner && <GameOver />}
                             {this.props.status !== "GAME_OVER" && <PlayedCards />}
