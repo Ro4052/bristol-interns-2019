@@ -12,7 +12,6 @@ export class Lobby extends React.Component {
             joined: false
         };
         this.createRoom = this.createRoom.bind(this);
-        this.joinRoom = this.joinRoom.bind(this);
     }
 
     createRoom() {
@@ -25,20 +24,13 @@ export class Lobby extends React.Component {
         })
     }
 
-    joinRoom(id) {
-        axios.post('/api/room/join', {
-            roomId: id
-        })
-        .catch((err) => console.log(err.message));
-    }
-
     render() {
         return (
             <>
                 <CreateRoom createRoom={this.createRoom}/>
                 <ul className={styles.currentRooms} data-cy="current-rooms">
                     {this.props.rooms.map(room => 
-                        <Room room={room} key={room.roomId} handleClick={this.joinRoom} history={this.props.history} />
+                        <Room room={room} key={room.roomId} history={this.props.history} />
                     )}
                 </ul>
             </>

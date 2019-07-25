@@ -36,12 +36,12 @@ exports.createRoom = (username, roomId, minPlayers) => {
 
 // Join an existing room
 exports.joinRoom = (username, roomId) => {
-    let room = rooms.find((room) => room.id === roomId);
-    if (username !== room.creator && !room.players.some((player) => player === username)) {
+    let room = rooms.find((room) => room.roomId === roomId);
+    if (username !== room.creator.username && !room.players.some(player => player.username === username)) {
         let socket = sockets.find(socket => socket.handshake.session.user === username);
         socket.join(`room-${roomId}`);
         socket.handshake.session.roomId = roomId;
-        room.players.push(username);
+        room.players.push({ username });
         this.emitRooms();
     } else {
         throw new Error("You cannot join the room again.");
