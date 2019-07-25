@@ -6,6 +6,7 @@ import { CreateRoom } from './CreateRoom/CreateRoom';
 import Room from './Room/Room';
 import Dixit from '../Dixit/Dixit';
 import Logout from '../Logout/Logout';
+import { authenticateUser } from '../shared/Auth/AuthActions';
 
 export class Lobby extends React.Component {
     constructor(props) {
@@ -17,6 +18,10 @@ export class Lobby extends React.Component {
         this.joinRoom = this.joinRoom.bind(this);
     }
 
+    componentDidMount() {
+        this.props.authenticateUser();
+    }
+    
     createRoom() {
         axios.get('/api/room/create')
         .then(() => {
@@ -47,7 +52,7 @@ export class Lobby extends React.Component {
                     <CreateRoom createRoom={this.createRoom}/>
                     <ul className={styles.currentRooms} data-cy="current-rooms">
                         {this.props.rooms.map(room => 
-                            <Room room={room} key={room.id} handleClick={this.joinRoom} history={this.props.history} />
+                            <Room room={room} key={room.id} handleClick={this.joinRoom} />
                         )}
                     </ul>
                 </div>
@@ -60,4 +65,8 @@ const mapStateToProps = (state) => ({
     rooms: state.lobbyReducer.rooms
 });
 
-export default connect(mapStateToProps)(Lobby);
+const mapDispatchToProps = (dispatch) => ({
+    authenticateUser: () => dispatch(authenticateUser())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Lobby);

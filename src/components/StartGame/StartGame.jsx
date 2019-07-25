@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import Button from '../shared/Button/Button';
+import history from '../../services/history';
 
 export class StartGame extends React.Component {
     constructor(props) {
@@ -10,6 +11,7 @@ export class StartGame extends React.Component {
 
     startGame() {
         axios.get('/api/start')
+        .then(() => history.push('/dashboard'))
         .catch(err => console.log(err));
     }
 
