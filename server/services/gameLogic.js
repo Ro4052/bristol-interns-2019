@@ -132,6 +132,7 @@ exports.playCardAndWord = (username, cardId, word) => {
         throw Error("You cannot play more than one card and one word, or now is not the right time to play a card and a word.");
     }
 }
+
 /* Random card pushed if player does not submit in time*/
 exports.playRandomCard = () => {
     players.forEach(player => {

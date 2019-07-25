@@ -125,7 +125,7 @@ module.exports = class GameLogic {
             this.currentWord = word;
             socket.emitWord(this.roomId, this.currentWord);
             socket.promptOtherPlayers(this.roomId, this.currentPlayer);
-            this.playCardTimeout = setTimeout(() => this.playRandomCard(), this.timeoutDuration);
+            this.playCardTimeout = setTimeout(this.playRandomCard, this.timeoutDuration);
         } else {
             // Cannot play card and word, the user sending the request is not the current player, the player has already played a card,
             // or the game status is not appropriate for the request, server is responsible for generating an error
@@ -157,7 +157,7 @@ module.exports = class GameLogic {
                 this.setStatus(statusTypes.WAITING_FOR_VOTES);
                 socket.emitPlayedCards(this.roomId, this.getPlayedCards());
                 socket.promptPlayersVote(this.roomId, this.currentPlayer);
-                this.voteTimeout = setTimeout(() => this.emitVotes(), this.timeoutDuration);
+                this.voteTimeout = setTimeout(this.emitVotes, this.timeoutDuration);
             }
         } else {
             // Cannot play card, the player has already played a card, or the game status is not
@@ -176,7 +176,7 @@ module.exports = class GameLogic {
                 socket.emitStatus(this.roomId, this.status);
                 socket.emitAllVotes(this.roomId, this.votes);
                 this.calcScores();
-                setTimeout(() => this.nextRound(), 5000);
+                setTimeout(this.nextRound, 5000);
             }
         } else {
             // Cannot vote for card, the player has already voted for a card, or the game status is not
@@ -191,7 +191,7 @@ module.exports = class GameLogic {
         socket.emitStatus(this.roomId, this.status);
         socket.emitAllVotes(this.roomId, this.votes);
         this.calcScores();
-        this.nextRoundTimeout = setTimeout(() => this.nextRound(), this.timeoutDuration);
+        this.nextRoundTimeout = setTimeout(this.nextRound, this.timeoutDuration);
     };
 
     emitPlayedCards() {
@@ -199,7 +199,7 @@ module.exports = class GameLogic {
         this.status = statusTypes.WAITING_FOR_VOTES;
         socket.emitPlayedCards(this.roomId, this.getPlayedCards());
         socket.promptPlayersVote(this.roomId, this.currentPlayer);
-        this.voteTimeout = setTimeout(() => this.emitVotes(), this.timeoutDuration);
+        this.voteTimeout = setTimeout(this.emitVotes, this.timeoutDuration);
     };
 
     /* Calculate the scores for this round */
