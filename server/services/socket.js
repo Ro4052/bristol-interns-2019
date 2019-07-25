@@ -83,6 +83,9 @@ exports.emitPlayers = emitPlayers;
 // Let the players know about the next round
 exports.emitNewRound = (roomId, status, roundNum, currentPlayer) => io.to(`room-${roomId}`).emit("new round", { status, roundNum, currentPlayer });
 
+// Get the current list of rooms
+exports.getRooms = () => rooms;
+
 // Emit the newly created room
 exports.emitRooms = () => sockets.forEach(socket => socket.emit("rooms", rooms));
 
