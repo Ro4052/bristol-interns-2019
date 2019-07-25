@@ -4,6 +4,8 @@ import axios from 'axios';
 import styles from './Lobby.module.css';
 import { CreateRoom } from './CreateRoom/CreateRoom';
 import Room from './Room/Room';
+import Dixit from '../Dixit/Dixit';
+import Logout from '../Logout/Logout';
 
 export class Lobby extends React.Component {
     constructor(props) {
@@ -34,14 +36,22 @@ export class Lobby extends React.Component {
 
     render() {
         return (
-            <>
-                <CreateRoom createRoom={this.createRoom}/>
-                <ul className={styles.currentRooms} data-cy="current-rooms">
-                    {this.props.rooms.map(room => 
-                        <Room room={room} key={room.id} handleClick={this.joinRoom} history={this.props.history} />
-                    )}
-                </ul>
-            </>
+            <div className={styles.lobby}>
+                <div className={styles.header}>
+                    <Logout />
+                    <div className={styles.logo}>
+                        <Dixit />
+                    </div>
+                </div>
+                <div className={styles.rooms}>
+                    <CreateRoom createRoom={this.createRoom}/>
+                    <ul className={styles.currentRooms} data-cy="current-rooms">
+                        {this.props.rooms.map(room => 
+                            <Room room={room} key={room.id} handleClick={this.joinRoom} history={this.props.history} />
+                        )}
+                    </ul>
+                </div>
+            </div>
         )
     }
 }

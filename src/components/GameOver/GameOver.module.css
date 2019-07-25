@@ -7,5 +7,6 @@
     padding: 1em;
     border: 2px solid black;
     border-radius: 1em;
-    font-size: 1.5em;
+    font-size: 5vmin;
+    margin-bottom: 15vmin;
 }

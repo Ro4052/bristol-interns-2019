@@ -21,14 +21,14 @@ exports.setupSocket = (server, session) => {
 
 // Create a room
 exports.createRoom = (username, roomId) => {
-    if (!rooms.some((room) => room.creator === username)) {
+    if (!rooms.some((room) => room.creator === username) && rooms.length < 10) {
         rooms.push({id: roomId, creator: username, players: [username]});
         let socket = sockets.find(socket => socket.handshake.session.user === username);
         socket.join(`room-${roomId}`);
         socket.handshake.session.roomId = roomId;
         this.emitRooms();
     } else {
-        throw new Error("You cannot create two rooms");
+        throw new Error("You cannot create two rooms or no more than 10 rooms can exist at the same time");
     }
 };
 
