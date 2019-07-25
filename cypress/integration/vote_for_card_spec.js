@@ -8,9 +8,7 @@ describe('Vote for a card', () => {
             const id = $title.text().split(" ")[1];
             return cy.request(`http://localhost:12346/joinRoom?roomId=${id}&url=${encodeURIComponent(Cypress.config().baseUrl)}`)
         })
-        .then(() => {
-            cy.startGame();
-        });
+        .then(() => cy.startGame());
     });
 
     describe('on everyone played cards', () => {
@@ -24,7 +22,7 @@ describe('Vote for a card', () => {
         it('prompts to vote for a card', () => {
             cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => {
-                cy.playCard()
+                cy.playCard();
                 cy.get('[data-cy="vote-card"]');
             });
         });
@@ -34,6 +32,7 @@ describe('Vote for a card', () => {
         it("displays the votes", () => {
             cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => {
+                cy.playCard();
                 cy.voteCard();
                 cy.get('[data-cy="vote-card"]').should('not.exist');
                 cy.get('[data-cy="vote"]').should('exist');
