@@ -6,9 +6,7 @@ import { logOutUser } from '../shared/Auth/AuthActions';
 export class Logout extends React.Component {
     render() {
         return (
-            <div>
-                <Button cy="logout" handleClick={this.props.logOutUser} text="Log out" />
-            </div>
+            <Button cy="logout" handleClick={this.props.logOutUser} text="Log out" />
         );
     }
 }
