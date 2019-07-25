@@ -19,7 +19,7 @@ module.exports = class GameLogic {
         this.votes = [];
         this.playCardTimeout = 0;
         this.voteTimeout = 0;
-        this.timeoutDuration = 1000;
+        this.timeoutDuration = 30000;
     }
 
     /* Remove player from list of this.players on log out */
