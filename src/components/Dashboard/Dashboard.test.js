@@ -2,15 +2,10 @@ import React from 'react';
 import MyCards from '../MyCards/MyCards';
 import { shallow } from 'enzyme';
 import { Dashboard } from './Dashboard';
-import StartGame from '../StartGame/StartGame';
 import GameOver from '../GameOver/GameOver';
 import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
 
 describe('on status NOT_STARTED', () => {
-    it('displays the start game component', () => {
-        const wrapper = shallow(<Dashboard status={"NOT_STARTED"} />);
-        expect(wrapper.exists(StartGame)).toEqual(true);
-    });
     it("doesn't display the cards", () => {
         const wrapper = shallow(<Dashboard status={"NOT_STARTED"}/>);
         expect(wrapper.exists(MyCards)).toEqual(false);
@@ -18,10 +13,6 @@ describe('on status NOT_STARTED', () => {
 });
 
 describe('on any status other than NOT_STARTED', () => {
-    it("doesn't display the start game component", () => {
-        const wrapper = shallow(<Dashboard status={"STARTED"} />);
-        expect(wrapper.exists(StartGame)).toEqual(false);
-    });
     it('displays cards', () => {
         const wrapper = shallow(<Dashboard status={"STARTED"}/>);
         expect(wrapper.exists(MyCards)).toEqual(true);
