@@ -22,7 +22,7 @@ export class Room extends React.Component {
                 <ul id="players" data-cy='players-list'>
                     {this.props.room.players.map((player, key) => <li key={key}><span data-cy='player-username'>{player}</span></li>)}
                 </ul>
-                {this.props.status === "NOT_STARTED" && <StartGame history={this.props.history} />}
+                {this.props.status === "NOT_STARTED" && <StartGame />}
             </li>
         );
     }
