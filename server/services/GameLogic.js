@@ -2,11 +2,15 @@ const cardManager = require('./cards');
 const socket = require('./socket');
 const { statusTypes } = require('./statusTypes');
 
+// Set durations
+const promptDuration = process.env.NODE_ENV === 'testing' ? 1000 : 37000;
+const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 1000 : 5000;
+const rounds = 3;
+const minPlayers = 0;
+
 module.exports = class GameLogic {
     constructor(roomId) {
         this.roomId = roomId;
-        this.rounds = 3;
-        this.minPlayers = 0;
         this.status = statusTypes.NOT_STARTED;
         this.roundNum = 0;
         this.currentPlayer = null;
@@ -22,10 +26,6 @@ module.exports = class GameLogic {
         this.playCardTimeout = null;
         this.voteTimeout = null;
         this.nextRoundTimeout = null;
-
-        // Set durations
-        this.timeoutDuration = 37000;
-        this.nextRoundTimeoutDuration = 5000;
     }
 
     /* Remove player from list of this.players on log out */
@@ -57,7 +57,7 @@ module.exports = class GameLogic {
 
     /* Add the player to the game if possible */
     joinGame(user, callback) {
-        const cards = cardManager.assign(this.players, this.rounds);
+        const cards = cardManager.assign(this.players, rounds);
         const player = {
             username: user,
             cards: cards,
@@ -81,7 +81,7 @@ module.exports = class GameLogic {
 
     /* Start the game with the players that have joined */
     startGame() {        
-        if (this.status === statusTypes.NOT_STARTED && this.players.length >= this.minPlayers) {
+        if (this.status === statusTypes.NOT_STARTED && this.players.length >= minPlayers) {
             this.setStatus(statusTypes.STARTED);
             this.nextRound();
             socket.emitPlayers(this.roomId, this.players);
@@ -105,7 +105,7 @@ module.exports = class GameLogic {
 
     /* Move on to the next round, called when all players have finished their turn */
     nextRound() {
-        if (this.roundNum < this.rounds) {
+        if (this.roundNum < rounds) {
             this.setStatus(statusTypes.WAITING_FOR_CURRENT_PLAYER);
             this.roundNum++;
             this.currentPlayer = this.players[this.roundNum % this.players.length];
@@ -130,9 +130,8 @@ module.exports = class GameLogic {
             socket.emitStatus(this.roomId, this.status);
             this.currentWord = word;
             socket.emitWord(this.roomId, this.currentWord);
-            console.log("good")
-            socket.promptOtherPlayers(this.roomId, this.currentPlayer, this.timeoutDuration);
-            this.playCardTimeout = setTimeout(() => this.playRandomCard(), this.timeoutDuration);
+            socket.promptOtherPlayers(this.roomId, this.currentPlayer, promptDuration);
+            this.playCardTimeout = setTimeout(() => this.playRandomCard(), promptDuration);
         } else {
             // Cannot play card and word, the user sending the request is not the current player, the player has already played a card,
             // or the game status is not appropriate for the request, server is responsible for generating an error
@@ -164,8 +163,8 @@ module.exports = class GameLogic {
                 this.clearTimeouts();
                 this.setStatus(statusTypes.WAITING_FOR_VOTES);
                 socket.emitPlayedCards(this.roomId, this.getPlayedCards());
-                socket.promptPlayersVote(this.roomId, this.currentPlayer, this.timeoutDuration);
-                this.voteTimeout = setTimeout(() => this.emitVotes(), this.timeoutDuration);
+                socket.promptPlayersVote(this.roomId, this.currentPlayer, promptDuration);
+                this.voteTimeout = setTimeout(() => this.emitVotes(), promptDuration);
             }
         } else {
             // Cannot play card, the player has already played a card, or the game status is not
@@ -185,7 +184,7 @@ module.exports = class GameLogic {
                 socket.emitStatus(this.roomId, this.status);
                 socket.emitAllVotes(this.roomId, this.votes);
                 this.calcScores();
-                this.nextRoundTimeout = setTimeout(() => this.nextRound(), this.nextRoundTimeoutDuration);
+                this.nextRoundTimeout = setTimeout(() => this.nextRound(), nextRoundDuration);
             }
         } else {
             // Cannot vote for card, the player has already voted for a card, or the game status is not
@@ -200,15 +199,15 @@ module.exports = class GameLogic {
         socket.emitStatus(this.roomId, this.status);
         socket.emitAllVotes(this.roomId, this.votes);
         this.calcScores();
-        this.nextRoundTimeout = setTimeout(() => this.nextRound(), this.nextRoundTimeoutDuration);
+        this.nextRoundTimeout = setTimeout(() => this.nextRound(), nextRoundDuration);
     };
 
     emitPlayedCards() {
         this.clearTimeouts();
         this.status = statusTypes.WAITING_FOR_VOTES;
         socket.emitPlayedCards(this.roomId, this.getPlayedCards());
-        socket.promptPlayersVote(this.roomId, this.currentPlayer, this.timeoutDuration);
-        this.voteTimeout = setTimeout(() => this.emitVotes(), this.timeoutDuration);
+        socket.promptPlayersVote(this.roomId, this.currentPlayer, promptDuration);
+        this.voteTimeout = setTimeout(() => this.emitVotes(), promptDuration);
     };
 
     /* Calculate the scores for this round */
@@ -249,6 +248,7 @@ module.exports = class GameLogic {
 
     /* Clear entire game state */
     clearGameState() {
+        this.clearTimeouts();
         this.clearRoundData();
         this.setStatus(statusTypes.NOT_STARTED);
         this.currentPlayer = null;

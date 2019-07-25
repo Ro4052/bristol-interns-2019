@@ -4,7 +4,6 @@ import styles from './Timer.module.css';
 export class Timer extends React.Component {
     constructor(props) {
         super(props);
-        console.log("constructor, ", this.props.duration);
         this.state = {
             seconds: this.props.duration
         };
@@ -13,12 +12,10 @@ export class Timer extends React.Component {
     }
 
     componentDidMount() {
-        console.log("mount");
         this.timeout = setTimeout(this.decrement, 1000);
     }
 
     componentWillUnmount() {
-        console.log("unmount");
         this.props.reset();
         clearTimeout(this.timeout);
     }
@@ -34,7 +31,7 @@ export class Timer extends React.Component {
 
     render() {
         return(
-            <div className={styles.timer}>
+            <div data-cy={this.props.cy} className={styles.timer}>
                 <span>{this.state.seconds}</span>
             </div>
         );

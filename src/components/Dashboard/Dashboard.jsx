@@ -43,8 +43,8 @@ export class Dashboard extends React.Component {
                     <div className={styles.middle}>
                         <div className={styles.interactions}>
                             {showPlayerInteractions && <PlayerInteractions />}
-                            {(this.props.voteCard) && this.props.voteCardDuration && <Timer reset={() => this.props.setVoteCardTimer(0)} duration={this.props.voteCardDuration} />}
-                            {(this.props.playCard) && this.props.playCardDuration && <Timer reset={() => this.props.setPlayCardTimer(0)} duration={this.props.playCardDuration} />}
+                            {(this.props.voteCard) && this.props.voteCardDuration && <Timer cy="vote-timer" reset={() => this.props.setVoteCardTimer(0)} duration={this.props.voteCardDuration} />}
+                            {(this.props.playCard) && this.props.playCardDuration && <Timer cy="card-timer" reset={() => this.props.setPlayCardTimer(0)} duration={this.props.playCardDuration} />}
                             {this.props.winner && <GameOver />}
                             {this.props.status !== "GAME_OVER" && <PlayedCards />}
                         </div>
