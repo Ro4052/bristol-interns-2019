@@ -9,14 +9,16 @@ export class Players extends React.PureComponent {
     render() {
         return (
             <table className={styles.players} data-cy='players-list'>
-                {this.props.players.map((player, key) => {
-                    return (
-                        <tr data-cy="player" key={key} className={cx({ current: this.props.currentPlayer && this.props.currentPlayer.username === player.username })}>
-                            <td className={styles.playerUsername} data-cy='player-username'>{player.username}</td>
-                            <td data-cy='player-score'>{player.score}</td>
-                        </tr>
-                    );
-                })}
+                <tbody>
+                    {this.props.players.map((player, key) => {
+                        return (
+                            <tr data-cy="player" key={key} className={cx({ current: this.props.currentPlayer && this.props.currentPlayer.username === player.username })}>
+                                <td className={styles.playerUsername} data-cy='player-username'>{player.username}</td>
+                                <td data-cy='player-score'>{player.score}</td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
             </table>
         )
     }
