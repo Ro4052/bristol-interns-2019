@@ -97,7 +97,7 @@ const connectSocket = () => {
         dispatch(playWord(""));
         dispatch(resetFinishRound());
         dispatch(setWinner(null));
-        dispatch(resetCookie());
+        history.push('/lobby');
     });
 
     return new Promise((resolve, reject) => {
