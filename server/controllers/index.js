@@ -2,12 +2,12 @@ const validWord = require('../services/validWord');
 const router = require('express').Router();
 const path = require('path');
 const auth = require('../services/auth');
-const gameLogicClass = require('../services/gameLogicClass');
+const GameLogic = require('../services/GameLogic');
 const { closeSocket, createRoom, joinRoom, getRooms } = require('../services/socket');
 
 let currentUsers = [];
 let roomId = 0;
-/** @type {{ roomId: number, gameState: gameLogicClass }[]} */
+/** @type {{ roomId: number, gameState: GameLogic }[]} */
 let games = [];
 
 /* Check if player is logged in */
@@ -55,7 +55,7 @@ router.get('/api/room/create', auth, (req, res) => {
     const { user } = req.session;
     /* TODO: add check for when a room cannot be created and return an error */
     try {
-        let newGameState = new gameLogicClass(roomId);
+        let newGameState = new GameLogic(roomId);
         let newGameRoom = {roomId, gameState: newGameState}
         createRoom(user, roomId);
         games.push(newGameRoom);
