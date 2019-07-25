@@ -1,5 +1,5 @@
 const url = Cypress.config().baseUrl;
-const username = 'unicorn';
+const username = 'halfling';
 
 describe('Login', () => {
     describe('on login', () => {
@@ -11,7 +11,7 @@ describe('Login', () => {
 
     describe('on username already exists', () => {
         it('returns error', () => {
-            cy.request('POST', '/auth/login', { username })
+            cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => cy.login(username));
             cy.get('[data-cy="login-error"]').should('contain', 'Username already exists');
         });

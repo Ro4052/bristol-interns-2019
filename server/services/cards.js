@@ -4,7 +4,7 @@ module.exports.assign = (users, number_of_cards) => {
 
     for (let j = 0; j < number_of_cards; j++) {
         const min = 1;
-        const max = 298;
+        const max = 249;
         let random = Math.floor(Math.random() * (max - min) + min);
         
         let availableGlobally = allCards.some(card => card.cardId !== random);

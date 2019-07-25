@@ -5,6 +5,7 @@
 
 .sendWordBox {
     width: 100%;
+    margin-bottom: 2vmin;
     display: flex;
     flex-direction: column;
     align-items: center;

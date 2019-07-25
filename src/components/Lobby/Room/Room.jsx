@@ -19,10 +19,10 @@ export class Room extends React.Component {
         return (
             <li className={styles.singleRoom} key={this.props.room.id} data-cy="single-room">
                 <h2 onClick={this.handleClick} data-cy="room-title">{"Room: " + this.props.room.id}</h2>
-                <ul id="players" data-cy='players-list'>
+                <ul id="players" data-cy='players-list' className={styles.roomPlayersList}>
                     {this.props.room.players.map((player, key) => <li key={key}><span data-cy='player-username'>{player}</span></li>)}
                 </ul>
-                {this.props.status === "NOT_STARTED" && <StartGame history={this.props.history} />}
+                {this.props.status === "NOT_STARTED" && <StartGame />}
             </li>
         );
     }
