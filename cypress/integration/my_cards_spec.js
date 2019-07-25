@@ -11,9 +11,13 @@ describe('My Cards', () => {
     });
 
     describe('player clicks on a card', () => {
-        it("its highlighted by being moved upwards on the y axis", () => {
-            cy.get('[data-cy="my-cards"] [data-cy="card"]').first().click().then(() => {
-                cy.get('[data-cy="my-cards"]').children().first().should('have.css', "transform", "matrix(1, 0, 0, 1, 0, -30)");
+        it("its class is updated to selected", () => {
+            cy.get('[data-cy="my-cards"]').find('[data-cy="card"]').first().click().then(() => {
+                cy.get('[data-cy="my-cards"]').find('[data-cy="card-wrapper"]').first().then(($wrapper) => {
+                    const selected = /selected/;
+                    const classList = Array.from($wrapper[0].classList);
+                    expect(classList.some(cls => selected.test(cls))).to.equal(true);
+                });
             });
         });
     });
