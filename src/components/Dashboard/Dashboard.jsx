@@ -9,7 +9,6 @@ import Players from '../Players/Players';
 import StartGame from '../StartGame/StartGame';
 import GameOver from '../GameOver/GameOver';
 import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
-import CreateRoom from '../CreateRoom/CreateRoom';
 import Dixit from '../Dixit/Dixit';
 
 export class Dashboard extends React.Component {
@@ -23,7 +22,6 @@ export class Dashboard extends React.Component {
             <div className={styles.dashboard}>
                 <div className={styles.header}>
                     <Logout />
-                    <CreateRoom />
                     <div className={styles.logo}>
                         <Dixit />
                     </div>
