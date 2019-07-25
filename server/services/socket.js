@@ -3,6 +3,8 @@ const sharedsession = require("express-socket.io-session");
 
 let io;
 let sockets = [];
+
+/** @type {{ roomId: number, creator: { username: string }, players: {{ username: string }[]}, minPlayers: number }[]} */
 let rooms = [];
 
 exports.setupSocket = (server, session) => {
@@ -20,9 +22,9 @@ exports.setupSocket = (server, session) => {
 }
 
 // Create a room
-exports.createRoom = (username, roomId) => {
+exports.createRoom = (username, roomId, minPlayers) => {
     if (!rooms.some((room) => room.creator === username)) {
-        rooms.push({id: roomId, creator: username, players: [username]});
+        rooms.push({ roomId, creator: { username }, players: [{ username }], minPlayers });
         let socket = sockets.find(socket => socket.handshake.session.user === username);
         socket.join(`room-${roomId}`);
         socket.handshake.session.roomId = roomId;

@@ -38,7 +38,7 @@ export class Lobby extends React.Component {
                 <CreateRoom createRoom={this.createRoom}/>
                 <ul className={styles.currentRooms} data-cy="current-rooms">
                     {this.props.rooms.map(room => 
-                        <Room room={room} key={room.id} handleClick={this.joinRoom} history={this.props.history} />
+                        <Room room={room} key={room.roomId} handleClick={this.joinRoom} history={this.props.history} />
                     )}
                 </ul>
             </>

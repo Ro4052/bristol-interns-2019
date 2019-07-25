@@ -6,7 +6,7 @@ module.exports = class GameLogic {
     constructor(roomId) {
         this.roomId = roomId;
         this.rounds = 3;
-        this.minPlayers = 0;
+        this.minPlayers = 3;
         this.status = statusTypes.NOT_STARTED;
         this.roundNum = 0;
         this.currentPlayer = null;
@@ -24,6 +24,9 @@ module.exports = class GameLogic {
         this.players = this.players.filter(player => player.username !== username);
         socket.emitPlayers(this.roomId, this.players);
     }
+
+    /* Get the minimum number of players */
+    getMinPlayers() { return this.minPlayers };
 
     /* Set the status of the game */
     setStatus(newStatus) { return this.status = newStatus };

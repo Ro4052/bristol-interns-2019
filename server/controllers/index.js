@@ -57,7 +57,7 @@ router.get('/api/room/create', auth, (req, res) => {
     try {
         let newGameState = new gameLogicClass(roomId);
         let newGameRoom = {roomId, gameState: newGameState}
-        createRoom(user, roomId);
+        createRoom(user, roomId, newGameState.getMinPlayers());
         games.push(newGameRoom);
         // Add the creator to the room
         if (newGameState.canJoinGame(user)) { /* Game has not been started yet */
