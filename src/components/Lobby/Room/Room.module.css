@@ -1,0 +1,16 @@
+.singleRoom {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1em;
+    margin: 1em;
+    background-color: white;
+    border: 3px solid black;
+    border-radius: 20px;
+    font-size: 1.5em;
+}
+
+.singleRoom > h2 {
+    margin-top: 0;
+}

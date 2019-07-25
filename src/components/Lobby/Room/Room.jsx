@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import styles from '../Lobby.module.css';
+import styles from './Room.module.css';
 import StartGame from '../../StartGame/StartGame';
 
 export class Room extends React.Component {
