@@ -20,6 +20,7 @@ module.exports = class GameLogic {
         this.playCardTimeout = 0;
         this.voteTimeout = 0;
         this.timeoutDuration = 30000;
+        this.nextRoundTimeoutDuration = 5000;
     }
 
     /* Remove player from list of this.players on log out */
@@ -176,7 +177,7 @@ module.exports = class GameLogic {
                 socket.emitStatus(this.roomId, this.status);
                 socket.emitAllVotes(this.roomId, this.votes);
                 this.calcScores();
-                this.nextRoundTimeout = setTimeout(() => this.nextRound(), 5000);
+                this.nextRoundTimeout = setTimeout(() => this.nextRound(), this.nextRoundTimeoutDuration);
             }
         } else {
             // Cannot vote for card, the player has already voted for a card, or the game status is not
@@ -191,7 +192,7 @@ module.exports = class GameLogic {
         socket.emitStatus(this.roomId, this.status);
         socket.emitAllVotes(this.roomId, this.votes);
         this.calcScores();
-        this.nextRoundTimeout = setTimeout(() => this.nextRound(), 5000);
+        this.nextRoundTimeout = setTimeout(() => this.nextRound(), this.nextRoundTimeoutDuration);
     };
 
     emitPlayedCards() {
@@ -251,5 +252,6 @@ module.exports = class GameLogic {
     clearTimeouts() {
         clearTimeout(this.playCardTimeout);
         clearTimeout(this.voteTimeout);
+        clearTimeout(this.nextRoundTimeout);
     }
 }
