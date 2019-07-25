@@ -44,10 +44,13 @@ describe('on initial render', () => {
 });
 
 describe('on click', () => {
-    
     it('calls createRoom', () => {
         const createRoom = jest.spyOn(Lobby.prototype, 'createRoom');
-        const wrapper = mount(<Lobby rooms={[]}/>);
+        const wrapper = mount(
+            <Provider store={afterClickStore}>
+                <Lobby rooms={[room]}/>
+            </Provider>
+        );
         wrapper.find({ 'data-cy': 'create-room' }).simulate('click');
         expect(createRoom).toHaveBeenCalled();
         createRoom.mockRestore();
