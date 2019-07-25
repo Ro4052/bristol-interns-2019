@@ -2,6 +2,7 @@ import axios from "axios";
 import connectSocket from '../../../services/socket';
 import { types } from './AuthActionTypes';
 import { setRooms } from '../../Lobby/LobbyActions';
+import history from '../../../services/history';
 
 const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
@@ -34,11 +35,14 @@ export const authenticateUser = () => dispatch => {
         if (res.status === 200) {
             connectSocket()
             .then(() => dispatch(authSuccess(res.data.cookie)));
-        } else throw Error(res.data.message);
+        } else {
+            history.push('/');
+            throw Error(res.data.message);
+        }
     })
-    .catch(err => {
+    .catch(() => {
+        history.push('/');
         dispatch(resetStore());
-        dispatch(authFailure(err.message));
     });
 }
 

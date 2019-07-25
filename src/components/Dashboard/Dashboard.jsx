@@ -9,8 +9,14 @@ import Players from '../Players/Players';
 import GameOver from '../GameOver/GameOver';
 import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
 import Dixit from '../Dixit/Dixit';
+import { authenticateUser } from '../shared/Auth/AuthActions';
 
 export class Dashboard extends React.Component {
+
+    componentDidMount() {
+        this.props.authenticateUser();
+    }
+
     render() {
         const showPlayerInteractions = (this.props.playCard || this.props.playWord || this.props.voteCard)
                                     || ((this.props.currentPlayer) && 
@@ -62,4 +68,8 @@ const mapStateToProps = (state) => ({
     winner: state.gameOverReducer.winner
 });
 
-export default connect(mapStateToProps)(Dashboard);
+const mapDispatchToProps = (dispatch) => ({
+    authenticateUser: () => dispatch(authenticateUser())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
