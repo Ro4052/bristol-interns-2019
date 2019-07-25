@@ -1,5 +1,8 @@
 describe('Dashboard', () => {
-    beforeEach(() => cy.login('unicorn'));
+    beforeEach(() => {
+        cy.login('unicorn'); 
+        cy.createRoom();
+    });
 
     describe('before start of game', () => {
         it("should display start button and shouldn't display any round information", () => {

@@ -1,10 +1,11 @@
 describe('Valid word', () => {
-    describe('on submit invalid word', () => {
-        beforeEach(() => {
-            cy.login('username');
+    beforeEach(() => cy.login('unicorn'));
+
+    describe('on submit a bad word', () => {
+        it('displays an error', () => {
+            cy.createRoom();
             cy.startGame();
-        });
-        it('displays error', () => {
+            cy.get('[data-cy="start-game"]').should('not.exist');
             cy.sendWord();
             cy.get('[data-cy="send-error"]').should('contain', 'Invalid word');
         });

@@ -87,7 +87,7 @@ export class Login extends React.Component {
                         <Button cy="login" handeClick={this.sendLogin} type="submit" text="Log in" />
                     </form>
                 </div>
-            : <Redirect to='/dashboard' />
+            : <Redirect to='/lobby' />
         )
     }
 }
