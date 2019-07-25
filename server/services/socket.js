@@ -4,7 +4,7 @@ const sharedsession = require("express-socket.io-session");
 let io;
 let sockets = [];
 
-/** @type {{ roomId: number, creator: { username: string }, players: {{ username: string }[]}, minPlayers: number }[]} */
+/** @type {{ roomId: number, started: boolean, creator: { username: string }, players: {{ username: string }[]}, minPlayers: number }[]} */
 let rooms = [];
 
 exports.setupSocket = (server, session) => {
@@ -24,7 +24,7 @@ exports.setupSocket = (server, session) => {
 // Create a room
 exports.createRoom = (username, roomId, minPlayers) => {
     if (!rooms.some((room) => room.creator === username)) {
-        rooms.push({ roomId, creator: { username }, players: [{ username }], minPlayers });
+        rooms.push({ roomId, started: false, creator: { username }, players: [{ username }], minPlayers });
         let socket = sockets.find(socket => socket.handshake.session.user === username);
         socket.join(`room-${roomId}`);
         socket.handshake.session.roomId = roomId;
@@ -59,6 +59,12 @@ exports.leaveRoom = (username, roomId) => {
     this.emitRooms();
 };
 
+// Set that the room has started
+exports.setRoomStarted = (roomId) => {
+    let room = rooms.find(room => room.roomId === roomId);
+    if (room) room.started = true;
+}
+
 // Cloase the existing socket
 exports.closeSocket = () => {
     rooms = [];
@@ -76,9 +82,6 @@ exports.emitPlayers = emitPlayers;
 
 // Let the players know about the next round
 exports.emitNewRound = (roomId, status, roundNum, currentPlayer) => io.to(`room-${roomId}`).emit("new round", { status, roundNum, currentPlayer });
-
-// Get the current list of rooms
-exports.getRooms = () => { return rooms; };
 
 // Emit the newly created room
 exports.emitRooms = () => sockets.forEach(socket => socket.emit("rooms", rooms));

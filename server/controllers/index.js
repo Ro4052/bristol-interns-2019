@@ -3,7 +3,7 @@ const router = require('express').Router();
 const path = require('path');
 const auth = require('../services/auth');
 const GameLogic = require('../services/GameLogic');
-const { closeSocket, createRoom, joinRoom, leaveRoom, getRooms } = require('../services/socket');
+const { closeSocket, createRoom, joinRoom, leaveRoom, getRooms, setRoomStarted } = require('../services/socket');
 
 let currentUsers = [];
 let roomId = 0;
@@ -126,7 +126,9 @@ router.get('/api/cards', auth, (req, res) => {
 /* Start the game */
 router.get('/api/start', auth, (req, res) => {
     try {
-        getGameStateById(req.session.roomId).startGame();
+        const roomId = req.session.roomId;
+        getGameStateById(roomId).startGame();
+        setRoomStarted(roomId);
         res.sendStatus(200);
     } catch (err) {
         console.log(err);
