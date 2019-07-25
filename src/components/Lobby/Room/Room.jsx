@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import styles from './Room.module.css';
 import StartGame from '../../StartGame/StartGame';
 import Button from '../../shared/Button/Button';
-import { joinRoom } from '../LobbyActions';
+import { joinRoom, leaveRoom } from '../LobbyActions';
 
 export class Room extends React.Component {
     render() {
@@ -18,7 +18,7 @@ export class Room extends React.Component {
                 </ul>
                 {this.props.room.minPlayers - this.props.room.players.length ? waiting : <StartGame />}
                 {inRoom ?
-                    <Button cy="leave-room" handleClick={() => {}} text="Leave room" /> :
+                    <Button cy="leave-room" handleClick={() => this.props.leaveRoom(this.props.room.roomId)} text="Leave room" /> :
                     <Button cy="join-room" handleClick={() => this.props.joinRoom(this.props.room.roomId)} text="Join room" />
                 }
             </li>
@@ -32,6 +32,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     joinRoom: (roomId) => dispatch(joinRoom(roomId)),
+    leaveRoom: (roomId) => dispatch(leaveRoom(roomId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Room);

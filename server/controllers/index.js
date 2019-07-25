@@ -3,7 +3,7 @@ const router = require('express').Router();
 const path = require('path');
 const auth = require('../services/auth');
 const GameLogic = require('../services/GameLogic');
-const { closeSocket, createRoom, joinRoom, getRooms } = require('../services/socket');
+const { closeSocket, createRoom, joinRoom, leaveRoom, getRooms } = require('../services/socket');
 
 let currentUsers = [];
 let roomId = 0;
@@ -75,6 +75,7 @@ router.get('/api/room/create', auth, (req, res) => {
     }
 });
 
+/* Join a room */
 router.post('/api/room/join', auth, (req, res) => {
     const { user } = req.session;
     const { roomId } = req.body;
@@ -88,6 +89,28 @@ router.post('/api/room/join', auth, (req, res) => {
         } else { /* Game has already began */
             res.status(400).json({message: "Game has already started."});
         }
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({message: err.message})
+    }
+});
+
+/* Leave a room */
+router.post('/api/room/leave', auth, (req, res) => {
+    const { user } = req.session;
+    const { roomId } = req.body;
+    try {
+        getGameStateById(roomId).quitGame(user);
+        leaveRoom(user, roomId);
+        req.session.roomId = undefined;
+    //     if (getGameStateById(roomId).canJoinGame(user)) {
+    //         getGameStateById(roomId).joinGame(user, () => {
+    //             req.session.roomId = roomId; 
+                res.sendStatus(200);
+    //         });
+    //     } else { /* Game has already began */
+    //         res.status(400).json({message: "Game has already started."});
+    //     }
     } catch (err) {
         console.log(err);
         res.status(400).json({message: err.message})

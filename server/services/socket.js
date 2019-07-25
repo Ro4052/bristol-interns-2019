@@ -48,6 +48,20 @@ exports.joinRoom = (username, roomId) => {
     }
 };
 
+// Leave a room
+exports.leaveRoom = (username, roomId) => {
+    let room = rooms.find((room) => room.roomId === roomId);
+    // if (username !== room.creator.username && !room.players.some(player => player.username === username)) {
+        let socket = sockets.find(socket => socket.handshake.session.user === username);
+        socket.leave(`room-${roomId}`);
+        socket.handshake.session.roomId = undefined;
+        room.players = room.players.filter(player => player.username !== username );
+        this.emitRooms();
+    // } else {
+    //     throw new Error("You cannot join the room again.");
+    // }
+};
+
 // Cloase the existing socket
 exports.closeSocket = () => {
     rooms = [];
