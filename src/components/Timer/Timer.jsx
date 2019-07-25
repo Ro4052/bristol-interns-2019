@@ -4,10 +4,10 @@ import styles from './Timer.module.css';
 export class Timer extends React.Component {
     constructor() {
         super();
-        this.decrement = this.decrement.bind(this);
         this.state = {
             seconds: 30
         };
+        this.decrement = this.decrement.bind(this);
     }
 
     componentDidMount() {
