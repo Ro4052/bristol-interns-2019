@@ -16,7 +16,7 @@ export class Room extends React.Component {
                 <ul id="players" data-cy='players-list'>
                     {this.props.room.players.map((player, key) => <li key={key}><span data-cy='player-username'>{player.username}</span></li>)}
                 </ul>
-                {this.props.room.minPlayers - this.props.room.players.length ? waiting : <StartGame />}
+                {!this.props.started && this.props.room.minPlayers - this.props.room.players.length ? waiting : <StartGame />}
                 {inRoom ?
                     <Button cy="leave-room" handleClick={() => this.props.leaveRoom(this.props.room.roomId)} text="Leave room" /> :
                     <Button cy="join-room" handleClick={() => this.props.joinRoom(this.props.room.roomId)} text="Join room" />
