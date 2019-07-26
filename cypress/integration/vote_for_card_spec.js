@@ -38,5 +38,13 @@ describe('Vote for a card', () => {
                 cy.get('[data-cy="vote"]').should('exist');
             });
         });
+        it("marks the player's turn as finished", () => {
+            cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
+            .then(() => {
+                cy.playCard();
+                cy.voteCard();
+                cy.get('[data-cy="finished-turn"]').should('have.text', '✓');
+            });
+        });
     });
 });

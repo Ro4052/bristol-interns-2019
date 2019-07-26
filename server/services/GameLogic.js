@@ -63,8 +63,6 @@ module.exports = class GameLogic {
             throw Error("You have already joined this game");
         } else {
             const cards = cardManager.assign(this.players, rounds);
-            console.log("ASSIGNED CARDS");
-            console.log(cards);
             const player = { username, cards, score: 0 };
             this.players.push(player);      
             socket.emitPlayers(this.roomId, this.players);
@@ -113,6 +111,7 @@ module.exports = class GameLogic {
             this.roundNum++;
             this.currentPlayer = this.players[this.roundNum % this.players.length];
             this.clearRoundData();
+            this.clearFinishedTurn();
             socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer);
             socket.promptCurrentPlayer(this.roomId, this.currentPlayer);
         } else {
@@ -133,6 +132,7 @@ module.exports = class GameLogic {
             socket.emitStatus(this.roomId, this.status);
             this.currentWord = word;
             socket.emitWord(this.roomId, this.currentWord);
+            this.markTurnAsFinished(username);
             socket.promptOtherPlayers(this.roomId, this.currentPlayer, promptDuration);
             this.playCardTimeout = setTimeout(() => this.playRandomCard(), promptDuration);
         } else {
@@ -149,6 +149,8 @@ module.exports = class GameLogic {
                 const cards = this.getCardsByUsername(player.username);
                 const randomCard = (cards[Math.floor(Math.random()*cards.length)]);
                 this.playedCards.push(randomCard);
+                player.finishedTurn = true;
+                socket.emitPlayers(this.roomId, this.players);
                 cards.find(card => card.cardId === randomCard.cardId).played = true;
                 socket.emitPlayedCard(player.username, randomCard);
             }
@@ -160,10 +162,12 @@ module.exports = class GameLogic {
     playCard (username, cardId) {      
         if (this.status === statusTypes.WAITING_FOR_OTHER_PLAYERS && !this.playerHasPlayedCard(username)) {
             const card = { username, cardId };
-            this.playedCards.push(card);            
+            this.playedCards.push(card);
             this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
+            this.markTurnAsFinished(username);
             if (this.allPlayersPlayedCard()) {
                 this.clearTimeouts();
+                this.clearFinishedTurn();
                 this.setStatus(statusTypes.WAITING_FOR_VOTES);
                 socket.emitPlayedCards(this.roomId, this.getPlayedCards());
                 socket.promptPlayersVote(this.roomId, this.currentPlayer, promptDuration);
@@ -181,6 +185,7 @@ module.exports = class GameLogic {
         if (this.status === statusTypes.WAITING_FOR_VOTES && !this.playerHasVoted(username)) {
             const vote = { username, cardId };
             this.votes.push(vote);
+            this.markTurnAsFinished(username);
             if (this.allPlayersVoted()) {
                 this.clearTimeouts();
                 this.setStatus(statusTypes.DISPLAY_ALL_VOTES);
@@ -242,6 +247,12 @@ module.exports = class GameLogic {
     /* Returns true if all players (apart from the current player) have voted this round */
     allPlayersVoted() { return this.players.every(player => player.username === this.currentPlayer.username || this.playerHasVoted(player.username)) };
 
+    /* Mark the player's turn as finished and notify the other players */
+    markTurnAsFinished(username) {
+        this.players.find(player => player.username === username).finishedTurn = true;
+        socket.emitPlayers(this.roomId, this.players);
+    }
+
     /* Clean up stored data */
     clearRoundData() {
         this.currentWord = '';
@@ -264,5 +275,11 @@ module.exports = class GameLogic {
         clearTimeout(this.playCardTimeout);
         clearTimeout(this.voteTimeout);
         clearTimeout(this.nextRoundTimeout);
+    }
+
+    /* Clears the bool for finished turn */
+    clearFinishedTurn() {
+        this.players.forEach(player => player.finishedTurn = false);
+        socket.emitPlayers(this.roomId, this.players);
     }
 }
