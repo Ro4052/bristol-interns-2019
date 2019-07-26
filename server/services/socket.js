@@ -63,6 +63,7 @@ exports.leaveRoom = (username, roomId) => {
 exports.setRoomStarted = (roomId) => {
     let room = rooms.find(room => room.roomId === roomId);
     if (room) room.started = true;
+    this.emitRooms();
 }
 
 // Cloase the existing socket
