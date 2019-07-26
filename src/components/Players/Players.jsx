@@ -9,6 +9,7 @@ export class Players extends React.PureComponent {
     render() {
         return (
             <table className={styles.players} data-cy='players-list'>
+                <tbody> 
                 {this.props.players.map((player, key) => {
                     return (
                         <tr data-cy="player" key={key} className={cx({ current: this.props.currentPlayer && this.props.currentPlayer.username === player.username })}>
@@ -18,6 +19,7 @@ export class Players extends React.PureComponent {
                         </tr>
                     );
                 })}
+                </tbody>
             </table>
         )
     }
