@@ -14,6 +14,7 @@ exports.setupSocket = (server, session) => {
         if (socket.handshake.session.user) {
             sockets = sockets.filter(otherSocket => otherSocket.handshake.session.user !== socket.handshake.session.user);
             sockets.push(socket);
+            emitRooms();
         }
         socket.on('disconnect', function (disconnected) {
             sockets = sockets.filter(socket => socket !== disconnected);
@@ -88,7 +89,8 @@ exports.emitNewRound = (roomId, status, roundNum, currentPlayer) => io.to(`room-
 exports.getRooms = () => rooms;
 
 // Emit the newly created room
-exports.emitRooms = () => sockets.forEach(socket => socket.emit("rooms", rooms));
+const emitRooms = () => sockets.forEach(socket => socket.emit("rooms", rooms));
+exports.emitRooms = emitRooms;
 
 // Emit the new status of the game
 exports.emitStatus = (roomId, status) => io.to(`room-${roomId}`).emit("status", { status });
