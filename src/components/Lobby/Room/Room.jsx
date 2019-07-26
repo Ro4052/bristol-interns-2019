@@ -10,7 +10,7 @@ export class Room extends React.Component {
         const waiting = <span data-cy="players-needed">Waiting for {this.props.room.minPlayers - this.props.room.players.length} more players</span>;
         const inRoom = this.props.room.players.some(player => player.username === this.props.username);
         return (
-            <li className={styles.singleRoom} key={this.props.room.roomId} data-cy="room">
+            <li className={styles.room} key={this.props.room.roomId} data-cy="room">
                 <h2 data-cy="room-title">{"Room: " + this.props.room.roomId}</h2>
                 <ul id="players" data-cy='room-players'>
                     {this.props.room.players.map((player, key) => <li key={key}><span data-cy='player-username'>{player.username}</span></li>)}

@@ -1,4 +1,4 @@
-.singleRoom {
+.room {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -11,6 +11,6 @@
     font-size: 1.5em;
 }
 
-.singleRoom > h2 {
+.room > h2 {
     margin-top: 0;
 }
