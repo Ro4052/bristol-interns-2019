@@ -22,6 +22,10 @@ export const playWord = word => ({
     word
 });
 
+export const resetWord = () => ({
+    type: types.RESET_PLAY_WORD
+});
+
 export const validateWord = word => dispatch => {
     axiosInstance.post('/api/validWord', { word })
     .then(res => {

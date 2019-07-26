@@ -1,0 +1,4 @@
+export const types = {
+    SET_PLAY_CARD_TIMER: 'SET_PLAY_CARD_TIMER',
+    SET_VOTE_CARD_TIMER: 'SET_VOTE_CARD_TIMER'
+};
