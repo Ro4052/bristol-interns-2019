@@ -195,9 +195,7 @@ router.post('/api/voteCard', auth, (req, res) => {
 if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {
         try {
-            if (req.session.roomId) {
-                getGameStateById(req.session.roomId).clearGameState();
-            }
+            games.forEach(game => game.gameState.clearGameState());
             currentUsers = [];
             roomId = 0;
             games = [];
