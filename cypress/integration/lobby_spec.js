@@ -47,7 +47,7 @@ describe('Lobby', () => {
             .then(() => {
                 cy.playCard();
                 cy.voteCard();
-                cy.wait(500);
+                cy.wait(1000);
                 return cy.request(`http://localhost:12346/playCard?url=${encodeURIComponent(Cypress.config().baseUrl)}`);
             })
             .then(() => {
@@ -62,7 +62,7 @@ describe('Lobby', () => {
             .then(() => {
                 cy.playCard();
                 cy.voteCard();
-                cy.wait(500);
+                cy.wait(1000);
                 cy.newGame();
                 cy.url().should('include', '/lobby');
             })
