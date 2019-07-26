@@ -112,8 +112,9 @@ module.exports = class GameLogic {
             this.currentPlayer = this.players[this.roundNum % this.players.length];
             this.clearRoundData();
             this.clearFinishedTurn();
-            socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer);
-            socket.promptCurrentPlayer(this.roomId, this.currentPlayer);
+            socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer).then(() => {
+                socket.promptCurrentPlayer(this.roomId, this.currentPlayer);
+            });
         } else {
             this.setStatus(statusTypes.GAME_OVER);
             socket.emitStatus(this.roomId, this.status);
