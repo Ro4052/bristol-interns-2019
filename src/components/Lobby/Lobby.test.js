@@ -3,79 +3,73 @@ import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
 import { Lobby } from './Lobby';
 import configureStore from 'redux-mock-store';
-import { authFailure, authSuccess } from '../shared/Auth/AuthActions';
-
-const room = {
-    id: 0,
-    players: ["unicorn", "halfling"]
-};
-
-const initialState = {
-    lobbyReducer: {
-        rooms: []
-    },
-    dashboardReducer: {
-        status: "NOT_STARTED"
-    }
-};
-
-const afterClickState = {
-    lobbyReducer: {
-        rooms: [room]
-    },
-    dashboardReducer: {
-        status: "NOT_STARTED"
-    }
-};
 
 const middlewares = [];
 const mockStore = configureStore(middlewares);
-const initialStore = mockStore(initialState);
-const afterClickStore = mockStore(afterClickState);
-const authenticateUserMock = jest.fn();
 
-describe('on initial render', () => {
-    it('calls authenticateUser', () => {
-        mount(
-            <Provider store={initialStore}>
-                <Lobby rooms={[]} authenticateUser={authenticateUserMock}/>
-            </Provider>
-        );
-        expect(authenticateUserMock).toHaveBeenCalled();
-        authenticateUserMock.mockRestore();
-    });
-    
-    it('displays no rooms', () => {
+const room = {
+    roomId: 0,
+    players: [
+        { username: "unicorn" },
+        { username: "halfling" }
+    ]
+};
+
+const emptyState = { authReducer: { username: 'unicorn' }, lobbyReducer: { rooms: [] } };
+const emptyStore = mockStore(emptyState);
+
+describe('on render', () => {
+    it('renders a create room button', () => {
         const wrapper = mount(
-            <Provider store={initialStore}>
-                <Lobby rooms={[]} authenticateUser={authenticateUserMock}/>
+            <Provider store={emptyStore}>
+                <Lobby authenticateUser={jest.fn()} rooms={[]} />
             </Provider>
         );
-        expect(wrapper.exists({ 'data-cy': 'single-room' })).toEqual(false);
+        expect(wrapper.exists({ 'data-cy': 'create-room' })).toEqual(true);
+    });
+
+    it('renders the list of rooms', () => {
+        const wrapper = mount(
+            <Provider store={emptyStore}>
+                <Lobby authenticateUser={jest.fn()} rooms={[]} />
+            </Provider>
+        );
+        expect(wrapper.exists({ 'data-cy': 'current-rooms' })).toEqual(true);
     });
 });
 
-describe('on click', () => {
-    it('calls createRoom', () => {
-        const createRoom = jest.spyOn(Lobby.prototype, 'createRoom');
+describe('if given an empty list rooms', () => {
+    it('displays no rooms', () => {
         const wrapper = mount(
-            <Provider store={afterClickStore}>
-                <Lobby rooms={[room]} authenticateUser={authenticateUserMock}/>
+            <Provider store={emptyStore}>
+                <Lobby authenticateUser={jest.fn()} rooms={[]} />
+            </Provider>
+        );
+        expect(wrapper.find({ 'data-cy': 'current-rooms' }).children().length).toEqual(0);
+    });
+});
+
+describe('if given a list of rooms', () => {
+    it('displays the correct number of rooms', () => {
+        const wrapper = mount(
+            <Provider store={emptyStore}>
+                <Lobby authenticateUser={jest.fn()} rooms={[room]} />
+            </Provider>
+        );
+        expect(wrapper.find({ 'data-cy': 'current-rooms' }).children().length).toEqual(1);
+    });
+});
+
+describe('on click the create room button', () => {
+    it('calls createRoom', () => {
+        const createRoom = jest.fn();
+        const wrapper = mount(
+            <Provider store={emptyStore}>
+                <Lobby authenticateUser={jest.fn()} rooms={[]} createRoom={createRoom} />
             </Provider>
         );
         wrapper.find({ 'data-cy': 'create-room' }).simulate('click');
         expect(createRoom).toHaveBeenCalled();
         createRoom.mockRestore();
     });
-
-    it('displays the new room', () => {
-        const wrapper = mount(
-            <Provider store={afterClickStore}>
-                <Lobby rooms={[room]} authenticateUser={authenticateUserMock}/>
-            </Provider>
-        );
-        expect(wrapper.exists({ 'data-cy': 'single-room' })).toEqual(true);
-    });
-
-   /* TODO: moxios when createRoom is moved into actions */
 });

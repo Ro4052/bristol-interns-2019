@@ -6,9 +6,10 @@ const { statusTypes } = require('./statusTypes');
 const promptDuration = process.env.NODE_ENV === 'testing' ? 1000 : 37000;
 const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 1000 : 5000;
 const rounds = 3;
-const minPlayers = 0;
+const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 3;
+exports.minPlayers = minPlayers;
 
-module.exports = class GameLogic {
+class GameLogic {
     constructor(roomId) {
         this.roomId = roomId;
         this.status = statusTypes.NOT_STARTED;
@@ -46,9 +47,6 @@ module.exports = class GameLogic {
     /* Get the list of unplayed cards for a specific player */
     getUnplayedCardsByUsername(username) { return this.players.find(player => player.username === username).cards.filter(card => !card.played) };
 
-    /* Returns true if the player is able to join the game, false otherwise */
-    canJoinGame(username) { return (this.status === statusTypes.NOT_STARTED && !this.players.some(player => player.username === username)) };
-
     /* Return the list of players, hiding their assigned cards */
     getPlayers() { return this.players.map(player => ({ username: player.username, score: player.score })) };
 
@@ -56,17 +54,17 @@ module.exports = class GameLogic {
     getPlayedCards() { return this.playedCards.map(card => ({ cardId: card.cardId })).sort(() => .5 - Math.random()) };
 
     /* Add the player to the game if possible */
-    joinGame(user, callback) {
-        const cards = cardManager.assign(this.players, rounds);
-        const player = {
-            username: user,
-            cards: cards,
-            score: 0,
-            finishedTurn: false
+    joinGame(username) {
+        if (this.status !== statusTypes.NOT_STARTED) {
+            throw Error("Game has already started");
+        } else if (this.players.some(player => player.username === username)) {
+            throw Error("You have already joined this game");
+        } else {
+            const cards = cardManager.assign(this.players, rounds);
+            const player = { username, cards, score: 0 };
+            this.players.push(player);      
+            socket.emitPlayers(this.roomId, this.players);
         }
-        this.players.push(player);      
-        socket.emitPlayers(this.roomId, this.players);  
-        callback();
     }
 
     /* Remove player from current game */
@@ -106,7 +104,9 @@ module.exports = class GameLogic {
 
     /* Move on to the next round, called when all players have finished their turn */
     nextRound() {
+        this.clearTimeouts();
         if (this.roundNum < rounds) {
+            this.clearRoundData();
             this.setStatus(statusTypes.WAITING_FOR_CURRENT_PLAYER);
             this.roundNum++;
             this.currentPlayer = this.players[this.roundNum % this.players.length];
@@ -284,3 +284,4 @@ module.exports = class GameLogic {
         socket.emitPlayers(this.roomId, this.players);
     }
 }
+exports.GameLogic = GameLogic;
