@@ -1,28 +1,26 @@
 import React from 'react';
-import axios from 'axios';
 import { connect } from 'react-redux';
 import styles from './GameOver.module.css';
 import Button from '../shared/Button/Button';
+import { endGame } from './GameOverActions';
 
 export class GameOver extends React.Component {
-
-    newGame() {
-        axios.get('/api/end')
-        .catch(err => console.log(err));
-    }
-
     render() {
         return (
             <div className={styles.gameOverBox}>
-                <h2 className={styles.winnerText}>Winner is: <span data-cy='winner'>{this.props.winner.username}</span></h2>
-                <Button cy="new-game" handleClick={this.newGame} text="New game" />
+                <h2>Winner is: <span data-cy='winner'>{this.props.winner.username}</span></h2>
+                <Button cy="new-game" handleClick={this.props.endGame} text="New game" />
             </div>
         );
     }
 }
 
 const mapStateToProps = (state) => ({
-    winner: state.gameReducer.winner
+    winner: state.gameOverReducer.winner
 });
 
-export default connect(mapStateToProps)(GameOver);
+const mapDispatchToProps = (dispatch) => ({
+    endGame: () => dispatch(endGame())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(GameOver);

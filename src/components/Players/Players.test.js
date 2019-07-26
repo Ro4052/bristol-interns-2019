@@ -3,10 +3,6 @@ import { shallow } from 'enzyme';
 import { Players } from './Players';
 
 describe('on empty list of players', () => {
-    it("displays the heading", () => {
-        const wrapper = shallow(<Players players={[]} />);
-        expect(wrapper.find({ "data-cy": "players-heading" }).text()).toEqual('Players:');
-    });
     it("doesn't display any players", () => {
         const wrapper = shallow(<Players players={[]} />);
         expect(wrapper.find('ul#players').children().length).toEqual(0);
@@ -22,8 +18,7 @@ const players = [
 describe('on given a list of players', () => {
     it("displays the correct number of players", () => {
         const wrapper = shallow(<Players players={players} />);
-        expect(wrapper.find('h3').text()).toEqual("Players:");
-        expect(wrapper.find('ul#players').children().length).toEqual(3);
+        expect(wrapper.find({ 'data-cy': 'player' }).length).toEqual(3);
     });
     it("displays the correct usernames", () => {
         const wrapper = shallow(<Players players={players} />);

@@ -12,6 +12,10 @@
   src: local('Dilana'), url('./fonts/NotoSerif-Regular.ttf') format('truetype');
 }
 
+* {
+    box-sizing: border-box;
+}
+
 body {
   height: 100%;
   margin: 0;
@@ -56,7 +60,6 @@ ul {
 
 input {
     padding: 1em;
-    font-size: 3vmin;
     background-color: var(--yellow);
     border: 3px solid black;
     border-radius: 15px;

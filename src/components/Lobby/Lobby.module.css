@@ -1,0 +1,6 @@
+.currentRooms {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-flow: row wrap;
+}

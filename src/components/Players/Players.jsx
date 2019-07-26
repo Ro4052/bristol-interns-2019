@@ -1,22 +1,33 @@
 import React from 'react';
 import styles from './Players.module.css';
 import { connect } from 'react-redux';
+import classNames from 'classnames/bind';
+
+const cx = classNames.bind(styles);
 
 export class Players extends React.PureComponent {
     render() {
         return (
-            <div className={styles.currentPlayersBox}>
-                <h3 data-cy="players-heading">Players:</h3>
-                <ul id="players" data-cy='players-list'>
-                    {this.props.players.map((player, key) => <li key={key}><span data-cy='player-username'>{player.username}</span>: <span data-cy='player-score'>{player.score}</span> points</li>)}
-                </ul>
-            </div>
+            <table className={styles.players} data-cy='players-list'>
+                <tbody> 
+                {this.props.players.map((player, key) => {
+                    return (
+                        <tr data-cy="player" key={key} className={cx({ current: this.props.currentPlayer && this.props.currentPlayer.username === player.username })}>
+                            <td className={styles.playerUsername} data-cy='player-username'>{player.username}</td>
+                            <td data-cy='player-score'>{player.score}</td>
+                            <td data-cy='finished-turn'>{player.finishedTurn && "✓"}</td>
+                        </tr>
+                    );
+                })}
+                </tbody>
+            </table>
         )
     }
 }
 
 const mapStateToProps = (state) => ({
-    players: state.gameReducer.players
+    players: state.playersReducer.players,
+    currentPlayer: state.playersReducer.currentPlayer,
 });
 
 export default connect(mapStateToProps)(Players);

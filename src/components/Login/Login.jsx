@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import styles from './Login.module.css';
 import { Redirect } from 'react-router-dom';
+import styles from './Login.module.css';
 import Monster from '../Monster/Monster';
 import Dixit from '../Dixit/Dixit';
-import { logIn, authenticateUser } from '../../store/playerActions';
 import Button from '../shared/Button/Button';
+import { authenticateUser, logIn } from '../shared/Auth/AuthActions';
 
 export class Login extends React.Component {
 
@@ -31,29 +31,32 @@ export class Login extends React.Component {
     checkUsernameAllowed(string) {
         // eslint-disable-next-line
         const allowed = /^[A-Za-z0-9]*$/;
-        if (allowed.test(string)){
-            return true;
-        }
-        return false;
+        return allowed.test(string);
     }
-    
+
     checkUsername() {
         if (this.state.value === '') {
             this.setState ({
                 error: "Username cannot be an empty string"
-            })
+            });
             return false;
         }
         if (!this.checkUsernameAllowed(this.state.value)) {
             this.setState({
                 error: "Username can be comprised of numbers and latin letters only"
-            })
+            });
             return false;
         }
         if (this.state.value.length < 3) {
             this.setState({
                 error: "Username must be at least 3 characters"
-            })
+            });
+            return false;
+        }
+        if (this.state.value.length > 15) {
+            this.setState({
+                error: "Username must be no longer than 15 characters"
+            });
             return false;
         }
         return true;
@@ -72,7 +75,7 @@ export class Login extends React.Component {
 
     render() {
         return (
-            (!this.props.cookie) ?
+            (!this.props.username) ?
                 <div className={styles.loginPage}>
                     <Dixit />
                     <Monster />
@@ -84,15 +87,14 @@ export class Login extends React.Component {
                         <Button cy="login" handeClick={this.sendLogin} type="submit" text="Log in" />
                     </form>
                 </div>
-            : <Redirect to='/dashboard' />
+            : <Redirect to='/lobby' />
         )
     }
 }
 
 const mapStateToProps = (state) => ({
-    cookie: state.playerReducer.cookie,
-    loading: state.playerReducer.loading,
-    error: state.playerReducer.error
+    username: state.authReducer.username,
+    error: state.authReducer.error
 });
 
 const mapDispatchToProps = (dispatch) => ({

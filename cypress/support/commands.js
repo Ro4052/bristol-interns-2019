@@ -24,6 +24,33 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
+Cypress.Commands.add('createRoom', () => {
+    cy.route({
+        method: 'POST',
+        url: '/api/room/create'
+    }).as('createRoom');
+    cy.get('[data-cy="create-room"]').click();
+    cy.wait('@createRoom');
+});
+
+Cypress.Commands.add('joinRoom', () => {
+    cy.route({
+        method: 'POST',
+        url: '/api/room/join'
+    }).as('joinRoom');
+    cy.get('[data-cy="join-room"]').click();
+    cy.wait('@joinRoom');
+});
+
+Cypress.Commands.add('leaveRoom', () => {
+    cy.route({
+        method: 'POST',
+        url: '/api/room/leave'
+    }).as('leaveRoom');
+    cy.get('[data-cy="leave-room"]').click();
+    cy.wait('@leaveRoom');
+});
+
 Cypress.Commands.add('login', username => {
     cy.route({
         method: 'POST',
@@ -48,9 +75,9 @@ Cypress.Commands.add('playCardWord', () => {
         method: 'POST',
         url: '/api/playCardWord'
     }).as('playCardWord');
-    cy.get('[data-cy="my-cards"] [data-cy="card"]').first().click();
     cy.get('[data-cy="type-word"]').type('word');
     cy.get('[data-cy="send-word"]').click();
+    cy.get('[data-cy="my-cards"] [data-cy="card"]').first().click();
     cy.get('[data-cy="end-turn"]').click();
     cy.wait('@playCardWord');
 });
@@ -69,11 +96,30 @@ Cypress.Commands.add('voteCard', () => {
         method: 'POST',
         url: '/api/voteCard'
     }).as('voteCard');
-    cy.get('[data-cy="played-cards"] [data-cy="card"]').first().click();
+    cy.get('[data-cy="played-cards"] [data-cy="card-wrapper"]').first().then(($wrapper) => {
+        const disabled = /disabled/;
+        const classList = Array.from($wrapper[0].classList);
+        if (classList.some(cls => disabled.test(cls))) $wrapper = $wrapper.next();
+        $wrapper.click();
+    });
     cy.wait('@voteCard');
 });
 
 Cypress.Commands.add('sendWord', () => {
+    cy.route({
+        method: 'POST',
+        url: '/api/validWord'
+    }).as('validWord');
     cy.get('[data-cy="type-word"]').type('fuck');
     cy.get('[data-cy="send-word"]').click();
+    cy.wait('@validWord');
+});
+
+Cypress.Commands.add('newGame', () => {
+    cy.route({
+        method: 'GET',
+        url: '/api/end'
+    }).as('endGame');
+    cy.get('[data-cy="new-game"]').click();
+    cy.wait('@endGame');
 });

@@ -1,18 +1,12 @@
 .gameOverBox {
-    position: absolute;
-    top: 20%;
-    z-index: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: #fac825;
-    padding: 1vmin 3vmin;
+    padding: 1em;
     border: 2px solid black;
-    border-radius: 2vmin;
-}
-
-.winnerText {
-    font-size: 10vmin;
-    margin: 0;
+    border-radius: 1em;
+    font-size: 5vmin;
+    margin-bottom: 15vmin;
 }

@@ -11,7 +11,7 @@ const port = process.env.PORT || 8081;
 
 axiosCookieJarSupport(axios);
  
-const cookieJar = new tough.CookieJar();
+let cookieJar = new tough.CookieJar();
 const app = express();
 
 let socket;
@@ -26,14 +26,14 @@ app.get('/connect', (req, res) => {
     const url = req.query.url;
     const connectionString = "ws://localhost:12345/";
 
-    const instance = axios.create({
+    const axiosInstance = axios.create({
         baseURL: url,
         timeout: 500,
         jar: cookieJar,
         withCredentials: true
     });
     
-    instance.post('auth/login', { 
+    axiosInstance.post('auth/login', { 
         username: "halfling" 
     })
     .then((response) => {
@@ -49,52 +49,120 @@ app.get('/connect', (req, res) => {
                 }
             });
             socket.on('connect', () => {
-                instance.get('api/cards')
-                .then((response) => {
-                    cards = response.data
-                    res.sendStatus(200);
-                })
-                .catch((err) => res.send(err));
+                res.sendStatus(200);
             });
         }
     })
-    .catch((err) => res.sendStatus(400)); 
+    .catch((err) => {
+        console.error(err);
+        res.status(err.response.status).json(err.response.data);
+    }); 
 });
 
 app.get('/startGame', (req, res) => {
     const url = req.query.url;
-    const instance = axios.create({
+    const axiosInstance = axios.create({
         baseURL: url,
         timeout: 500,
         jar: cookieJar,
         withCredentials: true
     });
-    instance.get('api/start')
+    axiosInstance.get('api/start')
         .then(() => res.sendStatus(200))
         .catch((err) =>  res.send(err));
 });
 
-app.get('/playCardWord', (req, res) => {
+app.get('/createRoom', (req, res) => {
     const url = req.query.url;
-    const instance = axios.create({
+    const axiosInstance = axios.create({
         baseURL: url,
         timeout: 500,
         jar: cookieJar,
         withCredentials: true
     });
-    instance.post('api/playCardWord', {
+    axiosInstance.post('api/room/create')
+    .then(() => res.sendStatus(200))
+    .catch((err) => {
+        console.log(err);
+        res.send(err);
+    });
+})
+
+app.get('/joinRoom', (req, res) => {
+    const url = req.query.url;
+    const roomId = req.query.roomId;
+    const axiosInstance = axios.create({
+        baseURL: url,
+        timeout: 500,
+        jar: cookieJar,
+        withCredentials: true
+    });
+    const body = { roomId: parseInt(roomId) };
+    axiosInstance.post('api/room/join', body)
+    .then(() => {
+        axiosInstance.get('api/cards')
+        .then((response) => {
+            cards = response.data;
+            res.sendStatus(200);
+        })
+        .catch((err) => res.send(err));
+    })
+    .catch((err) => res.send(err));
+});
+
+app.get('/playCardWord', (req, res) => {
+    const url = req.query.url;
+    const axiosInstance = axios.create({
+        baseURL: url,
+        timeout: 500,
+        jar: cookieJar,
+        withCredentials: true
+    });
+    const body = { 
         cardId: cards[0].cardId,
         word: "Hello"
-    })
+    };
+    axiosInstance.post('api/playCardWord', body)
+    .then(() => res.sendStatus(200))
+    .catch((err) =>  res.send(err));
+});
+
+app.get('/playCard', (req, res) => {
+    const url = req.query.url;
+    const axiosInstance = axios.create({
+        baseURL: url,
+        timeout: 500,
+        jar: cookieJar,
+        withCredentials: true
+    });
+    const body = { 
+        cardId: cards[0].cardId
+    };
+    axiosInstance.post('api/playCard', body)
+    .then(() => res.sendStatus(200))
+    .catch((err) =>  res.send(err));
+});
+
+app.get('/voteCard', (req, res) => {
+    const url = req.query.url;
+    const axiosInstance = axios.create({
+        baseURL: url,
+        timeout: 500,
+        jar: cookieJar,
+        withCredentials: true
+    });
+    const body = { 
+        cardId: cards[0].cardId
+    };
+    axiosInstance.post('api/voteCard', body)
     .then(() => res.sendStatus(200))
     .catch((err) =>  res.send(err));
 });
 
 app.get('/disconnect', (req, res) => {
-    socket.on('disconnect', () => {
-        res.sendStatus(200);
-    });
-    socket.disconnect();
-})
+    if (socket) socket.disconnect(); // Needed because this is called in the before each, and socket is not set up yet in the first test
+    cookieJar = new tough.CookieJar();
+    res.sendStatus(200);
+});
 
 app.listen(port, () => console.log(`Proxy Server running on port: ${port}`));
