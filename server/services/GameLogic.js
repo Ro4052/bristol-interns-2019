@@ -127,13 +127,12 @@ module.exports = class GameLogic {
         if (this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER && !this.playerHasPlayedCard(username)) {
             const card = { username, cardId };
             this.playedCards.push(card);
-            this.players.find(player => player.username === username).finishedTurn = true;
-            socket.emitPlayers(this.roomId, this.players);
             this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
             this.setStatus(statusTypes.WAITING_FOR_OTHER_PLAYERS);
             socket.emitStatus(this.roomId, this.status);
             this.currentWord = word;
             socket.emitWord(this.roomId, this.currentWord);
+            markTurnAsFinished();
             socket.promptOtherPlayers(this.roomId, this.currentPlayer, promptDuration);
             this.playCardTimeout = setTimeout(() => this.playRandomCard(), promptDuration);
         } else {
@@ -164,9 +163,8 @@ module.exports = class GameLogic {
         if (this.status === statusTypes.WAITING_FOR_OTHER_PLAYERS && !this.playerHasPlayedCard(username)) {
             const card = { username, cardId };
             this.playedCards.push(card);
-            this.players.find(player => player.username === username).finishedTurn = true;
-            socket.emitPlayers(this.roomId, this.players);
             this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
+            markTurnAsFinished();
             if (this.allPlayersPlayedCard()) {
                 this.clearTimeouts();
                 this.clearFinishedTurn();
@@ -187,8 +185,7 @@ module.exports = class GameLogic {
         if (this.status === statusTypes.WAITING_FOR_VOTES && !this.playerHasVoted(username)) {
             const vote = { username, cardId };
             this.votes.push(vote);
-            this.players.find(player => player.username === username).finishedTurn = true;
-            socket.emitPlayers(this.roomId, this.players);
+            markTurnAsFinished();
             if (this.allPlayersVoted()) {
                 this.clearTimeouts();
                 this.setStatus(statusTypes.DISPLAY_ALL_VOTES);
@@ -249,6 +246,12 @@ module.exports = class GameLogic {
 
     /* Returns true if all players (apart from the current player) have voted this round */
     allPlayersVoted() { return this.players.every(player => player.username === this.currentPlayer.username || this.playerHasVoted(player.username)) };
+
+    /* Mark the player's turn as finished and notify the other players */
+    markTurnAsFinished() {
+        this.players.find(player => player.username === username).finishedTurn = true;
+        socket.emitPlayers(this.roomId, this.players);
+    }
 
     /* Clean up stored data */
     clearRoundData() {
