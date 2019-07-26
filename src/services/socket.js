@@ -31,7 +31,6 @@ const connectSocket = () => {
     });
 
     socket.on("rooms", msg => {
-        console.log(msg);
         dispatch(setRooms(msg));
     });
 

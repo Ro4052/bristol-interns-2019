@@ -10,5 +10,4 @@ export const setWinner = winner => ({
 
 export const endGame = () => dispatch => {
     axiosInstance.get('/api/end');
-    // .catch(err => console.log(err));
 };

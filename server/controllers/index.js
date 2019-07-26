@@ -121,11 +121,8 @@ router.post('/api/room/leave', auth, (req, res) => {
 
 /* Get the players list of cards */
 router.get('/api/cards', auth, (req, res) => {
-    console.log("/api/cards");
     const gameState = getGameStateById(req.session.roomId);
-    console.log(gameState);
     const cards = gameState.getUnplayedCardsByUsername(req.session.user);
-    console.log(cards);
     if (cards) {
         res.status(200).json(cards);
     }

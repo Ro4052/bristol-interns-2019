@@ -11,8 +11,6 @@ export class MyCards extends React.Component {
     }
 
     render() {
-        console.log("MyCards");
-        console.log(this.props.cards);
         return (
             <div className={styles.myCards}>
                 <CardList cards={this.props.cards} handleClick={this.props.selectCard} isEnabled={() => this.props.playCard} cy={"my-cards"} />
