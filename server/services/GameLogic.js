@@ -106,13 +106,14 @@ module.exports = class GameLogic {
 
     /* Move on to the next round, called when all players have finished their turn */
     nextRound() {
+        this.clearTimeouts();
         if (this.roundNum < rounds) {
+            this.clearRoundData();
             this.setStatus(statusTypes.WAITING_FOR_CURRENT_PLAYER);
             this.roundNum++;
             this.currentPlayer = this.players[this.roundNum % this.players.length];
-            this.clearRoundData();
-            this.clearFinishedTurn();
             socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer);
+            this.clearFinishedTurn();
             socket.promptCurrentPlayer(this.roomId, this.currentPlayer);
         } else {
             this.setStatus(statusTypes.GAME_OVER);
