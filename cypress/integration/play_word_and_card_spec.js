@@ -22,6 +22,7 @@ describe('Play word and card', () => {
                 cy.get('[data-cy="my-cards"]').find('[data-cy="card"]').first().click();
             });
             it("its class is updated to selected", () => {
+                cy.wait(1000); /*TODO: remove on MONDAY*/
                 cy.get('[data-cy="my-cards"]').find('[data-cy="card-wrapper"]').first().then(($wrapper) => {
                     const selected = /selected/;
                     const classList = Array.from($wrapper[0].classList);
