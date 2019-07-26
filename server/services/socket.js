@@ -26,7 +26,7 @@ exports.setupSocket = (server, session) => {
 exports.createRoom = (username, roomId, minPlayers) => {
     if (!rooms.some((room) => room.creator === username) && rooms.length < 10) {
         rooms.push({ roomId, started: false, creator: { username }, players: [{ username }], minPlayers });
-        let socket = sockets.find(socket => socket.handshake.session.user === username);
+        const socket = sockets.find(socket => socket.handshake.session.user === username);
         socket.join(`room-${roomId}`);
         socket.handshake.session.roomId = roomId;
         this.emitRooms();
@@ -37,9 +37,9 @@ exports.createRoom = (username, roomId, minPlayers) => {
 
 // Join an existing room
 exports.joinRoom = (username, roomId) => {
-    let room = rooms.find((room) => room.roomId === roomId);
+    const room = rooms.find((room) => room.roomId === roomId);
     if (!room.players.some(player => player.username === username)) {
-        let socket = sockets.find(socket => socket.handshake.session.user === username);
+        const socket = sockets.find(socket => socket.handshake.session.user === username);
         socket.join(`room-${roomId}`);
         socket.handshake.session.roomId = roomId;
         room.players.push({ username });
@@ -51,8 +51,8 @@ exports.joinRoom = (username, roomId) => {
 
 // Leave a room
 exports.leaveRoom = (username, roomId) => {
-    let room = rooms.find((room) => room.roomId === roomId);
-    let socket = sockets.find(socket => socket.handshake.session.user === username);
+    const room = rooms.find((room) => room.roomId === roomId);
+    const socket = sockets.find(socket => socket.handshake.session.user === username);
     socket.leave(`room-${roomId}`);
     socket.handshake.session.roomId = undefined;
     room.players = room.players.filter(player => player.username !== username );
@@ -62,7 +62,7 @@ exports.leaveRoom = (username, roomId) => {
 
 // Set that the room has started
 exports.setRoomStarted = (roomId) => {
-    let room = rooms.find(room => room.roomId === roomId);
+    const room = rooms.find(room => room.roomId === roomId);
     if (room) room.started = true;
     this.emitRooms();
 }
@@ -127,7 +127,7 @@ exports.closeRoom = (roomId) => {
 
 // Ask the current player for a word and a card
 const promptCurrentPlayer = (roomId, currentPlayer) => {
-    let current = sockets.find(socket => (socket.handshake.session.user === currentPlayer.username && socket.handshake.session.roomId === roomId));
+    const current = sockets.find(socket => (socket.handshake.session.user === currentPlayer.username && socket.handshake.session.roomId === roomId));
     if (current) current.emit("play word and card");
 };
 exports.promptCurrentPlayer = promptCurrentPlayer;

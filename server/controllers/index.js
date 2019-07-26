@@ -29,6 +29,7 @@ router.post('/auth/login', (req, res) => {
         res.status(409).json({message: "Username already exists."});
     } else {
         req.session.user = username;
+        req.session.roomId = null;
         const user = { username };
         try {
             currentUsers.push(user);
@@ -57,16 +58,16 @@ router.get('/auth/logout', auth, (req, res) => {
 router.post('/api/room/create', auth, (req, res) => {
     const { user } = req.session;
     try {
-        if (req.session.roomId !== undefined) {
+        if (req.session.roomId !== null) {
             const oldRoomId = req.session.roomId;
-            let game = getGameStateById(oldRoomId);
+            const game = getGameStateById(oldRoomId);
             game.quitGame(user);
             if (!game.getPlayers().length) games = games.filter(otherGame => otherGame !== game);
             leaveRoom(user, oldRoomId);
-            req.session.roomId = undefined;
+            req.session.roomId = null;
         }
-        let newGameState = new GameLogic(latestRoomId);
-        let newGameRoom = {roomId: latestRoomId, gameState: newGameState}
+        const newGameState = new GameLogic(latestRoomId);
+        const newGameRoom = {roomId: latestRoomId, gameState: newGameState}
         createRoom(user, latestRoomId, newGameState.getMinPlayers());
         games.push(newGameRoom);
         newGameState.joinGame(user);
@@ -84,13 +85,13 @@ router.post('/api/room/join', auth, (req, res) => {
     const { user } = req.session;
     const { roomId } = req.body;
     try {
-        if (req.session.roomId !== undefined) {
+        if (req.session.roomId !== null) {
             const oldRoomId = req.session.roomId;
-            let game = getGameStateById(oldRoomId);
+            const game = getGameStateById(oldRoomId);
             game.quitGame(user);
             if (!game.getPlayers().length) games = games.filter(otherGame => otherGame !== game);
             leaveRoom(user, oldRoomId);
-            req.session.roomId = undefined;
+            req.session.roomId = null;
         }
         joinRoom(user, roomId);
         getGameStateById(roomId).joinGame(user);
@@ -107,11 +108,11 @@ router.post('/api/room/leave', auth, (req, res) => {
     const { user } = req.session;
     const { roomId } = req.body;
     try {
-        let game = getGameStateById(roomId);
+        const game = getGameStateById(roomId);
         game.quitGame(user);
         if (game.getPlayers().length <= 0) games = games.filter(otherGame => otherGame !== game);
         leaveRoom(user, roomId);
-        req.session.roomId = undefined;
+        req.session.roomId = null;
         res.sendStatus(200);
     } catch (err) {
         console.log(err);
