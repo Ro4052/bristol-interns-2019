@@ -33,6 +33,8 @@ export class Dashboard extends React.Component {
                 </div>
                 <div className={styles.main}>
                     <div className={styles.side}>
+                        {(this.props.voteCard) && this.props.voteCardDuration && <Timer cy="vote-timer" reset={() => this.props.setVoteCardTimer(0)} duration={this.props.voteCardDuration} />}
+                        {(this.props.playCard) && this.props.playCardDuration && <Timer cy="card-timer" reset={() => this.props.setPlayCardTimer(0)} duration={this.props.playCardDuration} />}
                         <div className={styles.gameInfo}>
                             {this.props.status !== "NOT_STARTED" && <h2>Round: <span id="round-number" data-cy="round-number">{this.props.roundNum}</span></h2>}
                             {this.props.currentWord !== '' && <h2 id="message">Word: <span data-cy='current-word'>{this.props.currentWord}</span></h2>}
@@ -42,8 +44,6 @@ export class Dashboard extends React.Component {
                     <div className={styles.middle}>
                         <div className={styles.interactions}>
                             {showPlayerInteractions && <PlayerInteractions />}
-                            {(this.props.voteCard) && this.props.voteCardDuration && <Timer cy="vote-timer" reset={() => this.props.setVoteCardTimer(0)} duration={this.props.voteCardDuration} />}
-                            {(this.props.playCard) && this.props.playCardDuration && <Timer cy="card-timer" reset={() => this.props.setPlayCardTimer(0)} duration={this.props.playCardDuration} />}
                             {this.props.winner && <GameOver />}
                             {this.props.status !== "GAME_OVER" && <PlayedCards />}
                         </div>
