@@ -9,8 +9,6 @@ exports.setupSocket = (server, session) => {
     io = socketio(server);
     io.use(sharedsession(session));
     io.on('connection', function (socket) {
-        console.log("hi");
-        
         if (socket.handshake.session.user) {
             sockets = sockets.filter(otherSocket => otherSocket.handshake.session.user !== socket.handshake.session.user);
             sockets.push(socket);
