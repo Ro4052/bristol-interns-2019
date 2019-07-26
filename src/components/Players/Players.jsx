@@ -6,9 +6,7 @@ import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 
 export class Players extends React.PureComponent {
-    render() {
-        console.log(this.props.players);
-        
+    render() {        
         return (
             <table className={styles.players} data-cy='players-list'>
                 {this.props.players.map((player, key) => {
