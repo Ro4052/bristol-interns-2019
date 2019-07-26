@@ -6,7 +6,7 @@ const { statusTypes } = require('./statusTypes');
 const promptDuration = process.env.NODE_ENV === 'testing' ? 1000 : 37000;
 const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 1000 : 5000;
 const rounds = 3;
-const minPlayers = 2;
+const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 3;
 
 module.exports = class GameLogic {
     constructor(roomId) {
@@ -34,8 +34,8 @@ module.exports = class GameLogic {
         socket.emitPlayers(this.roomId, this.players);
     }
 
-    /* Get the minimum number of players */
-    getMinPlayers() { return minPlayers };
+     /* Get the minimum number of players */
+     getMinPlayers() { return minPlayers };
 
     /* Set the status of the game */
     setStatus(newStatus) { return this.status = newStatus };
