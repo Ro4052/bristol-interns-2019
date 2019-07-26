@@ -1,42 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import styles from './Lobby.module.css';
-import { CreateRoom } from './CreateRoom/CreateRoom';
+import { createRoom } from './LobbyActions';
 import Room from './Room/Room';
+import Button from '../shared/Button/Button';
 import Dixit from '../Dixit/Dixit';
 import Logout from '../Logout/Logout';
 import { authenticateUser } from '../shared/Auth/AuthActions';
 
 export class Lobby extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            joined: false
-        };
-        this.createRoom = this.createRoom.bind(this);
-        this.joinRoom = this.joinRoom.bind(this);
-    }
-
     componentDidMount() {
         this.props.authenticateUser();
-    }
-    
-    createRoom() {
-        axios.get('/api/room/create')
-        .then(() => {
-            this.setState({joined: true});
-        })
-        .catch((err) => {
-            window.alert(err.message);
-        })
-    }
-
-    joinRoom(id) {
-        axios.post('/api/room/join', {
-            roomId: id
-        })
-        .catch((err) => console.log(err.message));
     }
 
     render() {
@@ -49,11 +23,9 @@ export class Lobby extends React.Component {
                     </div>
                 </div>
                 <div className={styles.rooms}>
-                    <CreateRoom createRoom={this.createRoom}/>
+                    <Button cy="create-room" handleClick={this.props.createRoom} text="Create Room" />
                     <ul className={styles.currentRooms} data-cy="current-rooms">
-                        {this.props.rooms.map(room => 
-                            <Room room={room} key={room.id} handleClick={this.joinRoom} />
-                        )}
+                        {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}
                     </ul>
                 </div>
             </div>
@@ -66,6 +38,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+    createRoom: () => dispatch(createRoom()),
     authenticateUser: () => dispatch(authenticateUser())
 });
 
