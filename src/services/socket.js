@@ -69,7 +69,6 @@ const connectSocket = () => {
     });
 
     socket.on("play card", (timeoutDuration) => {
-        console.log(timeoutDuration)
         dispatch(setPlayCard(true));
         dispatch(setPlayCardTimer(timeoutDuration));
     });

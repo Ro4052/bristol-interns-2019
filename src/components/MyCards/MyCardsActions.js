@@ -40,11 +40,10 @@ export const selectCard = cardId => (dispatch, getState) => {
         axiosInstance.post('/api/playCard', { cardId })
         .then(res => {
             if (res.status === 200) {
-                console.log("success");
                 dispatch(selectCardSuccess(cardId));
                 dispatch(removeCard(cardId));
             } else {
-                console.log("fail");
+                console.error("Failed to select a card");
             }
         });
     }

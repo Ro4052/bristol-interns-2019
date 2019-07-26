@@ -24,7 +24,6 @@ export class Dashboard extends React.Component {
                                         (!this.props.finishedRound && 
                                         this.props.username === this.props.currentPlayer.username && 
                                         this.props.playedCardId));
-        console.log(this.props.duration)
         return (
             <div className={styles.dashboard}>
                 <div className={styles.header}>
