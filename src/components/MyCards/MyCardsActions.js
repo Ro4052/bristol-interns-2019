@@ -3,6 +3,10 @@ import axios from "axios";
 
 const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
+export const resetPlayedCardId = () => ({
+    type: types.RESET_PLAYED_CARD
+});
+
 export const setPlayCard = playCard => ({
     type: types.SET_PLAY_CARD,
     playCard
@@ -36,11 +40,10 @@ export const selectCard = cardId => (dispatch, getState) => {
         axiosInstance.post('/api/playCard', { cardId })
         .then(res => {
             if (res.status === 200) {
-                console.log("success");
                 dispatch(selectCardSuccess(cardId));
                 dispatch(removeCard(cardId));
             } else {
-                console.log("fail");
+                console.error("Failed to select a card");
             }
         });
     }

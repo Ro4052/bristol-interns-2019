@@ -79,6 +79,11 @@ exports.emitStartGame = (roomId, status) => io.to(`room-${roomId}`).emit("start"
 // Tell all the players what word was played
 exports.emitWord = (roomId, word) => io.to(`room-${roomId}`).emit("played word", word);
 
+exports.emitPlayedCard = (username, card) => {
+    const socket = sockets.find(socket => socket.handshake.session.user === username);
+    if (socket) socket.emit("played card", card);
+};
+
 // When everyone has played their cards, send them all to the players
 exports.emitPlayedCards = (roomId, cards) => io.to(`room-${roomId}`).emit("played cards", cards);
 
@@ -98,10 +103,9 @@ const promptCurrentPlayer = (roomId, currentPlayer) => {
 };
 exports.promptCurrentPlayer = promptCurrentPlayer;
 
-// Ask the other players for a card
-const promptOtherPlayers = (roomId, currentPlayer) => sockets.filter(socket => socket.handshake.session.user !== currentPlayer.username && socket.handshake.session.roomId === roomId).forEach(socket => socket.emit("play card"));
+const promptOtherPlayers = (roomId, currentPlayer, timeoutDuration) => sockets.forEach(socket => socket.handshake.session.user !== currentPlayer.username && socket.handshake.session.roomId === roomId && socket.emit("play card", timeoutDuration/1000));
 exports.promptOtherPlayers = promptOtherPlayers;
 
 // Ask the other players to vote on the cards
-const promptPlayersVote = (roomId, currentPlayer) => sockets.filter(socket => socket.handshake.session.user !== currentPlayer.username && socket.handshake.session.roomId === roomId).forEach(socket => socket.emit("vote"));
+const promptPlayersVote = (roomId, currentPlayer, timeoutDuration) => sockets.forEach(socket => socket.handshake.session.user !== currentPlayer.username && socket.handshake.session.roomId === roomId && socket.emit("vote", timeoutDuration/1000));
 exports.promptPlayersVote = promptPlayersVote;

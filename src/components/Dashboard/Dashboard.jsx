@@ -7,6 +7,8 @@ import MyCards from '../MyCards/MyCards';
 import Players from '../Players/Players';
 import GameOver from '../GameOver/GameOver';
 import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
+import Timer from '../Timer/Timer';
+import { setVoteCardTimer, setPlayCardTimer} from '../Timer/TimerActions';
 import Dixit from '../Dixit/Dixit';
 import { authenticateUser } from '../shared/Auth/AuthActions';
 
@@ -40,6 +42,8 @@ export class Dashboard extends React.Component {
                     <div className={styles.middle}>
                         <div className={styles.interactions}>
                             {showPlayerInteractions && <PlayerInteractions />}
+                            {(this.props.voteCard) && this.props.voteCardDuration && <Timer cy="vote-timer" reset={() => this.props.setVoteCardTimer(0)} duration={this.props.voteCardDuration} />}
+                            {(this.props.playCard) && this.props.playCardDuration && <Timer cy="card-timer" reset={() => this.props.setPlayCardTimer(0)} duration={this.props.playCardDuration} />}
                             {this.props.winner && <GameOver />}
                             {this.props.status !== "GAME_OVER" && <PlayedCards />}
                         </div>
@@ -65,10 +69,14 @@ const mapStateToProps = (state) => ({
     finishedRound: state.playerInteractionsReducer.finishedRound,
     playedCardId: state.myCardsReducer.playedCardId,
     username: state.authReducer.username,
-    winner: state.gameOverReducer.winner
+    winner: state.gameOverReducer.winner,
+    playCardDuration: state.timerReducer.playCardDuration,
+    voteCardDuration: state.timerReducer.voteCardDuration
 });
 
 const mapDispatchToProps = (dispatch) => ({
+    setPlayCardTimer: duration => dispatch(setPlayCardTimer(duration)),
+    setVoteCardTimer: duration => dispatch(setVoteCardTimer(duration)),
     authenticateUser: () => dispatch(authenticateUser())
 });
 
