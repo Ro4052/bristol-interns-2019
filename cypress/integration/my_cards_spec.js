@@ -13,6 +13,7 @@ describe('My Cards', () => {
 
     describe('player clicks on a card', () => {
         it("its class is updated to selected", () => {
+            cy.wait(1000);
             cy.get('[data-cy="my-cards"]').find('[data-cy="card"]').first().click().then(() => {
                 cy.get('[data-cy="my-cards"]').find('[data-cy="card-wrapper"]').first().then(($wrapper) => {
                     const selected = /selected/;
