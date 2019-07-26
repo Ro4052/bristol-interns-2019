@@ -80,7 +80,7 @@ app.get('/createRoom', (req, res) => {
         jar: cookieJar,
         withCredentials: true
     });
-    axiosInstance.get('api/room/create')
+    axiosInstance.post('api/room/create')
     .then(() => res.sendStatus(200))
     .catch((err) => {
         console.log(err);
