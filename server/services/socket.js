@@ -3,6 +3,8 @@ const sharedsession = require("express-socket.io-session");
 
 let io;
 let sockets = [];
+
+/** @type {{ roomId: number, started: boolean, creator: { username: string }, players: {{ username: string }[]}, minPlayers: number }[]} */
 let rooms = [];
 
 exports.setupSocket = (server, session) => {
@@ -12,6 +14,7 @@ exports.setupSocket = (server, session) => {
         if (socket.handshake.session.user) {
             sockets = sockets.filter(otherSocket => otherSocket.handshake.session.user !== socket.handshake.session.user);
             sockets.push(socket);
+            emitRooms();
         }
         socket.on('disconnect', function (disconnected) {
             sockets = sockets.filter(socket => socket !== disconnected);
@@ -20,10 +23,10 @@ exports.setupSocket = (server, session) => {
 }
 
 // Create a room
-exports.createRoom = (username, roomId) => {
+exports.createRoom = (username, roomId, minPlayers) => {
     if (!rooms.some((room) => room.creator === username) && rooms.length < 10) {
-        rooms.push({id: roomId, creator: username, players: [username]});
-        let socket = sockets.find(socket => socket.handshake.session.user === username);
+        rooms.push({ roomId, started: false, creator: { username }, players: [{ username }], minPlayers });
+        const socket = sockets.find(socket => socket.handshake.session.user === username);
         socket.join(`room-${roomId}`);
         socket.handshake.session.roomId = roomId;
         this.emitRooms();
@@ -34,17 +37,35 @@ exports.createRoom = (username, roomId) => {
 
 // Join an existing room
 exports.joinRoom = (username, roomId) => {
-    let room = rooms.find((room) => room.id === roomId);
-    if (username !== room.creator && !room.players.some((player) => player === username)) {
-        let socket = sockets.find(socket => socket.handshake.session.user === username);
+    const room = rooms.find((room) => room.roomId === roomId);
+    if (!room.players.some(player => player.username === username)) {
+        const socket = sockets.find(socket => socket.handshake.session.user === username);
         socket.join(`room-${roomId}`);
         socket.handshake.session.roomId = roomId;
-        room.players.push(username);
+        room.players.push({ username });
         this.emitRooms();
     } else {
         throw new Error("You cannot join the room again.");
     }
 };
+
+// Leave a room
+exports.leaveRoom = (username, roomId) => {
+    const room = rooms.find((room) => room.roomId === roomId);
+    const socket = sockets.find(socket => socket.handshake.session.user === username);
+    socket.leave(`room-${roomId}`);
+    socket.handshake.session.roomId = undefined;
+    room.players = room.players.filter(player => player.username !== username );
+    if (room.players.length <= 0) rooms = rooms.filter(otherRoom => otherRoom !== room);
+    this.emitRooms();
+};
+
+// Set that the room has started
+exports.setRoomStarted = (roomId) => {
+    const room = rooms.find(room => room.roomId === roomId);
+    if (room) room.started = true;
+    this.emitRooms();
+}
 
 // Cloase the existing socket
 exports.closeSocket = () => {
@@ -65,10 +86,11 @@ exports.emitPlayers = emitPlayers;
 exports.emitNewRound = (roomId, status, roundNum, currentPlayer) => io.to(`room-${roomId}`).emit("new round", { status, roundNum, currentPlayer });
 
 // Get the current list of rooms
-exports.getRooms = () => { return rooms; };
+exports.getRooms = () => rooms;
 
 // Emit the newly created room
-exports.emitRooms = () => sockets.forEach(socket => socket.emit("rooms", rooms));
+const emitRooms = () => sockets.forEach(socket => socket.emit("rooms", rooms));
+exports.emitRooms = emitRooms;
 
 // Emit the new status of the game
 exports.emitStatus = (roomId, status) => io.to(`room-${roomId}`).emit("status", { status });
@@ -105,7 +127,7 @@ exports.closeRoom = (roomId) => {
 
 // Ask the current player for a word and a card
 const promptCurrentPlayer = (roomId, currentPlayer) => {
-    let current = sockets.find(socket => (socket.handshake.session.user === currentPlayer.username && socket.handshake.session.roomId === roomId));
+    const current = sockets.find(socket => (socket.handshake.session.user === currentPlayer.username && socket.handshake.session.roomId === roomId));
     if (current) current.emit("play word and card");
 };
 exports.promptCurrentPlayer = promptCurrentPlayer;
