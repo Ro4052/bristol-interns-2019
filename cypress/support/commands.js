@@ -66,9 +66,9 @@ Cypress.Commands.add('playCardWord', () => {
         method: 'POST',
         url: '/api/playCardWord'
     }).as('playCardWord');
-    cy.get('[data-cy="my-cards"] [data-cy="card"]').first().click();
     cy.get('[data-cy="type-word"]').type('word');
     cy.get('[data-cy="send-word"]').click();
+    cy.get('[data-cy="my-cards"] [data-cy="card"]').first().click();
     cy.get('[data-cy="end-turn"]').click();
     cy.wait('@playCardWord');
 });
