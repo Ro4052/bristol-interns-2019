@@ -40,7 +40,7 @@ describe('Lobby', () => {
             });
 
             describe('on clicking start game button', () => {
-                it('redirects to the dahsboard', () => {
+                it('redirects to the dashboard', () => {
                     cy.startGame();
                     cy.url().should('include', '/dashboard');
                 });
