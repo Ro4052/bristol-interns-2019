@@ -3,7 +3,7 @@ const router = require('express').Router();
 const path = require('path');
 const auth = require('../services/auth');
 const GameLogic = require('../services/GameLogic');
-const { closeSocket, createRoom, joinRoom, getRooms } = require('../services/socket');
+const { closeSocket, createRoom, joinRoom, getRooms, closeRoom } = require('../services/socket');
 
 let currentUsers = [];
 let roomId = 0;
@@ -44,6 +44,7 @@ router.get('/auth/logout', auth, (req, res) => {
         currentUsers = currentUsers.filter((otherUser) => otherUser.username !== req.session.user);
         getGameStateById(req.session.roomId).removePlayer(req.session.user);
         req.session.destroy();
+        closeSocket();
         res.sendStatus(200);
     } catch (err) { /* Game has started, method not allowed */
         res.status(400).json({message: err.message});
@@ -120,8 +121,7 @@ router.get('/api/start', auth, (req, res) => {
 router.get('/api/end', auth, (req, res) => {
     try {
         getGameStateById(req.session.roomId).endGame();
-        currentUsers = [];
-        closeSocket();
+        closeRoom(req.session.roomId);
         res.sendStatus(200);
     } catch (err) {
         res.status(400).json({message: err.message});

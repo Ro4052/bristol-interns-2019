@@ -74,7 +74,7 @@ exports.emitRooms = () => sockets.forEach(socket => socket.emit("rooms", rooms))
 exports.emitStatus = (roomId, status) => io.to(`room-${roomId}`).emit("status", { status });
 
 // Emit start of the game
-exports.emitStartGame = (roomId, status) => io.to(`room-${roomId}`).emit("start");
+exports.emitStartGame = (roomId) => io.to(`room-${roomId}`).emit("start");
 
 // Tell all the players what word was played
 exports.emitWord = (roomId, word) => io.to(`room-${roomId}`).emit("played word", word);
@@ -95,6 +95,13 @@ exports.emitWinner = (roomId, player) => io.to(`room-${roomId}`).emit("winner", 
 
 // When game is over, tell the users
 exports.emitEndGame = (roomId) => io.to(`room-${roomId}`).emit("end");
+
+// Close the room when the game has ended
+exports.closeRoom = (roomId) => {
+    sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.leave(`room-${roomId}`));
+    rooms = rooms.filter(room => room.id !== roomId);
+    this.emitRooms();
+};
 
 // Ask the current player for a word and a card
 const promptCurrentPlayer = (roomId, currentPlayer) => {

@@ -143,6 +143,22 @@ app.get('/playCard', (req, res) => {
     .catch((err) =>  res.send(err));
 });
 
+app.get('/voteCard', (req, res) => {
+    const url = req.query.url;
+    const axiosInstance = axios.create({
+        baseURL: url,
+        timeout: 500,
+        jar: cookieJar,
+        withCredentials: true
+    });
+    const body = { 
+        cardId: cards[0].cardId
+    };
+    axiosInstance.post('api/voteCard', body)
+    .then(() => res.sendStatus(200))
+    .catch((err) =>  res.send(err));
+});
+
 app.get('/disconnect', (req, res) => {
     if (socket) socket.disconnect(); // Needed because this is called in the before each, and socket is not set up yet in the first test
     cookieJar = new tough.CookieJar();

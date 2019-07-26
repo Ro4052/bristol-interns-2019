@@ -2,7 +2,6 @@ import io from 'socket.io-client';
 import history from './history';
 import { dispatch } from '../store/store';
 import { setPlayedCards, setVoteCard, setVotedCard, setAllVotes } from '../components/PlayedCards/PlayedCardsActions';
-import { resetCookie } from '../components/shared/Auth/AuthActions';
 import { setPlayCard, resetPlayedCardId, selectCardSuccess } from '../components/MyCards/MyCardsActions';
 import { playWord, setPlayWord, resetWord } from '../components/PlayWord/PlayWordActions';
 import { setPlayers, setCurrentPlayer } from '../components/Players/PlayersActions';
@@ -109,7 +108,7 @@ const connectSocket = () => {
         dispatch(playWord(""));
         dispatch(resetFinishRound());
         dispatch(setWinner(null));
-        dispatch(resetCookie());
+        history.push('/lobby');
     });
 
     return new Promise((resolve, reject) => {

@@ -30,4 +30,42 @@ describe('Lobby', () => {
             });
         });
     });
+
+    describe('when a whole game has been played', () => {
+        it('redirects back to the lobby', () => {
+            cy.createRoom();
+            cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
+            .then(() => cy.get('[data-cy="room-title"]'))
+            .then(($title) => {
+                const id = $title.text().split(" ")[1];
+                return cy.request(`http://localhost:12346/joinRoom?roomId=${id}&url=${encodeURIComponent(Cypress.config().baseUrl)}`);
+            })
+            .then(() => {
+                cy.startGame();
+                return cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`);
+            })
+            .then(() => {
+                cy.playCard();
+                cy.voteCard();
+                cy.wait(1000);
+                return cy.request(`http://localhost:12346/playCard?url=${encodeURIComponent(Cypress.config().baseUrl)}`);
+            })
+            .then(() => {
+                cy.playCardWord();
+                return cy.request(`http://localhost:12346/playCard?url=${encodeURIComponent(Cypress.config().baseUrl)}`);
+            })
+            .then(() => cy.request(`http://localhost:12346/voteCard?url=${encodeURIComponent(Cypress.config().baseUrl)}`))
+            .then(() => {
+                cy.wait(1000);
+                cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
+            })
+            .then(() => {
+                cy.playCard();
+                cy.voteCard();
+                cy.wait(1000);
+                cy.newGame();
+                cy.url().should('include', '/lobby');
+            })
+        });
+    });
 });
