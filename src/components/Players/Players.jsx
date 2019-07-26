@@ -14,6 +14,7 @@ export class Players extends React.PureComponent {
                         <tr data-cy="player" key={key} className={cx({ current: this.props.currentPlayer && this.props.currentPlayer.username === player.username })}>
                             <td className={styles.playerUsername} data-cy='player-username'>{player.username}</td>
                             <td data-cy='player-score'>{player.score}</td>
+                            <td data-cy='finished-turn'>{player.finishedTurn && "✓"}</td>
                         </tr>
                     );
                 })}
