@@ -22,7 +22,7 @@ describe('on render', () => {
     it('renders a create room button', () => {
         const wrapper = mount(
             <Provider store={emptyStore}>
-                <Lobby rooms={[]} />
+                <Lobby authenticateUser={jest.fn()} rooms={[]} />
             </Provider>
         );
         expect(wrapper.exists({ 'data-cy': 'create-room' })).toEqual(true);
@@ -31,7 +31,7 @@ describe('on render', () => {
     it('renders the list of rooms', () => {
         const wrapper = mount(
             <Provider store={emptyStore}>
-                <Lobby rooms={[]} />
+                <Lobby authenticateUser={jest.fn()} rooms={[]} />
             </Provider>
         );
         expect(wrapper.exists({ 'data-cy': 'current-rooms' })).toEqual(true);
@@ -42,7 +42,7 @@ describe('if given an empty list rooms', () => {
     it('displays no rooms', () => {
         const wrapper = mount(
             <Provider store={emptyStore}>
-                <Lobby rooms={[]} />
+                <Lobby authenticateUser={jest.fn()} rooms={[]} />
             </Provider>
         );
         expect(wrapper.find({ 'data-cy': 'current-rooms' }).children().length).toEqual(0);
@@ -53,7 +53,7 @@ describe('if given a list of rooms', () => {
     it('displays the correct number of rooms', () => {
         const wrapper = mount(
             <Provider store={emptyStore}>
-                <Lobby rooms={[room]} />
+                <Lobby authenticateUser={jest.fn()} rooms={[room]} />
             </Provider>
         );
         expect(wrapper.find({ 'data-cy': 'current-rooms' }).children().length).toEqual(1);
@@ -65,7 +65,7 @@ describe('on click the create room button', () => {
         const createRoom = jest.fn();
         const wrapper = mount(
             <Provider store={emptyStore}>
-                <Lobby rooms={[]} createRoom={createRoom} />
+                <Lobby authenticateUser={jest.fn()} rooms={[]} createRoom={createRoom} />
             </Provider>
         );
         wrapper.find({ 'data-cy': 'create-room' }).simulate('click');
