@@ -1,7 +1,6 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { Lobby } from './Lobby';
-import CreateRoom from './CreateRoom/CreateRoom';
 
 const room = {
     roomId: 0,
@@ -12,13 +11,18 @@ const room = {
 };
 
 describe('on render', () => {
-    it('renders a CreateRoom element', () => {
-        const wrapper = shallow(<Lobby username='username' rooms={[]}/>);
-        expect(wrapper.exists(CreateRoom)).toEqual(true);
+    it('renders a create room button', () => {
+        const wrapper = mount(<Lobby username='username' rooms={[]}/>);
+        expect(wrapper.exists({ 'data-cy': 'create-room' })).toEqual(true);
+    });
+
+    it('renders the list of rooms', () => {
+        const wrapper = mount(<Lobby username='username' rooms={[]}/>);
+        expect(wrapper.exists({ 'data-cy': 'current-rooms' })).toEqual(true);
     });
 });
 
-describe('if given no rooms', () => {
+describe('if given an empty list rooms', () => {
     it('displays no rooms', () => {
         const wrapper = shallow(<Lobby username='username' rooms={[]}/>);
         expect(wrapper.find({ 'data-cy': 'current-rooms' }).children().length).toEqual(0);
@@ -32,23 +36,12 @@ describe('if given a list of rooms', () => {
     });
 });
 
-// describe('on click', () => {
-    // it('calls createRoom', () => {
-    //     const createRoom = jest.spyOn(Lobby.prototype, 'createRoom');
-    //     const wrapper = mount(<Lobby username='username' rooms={[]}/>);
-    //     wrapper.find({ 'data-cy': 'create-room' }).simulate('click');
-    //     expect(createRoom).toHaveBeenCalled();
-    //     createRoom.mockRestore();
-    // });
-
-    // it('displays the new room', () => {
-    //     const wrapper = mount(
-    //         <Provider store={afterClickStore}>
-    //             <Lobby username='username' rooms={[room]}/>
-    //         </Provider>
-    //     );
-    //     expect(wrapper.exists({ 'data-cy': 'room' })).toEqual(true);
-    // });
-
-   /* TODO: moxios when createRoom is moved into actions */
-// });
+describe('on click the create room button', () => {
+    it('calls createRoom', () => {
+        const createRoom = jest.fn();
+        const wrapper = mount(<Lobby username='username' rooms={[]} createRoom={createRoom} />);
+        wrapper.find({ 'data-cy': 'create-room' }).simulate('click');
+        expect(createRoom).toHaveBeenCalled();
+        createRoom.mockRestore();
+    });
+});
