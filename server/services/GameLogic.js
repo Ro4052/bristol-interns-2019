@@ -110,9 +110,11 @@ class GameLogic {
             this.setStatus(statusTypes.WAITING_FOR_CURRENT_PLAYER);
             this.roundNum++;
             this.currentPlayer = this.players[this.roundNum % this.players.length];
-            socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer);
+            this.clearRoundData();
             this.clearFinishedTurn();
-            socket.promptCurrentPlayer(this.roomId, this.currentPlayer);
+            socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer).then(() => {
+                socket.promptCurrentPlayer(this.roomId, this.currentPlayer);
+            });
         } else {
             this.setStatus(statusTypes.GAME_OVER);
             socket.emitStatus(this.roomId, this.status);

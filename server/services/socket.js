@@ -83,7 +83,18 @@ const emitPlayers = (roomId, players) => io.to(`room-${roomId}`).emit("players",
 exports.emitPlayers = emitPlayers;
 
 // Let the players know about the next round
-exports.emitNewRound = (roomId, status, roundNum, currentPlayer) => io.to(`room-${roomId}`).emit("new round", { status, roundNum, currentPlayer });
+exports.emitNewRound = (roomId, status, roundNum, currentPlayer) => {
+    return new Promise((resolve, reject) => {
+        try {
+            io.to(`room-${roomId}`).emit("new round", { status, roundNum, currentPlayer })
+            setTimeout(() => {
+                resolve();
+            }, 1000);
+        } catch (err) {
+            reject();
+        }
+    });
+};
 
 // Get the current list of rooms
 exports.getRooms = () => rooms;

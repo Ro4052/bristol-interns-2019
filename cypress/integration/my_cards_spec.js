@@ -13,5 +13,5 @@ describe('My Cards', () => {
         it("displays the correct number of cards", () => {
             cy.get('[data-cy="my-cards"]').children().its('length').should('eq', 3);
         });
-    });    
+    });
 });
