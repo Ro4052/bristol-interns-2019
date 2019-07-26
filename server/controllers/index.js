@@ -60,15 +60,10 @@ router.post('/api/room/create', auth, (req, res) => {
         createRoom(user, roomId, newGameState.getMinPlayers());
         games.push(newGameRoom);
         // Add the creator to the room
-        if (newGameState.canJoinGame(user)) { /* Game has not been started yet */
-            newGameState.joinGame(user, () => {
-                req.session.roomId = roomId;    
-                res.sendStatus(200);
-                roomId++;
-            });
-        } else { /* Game has already began */
-            res.status(400).json({message: "Game has already started."});
-        }
+        newGameState.joinGame(user);
+        req.session.roomId = roomId;    
+        res.sendStatus(200);
+        roomId++;
     } catch (err) {
         console.log(err);
         res.status(400).json({message: err.message});
@@ -81,14 +76,9 @@ router.post('/api/room/join', auth, (req, res) => {
     const { roomId } = req.body;
     try {
         joinRoom(user, roomId);
-        if (getGameStateById(roomId).canJoinGame(user)) {
-            getGameStateById(roomId).joinGame(user, () => {
-                req.session.roomId = roomId; 
-                res.sendStatus(200);
-            });
-        } else { /* Game has already began */
-            res.status(400).json({message: "Game has already started."});
-        }
+        getGameStateById(roomId).joinGame(user);
+        req.session.roomId = roomId; 
+        res.sendStatus(200);
     } catch (err) {
         console.log(err);
         res.status(400).json({message: err.message})
