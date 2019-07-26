@@ -61,7 +61,8 @@ module.exports = class GameLogic {
         const player = {
             username: user,
             cards: cards,
-            score: 0
+            score: 0,
+            finishedTurn: false
         }
         this.players.push(player);      
         socket.emitPlayers(this.roomId, this.players);  
@@ -110,6 +111,7 @@ module.exports = class GameLogic {
             this.roundNum++;
             this.currentPlayer = this.players[this.roundNum % this.players.length];
             this.clearRoundData();
+            this.clearFinishedTurn();
             socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer);
             socket.promptCurrentPlayer(this.roomId, this.currentPlayer);
         } else {
@@ -125,6 +127,8 @@ module.exports = class GameLogic {
         if (this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER && !this.playerHasPlayedCard(username)) {
             const card = { username, cardId };
             this.playedCards.push(card);
+            this.players.find(player => player.username === username).finishedTurn = true;
+            socket.emitPlayers(this.roomId, this.players);
             this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
             this.setStatus(statusTypes.WAITING_FOR_OTHER_PLAYERS);
             socket.emitStatus(this.roomId, this.status);
@@ -146,6 +150,8 @@ module.exports = class GameLogic {
                 const cards = this.getCardsByUsername(player.username);
                 const randomCard = (cards[Math.floor(Math.random()*cards.length)]);
                 this.playedCards.push(randomCard);
+                player.finishedTurn = true;
+                socket.emitPlayers(this.roomId, this.players);
                 cards.find(card => card.cardId === randomCard.cardId).played = true;
                 socket.emitPlayedCard(player.username, randomCard);
             }
@@ -157,10 +163,13 @@ module.exports = class GameLogic {
     playCard (username, cardId) {      
         if (this.status === statusTypes.WAITING_FOR_OTHER_PLAYERS && !this.playerHasPlayedCard(username)) {
             const card = { username, cardId };
-            this.playedCards.push(card);            
+            this.playedCards.push(card);
+            this.players.find(player => player.username === username).finishedTurn = true;
+            socket.emitPlayers(this.roomId, this.players);
             this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
             if (this.allPlayersPlayedCard()) {
                 this.clearTimeouts();
+                this.clearFinishedTurn();
                 this.setStatus(statusTypes.WAITING_FOR_VOTES);
                 socket.emitPlayedCards(this.roomId, this.getPlayedCards());
                 socket.promptPlayersVote(this.roomId, this.currentPlayer, promptDuration);
@@ -178,6 +187,8 @@ module.exports = class GameLogic {
         if (this.status === statusTypes.WAITING_FOR_VOTES && !this.playerHasVoted(username)) {
             const vote = { username, cardId };
             this.votes.push(vote);
+            this.players.find(player => player.username === username).finishedTurn = true;
+            socket.emitPlayers(this.roomId, this.players);
             if (this.allPlayersVoted()) {
                 this.clearTimeouts();
                 this.setStatus(statusTypes.DISPLAY_ALL_VOTES);
@@ -261,5 +272,11 @@ module.exports = class GameLogic {
         clearTimeout(this.playCardTimeout);
         clearTimeout(this.voteTimeout);
         clearTimeout(this.nextRoundTimeout);
+    }
+
+    /* Clears the bool for finished turn */
+    clearFinishedTurn() {
+        this.players.forEach(player => player.finishedTurn = false);
+        socket.emitPlayers(this.roomId, this.players);
     }
 }

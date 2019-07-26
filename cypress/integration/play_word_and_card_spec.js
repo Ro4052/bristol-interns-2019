@@ -14,8 +14,12 @@ describe('Play word and card', () => {
 
     describe('on send a word and a card', () => {
         it('displays the word', () => {
-            cy.playCardWord();            
+            cy.playCardWord();
             cy.get('[data-cy="current-word"]').should('have.text', 'word');
+        });
+        it("marks the player's turn as finished", () => {
+            cy.playCardWord();
+            cy.get('[data-cy="finished-turn"]').should('have.text', '✓');
         });
     });    
 });
