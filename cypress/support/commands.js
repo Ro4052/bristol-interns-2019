@@ -38,8 +38,17 @@ Cypress.Commands.add('joinRoom', () => {
         method: 'POST',
         url: '/api/room/join'
     }).as('joinRoom');
-    cy.get('[data-cy="room-title"]').click();
+    cy.get('[data-cy="join-room"]').click();
     cy.wait('@joinRoom');
+});
+
+Cypress.Commands.add('leaveRoom', () => {
+    cy.route({
+        method: 'POST',
+        url: '/api/room/leave'
+    }).as('leaveRoom');
+    cy.get('[data-cy="leave-room"]').click();
+    cy.wait('@leaveRoom');
 });
 
 Cypress.Commands.add('login', username => {
