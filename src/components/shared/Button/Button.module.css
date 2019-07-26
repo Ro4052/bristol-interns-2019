@@ -5,8 +5,8 @@
     color: var(--lighter-black);
     cursor: pointer;
     font-family: var(--main-font);
-    font-size: 30px;
+    font-size: 4vmin;
     margin: 0.4em;
     outline: none;
-    padding: 0.2em 0.5em;
+    padding: 1vmin 1.5vmin;
 }

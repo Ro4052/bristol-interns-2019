@@ -114,3 +114,12 @@ Cypress.Commands.add('sendWord', () => {
     cy.get('[data-cy="send-word"]').click();
     cy.wait('@validWord');
 });
+
+Cypress.Commands.add('newGame', () => {
+    cy.route({
+        method: 'GET',
+        url: '/api/end'
+    }).as('endGame');
+    cy.get('[data-cy="new-game"]').click();
+    cy.wait('@endGame');
+});

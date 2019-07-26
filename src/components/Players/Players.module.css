@@ -1,6 +1,7 @@
 .players {
-    min-width: 5em;
-    font-size: 1.2em;
+    min-width: 3vmin;
+    font-size: 4vmin;
+    margin: 1vmin;
 }
 
 .playerUsername {

@@ -2,14 +2,15 @@ import io from 'socket.io-client';
 import history from './history';
 import { dispatch } from '../store/store';
 import { setPlayedCards, setVoteCard, setVotedCard, setAllVotes } from '../components/PlayedCards/PlayedCardsActions';
-import { resetCookie } from '../components/shared/Auth/AuthActions';
-import { setPlayCard } from '../components/MyCards/MyCardsActions';
-import { playWord, setPlayWord } from '../components/PlayWord/PlayWordActions';
+import { setPlayCard, resetPlayedCardId, selectCardSuccess } from '../components/MyCards/MyCardsActions';
+import { playWord, setPlayWord, resetWord } from '../components/PlayWord/PlayWordActions';
 import { setPlayers, setCurrentPlayer } from '../components/Players/PlayersActions';
 import { setWinner } from '../components/GameOver/GameOverActions';
 import { setCurrentWord, setStatus, setRoundNumber } from '../components/Dashboard/DashboardActions';
 import { resetFinishRound } from '../components/PlayerInteractions/PlayerInteractionsActions';
-import { setRooms } from '../components/Lobby/LobbyActions.js';
+import { removeCard } from '../components/MyCards/MyCardsActions';
+import { setRooms } from '../components/Lobby/LobbyActions';
+import { setVoteCardTimer, setPlayCardTimer } from '../components/Timer/TimerActions';
 
 const connectSocket = () => {
     let connectionString;
@@ -30,6 +31,7 @@ const connectSocket = () => {
     });
 
     socket.on("rooms", msg => {
+        console.log(msg);
         dispatch(setRooms(msg));
     });
 
@@ -46,6 +48,8 @@ const connectSocket = () => {
         dispatch(setPlayCard(false));
         dispatch(setVoteCard(false));
         dispatch(setPlayWord(false));
+        dispatch(resetWord());
+        dispatch(resetPlayedCardId());
         dispatch(setVotedCard(0));
         dispatch(playWord(""));
         dispatch(resetFinishRound());
@@ -64,20 +68,28 @@ const connectSocket = () => {
         dispatch(setPlayCard(true));
     });
 
-    socket.on("play card", () => {
+    socket.on("play card", (timeoutDuration) => {
         dispatch(setPlayCard(true));
+        dispatch(setPlayCardTimer(timeoutDuration));
+    });
+
+    socket.on("played card", card => {
+        dispatch(selectCardSuccess(card.cardId));
+        dispatch(removeCard(card.cardId));
     });
 
     socket.on("played cards", msg => {
         dispatch(setPlayedCards(msg));
     });
 
-    socket.on("vote", () => {
+    socket.on("vote", (timeoutDuration) => {
         dispatch(setVoteCard(true));
+        dispatch(setVoteCardTimer(timeoutDuration));
     });
 
     socket.on("all votes", (msg) => {
         dispatch(setAllVotes(msg));
+        dispatch(setVoteCard(false));
     });
 
     socket.on("winner", (msg) => {
@@ -97,7 +109,7 @@ const connectSocket = () => {
         dispatch(playWord(""));
         dispatch(resetFinishRound());
         dispatch(setWinner(null));
-        dispatch(resetCookie());
+        history.push('/lobby');
     });
 
     return new Promise((resolve, reject) => {

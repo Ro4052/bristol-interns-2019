@@ -8,27 +8,35 @@ describe('Vote for a card', () => {
             const id = $title.text().split(" ")[1];
             return cy.request(`http://localhost:12346/joinRoom?roomId=${id}&url=${encodeURIComponent(Cypress.config().baseUrl)}`)
         })
-        .then(() => {
-            cy.startGame();
-            return cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
-        })
-        .then(() => cy.playCard());
+        .then(() => cy.startGame());
     });
 
     describe('on everyone played cards', () => {
         it('displays all played cards', () => {
-            cy.get('[data-cy="played-cards"]').children().its('length').should('eq', 2);
+            cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
+            .then(() => {
+                cy.playCard()
+                cy.get('[data-cy="played-cards"]').children().its('length').should('eq', 2);
+            });
         });
         it('prompts to vote for a card', () => {
-            cy.get('[data-cy="vote-card"]');
+            cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
+            .then(() => {
+                cy.playCard();
+                cy.get('[data-cy="vote-card"]');
+            });
         });
     });
 
     describe('on vote for a card', () => {
         it("displays the votes", () => {
-            cy.voteCard();
-            cy.get('[data-cy="vote-card"]').should('not.exist');
-            cy.get('[data-cy="vote"]').should('exist');
+            cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
+            .then(() => {
+                cy.playCard();
+                cy.voteCard();
+                cy.get('[data-cy="vote-card"]').should('not.exist');
+                cy.get('[data-cy="vote"]').should('exist');
+            });
         });
     });
 });

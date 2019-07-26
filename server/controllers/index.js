@@ -3,7 +3,7 @@ const router = require('express').Router();
 const path = require('path');
 const auth = require('../services/auth');
 const GameLogic = require('../services/GameLogic');
-const { closeSocket, createRoom, joinRoom, leaveRoom, getRooms, setRoomStarted } = require('../services/socket');
+const { closeSocket, createRoom, joinRoom, leaveRoom, getRooms, setRoomStarted, closeRoom } = require('../services/socket');
 
 let currentUsers = [];
 let latestRoomId = 0;
@@ -46,6 +46,7 @@ router.get('/auth/logout', auth, (req, res) => {
         currentUsers = currentUsers.filter((otherUser) => otherUser.username !== req.session.user);
         getGameStateById(req.session.roomId).removePlayer(req.session.user);
         req.session.destroy();
+        closeSocket();
         res.sendStatus(200);
     } catch (err) { /* Game has started, method not allowed */
         res.status(400).json({message: err.message});
@@ -146,8 +147,7 @@ router.get('/api/start', auth, (req, res) => {
 router.get('/api/end', auth, (req, res) => {
     try {
         getGameStateById(req.session.roomId).endGame();
-        currentUsers = [];
-        closeSocket();
+        closeRoom(req.session.roomId);
         res.sendStatus(200);
     } catch (err) {
         res.status(400).json({message: err.message});
@@ -221,9 +221,7 @@ router.post('/api/voteCard', auth, (req, res) => {
 if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {
         try {
-            if (req.session.roomId) {
-                getGameStateById(req.session.roomId).clearGameState();
-            }
+            games.forEach(game => game.gameState.clearGameState());
             currentUsers = [];
             latestRoomId = 0;
             games = [];

@@ -1,3 +1,39 @@
 .currentRooms {
     display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-flow: row wrap;
 }
+
+/* .singleRoom {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1vmin;
+    margin: 1vmin;
+    background-color: white;
+    border: 3px solid black;
+    border-radius: 20px;
+} */
+
+/* .singleRoom > h2 {
+    margin-top: 0;
+} */
+
+/* .roomPlayersList {
+    margin-bottom: 2vmin;
+} */
+
+/* .rooms {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2vmin;
+} */
+
+/* .createRoom {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5vmin;
+} */
