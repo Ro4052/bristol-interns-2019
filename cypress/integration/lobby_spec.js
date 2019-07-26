@@ -25,9 +25,8 @@ describe('Lobby', () => {
 
         describe('on another player joining the room', () => {
             beforeEach(() => {
-                cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`).then(() => {
-                    cy.request(`http://localhost:12346/joinRoom?roomId=0&url=${encodeURIComponent(Cypress.config().baseUrl)}`);
-                });
+                cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
+                .then(() => cy.request(`http://localhost:12346/joinRoom?roomId=0&url=${encodeURIComponent(Cypress.config().baseUrl)}`));
             });
 
             it('displays that player', () => {
@@ -51,11 +50,9 @@ describe('Lobby', () => {
 
     describe('on logging in when a room already exists', () => {
         beforeEach(() => {
-            cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`).then(() => {
-                cy.request(`http://localhost:12346/createRoom?url=${encodeURIComponent(url)}`).then(() => {
-                    cy.login('unicorn');
-                });
-            });
+            cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
+            .then(() => cy.request(`http://localhost:12346/createRoom?url=${encodeURIComponent(url)}`))
+            .then(() => cy.login('unicorn'));
         });
 
         it('displays the existing room', () => {

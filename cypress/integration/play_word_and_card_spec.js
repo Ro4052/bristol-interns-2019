@@ -4,11 +4,11 @@ describe('Play word and card', () => {
     describe('on start game', () => {
         beforeEach(() => {
             cy.login('unicorn');
-            cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`).then(() => {
-                cy.request(`http://localhost:12346/createRoom?url=${encodeURIComponent(Cypress.config().baseUrl)}`).then(() => {
-                    cy.joinRoom();    
-                    cy.startGame();
-                });
+            cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
+            .then(() => cy.request(`http://localhost:12346/createRoom?url=${encodeURIComponent(Cypress.config().baseUrl)}`))
+            .then(() => {
+                cy.joinRoom();    
+                cy.startGame();
             });
         });
 

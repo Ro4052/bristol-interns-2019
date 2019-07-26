@@ -4,9 +4,8 @@ describe('My Cards', () => {
     beforeEach(() => {
         cy.login('unicorn');
         cy.createRoom();
-        cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`).then(() => {
-            cy.request(`http://localhost:12346/joinRoom?roomId=0&url=${encodeURIComponent(Cypress.config().baseUrl)}`);
-        });
+        cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
+        .then(() => cy.request(`http://localhost:12346/joinRoom?roomId=0&url=${encodeURIComponent(Cypress.config().baseUrl)}`));
     });
     
     describe('when the game has started', () => {

@@ -1,4 +1,3 @@
-const url = Cypress.config().baseUrl;
 const username = 'halfling';
 
 describe('Login', () => {
