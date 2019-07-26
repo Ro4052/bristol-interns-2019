@@ -7,8 +7,9 @@ const promptDuration = process.env.NODE_ENV === 'testing' ? 1000 : 37000;
 const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 1000 : 5000;
 const rounds = 3;
 const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 3;
+exports.minPlayers = minPlayers;
 
-module.exports = class GameLogic {
+class GameLogic {
     constructor(roomId) {
         this.roomId = roomId;
         this.status = statusTypes.NOT_STARTED;
@@ -33,9 +34,6 @@ module.exports = class GameLogic {
         this.players = this.players.filter(player => player.username !== username);
         socket.emitPlayers(this.roomId, this.players);
     }
-
-     /* Get the minimum number of players */
-     getMinPlayers() { return minPlayers };
 
     /* Set the status of the game */
     setStatus(newStatus) { return this.status = newStatus };
@@ -284,3 +282,4 @@ module.exports = class GameLogic {
         socket.emitPlayers(this.roomId, this.players);
     }
 }
+exports.GameLogic = GameLogic;

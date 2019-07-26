@@ -2,7 +2,7 @@ const validWord = require('../services/validWord');
 const router = require('express').Router();
 const path = require('path');
 const auth = require('../services/auth');
-const GameLogic = require('../services/GameLogic');
+const { GameLogic, minPlayers } = require('../services/GameLogic');
 const { closeSocket, createRoom, joinRoom, leaveRoom, getRooms, setRoomStarted, closeRoom } = require('../services/socket');
 
 let currentUsers = [];
@@ -68,7 +68,7 @@ router.post('/api/room/create', auth, (req, res) => {
         }
         const newGameState = new GameLogic(latestRoomId);
         const newGameRoom = {roomId: latestRoomId, gameState: newGameState}
-        createRoom(user, latestRoomId, newGameState.getMinPlayers());
+        createRoom(user, latestRoomId, minPlayers);
         games.push(newGameRoom);
         newGameState.joinGame(user);
         req.session.roomId = latestRoomId;    
