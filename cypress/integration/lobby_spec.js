@@ -95,11 +95,11 @@ describe('Lobby', () => {
                     cy.get('[data-cy="room"]').last().contains('unicorn');
                 });
 
-                it.skip('removes you from the other room', () => {
+                it('removes you from the other room', () => {
                     cy.get('[data-cy="room"]').first().should('not.contain', 'unicorn');
                 });
 
-                describe.skip('on clicking join room on the first room', () => {
+                describe('on clicking join room on the first room', () => {
                     beforeEach(() => cy.joinRoom());
 
                     it('adds you to that room', () => {

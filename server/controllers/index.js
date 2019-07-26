@@ -6,9 +6,11 @@ const GameLogic = require('../services/GameLogic');
 const { closeSocket, createRoom, joinRoom, leaveRoom, getRooms, setRoomStarted } = require('../services/socket');
 
 let currentUsers = [];
-let roomId = 0;
+let latestRoomId = 0;
 /** @type {{ roomId: number, gameState: GameLogic }[]} */
 let games = [];
+
+const getGameStateById = roomId => games.find(game => game.roomId === roomId).gameState;
 
 /* Check if player is logged in */
 router.get('/auth', (req, res) => {
@@ -53,17 +55,23 @@ router.get('/auth/logout', auth, (req, res) => {
 /* Create a room (a single instance of a game) */
 router.post('/api/room/create', auth, (req, res) => {
     const { user } = req.session;
-    /* TODO: add check for when a room cannot be created and return an error */
     try {
-        let newGameState = new GameLogic(roomId);
-        let newGameRoom = {roomId, gameState: newGameState}
-        createRoom(user, roomId, newGameState.getMinPlayers());
+        if (req.session.roomId !== undefined) {
+            const oldRoomId = req.session.roomId;
+            let game = getGameStateById(oldRoomId);
+            game.quitGame(user);
+            if (!game.getPlayers().length) games = games.filter(otherGame => otherGame !== game);
+            leaveRoom(user, oldRoomId);
+            req.session.roomId = undefined;
+        }
+        let newGameState = new GameLogic(latestRoomId);
+        let newGameRoom = {roomId: latestRoomId, gameState: newGameState}
+        createRoom(user, latestRoomId, newGameState.getMinPlayers());
         games.push(newGameRoom);
-        // Add the creator to the room
         newGameState.joinGame(user);
-        req.session.roomId = roomId;    
+        req.session.roomId = latestRoomId;    
         res.sendStatus(200);
-        roomId++;
+        latestRoomId++;
     } catch (err) {
         console.log(err);
         res.status(400).json({message: err.message});
@@ -75,6 +83,14 @@ router.post('/api/room/join', auth, (req, res) => {
     const { user } = req.session;
     const { roomId } = req.body;
     try {
+        if (req.session.roomId !== undefined) {
+            const oldRoomId = req.session.roomId;
+            let game = getGameStateById(oldRoomId);
+            game.quitGame(user);
+            if (!game.getPlayers().length) games = games.filter(otherGame => otherGame !== game);
+            leaveRoom(user, oldRoomId);
+            req.session.roomId = undefined;
+        }
         joinRoom(user, roomId);
         getGameStateById(roomId).joinGame(user);
         req.session.roomId = roomId; 
@@ -90,7 +106,7 @@ router.post('/api/room/leave', auth, (req, res) => {
     const { user } = req.session;
     const { roomId } = req.body;
     try {
-        const game = getGameStateById(roomId);
+        let game = getGameStateById(roomId);
         game.quitGame(user);
         if (game.getPlayers().length <= 0) games = games.filter(otherGame => otherGame !== game);
         leaveRoom(user, roomId);
@@ -209,7 +225,7 @@ if (process.env.NODE_ENV === 'testing') {
                 getGameStateById(req.session.roomId).clearGameState();
             }
             currentUsers = [];
-            roomId = 0;
+            latestRoomId = 0;
             games = [];
             res.sendStatus(200);
         } catch (err) {
@@ -231,7 +247,5 @@ router.get('/*', (req, res) => {
         }
     });
 });
-
-const getGameStateById = (roomId) => games.find(game => game.roomId === roomId).gameState;
 
 module.exports = router;
