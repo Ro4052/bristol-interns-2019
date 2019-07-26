@@ -11,13 +11,7 @@ describe('Lobby', () => {
             cy.get('[data-cy="current-rooms"]').children().should('have.length', 1);
             cy.get('[data-cy="room"]').should('exist');
             cy.get('[data-cy="player-username"]').contains('unicorn');
-        });
-
-        it('displays the leave room button', () => {
             cy.get('[data-cy="leave-room"]').should('exist');
-        });
-
-        it('displays how many players are needed to start the game', () => {
             cy.get('[data-cy="players-needed"]').contains('1');
         });
 
@@ -68,9 +62,6 @@ describe('Lobby', () => {
             cy.get('[data-cy="current-rooms"]').children().should('have.length', 1);
             cy.get('[data-cy="room"]').should('exist');
             cy.get('[data-cy="player-username"]').first().should('have.text', 'halfling');
-        });
-
-        it('displays the join room button', () => {
             cy.get('[data-cy="join-room"]').should('exist');
         });
 
@@ -91,11 +82,8 @@ describe('Lobby', () => {
                     cy.get('[data-cy="room-title"]').contains('Room: 1');
                 });
 
-                it('adds you to the room', () => {
+                it('switches your room', () => {
                     cy.get('[data-cy="room"]').last().contains('unicorn');
-                });
-
-                it('removes you from the other room', () => {
                     cy.get('[data-cy="room"]').first().should('not.contain', 'unicorn');
                 });
 
@@ -112,44 +100,6 @@ describe('Lobby', () => {
                     });
                 });
             });
-        });
-    });
-
-    describe('when a whole game has been played', () => {
-        it('redirects back to the lobby', () => {
-            cy.createRoom();
-            cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
-            .then(() => cy.get('[data-cy="room-title"]'))
-            .then(($title) => {
-                const id = $title.text().split(" ")[1];
-                return cy.request(`http://localhost:12346/joinRoom?roomId=${id}&url=${encodeURIComponent(Cypress.config().baseUrl)}`);
-            })
-            .then(() => {
-                cy.startGame();
-                return cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`);
-            })
-            .then(() => {
-                cy.playCard();
-                cy.voteCard();
-                cy.wait(1000);
-                return cy.request(`http://localhost:12346/playCard?url=${encodeURIComponent(Cypress.config().baseUrl)}`);
-            })
-            .then(() => {
-                cy.playCardWord();
-                return cy.request(`http://localhost:12346/playCard?url=${encodeURIComponent(Cypress.config().baseUrl)}`);
-            })
-            .then(() => cy.request(`http://localhost:12346/voteCard?url=${encodeURIComponent(Cypress.config().baseUrl)}`))
-            .then(() => {
-                cy.wait(1000);
-                cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
-            })
-            .then(() => {
-                cy.playCard();
-                cy.voteCard();
-                cy.wait(1000);
-                cy.newGame();
-                cy.url().should('include', '/lobby');
-            })
         });
     });
 });

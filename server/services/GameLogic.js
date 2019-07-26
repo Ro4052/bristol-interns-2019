@@ -35,7 +35,7 @@ module.exports = class GameLogic {
     }
 
     /* Get the minimum number of players */
-    getMinPlayers() { return this.minPlayers };
+    getMinPlayers() { return minPlayers };
 
     /* Set the status of the game */
     setStatus(newStatus) { return this.status = newStatus };
@@ -62,7 +62,9 @@ module.exports = class GameLogic {
         } else if (this.players.some(player => player.username === username)) {
             throw Error("You have already joined this game");
         } else {
-            const cards = cardManager.assign(this.players, this.rounds);
+            const cards = cardManager.assign(this.players, rounds);
+            console.log("ASSIGNED CARDS");
+            console.log(cards);
             const player = { username, cards, score: 0 };
             this.players.push(player);      
             socket.emitPlayers(this.roomId, this.players);

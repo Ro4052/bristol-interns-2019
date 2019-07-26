@@ -17,7 +17,7 @@ module.exports.assign = (users, number_of_cards) => {
         }
         cardsSet.push({ cardId: random, played: false });
     }
-
+    console.log("cardsSet", cardsSet);
     return cardsSet;
 }
 

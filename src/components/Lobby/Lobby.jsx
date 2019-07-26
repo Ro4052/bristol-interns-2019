@@ -9,28 +9,9 @@ import Logout from '../Logout/Logout';
 import { authenticateUser } from '../shared/Auth/AuthActions';
 
 export class Lobby extends React.Component {
-
-    //     constructor(props) {
-//         super(props);
-//         this.state = {
-//             joined: false
-//         };
-//         this.createRoom = this.createRoom.bind(this);
-//         this.joinRoom = this.joinRoom.bind(this);
-//     }
-
-//     componentDidMount() {
-//         this.props.authenticateUser();
-//     }
-
-//     render() {
-//         return (
-//             <>
-//                 <Button cy="create-room" handleClick={this.props.createRoom} text="Create Room" />
-//                 <ul className={styles.currentRooms} data-cy="current-rooms">
-//                     {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}
-//                 </ul>
-//             </>
+    componentDidMount() {
+        this.props.authenticateUser();
+    }
 
     render() {
         return (
@@ -44,9 +25,7 @@ export class Lobby extends React.Component {
                 <div className={styles.rooms}>
                     <Button cy="create-room" handleClick={this.props.createRoom} text="Create Room" />
                     <ul className={styles.currentRooms} data-cy="current-rooms">
-                        {this.props.rooms.map(room => 
-                            <Room room={room} key={room.roomId} handleClick={this.joinRoom} />
-                        )}
+                        {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}
                     </ul>
                 </div>
             </div>
