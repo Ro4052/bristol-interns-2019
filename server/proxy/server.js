@@ -59,6 +59,19 @@ app.get('/connect', (req, res) => {
     }); 
 });
 
+app.get('/logout', (req, res) => {
+    const url = req.query.url;
+    const axiosInstance = axios.create({
+        baseURL: url,
+        timeout: 500,
+        jar: cookieJar,
+        withCredentials: true
+    });
+    axiosInstance.post('auth/logout')
+        .then(() => res.sendStatus(200))
+        .catch((err) =>  res.send(err));
+});
+
 app.get('/startGame', (req, res) => {
     const url = req.query.url;
     const axiosInstance = axios.create({

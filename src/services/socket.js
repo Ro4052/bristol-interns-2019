@@ -116,7 +116,7 @@ const connectSocket = () => {
             resolve();
         });
         socket.on('error', (err) => reject(err));
-    })
+    });
 }
 
 export default connectSocket;

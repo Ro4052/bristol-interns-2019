@@ -1,4 +1,4 @@
-import { types } from './AuthActionTypes';
+import { types } from './LoginActionTypes';
 
 export const initialState = {
     username: null,

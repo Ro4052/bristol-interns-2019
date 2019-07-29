@@ -36,7 +36,6 @@ export const authenticateUser = () => dispatch => {
     axiosInstance.get('/auth')
     .then(res => {            
         if (res.status === 200) {
-            console.log("Authenticated");
             connectSocket()
             .then(() => {
                 dispatch(retrieveGameState());

@@ -6,7 +6,7 @@ import Room from './Room/Room';
 import Button from '../shared/Button/Button';
 import Dixit from '../Dixit/Dixit';
 import Logout from '../Logout/Logout';
-import { authenticateUser } from '../shared/Auth/AuthActions';
+import { authenticateUser } from '../Login/LoginActions';
 
 export class Lobby extends React.Component {
     componentDidMount() {

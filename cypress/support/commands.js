@@ -24,6 +24,25 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
+Cypress.Commands.add('login', username => {
+    cy.route({
+        method: 'POST',
+        url: '/auth/login'
+    }).as('login');
+    cy.get('input').type(username)
+    .then(() => cy.get('[data-cy="login"]').click());
+    cy.wait('@login');
+});
+
+Cypress.Commands.add('logout', () => {
+    cy.route({
+        method: 'POST',
+        url: '/auth/logout'
+    }).as('logout');
+    cy.get('[data-cy="logout"]').click();
+    cy.wait('@logout');
+});
+
 Cypress.Commands.add('createRoom', () => {
     cy.route({
         method: 'POST',
@@ -49,16 +68,6 @@ Cypress.Commands.add('leaveRoom', () => {
     }).as('leaveRoom');
     cy.get('[data-cy="leave-room"]').click();
     cy.wait('@leaveRoom');
-});
-
-Cypress.Commands.add('login', username => {
-    cy.route({
-        method: 'POST',
-        url: '/auth/login'
-    }).as('login');
-    cy.get('input').type(username);
-    cy.get('button').click();
-    cy.wait('@login');
 });
 
 Cypress.Commands.add('startGame', () => {

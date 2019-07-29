@@ -3,7 +3,7 @@ const router = require('express').Router();
 const path = require('path');
 const auth = require('../services/auth');
 const { GameLogic, minPlayers } = require('../services/GameLogic');
-const { closeSocket, createRoom, joinRoom, leaveRoom, getRooms, setRoomStarted, closeRoom } = require('../services/socket');
+const { disconnectSocket, closeSockets, createRoom, joinRoom, leaveRoom, setRoomStarted, closeRoom } = require('../services/socket');
 
 let currentUsers = [];
 let latestRoomId = 0;
@@ -30,28 +30,31 @@ router.post('/auth/login', (req, res) => {
     } else {
         req.session.user = username;
         req.session.roomId = null;
-        const user = { username };
-        try {
-            currentUsers.push(user);
-            res.status(200).json({rooms: getRooms()});
-        } catch (err) {
-            res.status(400).json({ message: err.message });
-        };
+        currentUsers.push({ username });
+        res.sendStatus(200);
     }
 });
 
 /* Log out the user */
-router.get('/auth/logout', auth, (req, res) => {
-    try { /* Game has finished, or has not been started yet */
-        getGameStateById(req.session.roomId).quitGame(req.session.user);
-        currentUsers = currentUsers.filter((otherUser) => otherUser.username !== req.session.user);
-        getGameStateById(req.session.roomId).removePlayer(req.session.user);
+router.post('/auth/logout', auth, (req, res) => {
+    const { user, roomId } = req.session;
+    try {
+        if (roomId !== null) {
+            const gameState = getGameStateById(roomId);
+            // Why do we need both of these?
+            gameState.quitGame(user);
+            gameState.removePlayer(user);
+            if (gameState.getPlayers().length <= 0) games = games.filter(otherGame => otherGame !== gameState);
+            leaveRoom(user, roomId);
+        }
+        disconnectSocket(user);
         req.session.destroy();
-        closeSocket();
+        currentUsers = currentUsers.filter((otherUser) => otherUser.username !== user);
         res.sendStatus(200);
-    } catch (err) { /* Game has started, method not allowed */
+    } catch (err) {
+        console.log(err);
         res.status(400).json({message: err.message});
-    }    
+    }
 });
 
 /* Create a room (a single instance of a game) */
@@ -156,16 +159,6 @@ router.get('/api/end', auth, (req, res) => {
     }
 });
 
-/* Reset the cookie and destroy the session */
-router.get('/api/reset-cookie', (req, res) => {
-    if (req.session) {
-        req.session.destroy();
-        res.sendStatus(200);
-    } else {
-        res.status(404).json({message: "Cannot destroy session as it does not exist"});
-    }
-});
-
 /* Current player plays a card and a word */
 router.post('/api/playCardWord', auth, (req, res) => {
     if (getGameStateById(req.session.roomId).isCurrentPlayer(req.session.user)) { /* Only current player is allowed to play both a word and a card */
@@ -242,7 +235,7 @@ if (process.env.NODE_ENV === 'testing') {
             console.log(err);
             res.status(400).json({ message: err.message});
         } finally {
-            closeSocket();
+            closeSockets();
             req.session.destroy();
         }
     });
