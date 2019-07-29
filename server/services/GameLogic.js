@@ -29,12 +29,6 @@ class GameLogic {
         this.nextRoundTimeout = null;
     }
 
-    /* Remove player from list of this.players on log out */
-    removePlayer(username) {
-        this.players = this.players.filter(player => player.username !== username);
-        socket.emitPlayers(this.roomId, this.players);
-    }
-
     /* Set the status of the game */
     setStatus(newStatus) { return this.status = newStatus };
 
@@ -110,8 +104,9 @@ class GameLogic {
             this.setStatus(statusTypes.WAITING_FOR_CURRENT_PLAYER);
             this.roundNum++;
             this.currentPlayer = this.players[this.roundNum % this.players.length];
-            socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer);
+            this.clearRoundData();
             this.clearFinishedTurn();
+            socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer);
             socket.promptCurrentPlayer(this.roomId, this.currentPlayer);
         } else {
             this.setStatus(statusTypes.GAME_OVER);

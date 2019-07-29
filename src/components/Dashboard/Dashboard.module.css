@@ -23,7 +23,7 @@
 }
 
 .gameInfo {
-    padding: 3vmin 5vmin;
+    padding: 2vmin;
     margin: 2vmin;
     background-color: white;
     border: 3px solid black;
@@ -32,7 +32,7 @@
 }
 
 .gameInfo > h2 {
-    font-size: 5vmin;
+    font-size: 3vw;
     margin: 0;
 }
 
@@ -47,10 +47,7 @@
     flex-direction: column;
 }
 
-@media only screen and (max-width: 600px) {
-    .gameInfo {
-        height: 100%;
-    }
+@media only screen and (max-width: 750px) {
     .side {
         width: 100%;
         height: 20%;

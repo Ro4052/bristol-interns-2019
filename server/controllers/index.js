@@ -1,16 +1,21 @@
 const validWord = require('../services/validWord');
 const router = require('express').Router();
 const path = require('path');
-const auth = require('../services/auth');
+const auth = require('./auth');
 const { GameLogic, minPlayers } = require('../services/GameLogic');
-const { closeSocket, createRoom, joinRoom, leaveRoom, getRooms, setRoomStarted, closeRoom } = require('../services/socket');
+const { disconnectSocket, closeSockets, createRoom, joinRoom, leaveRoom, setRoomStarted, closeRoom } = require('../services/socket');
 
 let currentUsers = [];
 let latestRoomId = 0;
 /** @type {{ roomId: number, gameState: GameLogic }[]} */
 let games = [];
 
-const getGameStateById = roomId => games.find(game => game.roomId === roomId).gameState;
+const getGameStateById = roomId => {
+    const game = games.find(game => game.roomId === roomId);
+    if (game) return game.gameState;
+}
+
+const removeGameById = roomId => games = games.filter(game => game.roomId !== roomId);
 
 /* Check if player is logged in */
 router.get('/auth', (req, res) => {
@@ -30,28 +35,31 @@ router.post('/auth/login', (req, res) => {
     } else {
         req.session.user = username;
         req.session.roomId = null;
-        const user = { username };
-        try {
-            currentUsers.push(user);
-            res.status(200).json({rooms: getRooms()});
-        } catch (err) {
-            res.status(400).json({ message: err.message });
-        };
+        currentUsers.push({ username });
+        res.sendStatus(200);
     }
 });
 
 /* Log out the user */
-router.get('/auth/logout', auth, (req, res) => {
-    try { /* Game has finished, or has not been started yet */
-        getGameStateById(req.session.roomId).quitGame(req.session.user);
-        currentUsers = currentUsers.filter((otherUser) => otherUser.username !== req.session.user);
-        getGameStateById(req.session.roomId).removePlayer(req.session.user);
+router.post('/auth/logout', auth, (req, res) => {
+    const { user, roomId } = req.session;
+    try {
+        if (roomId !== null) {
+            const gameState = getGameStateById(roomId);
+            if (gameState) {
+                gameState.quitGame(user);
+                if (gameState.getPlayers().length <= 0) games = games.filter(otherGame => otherGame !== gameState);
+                leaveRoom(user, roomId);
+            }   
+        }
+        disconnectSocket(user);
         req.session.destroy();
-        closeSocket();
+        currentUsers = currentUsers.filter((otherUser) => otherUser.username !== user);
         res.sendStatus(200);
-    } catch (err) { /* Game has started, method not allowed */
+    } catch (err) {
+        console.log(err);
         res.status(400).json({message: err.message});
-    }    
+    }
 });
 
 /* Create a room (a single instance of a game) */
@@ -61,9 +69,11 @@ router.post('/api/room/create', auth, (req, res) => {
         if (req.session.roomId !== null) {
             const oldRoomId = req.session.roomId;
             const game = getGameStateById(oldRoomId);
-            game.quitGame(user);
-            if (!game.getPlayers().length) games = games.filter(otherGame => otherGame !== game);
-            leaveRoom(user, oldRoomId);
+            if (game) {
+                game.quitGame(user);
+                if (!game.getPlayers().length) games = games.filter(otherGame => otherGame !== game);
+                leaveRoom(user, oldRoomId);
+            }
             req.session.roomId = null;
         }
         const newGameState = new GameLogic(latestRoomId);
@@ -88,9 +98,11 @@ router.post('/api/room/join', auth, (req, res) => {
         if (req.session.roomId !== null) {
             const oldRoomId = req.session.roomId;
             const game = getGameStateById(oldRoomId);
-            game.quitGame(user);
-            if (!game.getPlayers().length) games = games.filter(otherGame => otherGame !== game);
-            leaveRoom(user, oldRoomId);
+            if (game) {
+                game.quitGame(user);
+                if (!game.getPlayers().length) games = games.filter(otherGame => otherGame !== game);
+                leaveRoom(user, oldRoomId);
+            }
             req.session.roomId = null;
         }
         joinRoom(user, roomId);
@@ -147,22 +159,15 @@ router.get('/api/start', auth, (req, res) => {
 
 /* End the game */
 router.get('/api/end', auth, (req, res) => {
+    const { roomId } = req.session;
     try {
-        getGameStateById(req.session.roomId).endGame();
-        closeRoom(req.session.roomId);
+        const gameState = getGameStateById(req.session.roomId);
+        gameState.endGame();
+        removeGameById(roomId);
+        closeRoom(roomId);
         res.sendStatus(200);
     } catch (err) {
         res.status(400).json({message: err.message});
-    }
-});
-
-/* Reset the cookie and destroy the session */
-router.get('/api/reset-cookie', (req, res) => {
-    if (req.session) {
-        req.session.destroy();
-        res.sendStatus(200);
-    } else {
-        res.status(404).json({message: "Cannot destroy session as it does not exist"});
     }
 });
 
@@ -192,7 +197,7 @@ router.post('/api/validWord', auth, (req,res) => {
     } else {
         res.status(400).json({message: "Invalid word"});
     }
-})
+});
 
 /* Player plays a card */
 router.post('/api/playCard', auth, (req, res) => {
@@ -232,7 +237,7 @@ if (process.env.NODE_ENV === 'testing') {
             console.log(err);
             res.status(400).json({ message: err.message});
         } finally {
-            closeSocket();
+            closeSockets();
             req.session.destroy();
         }
     });

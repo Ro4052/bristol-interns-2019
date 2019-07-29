@@ -24,6 +24,25 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
+Cypress.Commands.add('login', username => {
+    cy.route({
+        method: 'POST',
+        url: '/auth/login'
+    }).as('login');
+    cy.get('input').type(username)
+    .then(() => cy.get('[data-cy="login"]').click());
+    cy.wait('@login');
+});
+
+Cypress.Commands.add('logout', () => {
+    cy.route({
+        method: 'POST',
+        url: '/auth/logout'
+    }).as('logout');
+    cy.get('[data-cy="logout"]').click();
+    cy.wait('@logout');
+});
+
 Cypress.Commands.add('createRoom', () => {
     cy.route({
         method: 'POST',
@@ -51,16 +70,6 @@ Cypress.Commands.add('leaveRoom', () => {
     cy.wait('@leaveRoom');
 });
 
-Cypress.Commands.add('login', username => {
-    cy.route({
-        method: 'POST',
-        url: '/auth/login'
-    }).as('login');
-    cy.get('input').type(username);
-    cy.get('button').click();
-    cy.wait('@login');
-});
-
 Cypress.Commands.add('startGame', () => {
     cy.route({
         method: "GET",
@@ -75,9 +84,9 @@ Cypress.Commands.add('playCardWord', () => {
         method: 'POST',
         url: '/api/playCardWord'
     }).as('playCardWord');
-    cy.get('[data-cy="my-cards"] [data-cy="card"]').first().click();
     cy.get('[data-cy="type-word"]').type('word');
     cy.get('[data-cy="send-word"]').click();
+    cy.get('[data-cy="my-cards"] [data-cy="card"]').first().click();
     cy.get('[data-cy="end-turn"]').click();
     cy.wait('@playCardWord');
 });

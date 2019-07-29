@@ -10,13 +10,15 @@ let rooms = [];
 exports.setupSocket = (server, session) => {
     io = socketio(server);
     io.use(sharedsession(session));
-    io.on('connection', function (socket) {
+    io.on('connection', socket => {
         if (socket.handshake.session.user) {
             sockets = sockets.filter(otherSocket => otherSocket.handshake.session.user !== socket.handshake.session.user);
             sockets.push(socket);
             emitRooms();
+        } else {
+            socket.disconnect();
         }
-        socket.on('disconnect', function (disconnected) {
+        socket.on('disconnect', disconnected => {
             sockets = sockets.filter(socket => socket !== disconnected);
         });
     });
@@ -67,13 +69,19 @@ exports.setRoomStarted = (roomId) => {
     this.emitRooms();
 }
 
-// Cloase the existing socket
-exports.closeSocket = () => {
+// Close all the sockets
+exports.closeSockets = () => {
     rooms = [];
     this.emitRooms();
     sockets.forEach(socket => socket.disconnect());
     sockets = [];
 };
+
+// Disconnect
+exports.disconnectSocket = username => {
+    const socket = sockets.find(socket => socket.handshake.session.user === username);
+    if (socket) socket.disconnect();
+}
 
 // Check if it's the sender's turn
 exports.isCurrentPlayerSocket = (socket, state) => state.currentPlayer && socket.handshake.session.user === state.currentPlayer.username;
@@ -83,7 +91,7 @@ const emitPlayers = (roomId, players) => io.to(`room-${roomId}`).emit("players",
 exports.emitPlayers = emitPlayers;
 
 // Let the players know about the next round
-exports.emitNewRound = (roomId, status, roundNum, currentPlayer) => io.to(`room-${roomId}`).emit("new round", { status, roundNum, currentPlayer });
+exports.emitNewRound = (roomId, status, roundNum, currentPlayer) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("new round", { status, roundNum, currentPlayer}));
 
 // Get the current list of rooms
 exports.getRooms = () => rooms;
@@ -124,7 +132,7 @@ exports.emitEndGame = (roomId) => io.to(`room-${roomId}`).emit("end");
 // Close the room when the game has ended
 exports.closeRoom = (roomId) => {
     sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.leave(`room-${roomId}`));
-    rooms = rooms.filter(room => room.id !== roomId);
+    rooms = rooms.filter(room => room.roomId !== roomId);
     this.emitRooms();
 };
 
