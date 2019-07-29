@@ -1,11 +1,12 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import { Logout } from './Logout';
-import Button from '../shared/Button/Button';
 
 describe('on render', () => {
     it('renders correctly', () => {
-        const wrapper = shallow(<Logout />);
-        expect(wrapper.exists(Button)).toEqual(true);
+        const logOutUser = jest.fn();
+        const wrapper = mount(<Logout logOutUser={logOutUser} />);
+        wrapper.find({ 'data-cy': 'logout' }).simulate('click');
+        expect(logOutUser).toHaveBeenCalled();
     });
 });
