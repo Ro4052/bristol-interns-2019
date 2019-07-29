@@ -98,9 +98,10 @@ Cypress.Commands.add('playCard', () => {
         url: '/api/playCard'
     }).as('playCard');
     cy.get('[data-cy="my-cards"] [data-cy="card-wrapper"]').first().then(($wrapper) => {
-        expect($wrapper.attr('class')).to.equal("Card_cardWrapper__1BfyR Card_enabled__2jHyG");
+        expect($wrapper.attr('class')).to.include("enabled");
         $wrapper.click();
     });
+    cy.wait('@playCard');
 });
 
 Cypress.Commands.add('voteCard', () => {
