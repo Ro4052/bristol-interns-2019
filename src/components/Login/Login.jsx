@@ -40,9 +40,9 @@ export class Login extends React.Component {
                 <div className={styles.loginPage}>
                     <Dixit />
                     <Monster />
-                    <form className={styles.loginForm} onSubmit={this.sendLogin}>
+                    <form className={styles.loginForm} onSubmit={this.sendLogin} data-cy='login-form' >
                         <h2 className={styles.formHeader}>Type a username to enter the game:</h2>
-                        <input className={cx(styles.loginInput, { inputError: this.props.error })} value={this.state.value} placeholder="Enter username" onChange={this.handleChange} autoFocus />
+                        <input data-cy='username' className={cx(styles.loginInput, { inputError: this.props.error })} value={this.state.value} placeholder="Enter username" onChange={this.handleChange} autoFocus />
                         {this.props.error && <h3 data-cy="login-error" className={styles.errorText}>{this.props.error}</h3>}
                         <Button cy="login" handeClick={this.sendLogin} type="submit" text="Log in" />
                     </form>
