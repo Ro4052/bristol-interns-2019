@@ -68,15 +68,3 @@ export const logOutUser = () => dispatch => {
     })
     .catch((err) => dispatch(logOutFailure(err.message)));
 }
-
-export const resetCookie = () => (dispatch) => {
-    axiosInstance.get('/api/reset-cookie')
-    .then(res => {
-        if (res.status === 200) {
-            dispatch(authReset());
-        } else {
-            throw Error(res.data.message);
-        }
-    })
-    .catch((err) => dispatch(authFailure(err.message)));
-};

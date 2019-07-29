@@ -156,16 +156,6 @@ router.get('/api/end', auth, (req, res) => {
     }
 });
 
-/* Reset the cookie and destroy the session */
-router.get('/api/reset-cookie', (req, res) => {
-    if (req.session) {
-        req.session.destroy();
-        res.sendStatus(200);
-    } else {
-        res.status(404).json({message: "Cannot destroy session as it does not exist"});
-    }
-});
-
 /* Current player plays a card and a word */
 router.post('/api/playCardWord', auth, (req, res) => {
     if (getGameStateById(req.session.roomId).isCurrentPlayer(req.session.user)) { /* Only current player is allowed to play both a word and a card */
