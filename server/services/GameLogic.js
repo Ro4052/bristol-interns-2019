@@ -29,12 +29,6 @@ class GameLogic {
         this.nextRoundTimeout = null;
     }
 
-    /* Remove player from list of this.players on log out */
-    removePlayer(username) {
-        this.players = this.players.filter(player => player.username !== username);
-        socket.emitPlayers(this.roomId, this.players);
-    }
-
     /* Set the status of the game */
     setStatus(newStatus) { return this.status = newStatus };
 
