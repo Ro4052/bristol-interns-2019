@@ -44,6 +44,7 @@ export class Dashboard extends React.Component {
                     <div className={styles.middle}>
                         <div className={styles.interactions}>
                             {showPlayerInteractions && <PlayerInteractions />}
+                            {/* {this.props.drawers =[] ? this.props.winner && <GameOver /> : this.props.drawers && <GameOver />} */}
                             {this.props.winner && <GameOver />}
                             {this.props.status !== "GAME_OVER" && <PlayedCards />}
                         </div>
@@ -70,6 +71,7 @@ const mapStateToProps = (state) => ({
     playedCardId: state.myCardsReducer.playedCardId,
     username: state.authReducer.username,
     winner: state.gameOverReducer.winner,
+    drawers: state.gameOverReducer.drawers,
     playCardDuration: state.timerReducer.playCardDuration,
     voteCardDuration: state.timerReducer.voteCardDuration
 });

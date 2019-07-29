@@ -115,6 +115,9 @@ exports.emitAllVotes = (roomId, votes) => io.to(`room-${roomId}`).emit("all vote
 // When game is over, emit the winner to everyone
 exports.emitWinner = (roomId, player) => io.to(`room-${roomId}`).emit("winner", player);
 
+//When game is over, emit the drawers to everyone
+exports.emitDrawers = (roomId, players) => io.to(`room-${roomId}`).emit("drawers", players)
+
 // When game is over, tell the users
 exports.emitEndGame = (roomId) => io.to(`room-${roomId}`).emit("end");
 
