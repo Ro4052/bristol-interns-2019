@@ -13,9 +13,9 @@ export class PlayerInteractions extends React.Component {
     render() {
         return (
             <div className={cx(styles.playerInteractions, {votePrompt: this.props.voteCard})}>
-                {this.props.playWord && <Prompt cy="play-word" text="Type in a word" />}
-                {this.props.playCard && <Prompt cy="play-card" text="Pick a card" />}
-                {this.props.playWord && <PlayWord />}
+                {this.props.playWord && !this.props.word && <Prompt cy="play-word" text="Type in a word" />}
+                {this.props.playCard && !this.props.playedCardId && <Prompt cy="play-card" text="Pick a card" />}
+                {this.props.playWord && !this.props.word && <PlayWord />}
                 {this.props.voteCard && <Prompt cy="vote-card" text="Vote for a card" />}
                 {this.props.word && this.props.playedCardId && !this.props.finishedRound && <Button cy="end-turn" handleClick={this.props.endTurn} text="End my turn" />}
             </div>
