@@ -48,7 +48,6 @@ router.post('/auth/logout', auth, (req, res) => {
             const gameState = getGameStateById(roomId);
             if (gameState) {
                 gameState.quitGame(user);
-                gameState.removePlayer(user);
                 if (gameState.getPlayers().length <= 0) games = games.filter(otherGame => otherGame !== gameState);
                 leaveRoom(user, roomId);
             }   
