@@ -57,6 +57,14 @@ router.post('/auth/logout', auth, (req, res) => {
     }
 });
 
+const createNewRoom = user => {
+    const newGameState = new GameLogic(latestRoomId);
+    const newGameRoom = {roomId: latestRoomId, gameState: newGameState}
+    createRoom(user, latestRoomId, minPlayers);
+    games.push(newGameRoom);
+    newGameState.joinGame(user);
+};
+
 /* Create a room (a single instance of a game) */
 router.post('/api/room/create', auth, (req, res) => {
     const { user } = req.session;
@@ -64,19 +72,21 @@ router.post('/api/room/create', auth, (req, res) => {
         if (req.session.roomId !== null) {
             const oldRoomId = req.session.roomId;
             const game = getGameStateById(oldRoomId);
-            game.quitGame(user);
-            if (!game.getPlayers().length) games = games.filter(otherGame => otherGame !== game);
-            leaveRoom(user, oldRoomId);
-            req.session.roomId = null;
+            if (game.getPlayers().length !== 1) {
+                game.quitGame(user);
+                if (!game.getPlayers().length) games = games.filter(otherGame => otherGame !== game);
+                leaveRoom(user, oldRoomId);
+                req.session.roomId = null;
+                createNewRoom(user);
+                req.session.roomId = latestRoomId;    
+                latestRoomId++;
+            }
+        } else {
+            createNewRoom(user);
+            req.session.roomId = latestRoomId;    
+            latestRoomId++;
         }
-        const newGameState = new GameLogic(latestRoomId);
-        const newGameRoom = {roomId: latestRoomId, gameState: newGameState}
-        createRoom(user, latestRoomId, minPlayers);
-        games.push(newGameRoom);
-        newGameState.joinGame(user);
-        req.session.roomId = latestRoomId;    
         res.sendStatus(200);
-        latestRoomId++;
     } catch (err) {
         console.log(err);
         res.status(400).json({message: err.message});
