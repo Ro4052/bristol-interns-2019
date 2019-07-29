@@ -6,7 +6,7 @@ const { statusTypes } = require('./statusTypes');
 const promptDuration = process.env.NODE_ENV === 'testing' ? 1000 : 37000;
 const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 1000 : 5000;
 const rounds = 3;
-const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 3;
+const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 2;
 exports.minPlayers = minPlayers;
 
 class GameLogic {
@@ -27,12 +27,6 @@ class GameLogic {
         this.playCardTimeout = null;
         this.voteTimeout = null;
         this.nextRoundTimeout = null;
-    }
-
-    /* Remove player from list of this.players on log out */
-    removePlayer(username) {
-        this.players = this.players.filter(player => player.username !== username);
-        socket.emitPlayers(this.roomId, this.players);
     }
 
     /* Set the status of the game */

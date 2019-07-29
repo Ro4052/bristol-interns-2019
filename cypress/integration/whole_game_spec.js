@@ -25,12 +25,34 @@ describe('Whole game', () => {
             }).then(() => {
                 cy.playCard();
                 cy.voteCard();
+                cy.newGame();
             });
         });
 
-        it('redirects back to the lobby', () => {
-            cy.newGame();
+        it.skip('redirects back to the lobby', () => {
             cy.url().should('include', '/lobby');
+        });
+
+        it.skip('can create a new room', () => {
+            cy.createRoom();
+        });
+
+        it('can join an existing room', () => {
+            cy.request(`http://localhost:12346/createRoom?url=${encodeURIComponent(url)}`)
+            // .then(() => cy.joinRoom());
+        });
+
+        it.skip('can start a new game', () => {
+            cy.request(`http://localhost:12346/createRoom?url=${encodeURIComponent(url)}`)
+            .then(() => {
+                cy.joinRoom();
+                cy.startGame();
+            });
+        });
+
+        it.skip('can logout', () => {
+            cy.logout();
+            cy.url().should('eq', Cypress.config().baseUrl);
         });
     });
 });

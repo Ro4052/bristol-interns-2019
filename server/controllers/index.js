@@ -1,14 +1,13 @@
 const validWord = require('../services/validWord');
 const router = require('express').Router();
 const path = require('path');
-const auth = require('../services/auth');
-const { rooms, getGameStateById } = require('./rooms');
+const auth = require('./auth');
+const { roomsRouter, getGameStateById, removeGameById, clearAllGameStates, resetGames } = require('./rooms');
 const { disconnectSocket, closeSockets, leaveRoom, setRoomStarted, closeRoom } = require('../services/socket');
 
 let currentUsers = [];
-/** @type {{ roomId: number, gameState: GameLogic }[]} */
 
-router.use('/api/room', rooms);
+router.use('/api/room', roomsRouter);
 
 /* Check if player is logged in */
 router.get('/auth', (req, res) => {
@@ -39,12 +38,11 @@ router.post('/auth/logout', auth, (req, res) => {
     try {
         if (roomId !== null) {
             const gameState = getGameStateById(roomId);
-            // Why do we need both of these?
-            gameState.quitGame(user);
-            gameState.removePlayer(user);
-            // TODO: Delete room
-            // if (gameState.getPlayers().length <= 0) games = games.filter(otherGame => otherGame !== gameState);
-            leaveRoom(user, roomId);
+            if (gameState) {
+                gameState.quitGame(user);
+                if (gameState.getPlayers().length <= 0) removeGameById(roomId);
+                leaveRoom(user, roomId);
+            }   
         }
         disconnectSocket(user);
         req.session.destroy();
@@ -83,9 +81,12 @@ router.get('/api/start', auth, (req, res) => {
 
 /* End the game */
 router.get('/api/end', auth, (req, res) => {
+    const { roomId } = req.session;
     try {
-        getGameStateById(req.session.roomId).endGame();
-        closeRoom(req.session.roomId);
+        const gameState = getGameStateById(req.session.roomId);
+        gameState.endGame();
+        removeGameById(roomId);
+        closeRoom(roomId);
         res.sendStatus(200);
     } catch (err) {
         res.status(400).json({message: err.message});
@@ -118,7 +119,7 @@ router.post('/api/validWord', auth, (req,res) => {
     } else {
         res.status(400).json({message: "Invalid word"});
     }
-})
+});
 
 /* Player plays a card */
 router.post('/api/playCard', auth, (req, res) => {
@@ -149,12 +150,9 @@ router.post('/api/voteCard', auth, (req, res) => {
 if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {
         try {
-            // TODO:
-            // games.forEach(game => game.gameState.clearGameState());
+            clearAllGameStates();
             currentUsers = [];
-            // TODO:
-            // latestRoomId = 0;
-            // games = [];
+            resetGames();
             res.sendStatus(200);
         } catch (err) {
             console.log(err);

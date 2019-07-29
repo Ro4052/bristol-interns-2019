@@ -1,14 +1,33 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middlewares/auth');
+const auth = require('./auth');
 const { GameLogic, minPlayers } = require('../services/GameLogic');
 const { createRoom, joinRoom, leaveRoom } = require('../services/socket');
 
 let latestRoomId = 0;
+
+/** @type {{ roomId: number, gameState: GameLogic }[]} */
 let games = [];
 
-const getGameStateById = roomId => games.find(game => game.roomId === roomId).gameState;
+const getGameStateById = roomId => {
+    const game = games.find(game => game.roomId === roomId);
+    if (game) return game.gameState;
+}
 exports.getGameStateById = getGameStateById;
+
+const removeGameById = roomId => games = games.filter(game => game.roomId !== roomId);
+exports.removeGameById = removeGameById;
+
+const clearAllGameStates = () => {
+    games.forEach(game => game.gameState.clearGameState());
+}
+exports.clearAllGameStates = clearAllGameStates;
+
+const resetGames = () => {
+    latestRoomId = 0;
+    games = [];
+}
+exports.resetGames = resetGames;
 
 const setupRoom = user => {
     const newGameState = new GameLogic(latestRoomId);
@@ -19,17 +38,21 @@ const setupRoom = user => {
 };
 
 /* Create a room (a single instance of a game) */
-router.post('/api/room/create', auth, (req, res) => {
-    const { user } = req.session;
+router.post('/create', auth, (req, res) => {
+    const { user, roomId } = req.session;
     try {
-        if (req.session.roomId !== null) {
-            const oldRoomId = req.session.roomId;
-            const game = getGameStateById(oldRoomId);
-            if (game.getPlayers().length !== 1) {
-                game.quitGame(user);
-                if (!game.getPlayers().length) games = games.filter(otherGame => otherGame !== game);
-                leaveRoom(user, oldRoomId);
-                req.session.roomId = null;
+        if (roomId !== null) {
+            const game = getGameStateById(roomId);
+            if (game) {
+                if (game.getPlayers().length > 1) {
+                    game.quitGame(user);
+                    leaveRoom(user, roomId);
+                    req.session.roomId = null;
+                    setupRoom(user);
+                    req.session.roomId = latestRoomId;    
+                    latestRoomId++;
+                }
+            } else {
                 setupRoom(user);
                 req.session.roomId = latestRoomId;    
                 latestRoomId++;
@@ -47,16 +70,18 @@ router.post('/api/room/create', auth, (req, res) => {
 });
 
 /* Join a room */
-router.post('/api/room/join', auth, (req, res) => {
+router.post('/join', auth, (req, res) => {
     const { user } = req.session;
     const { roomId } = req.body;
     try {
-        if (req.session.roomId !== null) {
-            const oldRoomId = req.session.roomId;
+        const oldRoomId = req.session.roomId
+        if (oldRoomId !== null) {
             const game = getGameStateById(oldRoomId);
-            game.quitGame(user);
-            if (!game.getPlayers().length) games = games.filter(otherGame => otherGame !== game);
-            leaveRoom(user, oldRoomId);
+            if (game) {
+                game.quitGame(user);
+                if (!game.getPlayers().length) games = games.filter(otherGame => otherGame !== game);
+                leaveRoom(user, oldRoomId);
+            }
             req.session.roomId = null;
         }
         joinRoom(user, roomId);
@@ -70,7 +95,7 @@ router.post('/api/room/join', auth, (req, res) => {
 });
 
 /* Leave a room */
-router.post('/api/room/leave', auth, (req, res) => {
+router.post('/leave', auth, (req, res) => {
     const { user } = req.session;
     const { roomId } = req.body;
     try {
@@ -86,4 +111,4 @@ router.post('/api/room/leave', auth, (req, res) => {
     }
 });
 
-exports.router = router;
+exports.roomsRouter = router;
