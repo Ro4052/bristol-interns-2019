@@ -77,6 +77,12 @@ exports.closeSocket = () => {
     sockets = [];
 };
 
+// Disconnect
+exports.disconnectSocket = username => {
+    const socket = sockets.find(socket => socket.handshake.session.user === username);
+    if (socket) socket.disconnect();
+}
+
 // Check if it's the sender's turn
 exports.isCurrentPlayerSocket = (socket, state) => state.currentPlayer && socket.handshake.session.user === state.currentPlayer.username;
 
