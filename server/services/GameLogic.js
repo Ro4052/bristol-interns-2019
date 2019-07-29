@@ -3,8 +3,8 @@ const socket = require('./socket');
 const { statusTypes } = require('./statusTypes');
 
 // Set durations
-const promptDuration = process.env.NODE_ENV === 'testing' ? 5000 : 37000;
-const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 1000 : 5000;
+const promptDuration = process.env.NODE_ENV === 'testing' ? 2000 : 37000;
+const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 2000 : 5000;
 const rounds = 3;
 const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 2;
 exports.minPlayers = minPlayers;
