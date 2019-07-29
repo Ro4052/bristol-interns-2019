@@ -40,7 +40,7 @@ export const authenticateUser = () => dispatch => {
             connectSocket()
             .then(() => {
                 dispatch(retrieveGameState());
-                dispatch(authSuccess(res.data.cookie))
+                dispatch(authSuccess(res.data.cookie));
             });
         } else {
             history.push('/');
@@ -92,7 +92,7 @@ export const retrieveGameState = () => dispatch => {
     .then(res => {
         dispatch(setPlayCard(res.data.currentGameState.playCard));
         dispatch(setPlayWord(res.data.currentGameState.playWord));
-        dispatch(setVoteCard(res.data.currentGameState.voteCard))
+        dispatch(setVoteCard(res.data.currentGameState.voteCard));
     })
     .catch(err => console.error(err.message));
 }
