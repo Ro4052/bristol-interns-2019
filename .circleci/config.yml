@@ -34,8 +34,8 @@ jobs:
       - run:
           name: Run E2E Tests
           command: |
-          mkdir -p cypress/{videos,screenshots}
-          npm run build && npm run test:e2e
+            mkdir -p cypress/{videos,screenshots}
+            npm run build && npm run test:e2e
       - store_artifacts:
           path: cypress/videos
       - store_artifacts:
