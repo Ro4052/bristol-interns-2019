@@ -25,7 +25,6 @@ describe('Whole game', () => {
             }).then(() => {
                 cy.playCard();
                 cy.voteCard();
-                cy.newGame();
             });
         });
         describe.skip('when there is a draw', () => {
@@ -42,19 +41,23 @@ describe('Whole game', () => {
         });
 
         it('redirects back to the lobby', () => {
+            cy.newGame();
             cy.url().should('include', '/lobby');
         });
 
         it('can create a new room', () => {
+            cy.newGame();
             cy.createRoom();
         });
 
         it('can join an existing room', () => {
+            cy.newGame();
             cy.request(`http://localhost:12346/createRoom?url=${encodeURIComponent(url)}`)
             .then(() => cy.joinRoom());
         });
 
         it('can start a new game', () => {
+            cy.newGame();
             cy.request(`http://localhost:12346/createRoom?url=${encodeURIComponent(url)}`)
             .then(() => {
                 cy.joinRoom();
@@ -63,6 +66,7 @@ describe('Whole game', () => {
         });
 
         it('can logout', () => {
+            cy.newGame();
             cy.logout();
             cy.url().should('eq', Cypress.config().baseUrl);
         });
