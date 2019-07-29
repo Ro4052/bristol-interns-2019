@@ -4,9 +4,9 @@ import { Logout } from './Logout';
 
 describe('on render', () => {
     it('renders correctly', () => {
-        const logOutUser = jest.fn();
-        const wrapper = mount(<Logout logOutUser={logOutUser} />);
+        const logOut = jest.fn();
+        const wrapper = mount(<Logout logOut={logOut} />);
         wrapper.find({ 'data-cy': 'logout' }).simulate('click');
-        expect(logOutUser).toHaveBeenCalled();
+        expect(logOut).toHaveBeenCalled();
     });
 });

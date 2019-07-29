@@ -65,7 +65,7 @@ export const logIn = username => dispatch => {
     }
 };
 
-export const logOutUser = () => dispatch => {
+export const logOut = () => dispatch => {
     axiosInstance.post('/auth/logout')
     .then(res => {
         if (res.status === 200) {
