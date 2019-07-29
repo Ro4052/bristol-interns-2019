@@ -57,7 +57,7 @@ router.post('/auth/logout', auth, (req, res) => {
     }
 });
 
-const createNewRoom = user => {
+const setupRoom = user => {
     const newGameState = new GameLogic(latestRoomId);
     const newGameRoom = {roomId: latestRoomId, gameState: newGameState}
     createRoom(user, latestRoomId, minPlayers);
@@ -77,12 +77,12 @@ router.post('/api/room/create', auth, (req, res) => {
                 if (!game.getPlayers().length) games = games.filter(otherGame => otherGame !== game);
                 leaveRoom(user, oldRoomId);
                 req.session.roomId = null;
-                createNewRoom(user);
+                setupRoom(user);
                 req.session.roomId = latestRoomId;    
                 latestRoomId++;
             }
         } else {
-            createNewRoom(user);
+            setupRoom(user);
             req.session.roomId = latestRoomId;    
             latestRoomId++;
         }
