@@ -1,7 +1,6 @@
 import axios from "axios";
 import connectSocket from '../../../services/socket';
 import { types } from './AuthActionTypes';
-import { setRooms } from '../../Lobby/LobbyActions';
 import history from '../../../services/history';
 
 const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
@@ -31,18 +30,17 @@ export const logOutFailure = error => ({
 
 export const authenticateUser = () => dispatch => {
     axiosInstance.get('/auth')
-    .then(res => {            
+    .then(res => {
         if (res.status === 200) {
             connectSocket()
             .then(() => dispatch(authSuccess(res.data.cookie)));
         } else {
-            history.push('/');
             throw Error(res.data.message);
         }
     })
     .catch(() => {
-        history.push('/');
         dispatch(resetStore());
+        history.push('/');
     });
 }
 
@@ -51,11 +49,10 @@ export const logIn = username => dispatch => {
     .then(res => {
         if (res.status === 200) {
             connectSocket()
-            .then(() => {
-                dispatch(setRooms(res.data.rooms));
-                dispatch(authSuccess(username))
-            });
-        } else throw Error(res.data.message);
+            .then(() => dispatch(authSuccess(username)));
+        } else {
+            throw Error(res.data.message);
+        }
     })
     .catch(err => dispatch(authFailure(err.message)));
 };
@@ -63,19 +60,23 @@ export const logIn = username => dispatch => {
 export const logOutUser = () => dispatch => {
     axiosInstance.get('/auth/logout')
     .then(res => {
-        res.status === 200 ?
-        dispatch(resetStore()) :
-        dispatch(logOutFailure(res.data.message));
+        if (res.status === 200) {
+            dispatch(resetStore());
+        } else {
+            throw Error(res.data.message);
+        }
     })
     .catch((err) => dispatch(logOutFailure(err.message)));
 }
 
 export const resetCookie = () => (dispatch) => {
     axiosInstance.get('/api/reset-cookie')
-    .then((res) => {
-        res.status === 200 ?
-        dispatch(authReset()) :
-        dispatch(authFailure(res.data.message));
+    .then(res => {
+        if (res.status === 200) {
+            dispatch(authReset());
+        } else {
+            throw Error(res.data.message);
+        }
     })
     .catch((err) => dispatch(authFailure(err.message)));
 };
