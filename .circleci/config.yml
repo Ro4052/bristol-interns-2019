@@ -34,10 +34,6 @@ jobs:
       - run:
           name: Run E2E Tests
           command: npm run build && npm run test:e2e
-      - store_artifacts:
-          path: /tmp/screenshots
-      - store_artifacts:
-          path: /tmp/videos
 
   deploy-master:
     docker:
