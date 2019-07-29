@@ -33,8 +33,12 @@ export const authenticateUser = () => dispatch => {
     axiosInstance.get('/auth')
     .then(res => {            
         if (res.status === 200) {
+            console.log("Authenticated");
             connectSocket()
-            .then(() => dispatch(authSuccess(res.data.cookie)));
+            .then(() => {
+                dispatch(retrieveGameState());
+                dispatch(authSuccess(res.data.cookie))
+            });
         } else {
             history.push('/');
             throw Error(res.data.message);
@@ -70,7 +74,7 @@ export const logOutUser = () => dispatch => {
     .catch((err) => dispatch(logOutFailure(err.message)));
 }
 
-export const resetCookie = () => (dispatch) => {
+export const resetCookie = () => dispatch => {
     axiosInstance.get('/api/reset-cookie')
     .then((res) => {
         res.status === 200 ?
@@ -79,3 +83,11 @@ export const resetCookie = () => (dispatch) => {
     })
     .catch((err) => dispatch(authFailure(err.message)));
 };
+
+export const retrieveGameState = () => dispatch => {
+    axiosInstance.get('/api/gameState')
+    .then(res => {
+        console.log(res);
+    })
+    .catch(err => console.log(err));
+}
