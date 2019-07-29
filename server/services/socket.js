@@ -69,13 +69,19 @@ exports.setRoomStarted = (roomId) => {
     this.emitRooms();
 }
 
-// Cloase the existing socket
-exports.closeSocket = () => {
+// Close the existing socket
+exports.closeSockets = () => {
     rooms = [];
     this.emitRooms();
     sockets.forEach(socket => socket.disconnect());
     sockets = [];
 };
+
+// Disconnect
+exports.disconnectSocket = username => {
+    const socket = sockets.find(socket => socket.handshake.session.user === username);
+    if (socket) socket.disconnect();
+}
 
 // Check if it's the sender's turn
 exports.isCurrentPlayerSocket = (socket, state) => state.currentPlayer && socket.handshake.session.user === state.currentPlayer.username;

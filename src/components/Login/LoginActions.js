@@ -62,6 +62,7 @@ export const logOutUser = () => dispatch => {
     .then(res => {
         if (res.status === 200) {
             dispatch(resetStore());
+            history.push('/');
         } else {
             throw Error(res.data.message);
         }
