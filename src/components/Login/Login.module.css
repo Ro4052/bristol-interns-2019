@@ -34,6 +34,10 @@
     margin: 0.5em;
 }
 
+.inputError {
+    border: 2px solid red;
+}
+
 .formHeader {
     font-size: 3vh;
     text-align: center;

@@ -45,16 +45,24 @@ export const authenticateUser = () => dispatch => {
 }
 
 export const logIn = username => dispatch => {
-    axiosInstance.post('/auth/login', { username })
-    .then(res => {
-        if (res.status === 200) {
-            connectSocket()
-            .then(() => dispatch(authSuccess(username)));
-        } else {
-            throw Error(res.data.message);
-        }
-    })
-    .catch(err => dispatch(authFailure(err.message)));
+    try {
+        if (username.length < 3) throw Error("Username must be at least 3 characters");
+        if (username.length > 15) throw Error("Username must be no longer than 15 characters");
+        // eslint-disable-next-line
+        const allowed = /^[A-Za-z0-9]*$/;
+        if (!allowed.test(username)) throw Error("Username can be comprised of numbers and latin letters only");
+        axiosInstance.post('/auth/login', { username })
+        .then(res => {
+            if (res.status === 200) {
+                connectSocket()
+                .then(() => dispatch(authSuccess(username)));
+            } else {
+                throw Error(res.data.message);
+            }
+        });
+    } catch (err) {
+        dispatch(authFailure(err.message))
+    }
 };
 
 export const logOutUser = () => dispatch => {
