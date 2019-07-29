@@ -1,7 +1,7 @@
 const validWord = require('../services/validWord');
 const router = require('express').Router();
 const path = require('path');
-const auth = require('../services/auth');
+const auth = require('./auth');
 const { GameLogic, minPlayers } = require('../services/GameLogic');
 const { disconnectSocket, closeSockets, createRoom, joinRoom, leaveRoom, setRoomStarted, closeRoom } = require('../services/socket');
 
