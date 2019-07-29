@@ -10,7 +10,7 @@ import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
 import Timer from '../Timer/Timer';
 import { setVoteCardTimer, setPlayCardTimer} from '../Timer/TimerActions';
 import Dixit from '../Dixit/Dixit';
-import { authenticateUser } from '../shared/Auth/AuthActions';
+import { authenticateUser } from '../Login/LoginActions';
 
 export class Dashboard extends React.Component {
 
