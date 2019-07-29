@@ -92,6 +92,7 @@ Cypress.Commands.add('playCardWord', () => {
 });
 
 Cypress.Commands.add('playCard', () => {
+    cy.get('[data-cy="play-card"]');
     cy.route({
         method: 'POST',
         url: '/api/playCard'
