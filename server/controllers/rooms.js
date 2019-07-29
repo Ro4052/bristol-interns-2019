@@ -7,25 +7,25 @@ const { createRoom, joinRoom, leaveRoom } = require('../services/socket');
 let latestRoomId = 0;
 
 /** @type {{ roomId: number, gameState: GameLogic }[]} */
-let games = [];
+let rooms = [];
 
 const getGameStateById = roomId => {
-    const game = games.find(game => game.roomId === roomId);
+    const game = rooms.find(game => game.roomId === roomId);
     if (game) return game.gameState;
 }
 exports.getGameStateById = getGameStateById;
 
-const removeGameById = roomId => games = games.filter(game => game.roomId !== roomId);
+const removeGameById = roomId => rooms = rooms.filter(game => game.roomId !== roomId);
 exports.removeGameById = removeGameById;
 
 const clearAllGameStates = () => {
-    games.forEach(game => game.gameState.clearGameState());
+    rooms.forEach(game => game.gameState.clearGameState());
 }
 exports.clearAllGameStates = clearAllGameStates;
 
 const resetGames = () => {
     latestRoomId = 0;
-    games = [];
+    rooms = [];
 }
 exports.resetGames = resetGames;
 
@@ -33,7 +33,7 @@ const setupRoom = user => {
     const newGameState = new GameLogic(latestRoomId);
     const newGameRoom = {roomId: latestRoomId, gameState: newGameState}
     createRoom(user, latestRoomId, minPlayers);
-    games.push(newGameRoom);
+    rooms.push(newGameRoom);
     newGameState.joinGame(user);
 };
 
@@ -79,7 +79,7 @@ router.post('/join', auth, (req, res) => {
             const game = getGameStateById(oldRoomId);
             if (game) {
                 game.quitGame(user);
-                if (!game.getPlayers().length) games = games.filter(otherGame => otherGame !== game);
+                if (!game.getPlayers().length) rooms = rooms.filter(otherGame => otherGame !== game);
                 leaveRoom(user, oldRoomId);
             }
             req.session.roomId = null;
@@ -101,7 +101,7 @@ router.post('/leave', auth, (req, res) => {
     try {
         const game = getGameStateById(roomId);
         game.quitGame(user);
-        if (game.getPlayers().length <= 0) games = games.filter(otherGame => otherGame !== game);
+        if (game.getPlayers().length <= 0) rooms = rooms.filter(otherGame => otherGame !== game);
         leaveRoom(user, roomId);
         req.session.roomId = null;
         res.sendStatus(200);
