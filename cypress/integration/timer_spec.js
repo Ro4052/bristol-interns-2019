@@ -40,7 +40,7 @@ describe('Timer', () => {
 
             it('displays all the cards', () => {
                 cy.get('[data-cy="card-timer"]', { timeout: promptDuration + 1000 }).should('not.exist');
-                cy.get('[data-cy="played-cards"]', {timeout: promptDuration + 1000 }).children().its('length').should('eq', 2);
+                cy.get('[data-cy="played-cards"]', {timeout: promptDuration + 2000 }).children().its('length').should('eq', 2);
             });
         });
     });
