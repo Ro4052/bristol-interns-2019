@@ -35,6 +35,17 @@ class GameLogic {
         socket.emitPlayers(this.roomId, this.players);
     }
 
+    /* Get current state of the game (needed for a player after refresh of page) */
+    getState(username) {
+        return {
+            status: this.status,
+            voteCard: !this.playerHasVoted(username) && this.currentPlayer.username !== username && this.status === statusTypes.WAITING_FOR_VOTES ,
+            playCard: (!this.playerHasPlayedCard(username) && this.currentPlayer.username === username && this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER)
+                    || (!this.playerHasPlayedCard(username) && this.status === statusTypes.WAITING_FOR_OTHER_PLAYERS),
+            playWord: this.currentPlayer.username === username && !this.currentWord && this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER
+        }
+    }
+
     /* Set the status of the game */
     setStatus(newStatus) { return this.status = newStatus };
 

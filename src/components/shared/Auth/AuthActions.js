@@ -3,6 +3,9 @@ import connectSocket from '../../../services/socket';
 import { types } from './AuthActionTypes';
 import { setRooms } from '../../Lobby/LobbyActions';
 import history from '../../../services/history';
+import { setPlayCard } from "../../MyCards/MyCardsActions";
+import { setPlayWord } from "../../PlayWord/PlayWordActions";
+import { setVoteCard } from "../../PlayedCards/PlayedCardsActions";
 
 const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
@@ -87,7 +90,9 @@ export const resetCookie = () => dispatch => {
 export const retrieveGameState = () => dispatch => {
     axiosInstance.get('/api/gameState')
     .then(res => {
-        console.log(res);
+        dispatch(setPlayCard(res.data.currentGameState.playCard));
+        dispatch(setPlayWord(res.data.currentGameState.playWord));
+        dispatch(setVoteCard(res.data.currentGameState.voteCard))
     })
-    .catch(err => console.log(err));
+    .catch(err => console.error(err.message));
 }

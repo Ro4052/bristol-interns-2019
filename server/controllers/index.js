@@ -219,6 +219,16 @@ router.post('/api/voteCard', auth, (req, res) => {
     }
 });
 
+/* Player refreshes the page and asks for the current game state */
+router.get('/api/gameState', auth, (req, res) => {
+    try {
+        const currentGameState = getGameStateById(req.session.roomId).getState(req.session.user);
+        res.status(200).json({currentGameState});
+    } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
+        res.status(400).json({ message: err.message});
+    }
+});
+
 /* Check if in dev mode, and enable end game request */
 if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {
