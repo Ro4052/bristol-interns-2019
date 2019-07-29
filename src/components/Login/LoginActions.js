@@ -58,7 +58,7 @@ export const logIn = username => dispatch => {
 };
 
 export const logOutUser = () => dispatch => {
-    axiosInstance.get('/auth/logout')
+    axiosInstance.post('/auth/logout')
     .then(res => {
         if (res.status === 200) {
             dispatch(resetStore());

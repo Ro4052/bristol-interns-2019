@@ -36,14 +36,16 @@ router.post('/auth/login', (req, res) => {
 });
 
 /* Log out the user */
-router.get('/auth/logout', auth, (req, res) => {
+router.post('/auth/logout', auth, (req, res) => {
     const { user, roomId } = req.session;
     try {
-        if (roomId) {
+        if (roomId !== null) {
             const gameState = getGameStateById(roomId);
             // Why do we need both of these?
             gameState.quitGame(user);
             gameState.removePlayer(user);
+            if (gameState.getPlayers().length <= 0) games = games.filter(otherGame => otherGame !== gameState);
+            leaveRoom(user, roomId);
         }
         disconnectSocket(user);
         req.session.destroy();
