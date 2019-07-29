@@ -2,7 +2,7 @@ const validWord = require('../services/validWord');
 const router = require('express').Router();
 const path = require('path');
 const auth = require('./auth');
-const { roomsRouter, getGameStateById, removeGameById, clearAllGameStates, resetGames } = require('./rooms');
+const { roomsRouter, getGameStateById, deleteRoomById, resetRooms } = require('./rooms');
 const { disconnectSocket, closeSockets, leaveRoom, setRoomStarted, closeRoom } = require('../services/socket');
 
 let currentUsers = [];
@@ -40,7 +40,7 @@ router.post('/auth/logout', auth, (req, res) => {
             const gameState = getGameStateById(roomId);
             if (gameState) {
                 gameState.quitGame(user);
-                if (gameState.getPlayers().length <= 0) removeGameById(roomId);
+                if (gameState.getPlayers().length <= 0) deleteRoomById(roomId);
                 leaveRoom(user, roomId);
             }   
         }
@@ -85,7 +85,7 @@ router.get('/api/end', auth, (req, res) => {
     try {
         const gameState = getGameStateById(req.session.roomId);
         gameState.endGame();
-        removeGameById(roomId);
+        deleteRoomById(roomId);
         closeRoom(roomId);
         res.sendStatus(200);
     } catch (err) {
@@ -150,9 +150,8 @@ router.post('/api/voteCard', auth, (req, res) => {
 if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {
         try {
-            clearAllGameStates();
             currentUsers = [];
-            resetGames();
+            resetRooms();
             res.sendStatus(200);
         } catch (err) {
             console.log(err);
