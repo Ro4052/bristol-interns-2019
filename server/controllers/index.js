@@ -10,7 +10,12 @@ let latestRoomId = 0;
 /** @type {{ roomId: number, gameState: GameLogic }[]} */
 let games = [];
 
-const getGameStateById = roomId => games.find(game => game.roomId === roomId).gameState;
+const getGameStateById = roomId => {
+    const game = games.find(game => game.roomId === roomId);
+    if (game) return game.gameState;
+}
+
+const removeGameById = roomId => games = games.filter(game => game.roomId !== roomId);
 
 /* Check if player is logged in */
 router.get('/auth', (req, res) => {
@@ -64,9 +69,11 @@ router.post('/api/room/create', auth, (req, res) => {
         if (req.session.roomId !== null) {
             const oldRoomId = req.session.roomId;
             const game = getGameStateById(oldRoomId);
-            game.quitGame(user);
-            if (!game.getPlayers().length) games = games.filter(otherGame => otherGame !== game);
-            leaveRoom(user, oldRoomId);
+            if (game) {
+                game.quitGame(user);
+                if (!game.getPlayers().length) games = games.filter(otherGame => otherGame !== game);
+                leaveRoom(user, oldRoomId);
+            }
             req.session.roomId = null;
         }
         const newGameState = new GameLogic(latestRoomId);
@@ -91,9 +98,11 @@ router.post('/api/room/join', auth, (req, res) => {
         if (req.session.roomId !== null) {
             const oldRoomId = req.session.roomId;
             const game = getGameStateById(oldRoomId);
-            game.quitGame(user);
-            if (!game.getPlayers().length) games = games.filter(otherGame => otherGame !== game);
-            leaveRoom(user, oldRoomId);
+            if (game) {
+                game.quitGame(user);
+                if (!game.getPlayers().length) games = games.filter(otherGame => otherGame !== game);
+                leaveRoom(user, oldRoomId);
+            }
             req.session.roomId = null;
         }
         joinRoom(user, roomId);
@@ -150,11 +159,12 @@ router.get('/api/start', auth, (req, res) => {
 
 /* End the game */
 router.get('/api/end', auth, (req, res) => {
+    const { roomId } = req.session;
     try {
         const gameState = getGameStateById(req.session.roomId);
         gameState.endGame();
-        games = games.filter(otherGame => otherGame !== gameState);
-        closeRoom(req.session.roomId);
+        removeGameById(roomId);
+        closeRoom(roomId);
         res.sendStatus(200);
     } catch (err) {
         res.status(400).json({message: err.message});
