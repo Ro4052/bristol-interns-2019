@@ -19,7 +19,6 @@ describe('Play word and card', () => {
 
         describe('player clicks on a card', () => {
             beforeEach(() => {
-                cy.wait(1000); /*TODO: remove on MONDAY*/
                 cy.get('[data-cy="my-cards"]').find('[data-cy="card"]').first().click();
             });
             it("its class is updated to selected", () => {
