@@ -44,8 +44,7 @@ export class Dashboard extends React.Component {
                     <div className={styles.middle}>
                         <div className={styles.interactions}>
                             {showPlayerInteractions && <PlayerInteractions />}
-                            {/* {this.props.drawers =[] ? this.props.winner && <GameOver /> : this.props.drawers && <GameOver />} */}
-                            {this.props.winner && <GameOver />}
+                            {(this.props.winner || this.props.drawers.length) && <GameOver />}
                             {this.props.status !== "GAME_OVER" && <PlayedCards />}
                         </div>
                         {this.props.status !== "NOT_STARTED" && this.props.status !== "GAME_OVER" && <MyCards />}
