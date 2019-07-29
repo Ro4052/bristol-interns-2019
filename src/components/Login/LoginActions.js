@@ -36,7 +36,10 @@ export const authenticateUser = () => dispatch => {
     .then(res => {
         if (res.status === 200) {
             connectSocket()
-            .then(() => dispatch(authSuccess(res.data.cookie)));
+            .then(() => {
+                dispatch(retrieveGameState());
+                dispatch(authSuccess(res.data.cookie))
+            });
         } else {
             throw Error(res.data.message);
         }
@@ -58,10 +61,7 @@ export const logIn = username => dispatch => {
         .then(res => {
             if (res.status === 200) {
                 connectSocket()
-                .then(() => {
-                    dispatch(retrieveGameState());
-                    dispatch(authSuccess(username))
-                });
+                .then(() => dispatch(authSuccess(username)));
             } else {
                 throw Error(res.data.message);
             }
