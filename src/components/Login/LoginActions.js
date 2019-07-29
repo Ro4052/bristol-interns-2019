@@ -1,7 +1,7 @@
 import axios from "axios";
-import connectSocket from '../../../services/socket';
-import { types } from './AuthActionTypes';
-import history from '../../../services/history';
+import connectSocket from '../../services/socket';
+import { types } from './LoginActionTypes';
+import history from '../../services/history';
 
 const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '../shared/Button/Button';
 import { connect } from 'react-redux';
-import { logOutUser } from '../shared/Auth/AuthActions';
+import { logOutUser } from '../Login/LoginActions';
 import styles from './Logout.module.css';
 
 export class Logout extends React.Component {

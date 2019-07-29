@@ -5,7 +5,7 @@ import styles from './Login.module.css';
 import Monster from '../Monster/Monster';
 import Dixit from '../Dixit/Dixit';
 import Button from '../shared/Button/Button';
-import { authenticateUser, logIn } from '../shared/Auth/AuthActions';
+import { authenticateUser, logIn } from './LoginActions';
 
 export class Login extends React.Component {
 
