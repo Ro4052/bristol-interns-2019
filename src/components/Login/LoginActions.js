@@ -59,9 +59,10 @@ export const logIn = username => dispatch => {
             } else {
                 throw Error(res.data.message);
             }
-        });
+        })
+        .catch(err => dispatch(authFailure(err.message)));
     } catch (err) {
-        dispatch(authFailure(err.message))
+        dispatch(authFailure(err.message));
     }
 };
 
