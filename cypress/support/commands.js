@@ -92,7 +92,7 @@ Cypress.Commands.add('playCardWord', () => {
 });
 
 Cypress.Commands.add('playCard', () => {
-    cy.get('[data-cy="play-card"]');
+    cy.get('[data-cy="play-card"]').should('exist');
     cy.route({
         method: 'POST',
         url: '/api/playCard'
@@ -102,7 +102,7 @@ Cypress.Commands.add('playCard', () => {
 });
 
 Cypress.Commands.add('voteCard', () => {
-    cy.get('[data-cy="vote-card"]');
+    cy.get('[data-cy="vote-card"]').should('exist');
     cy.route({
         method: 'POST',
         url: '/api/voteCard'
