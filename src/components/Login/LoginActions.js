@@ -2,6 +2,9 @@ import axios from "axios";
 import connectSocket from '../../services/socket';
 import { types } from './LoginActionTypes';
 import history from '../../services/history';
+import { setPlayCard } from "../MyCards/MyCardsActions";
+import { setPlayWord } from "../PlayWord/PlayWordActions";
+import { setVoteCard } from "../PlayedCards/PlayedCardsActions";
 
 const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
