@@ -55,7 +55,10 @@ export const logIn = username => dispatch => {
         .then(res => {
             if (res.status === 200) {
                 connectSocket()
-                .then(() => dispatch(authSuccess(username)));
+                .then(() => {
+                    dispatch(retrieveGameState());
+                    dispatch(authSuccess(username))
+                });
             } else {
                 throw Error(res.data.message);
             }
@@ -77,4 +80,14 @@ export const logOut = () => dispatch => {
         }
     })
     .catch((err) => dispatch(logOutFailure(err.message)));
+}
+
+export const retrieveGameState = () => dispatch => {
+    axiosInstance.get('/api/gameState')
+    .then(res => {
+        dispatch(setPlayCard(res.data.currentGameState.playCard));
+        dispatch(setPlayWord(res.data.currentGameState.playWord));
+        dispatch(setVoteCard(res.data.currentGameState.voteCard));
+    })
+    .catch(err => console.error(err.message));
 }
