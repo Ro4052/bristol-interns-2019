@@ -15,6 +15,13 @@ describe('Lobby', () => {
             cy.get('[data-cy="players-needed"]').contains('1');
         });
 
+        describe('on clicking create room again', () => {
+            it("doesn't create a new room", () => {
+                cy.createRoom();
+                cy.get('[data-cy="room"]').contains('Room: 0');
+            });
+        });
+
         describe('on clicking leave room', () => {
             beforeEach(() => cy.leaveRoom());
 
