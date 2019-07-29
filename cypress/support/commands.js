@@ -92,11 +92,11 @@ Cypress.Commands.add('playCardWord', () => {
 });
 
 Cypress.Commands.add('playCard', () => {
-    cy.get('[data-cy="play-card"]').should('exist');
     cy.route({
         method: 'POST',
         url: '/api/playCard'
     }).as('playCard');
+    cy.get('[data-cy="play-card"]').should('exist');
     cy.get('[data-cy="my-cards"] [data-cy="card-wrapper"]').first().click();
     cy.wait('@playCard');
 });
