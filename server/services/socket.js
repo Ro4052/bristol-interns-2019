@@ -69,7 +69,7 @@ exports.setRoomStarted = (roomId) => {
     this.emitRooms();
 }
 
-// Close the existing socket
+// Close all the sockets
 exports.closeSockets = () => {
     rooms = [];
     this.emitRooms();
