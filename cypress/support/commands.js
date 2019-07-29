@@ -105,6 +105,7 @@ Cypress.Commands.add('playCard', () => {
 });
 
 Cypress.Commands.add('voteCard', () => {
+    cy.get('[data-cy="vote-card"]').should('exist');
     cy.route({
         method: 'POST',
         url: '/api/voteCard'
@@ -113,6 +114,7 @@ Cypress.Commands.add('voteCard', () => {
         const disabled = /disabled/;
         const classList = Array.from($wrapper[0].classList);
         if (classList.some(cls => disabled.test(cls))) $wrapper = $wrapper.next();
+        expect($wrapper.attr('class')).to.include("enabled");
         $wrapper.click();
     });
     cy.wait('@voteCard');
