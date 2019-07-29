@@ -114,7 +114,7 @@ class GameLogic {
             const drawers = this.players.reduce((prev, current) => (prev.score === current.score) ? [prev, current] : []);
             if (drawers.length) {
                 socket.emitDrawers(this.roomId, drawers);
-            }else{
+            } else {
                 const winner = this.players.reduce((prev, current) => (prev.score > current.score) ? prev : current);
                 socket.emitWinner(this.roomId, { username: winner.username });
             }   
