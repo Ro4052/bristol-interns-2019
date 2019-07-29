@@ -21,24 +21,24 @@ describe('Timer', () => {
 
         describe('after timeout', () => {
             it('hides the timer', () => {
-                cy.get('[data-cy="card-timer"]', { timeout: 5000 }).should('not.exist');
+                cy.get('[data-cy="card-timer"]', { timeout: 6000 }).should('not.exist');
             });
 
             it('displays the vote prompt', () => {
-                cy.get('[data-cy="vote-card"]', { timeout: 5000 });
+                cy.get('[data-cy="vote-card"]', { timeout: 6000 });
             });
 
             it('displays the vote timer', () => {
-                cy.get('[data-cy="vote-timer"]', { timeout: 5000 });
+                cy.get('[data-cy="vote-timer"]', { timeout: 6000 });
             });
 
             describe('after timeout', () => {
                 it('hides the timer', () => {
-                    cy.get('[data-cy="vote-timer"]', { timeout: 5000 }).should('not.exist');
+                    cy.get('[data-cy="vote-timer"]', { timeout: 6000 }).should('not.exist');
                 });
 
                 it('displays all the cards', () => {
-                    cy.get('[data-cy="played-cards"]', {timeout: 5000}).children().its('length').should('eq', 2);
+                    cy.get('[data-cy="played-cards"]', {timeout: 6000}).children().its('length').should('eq', 2);
                 });
             });
         });
