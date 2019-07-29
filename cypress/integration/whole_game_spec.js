@@ -49,5 +49,10 @@ describe('Whole game', () => {
                 cy.startGame();
             });
         });
+
+        it('can logout', () => {
+            cy.logout();
+            cy.url().should('eq', Cypress.config().baseUrl);
+        });
     });
 });
