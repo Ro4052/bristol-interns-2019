@@ -33,7 +33,7 @@ router.post('/auth/login', (req, res) => {
         const user = { username };
         try {
             currentUsers.push(user);
-            res.status(200).json({rooms: getRooms()});
+            res.sendStatus(200);
         } catch (err) {
             res.status(400).json({ message: err.message });
         };
@@ -51,7 +51,7 @@ router.get('/auth/logout', auth, (req, res) => {
         res.sendStatus(200);
     } catch (err) { /* Game has started, method not allowed */
         res.status(400).json({message: err.message});
-    }    
+    }
 });
 
 /* Create a room (a single instance of a game) */
