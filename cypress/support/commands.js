@@ -97,10 +97,7 @@ Cypress.Commands.add('playCard', () => {
         method: 'POST',
         url: '/api/playCard'
     }).as('playCard');
-    cy.get('[data-cy="my-cards"] [data-cy="card-wrapper"]').first().then(($wrapper) => {
-        expect($wrapper.attr('class')).to.include("enabled");
-        $wrapper.click();
-    });
+    cy.get('[data-cy="my-cards"] [data-cy="card-wrapper"]').first().click();
     cy.wait('@playCard');
 });
 
