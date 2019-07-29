@@ -32,7 +32,9 @@ describe('Vote for a card', () => {
         it("displays the votes", () => {
             cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => {
+                cy.wait(1000);
                 cy.playCard();
+                cy.wait(1000);
                 cy.voteCard();
                 cy.get('[data-cy="vote-card"]').should('not.exist');
                 cy.get('[data-cy="vote"]').should('exist');
@@ -41,7 +43,9 @@ describe('Vote for a card', () => {
         it("marks the player's turn as finished", () => {
             cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => {
+                cy.wait(1000);
                 cy.playCard();
+                cy.wait(1000);
                 cy.voteCard();
                 cy.get('[data-cy="finished-turn"]').should('have.text', '✓');
             });
