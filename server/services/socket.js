@@ -129,7 +129,7 @@ exports.emitEndGame = (roomId) => io.to(`room-${roomId}`).emit("end");
 // Close the room when the game has ended
 exports.closeRoom = (roomId) => {
     sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.leave(`room-${roomId}`));
-    rooms = rooms.filter(room => room.id !== roomId);
+    rooms = rooms.filter(room => room.roomId !== roomId);
     this.emitRooms();
 };
 

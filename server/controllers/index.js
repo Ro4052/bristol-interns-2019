@@ -151,7 +151,9 @@ router.get('/api/start', auth, (req, res) => {
 /* End the game */
 router.get('/api/end', auth, (req, res) => {
     try {
-        getGameStateById(req.session.roomId).endGame();
+        const gameState = getGameStateById(req.session.roomId);
+        gameState.endGame();
+        games = games.filter(otherGame => otherGame !== gameState);
         closeRoom(req.session.roomId);
         res.sendStatus(200);
     } catch (err) {
@@ -185,7 +187,7 @@ router.post('/api/validWord', auth, (req,res) => {
     } else {
         res.status(400).json({message: "Invalid word"});
     }
-})
+});
 
 /* Player plays a card */
 router.post('/api/playCard', auth, (req, res) => {
