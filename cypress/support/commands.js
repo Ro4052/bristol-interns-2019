@@ -105,7 +105,6 @@ Cypress.Commands.add('playCard', () => {
 });
 
 Cypress.Commands.add('voteCard', () => {
-    cy.get('[data-cy="vote-card"]').should('exist');
     cy.route({
         method: 'POST',
         url: '/api/voteCard'
