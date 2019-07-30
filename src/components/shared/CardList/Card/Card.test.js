@@ -1,7 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { Card } from './Card';
-import cardBack from '../../../../images/cardBack.jpg';
 import firstCard from '../../../../images/cards/card (1).jpg';
 
 const card1 = {
@@ -27,20 +26,6 @@ describe('on disabled', () => {
     it("has the correct className", () => {
         const wrapper = shallow(<Card card={card1} enabled={false}/>);
         expect(wrapper.find({ 'data-cy': 'card-wrapper' }).first().prop('className')).toEqual('cardWrapper disabled');
-    });
-});
-
-describe('on hidden', () => {
-    it("has the correct image", () => {
-        const wrapper = shallow(<Card card={card1} hidden={true} enabled={false} />);        
-        expect(wrapper.find({ 'data-cy': 'card' }).first().prop('src')).toEqual(cardBack);
-    });
-});
-
-describe('on revealed', () => {
-    it("has the correct image", () => {
-        const wrapper = shallow(<Card card={card1} hidden={false} enabled={false} />);        
-        expect(wrapper.find({ 'data-cy': 'card' }).first().prop('src')).toEqual(firstCard);
     });
 });
 

@@ -3,10 +3,9 @@ import axios from "axios";
 
 const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
-export const setPlayedCards = message => ({
+export const setPlayedCards = cards => ({
     type: types.SET_PLAYED_CARDS,
-    cards: message.cards,
-    hidden: message.hidden
+    cards
 });
 
 export const voteForCard = cardId => dispatch => {

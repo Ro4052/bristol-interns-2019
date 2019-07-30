@@ -43,7 +43,7 @@ const connectSocket = () => {
         dispatch(setRoundNumber(msg.roundNum));
         dispatch(setCurrentPlayer(msg.currentPlayer));
         dispatch(setCurrentWord(''));
-        dispatch(setPlayedCards({cards: [], hidden: true}));
+        dispatch(setPlayedCards([]));
         dispatch(setPlayCard(false));
         dispatch(setVoteCard(false));
         dispatch(setPlayWord(false));
@@ -67,7 +67,7 @@ const connectSocket = () => {
         dispatch(setPlayCard(true));
     });
 
-    socket.on("play card", (timeoutDuration) => {
+    socket.on("play card", timeoutDuration => {
         dispatch(setPlayCard(true));
         dispatch(setPlayCardTimer(timeoutDuration));
     });
@@ -81,17 +81,17 @@ const connectSocket = () => {
         dispatch(setPlayedCards(msg));
     });
 
-    socket.on("vote", (timeoutDuration) => {
+    socket.on("vote", timeoutDuration => {
         dispatch(setVoteCard(true));
         dispatch(setVoteCardTimer(timeoutDuration));
     });
 
-    socket.on("all votes", (msg) => {
+    socket.on("all votes", msg => {
         dispatch(setAllVotes(msg));
         dispatch(setVoteCard(false));
     });
 
-    socket.on("winner", (msg) => {
+    socket.on("winner", msg => {
         dispatch(setWinner(msg));
     });
 
@@ -100,7 +100,7 @@ const connectSocket = () => {
         dispatch(setRoundNumber(0));
         dispatch(setCurrentPlayer(null));
         dispatch(setCurrentWord(''));
-        dispatch(setPlayedCards({cards: [], hidden: true}));
+        dispatch(setPlayedCards([]));
         dispatch(setPlayCard(false));
         dispatch(setVoteCard(false));
         dispatch(setPlayWord(false));
