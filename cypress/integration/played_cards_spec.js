@@ -19,9 +19,7 @@ describe('Played cards', () => {
 
         it('a hidden card is displayed after first player plays', () => {
             cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
-            .then(() => {
-                cy.get('[data-cy="played-cards"]').children().its('length').should('eq', 1);
-            });
+            .then(() => cy.get('[data-cy="played-cards"]').children().its('length').should('eq', 1));
         });
 
         it('all the played cards are displayed', () => {

@@ -8,7 +8,7 @@ export class CardList extends React.Component {
         return (
             <div className={styles.cardList} data-cy={this.props.cy}>
                 {!this.props.hidden && this.props.cards.map(card => <Card card={card} key={card.cardId} handleClick={this.props.handleClick} enabled={this.props.isEnabled(card.cardId)} />)}
-                {this.props.hidden && this.props.cards.map((card, index) => <HiddenCard key={index}/>)}
+                {this.props.hidden && this.props.cards.map((card, index) => <HiddenCard key={index} />)}
             </div>
         );
     }
