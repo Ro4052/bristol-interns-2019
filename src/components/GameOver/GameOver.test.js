@@ -2,10 +2,10 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { GameOver } from './GameOver';
 
-const emptywinner = null
+const emptywinner = null;
 const winner = { username: 'username' };
-const empty = []
-const drawerstest = [{username:'one'}, {username:'two'}] 
+const empty = [];
+const drawerstest = [{username:'one'}, {username:'two'}];
 
 describe('on winner', () => {
     it("displays the winner's username", () => {

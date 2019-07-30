@@ -111,15 +111,30 @@ class GameLogic {
         } else {
             this.setStatus(statusTypes.GAME_OVER);
             socket.emitStatus(this.roomId, this.status);
-            const drawers = this.players.reduce((prev, current) => (prev.score === current.score) ? [prev, current] : []);
+            const winner = this.players.reduce((prev, current) => (prev.score > current.score) ? prev : current);
+            const topscore = winner.score;
+            console.log(topscore)
+            console.log(this.players)
+            const drawers = this.drawers(topscore)
+            console.log(drawers)
             if (drawers.length) {
                 socket.emitDrawers(this.roomId, drawers);
             } else {
-                const winner = this.players.reduce((prev, current) => (prev.score > current.score) ? prev : current);
                 socket.emitWinner(this.roomId, { username: winner.username });
             }   
         }
     }
+
+    drawers(topscore) {
+        return this.players.reduce((accumulator, current) => {
+            if (current.score === topscore) {
+                return [...accumulator, current];
+            } else {
+                return accumulator;
+            }
+        },
+        []);
+    };
 
     /* The storyteller plays a card and a word */
     playCardAndWord(username, cardId, word) {
