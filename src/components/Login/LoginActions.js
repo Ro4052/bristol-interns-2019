@@ -37,7 +37,7 @@ export const authenticateUser = () => dispatch => {
         if (res.status === 200) {
             connectSocket()
             .then(() => {
-                dispatch(retrieveGameState());
+                // dispatch(retrieveGameState());
                 dispatch(authSuccess(res.data.cookie))
             });
         } else {

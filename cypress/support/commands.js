@@ -92,7 +92,6 @@ Cypress.Commands.add('playCardWord', () => {
 });
 
 Cypress.Commands.add('playCard', () => {
-    cy.visit('/dashboard');
     cy.route({
         method: 'POST',
         url: '/api/playCard'
