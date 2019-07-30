@@ -117,7 +117,7 @@ class GameLogic {
             console.log(this.players)
             const drawers = this.drawers(topscore)
             console.log(drawers)
-            if (drawers.length) {
+            if (drawers.length>1) {
                 socket.emitDrawers(this.roomId, drawers);
             } else {
                 socket.emitWinner(this.roomId, { username: winner.username });
