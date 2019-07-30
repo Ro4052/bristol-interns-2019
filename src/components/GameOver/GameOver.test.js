@@ -13,7 +13,6 @@ describe('on winner', () => {
         expect(wrapper.find({ 'data-cy': 'winner' }).text()).toEqual(winner.username);
         expect(wrapper.find({ 'data-cy': 'drawers' }).children().length).toEqual(0);
     });
-
 });
 describe('on draw', () => {
     it("displays the drawers", () => {
