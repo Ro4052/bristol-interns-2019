@@ -1,3 +1,5 @@
+const promptDuration = 5000;
+
 describe('Timer', () => {
     describe(('when the storyteller plays a card and a word'), () => {
         beforeEach(() => {
@@ -21,25 +23,24 @@ describe('Timer', () => {
 
         describe('after timeout', () => {
             it('hides the timer', () => {
-                cy.get('[data-cy="card-timer"]', { timeout: 5000 }).should('not.exist');
+                cy.get('[data-cy="card-timer"]', { timeout: promptDuration + 1000 }).should('not.exist');
             });
 
             it('displays the vote prompt', () => {
-                cy.get('[data-cy="vote-card"]', { timeout: 5000 });
+                cy.get('[data-cy="vote-card"]', { timeout: promptDuration + 1000 });
             });
 
             it('displays the vote timer', () => {
-                cy.get('[data-cy="vote-timer"]', { timeout: 5000 });
+                cy.get('[data-cy="vote-timer"]', { timeout: promptDuration + 1000 });
             });
 
-            describe('after timeout', () => {
-                it('hides the timer', () => {
-                    cy.get('[data-cy="vote-timer"]', { timeout: 5000 }).should('not.exist');
-                });
+            it('hides the timer', () => {
+                cy.get('[data-cy="card-timer"]', { timeout: promptDuration + 1000 }).should('not.exist');
+            });
 
-                it('displays all the cards', () => {
-                    cy.get('[data-cy="played-cards"]', {timeout: 5000}).children().its('length').should('eq', 2);
-                });
+            it('displays all the cards', () => {
+                cy.get('[data-cy="card-timer"]', { timeout: promptDuration + 1000 }).should('not.exist');
+                cy.get('[data-cy="played-cards"]', {timeout: promptDuration + 1000 }).children().its('length').should('eq', 2);
             });
         });
     });
