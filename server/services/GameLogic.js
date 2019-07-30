@@ -3,8 +3,8 @@ const socket = require('./socket');
 const { statusTypes } = require('./statusTypes');
 
 // Set durations
-const promptDuration = process.env.NODE_ENV === 'testing' ? 1000 : 37000;
-const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 1000 : 5000;
+const promptDuration = process.env.NODE_ENV === 'testing' ? 2000 : 37000;
+const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 2000 : 5000;
 const rounds = 3;
 const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 3;
 exports.minPlayers = minPlayers;
@@ -27,6 +27,17 @@ class GameLogic {
         this.playCardTimeout = null;
         this.voteTimeout = null;
         this.nextRoundTimeout = null;
+    }
+  
+    /* Get current state of the game (needed for a player after refresh of page) */
+    getState(username) {
+        return {
+            status: this.status,
+            voteCard: !this.playerHasVoted(username) && this.currentPlayer.username !== username && this.status === statusTypes.WAITING_FOR_VOTES ,
+            playCard: (!this.playerHasPlayedCard(username) && this.currentPlayer.username === username && this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER)
+                    || (!this.playerHasPlayedCard(username) && this.status === statusTypes.WAITING_FOR_OTHER_PLAYERS),
+            playWord: this.currentPlayer.username === username && !this.currentWord && this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER
+        }
     }
 
     /* Set the status of the game */

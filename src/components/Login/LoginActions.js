@@ -2,6 +2,9 @@ import axios from "axios";
 import connectSocket from '../../services/socket';
 import { types } from './LoginActionTypes';
 import history from '../../services/history';
+import { setPlayCard } from "../MyCards/MyCardsActions";
+import { setPlayWord } from "../PlayWord/PlayWordActions";
+import { setVoteCard } from "../PlayedCards/PlayedCardsActions";
 
 const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
@@ -33,7 +36,10 @@ export const authenticateUser = () => dispatch => {
     .then(res => {
         if (res.status === 200) {
             connectSocket()
-            .then(() => dispatch(authSuccess(res.data.cookie)));
+            .then(() => {
+                dispatch(authSuccess(res.data.cookie));
+                dispatch(retrieveGameState());
+            });
         } else {
             throw Error(res.data.message);
         }
@@ -77,4 +83,14 @@ export const logOut = () => dispatch => {
         }
     })
     .catch((err) => dispatch(logOutFailure(err.message)));
+}
+
+export const retrieveGameState = () => dispatch => {
+    axiosInstance.get('/api/gameState')
+    .then(res => {
+        dispatch(setPlayCard(res.data.currentGameState.playCard));
+        dispatch(setPlayWord(res.data.currentGameState.playWord));
+        dispatch(setVoteCard(res.data.currentGameState.voteCard));
+    })
+    .catch(err => console.error(err.message));
 }
