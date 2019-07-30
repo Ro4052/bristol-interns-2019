@@ -112,7 +112,7 @@ class GameLogic {
             this.setStatus(statusTypes.GAME_OVER);
             socket.emitStatus(this.roomId, this.status);
             const winner = this.players.reduce((prev, current) => (prev.score > current.score) ? prev : current);
-            const drawers = this.drawers(winner.score);
+            const drawers = this.calculateDrawers(winner.score);
             if (drawers.length > 1) {
                 socket.emitDrawers(this.roomId, drawers);
             } else {
