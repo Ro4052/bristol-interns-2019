@@ -75,8 +75,13 @@ Cypress.Commands.add('startGame', () => {
         method: "GET",
         url: "/api/start",
     }).as('start');
+    cy.route({
+        method: "GET",
+        url: "/api/gameState",
+    }).as('getState');
     cy.get('[data-cy="start-game"]').click();
     cy.wait('@start');
+    cy.wait('@getState');
 });
 
 Cypress.Commands.add('playCardWord', () => {
