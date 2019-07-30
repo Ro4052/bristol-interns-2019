@@ -53,7 +53,7 @@ class GameLogic {
     getUnplayedCardsByUsername(username) { return this.players.find(player => player.username === username).cards.filter(card => !card.played) };
 
     /* Return the list of players, hiding their assigned cards */
-    getPlayers() { return this.players.map(player => ({ username: player.username, score: player.score })) };
+    getPlayers() { return this.players.map(player => ({ username: player.username, score: player.score, finishedTurn: player.finishedTurn })) };
 
     /**
      * Shuffles cards in place.
@@ -80,7 +80,7 @@ class GameLogic {
             throw Error("You have already joined this game");
         } else {
             const cards = cardManager.assign(this.players, rounds);
-            const player = { username, cards, score: 0 };
+            const player = { username, cards, score: 0, finishedTurn: false };
             this.players.push(player);      
             socket.emitPlayers(this.roomId, this.getPlayers());
         }
