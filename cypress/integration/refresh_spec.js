@@ -11,7 +11,7 @@ describe('Refresh page', () => {
 
     it('refreshes on start', () => {
         cy.refreshPage();
-        cy.get('[data-cy="play-card"]').should('not.exist')
+        cy.get('[data-cy="play-card"]').should('not.exist');
     });
 
     describe('when first player has played card and word', () => {
