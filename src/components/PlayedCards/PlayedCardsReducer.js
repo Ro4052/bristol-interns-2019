@@ -9,7 +9,7 @@ export const initialState = {
     votes: []
 };
 
-const playedCardsReducer = (state = initialState, action) => {    
+const playedCardsReducer = (state = initialState, action) => {
     switch (action.type) {
         case types.SET_PLAYED_CARDS:
             return { ...state, cards: action.cards, hidden: action.hidden };

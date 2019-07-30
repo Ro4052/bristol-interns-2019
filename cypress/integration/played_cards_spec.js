@@ -16,13 +16,21 @@ describe('Played cards', () => {
             })
             .then(() => cy.startGame());
         });
+
+        it('a hidden card is displayed after first player plays', () => {
+            cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
+            .then(() => {
+                cy.get('[data-cy="played-cards"]').children().its('length').should('eq', 1);
+            });
+        });
+
         it('all the played cards are displayed', () => {
             cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => {
                 cy.playCard();
                 cy.get('[data-cy="my-cards"]').children().its('length').should('eq', cardsNumber - 1);
                 cy.get('[data-cy="played-cards"]').children().its('length').should('eq', numberOfPlayers);
-            })
+            });
         });
     });
 });
