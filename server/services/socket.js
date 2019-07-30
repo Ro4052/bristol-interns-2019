@@ -66,7 +66,7 @@ exports.setRoomStarted = (roomId) => {
     this.emitRooms();
 }
 
-// Close the existing socket
+// Close all the sockets
 exports.closeSockets = () => {
     rooms = [];
     this.emitRooms();
@@ -126,7 +126,7 @@ exports.emitEndGame = (roomId) => sockets.forEach(socket => socket.handshake.ses
 // Close the room when the game has ended
 exports.closeRoom = (roomId) => {
     sockets.forEach(socket => socket.handshake.session.roomId === roomId && (socket.handshake.session.roomId = undefined));
-    rooms = rooms.filter(room => room.id !== roomId);
+    rooms = rooms.filter(room => room.roomId !== roomId);
     this.emitRooms();
 };
 
