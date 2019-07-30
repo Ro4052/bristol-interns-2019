@@ -25,34 +25,48 @@ describe('Whole game', () => {
             }).then(() => {
                 cy.playCard();
                 cy.voteCard();
-                cy.newGame();
             });
         });
-
-        it('redirects back to the lobby', () => {
-            cy.url().should('include', '/lobby');
-        });
-
-        it('can create a new room', () => {
-            cy.createRoom();
-        });
-
-        it('can join an existing room', () => {
-            cy.request(`http://localhost:12346/createRoom?url=${encodeURIComponent(url)}`)
-            .then(() => cy.joinRoom());
-        });
-
-        it('can start a new game', () => {
-            cy.request(`http://localhost:12346/createRoom?url=${encodeURIComponent(url)}`)
-            .then(() => {
-                cy.joinRoom();
-                cy.startGame();
+        describe.skip('when there is a draw', () => {
+            it('displays the drawers', () => {
+                cy.get('[data-cy="drawers"]').should('exist');
+                cy.get('[data-cy="winner"]').should('not.exist');
             });
         });
+        describe('when there is a winner', () => {
+            it('displays the winner', () => {
+                cy.get('[data-cy="winner"]').should('exist');
+                cy.get('[data-cy="drawers"]').should('not.exist');
+            });
+        });
+        describe('when start new game', () => {
+            beforeEach(() => cy.newGame());
+            
+            it('redirects back to the lobby', () => {
+                cy.url().should('include', '/lobby');
+            });
 
-        it('can logout', () => {
-            cy.logout();
-            cy.url().should('eq', Cypress.config().baseUrl);
+            it('can create a new room', () => {
+                cy.createRoom();
+            });
+
+            it('can join an existing room', () => {
+                cy.request(`http://localhost:12346/createRoom?url=${encodeURIComponent(url)}`)
+                .then(() => cy.joinRoom());
+            });
+
+            it('can start a new game', () => {
+                cy.request(`http://localhost:12346/createRoom?url=${encodeURIComponent(url)}`)
+                .then(() => {
+                    cy.joinRoom();
+                    cy.startGame();
+                });
+            });
+
+            it('can logout', () => {
+                cy.logout();
+                cy.url().should('eq', Cypress.config().baseUrl);
+            });
         });
     });
 });
