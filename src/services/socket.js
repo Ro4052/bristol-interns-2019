@@ -38,7 +38,7 @@ const connectSocket = () => {
         history.push('/dashboard');
     });
 
-    socket.on("new round", msg => {        
+    socket.on("new round", msg => {
         dispatch(setStatus(msg.status));
         dispatch(setRoundNumber(msg.roundNum));
         dispatch(setCurrentPlayer(msg.currentPlayer));
