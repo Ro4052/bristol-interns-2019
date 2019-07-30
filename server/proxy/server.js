@@ -81,8 +81,8 @@ app.get('/startGame', (req, res) => {
         withCredentials: true
     });
     axiosInstance.get('api/start')
-        .then(() => res.sendStatus(200))
-        .catch((err) =>  res.send(err));
+    .then(() => res.sendStatus(200))
+    .catch((err) =>  res.send(err));
 });
 
 app.get('/createRoom', (req, res) => {

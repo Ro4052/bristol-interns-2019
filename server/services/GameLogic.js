@@ -28,13 +28,7 @@ class GameLogic {
         this.voteTimeout = null;
         this.nextRoundTimeout = null;
     }
-
-    /* Remove player from list of this.players on log out */
-    removePlayer(username) {
-        this.players = this.players.filter(player => player.username !== username);
-        socket.emitPlayers(this.roomId, this.players);
-    }
-
+  
     /* Get current state of the game (needed for a player after refresh of page) */
     getState(username) {
         return {
