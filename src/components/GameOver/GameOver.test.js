@@ -16,7 +16,7 @@ describe('on winner', () => {
 
 });
 describe('on draw', () => {
-        it("displays the drawers", () => {
+    it("displays the drawers", () => {
         const wrapper = shallow(<GameOver drawers={drawerstest} winner= {emptywinner}/>);
         expect(wrapper.find({ 'data-cy': 'drawers' }).text()).toEqual("Draw between one and two ");
         expect(wrapper.find({ 'data-cy': 'winner' }).children()).toEqual({});

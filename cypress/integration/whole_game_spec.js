@@ -40,9 +40,7 @@ describe('Whole game', () => {
             });
         });
         describe('when start new game', () => {
-            beforeEach(() => {
-                cy.newGame();
-            });
+            beforeEach(() => cy.newGame());
             
             it('redirects back to the lobby', () => {
                 cy.url().should('include', '/lobby');
