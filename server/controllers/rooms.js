@@ -10,11 +10,10 @@ let latestRoomId = 0;
 
 /* Helper functions */
 
-const resetRooms = () => {
+exports.resetRooms = () => {
     latestRoomId = 0;
     rooms = [];
 }
-exports.resetRooms = resetRooms;
 
 const getGameStateById = roomId => {
     const game = rooms.find(game => game.roomId === roomId);
@@ -22,23 +21,41 @@ const getGameStateById = roomId => {
 }
 exports.getGameStateById = getGameStateById;
 
-const deleteRoomById = roomId => rooms = rooms.filter(game => game.roomId !== roomId);
-exports.deleteRoomById = deleteRoomById;
+const deleteRoom = roomId => rooms = rooms.filter(game => game.roomId !== roomId);
+exports.deleteRoom = deleteRoom;
 
 const setupRoom = creator => {
-    // Get the next roomId
     const roomId = latestRoomId;
     latestRoomId++;
-    // Create a gameState and room
     const gameState = new GameLogic(roomId);
     rooms.push({ roomId, gameState });
-    // Create a socket room
-    createRoom(creator, roomId, minPlayers);
-    // Add the creator to the room
-    gameState.joinGame(creator);
-    // Return the new roomId
+    createRoom(roomId, minPlayers);
+    addPlayerToRoom(creator, roomId);
     return roomId;
 };
+
+const removePlayerFromRoom = (username, roomId) => {
+    if (roomId !== null) {
+        const gameState = getGameStateById(roomId);
+        if (gameState && gameState.getPlayers().length > 1) {
+            gameState.quitGame(username);
+            leaveRoom(username, roomId);
+            if (!gameState.getPlayers().length) deleteRoom(roomId);
+        } else {
+            throw Error("You are the only player in your existing room");
+        }    
+    }
+};
+
+const addPlayerToRoom = (username, roomId) => {
+    const gameState = getGameStateById(roomId);
+    if (gameState) {
+        joinRoom(username, roomId);
+        gameState.joinGame(username);
+    } else {
+        throw Error("Room doesn't exist");
+    }
+}
 
 /* Endpoints */
 
@@ -46,44 +63,29 @@ const setupRoom = creator => {
 router.post('/create', auth, (req, res) => {
     const { user, roomId } = req.session;
     try {
-        if (roomId !== null) {
-            const game = getGameStateById(roomId);
-            if (game) {
-                if (game.getPlayers().length > 1) {
-                    game.quitGame(user);
-                    leaveRoom(user, roomId);
-                    req.session.roomId = setupRoom(user);
-                }
-            } else req.session.roomId = setupRoom(user);
-        } else req.session.roomId = setupRoom(user);
+        removePlayerFromRoom(user, roomId);
+        req.session.roomId = setupRoom(user);
         res.sendStatus(200);
     } catch (err) {
         console.log(err);
-        res.status(400).json({message: err.message});
+        res.status(400).json({ message: err.message });
     }
 });
 
 /* Join a room */
 router.post('/join', auth, (req, res) => {
     const { user, roomId } = req.session;
-    const { newRoomId } = req.body;
+    const newRoomId = req.body.roomId;
+    console.log(newRoomId);
     try {
-        if (roomId !== null) {
-            const game = getGameStateById(roomId);
-            if (game) {
-                game.quitGame(user);
-                if (!game.getPlayers().length) rooms = rooms.filter(otherGame => otherGame !== game);
-                leaveRoom(user, roomId);
-            }
-            req.session.roomId = null;
-        }
-        joinRoom(user, newRoomId);
-        getGameStateById(newRoomId).joinGame(user);
-        req.session.roomId = newRoomId; 
+        removePlayerFromRoom(user, roomId);
+        req.session.roomId = null;
+        addPlayerToRoom(user, newRoomId);
+        req.session.roomId = newRoomId;
         res.sendStatus(200);
     } catch (err) {
         console.log(err);
-        res.status(400).json({message: err.message})
+        res.status(400).json({ message: err.message })
     }
 });
 
@@ -91,15 +93,12 @@ router.post('/join', auth, (req, res) => {
 router.post('/leave', auth, (req, res) => {
     const { user, roomId } = req.session;
     try {
-        const game = getGameStateById(roomId);
-        game.quitGame(user);
-        if (game.getPlayers().length <= 0) rooms = rooms.filter(otherGame => otherGame !== game);
-        leaveRoom(user, roomId);
+        removePlayerFromRoom(user, roomId);
         req.session.roomId = null;
         res.sendStatus(200);
     } catch (err) {
         console.log(err);
-        res.status(400).json({message: err.message})
+        res.status(400).json({ message: err.message })
     }
 });
 

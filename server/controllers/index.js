@@ -2,7 +2,7 @@ const validWord = require('../services/validWord');
 const router = require('express').Router();
 const path = require('path');
 const auth = require('./auth');
-const { roomsRouter, getGameStateById, deleteRoomById, resetRooms } = require('./rooms');
+const { roomsRouter, getGameStateById, deleteRoom, resetRooms } = require('./rooms');
 const { disconnectSocket, closeSockets, leaveRoom, setRoomStarted, closeRoom } = require('../services/socket');
 
 let currentUsers = [];
@@ -40,7 +40,7 @@ router.post('/auth/logout', auth, (req, res) => {
             const gameState = getGameStateById(roomId);
             if (gameState) {
                 gameState.quitGame(user);
-                if (gameState.getPlayers().length <= 0) deleteRoomById(roomId);
+                if (gameState.getPlayers().length <= 0) deleteRoom(roomId);
                 leaveRoom(user, roomId);
             }   
         }
@@ -85,7 +85,7 @@ router.get('/api/end', auth, (req, res) => {
     try {
         const gameState = getGameStateById(req.session.roomId);
         gameState.endGame();
-        deleteRoomById(roomId);
+        deleteRoom(roomId);
         closeRoom(roomId);
         res.sendStatus(200);
     } catch (err) {
