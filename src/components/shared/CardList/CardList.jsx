@@ -6,7 +6,7 @@ export class CardList extends React.Component {
     render() {
         return (
             <div className={styles.cardList} data-cy={this.props.cy}>
-                {this.props.cards.map(card => <Card card={card} key={card.cardId} handleClick={this.props.handleClick} enabled={this.props.isEnabled(card.cardId)} />)}
+                {this.props.cards.map(card => <Card card={card} key={card.cardId} handleClick={this.props.handleClick} hidden={this.props.hidden} enabled={this.props.isEnabled(card.cardId)} />)}
             </div>
         );
     }

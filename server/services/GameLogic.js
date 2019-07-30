@@ -32,11 +32,11 @@ class GameLogic {
     /* Get current state of the game (needed for a player after refresh of page) */
     getState(username) {
         return {
-            status: this.status,
-            voteCard: !this.playerHasVoted(username) && this.currentPlayer.username !== username && this.status === statusTypes.WAITING_FOR_VOTES ,
+            playedCards: { cards: this.playedCards, hidden: !(this.status === statusTypes.WAITING_FOR_VOTES || this.status === statusTypes.DISPLAY_ALL_VOTES) },
             playCard: (!this.playerHasPlayedCard(username) && this.currentPlayer.username === username && this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER)
                     || (!this.playerHasPlayedCard(username) && this.status === statusTypes.WAITING_FOR_OTHER_PLAYERS),
-            playWord: this.currentPlayer.username === username && !this.currentWord && this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER
+            playWord: this.currentPlayer.username === username && !this.currentWord && this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER,
+            voteCard: !this.playerHasVoted(username) && this.currentPlayer.username !== username && this.status === statusTypes.WAITING_FOR_VOTES
         }
     }
 
@@ -55,8 +55,22 @@ class GameLogic {
     /* Return the list of players, hiding their assigned cards */
     getPlayers() { return this.players.map(player => ({ username: player.username, score: player.score })) };
 
+    /**
+     * Shuffles cards in place.
+     * @param {Array} cards
+    */
+    shuffle(cards) {
+        for (let i = cards.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            const x = cards[i];
+            cards[i] = cards[j];
+            cards[j] = x;
+        }
+        return cards;
+    }
+
     /* Return the list of cards played this round, hiding who played them */
-    getPlayedCards() { return this.playedCards.map(card => ({ cardId: card.cardId })).sort(() => .5 - Math.random()) };
+    getPlayedCards() { return this.shuffle(this.playedCards) };
 
     /* Add the player to the game if possible */
     joinGame(username) {
@@ -132,6 +146,7 @@ class GameLogic {
         if (this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER && !this.playerHasPlayedCard(username)) {
             const card = { username, cardId };
             this.playedCards.push(card);
+            socket.emitPlayedCards(this.roomId, this.getPlayedCards(), true /* hidden */);
             this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
             this.setStatus(statusTypes.WAITING_FOR_OTHER_PLAYERS);
             socket.emitStatus(this.roomId, this.status);
@@ -154,6 +169,7 @@ class GameLogic {
                 const cards = this.getCardsByUsername(player.username);
                 const randomCard = (cards[Math.floor(Math.random()*cards.length)]);
                 this.playedCards.push(randomCard);
+                socket.emitPlayedCards(this.roomId, this.getPlayedCards(), true /* hidden */);
                 player.finishedTurn = true;
                 socket.emitPlayers(this.roomId, this.players);
                 cards.find(card => card.cardId === randomCard.cardId).played = true;
@@ -168,13 +184,14 @@ class GameLogic {
         if (this.status === statusTypes.WAITING_FOR_OTHER_PLAYERS && !this.playerHasPlayedCard(username)) {
             const card = { username, cardId };
             this.playedCards.push(card);
+            socket.emitPlayedCards(this.roomId, this.getPlayedCards(), true /* hidden */);
             this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
             this.markTurnAsFinished(username);
             if (this.allPlayersPlayedCard()) {
                 this.clearTimeouts();
                 this.clearFinishedTurn();
                 this.setStatus(statusTypes.WAITING_FOR_VOTES);
-                socket.emitPlayedCards(this.roomId, this.getPlayedCards());
+                socket.emitPlayedCards(this.roomId, this.getPlayedCards(), false /* revealed */);
                 socket.promptPlayersVote(this.roomId, this.currentPlayer, promptDuration);
                 this.voteTimeout = setTimeout(() => this.emitVotes(), promptDuration);
             }
@@ -218,7 +235,7 @@ class GameLogic {
     emitPlayedCards() {
         this.clearTimeouts();
         this.status = statusTypes.WAITING_FOR_VOTES;
-        socket.emitPlayedCards(this.roomId, this.getPlayedCards());
+        socket.emitPlayedCards(this.roomId, this.getPlayedCards(), false /* revealed */);
         socket.promptPlayersVote(this.roomId, this.currentPlayer, promptDuration);
         this.voteTimeout = setTimeout(() => this.emitVotes(), promptDuration);
     };

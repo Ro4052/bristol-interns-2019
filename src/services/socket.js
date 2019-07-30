@@ -38,12 +38,12 @@ const connectSocket = () => {
         history.push('/dashboard');
     });
 
-    socket.on("new round", msg => {
+    socket.on("new round", msg => {        
         dispatch(setStatus(msg.status));
         dispatch(setRoundNumber(msg.roundNum));
         dispatch(setCurrentPlayer(msg.currentPlayer));
         dispatch(setCurrentWord(''));
-        dispatch(setPlayedCards([]));
+        dispatch(setPlayedCards({cards: [], hidden: true}));
         dispatch(setPlayCard(false));
         dispatch(setVoteCard(false));
         dispatch(setPlayWord(false));
@@ -77,7 +77,7 @@ const connectSocket = () => {
         dispatch(removeCard(card.cardId));
     });
 
-    socket.on("played cards", msg => {
+    socket.on("played cards", msg => {        
         dispatch(setPlayedCards(msg));
     });
 
@@ -100,7 +100,7 @@ const connectSocket = () => {
         dispatch(setRoundNumber(0));
         dispatch(setCurrentPlayer(null));
         dispatch(setCurrentWord(''));
-        dispatch(setPlayedCards([]));
+        dispatch(setPlayedCards({cards: [], hidden: true}));
         dispatch(setPlayCard(false));
         dispatch(setVoteCard(false));
         dispatch(setPlayWord(false));

@@ -112,7 +112,7 @@ exports.emitPlayedCard = (username, card) => {
 };
 
 // When everyone has played their cards, send them all to the players
-exports.emitPlayedCards = (roomId, cards) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("played cards", cards));
+exports.emitPlayedCards = (roomId, cards, hidden) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("played cards", { cards, hidden }));
 
 // When everyone has played their cards, send them all to the players
 exports.emitAllVotes = (roomId, votes) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("all votes", votes));
