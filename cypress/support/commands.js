@@ -75,8 +75,13 @@ Cypress.Commands.add('startGame', () => {
         method: "GET",
         url: "/api/start",
     }).as('start');
+    cy.route({
+        method: "GET",
+        url: "/api/gameState",
+    }).as('getState');
     cy.get('[data-cy="start-game"]').click();
     cy.wait('@start');
+    cy.wait('@getState');
 });
 
 Cypress.Commands.add('playCardWord', () => {
@@ -96,11 +101,13 @@ Cypress.Commands.add('playCard', () => {
         method: 'POST',
         url: '/api/playCard'
     }).as('playCard');
-    cy.get('[data-cy="my-cards"] [data-cy="card"]').first().click();
+    cy.get('[data-cy="play-card"]').should('exist');
+    cy.get('[data-cy="my-cards"] [data-cy="card-wrapper"]').first().click();
     cy.wait('@playCard');
 });
 
 Cypress.Commands.add('voteCard', () => {
+    cy.get('[data-cy="vote-card"]').should('exist');
     cy.route({
         method: 'POST',
         url: '/api/voteCard'

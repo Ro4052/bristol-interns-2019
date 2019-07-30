@@ -1,6 +1,7 @@
 import { types } from './PlayerInteractionsActionTypes';
 import axios from "axios";
-import { removeCard } from '../MyCards/MyCardsActions';
+import { removeCard, setPlayCard } from '../MyCards/MyCardsActions';
+import { setPlayWord } from '../PlayWord/PlayWordActions';
 
 const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
@@ -12,6 +13,8 @@ export const endTurn = () => (dispatch, getState) => {
     .then(res => {
         if (res.status === 200) {
             dispatch(finishPlayCard());
+            dispatch(setPlayCard(false));
+            dispatch(setPlayWord(false));
             dispatch(removeCard(cardId));
         } else {
             throw Error(res.data.message);
