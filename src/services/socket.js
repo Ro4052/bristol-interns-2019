@@ -77,7 +77,7 @@ const connectSocket = () => {
         dispatch(removeCard(card.cardId));
     });
 
-    socket.on("played cards", msg => {        
+    socket.on("played cards", msg => {
         dispatch(setPlayedCards(msg));
     });
 
