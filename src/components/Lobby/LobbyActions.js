@@ -40,7 +40,7 @@ export const joinRoom = roomId => dispatch => {
 };
 
 export const leaveRoom = roomId => dispatch => {
-    axiosInstance.post('/api/room/leave', { roomId })
+    axiosInstance.post('/api/room/leave')
     .then(res => {
         if (res.status !== 200) throw Error(res.data.message);
     })
