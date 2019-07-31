@@ -26,7 +26,7 @@ export function Monster(props) {
                         <div className={styles.eyes}>
                             <div className={styles.eye}>
                                 <div className={cx({ meaneye: props.error})}></div>
-                                {(props.winner) ? <div className={cx({tear: loser})}/> : ""}
+                                {props.winner && <div className={cx({tear: loser})}/>}
                             </div>
                         </div>
                     </div>
