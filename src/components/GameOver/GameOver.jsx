@@ -7,7 +7,7 @@ import { endGame } from './GameOverActions';
 export class GameOver extends React.Component {
     render() {
         return (
-            <div className={styles.gameOverBox}>
+            <div data-cy='game-over' className={styles.gameOverBox}>
                 <h2>Winner is: <span data-cy='winner'>{this.props.winner.username}</span></h2>
                 <Button cy="new-game" handleClick={this.props.endGame} text="New game" />
             </div>
