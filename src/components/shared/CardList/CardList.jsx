@@ -10,7 +10,7 @@ export class CardList extends React.Component {
                 {
                     (this.props.hidden) 
                     ? this.props.cards.map((card, index) => <HiddenCard key={index} />)
-                    : this.props.cards.map(card => <Card card={card} key={card.cardId} handleClick={this.props.handleClick} enabled={this.props.isEnabled(card.cardId)} />)
+                    : this.props.cards.map(card => <Card card={card} hidden={this.props.hidden} myCards={this.props.myCards} key={card.cardId} handleClick={this.props.handleClick} enabled={this.props.isEnabled(card.cardId)} />)
                 }
             </div>
         );
