@@ -56,6 +56,12 @@ exports.joinRoom = (roomId, username) => {
     if (socket) socket.handshake.session.roomId = roomId;
 }
 
+// Leave the room that you are in
+exports.leaveRoom = username => {
+    const socket = sockets.find(socket => socket.handshake.session.user === username);
+    if (socket) socket.handshake.session.roomId = null;
+}
+
 // Close a room
 exports.closeRoom = roomId => {
     sockets.forEach(socket => socket.handshake.session.roomId === roomId && (socket.handshake.session.roomId = undefined));

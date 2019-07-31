@@ -62,6 +62,7 @@ router.post('/leave', auth, (req, res) => {
         const room = Room.getById(roomId);
         if (room) {
             Room.removePlayer(room, user);
+            socket.leaveRoom(user);
         }
         socket.emitRooms();
         req.session.roomId = null;
