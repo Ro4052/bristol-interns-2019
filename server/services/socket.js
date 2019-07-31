@@ -102,9 +102,9 @@ exports.emitWinner = (roomId, player) => sockets.forEach(socket => socket.handsh
 exports.emitEndGame = roomId => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("end"));
 
 // Ask the current player for a word and a card
-exports.promptCurrentPlayer = (roomId, currentPlayer) => {
+exports.promptCurrentPlayer = (roomId, currentPlayer, timeoutDuration) => {
     const current = sockets.find(socket => (socket.handshake.session.user === currentPlayer.username && socket.handshake.session.roomId === roomId));
-    if (current) current.emit("play word and card");
+    if (current) current.emit("play word and card", timeoutDuration/1000);
 };
 
 // Prompt the players to pick a card

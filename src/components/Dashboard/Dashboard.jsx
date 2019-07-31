@@ -8,7 +8,7 @@ import Players from '../Players/Players';
 import GameOver from '../GameOver/GameOver';
 import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
 import Timer from '../Timer/Timer';
-import { setVoteCardTimer, setPlayCardTimer} from '../Timer/TimerActions';
+import { setVoteCardTimer, setPlayCardTimer, setStorytellerTimer } from '../Timer/TimerActions';
 import Dixit from '../Dixit/Dixit';
 import { authenticateUser } from '../Login/LoginActions';
 
@@ -35,6 +35,12 @@ export class Dashboard extends React.Component {
                     <div className={styles.side}>
                         {(this.props.voteCard) && this.props.voteCardDuration && <Timer cy="vote-timer" reset={() => this.props.setVoteCardTimer(0)} duration={this.props.voteCardDuration} />}
                         {(this.props.playCard) && this.props.playCardDuration && <Timer cy="card-timer" reset={() => this.props.setPlayCardTimer(0)} duration={this.props.playCardDuration} />}
+                        {
+                            (
+                                // (this.props.word && this.props.playedCardId && !this.props.finishedRound)
+                                (this.props.playWord || this.props.playCard)
+                            ) &&
+                            <Timer cy="storyteller-timer" reset={() => this.props.setStorytellerTimer(0)} duration={this.props.storytellerDuration} />}
                         <div className={styles.gameInfo}>
                             {this.props.status !== "NOT_STARTED" && <h2>Round: <span id="round-number" data-cy="round-number">{this.props.roundNum}</span></h2>}
                             {this.props.currentWord !== '' && <h2 id="message">Word: <span data-cy='current-word'>{this.props.currentWord}</span></h2>}
@@ -71,12 +77,15 @@ const mapStateToProps = (state) => ({
     username: state.authReducer.username,
     winner: state.gameOverReducer.winner,
     playCardDuration: state.timerReducer.playCardDuration,
-    voteCardDuration: state.timerReducer.voteCardDuration
+    voteCardDuration: state.timerReducer.voteCardDuration,
+    storytellerDuration: state.timerReducer.storytellerDuration,
+    word: state.playWordReducer.word
 });
 
 const mapDispatchToProps = (dispatch) => ({
     setPlayCardTimer: duration => dispatch(setPlayCardTimer(duration)),
     setVoteCardTimer: duration => dispatch(setVoteCardTimer(duration)),
+    setStorytellerTimer: duration => dispatch(setStorytellerTimer(duration)),
     authenticateUser: () => dispatch(authenticateUser())
 });
 

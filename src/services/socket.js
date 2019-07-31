@@ -10,7 +10,7 @@ import { setCurrentWord, setStatus, setRoundNumber } from '../components/Dashboa
 import { resetFinishRound } from '../components/PlayerInteractions/PlayerInteractionsActions';
 import { removeCard } from '../components/MyCards/MyCardsActions';
 import { setRooms } from '../components/Lobby/LobbyActions';
-import { setVoteCardTimer, setPlayCardTimer } from '../components/Timer/TimerActions';
+import { setVoteCardTimer, setPlayCardTimer, setStorytellerTimer } from '../components/Timer/TimerActions';
 
 const connectSocket = () => {
     let connectionString;
@@ -63,9 +63,10 @@ const connectSocket = () => {
         dispatch(setCurrentWord(msg));
     });
 
-    socket.on("play word and card", () => {
+    socket.on("play word and card", timeoutDuration => {
         dispatch(setPlayWord(true));
         dispatch(setPlayCard(true));
+        dispatch(setStorytellerTimer(timeoutDuration));
     });
 
     socket.on("play card", timeoutDuration => {
