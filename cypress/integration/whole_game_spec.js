@@ -13,7 +13,7 @@ describe('Whole game', () => {
             .then(() => cy.get('[data-cy="play-word"]', { timeout: 10000 }))
             // Round 2
             .then(() => cy.playCardWord())
-            .then(() => cy.get('[data-cy="played-cards"]', { timeout: 10000 }).children().its('length').should('eq', 2))
+            .then(() => cy.get('[data-cy="vote"]', { timeout: 10000 }))
             .then(() => cy.get('[data-cy="played-cards"]').children().should('not.exist', { timeout: 10000 }))
             // Round 3
             .then(() => cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`))
