@@ -29,6 +29,12 @@ class GameLogic {
         this.nextRoundTimeout = null;
     }
 
+    /* Set the status of the game */
+    setStatus(status) {
+        this.status = status;
+        socket.emitStatus(this.roomId, this.status);
+    };
+
     /* Get current state of the game */
     getState(username) {
         return {
@@ -122,15 +128,14 @@ class GameLogic {
         if (this.roundNum < rounds) {
             this.clearRoundData();
             this.clearFinishedTurn();
-            this.status = statusTypes.WAITING_FOR_CURRENT_PLAYER;
+            this.setStatus(statusTypes.WAITING_FOR_CURRENT_PLAYER);
             this.roundNum++;
             this.currentPlayer = this.players[this.roundNum % this.players.length];
             socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer);
             socket.promptCurrentPlayer(this.roomId, this.currentPlayer, promptDuration);
             this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), promptDuration);
         } else {
-            this.status = statusTypes.GAME_OVER;
-            socket.emitStatus(this.roomId, this.status);
+            this.setStatus(statusTypes.GAME_OVER);
             const winner = this.players.reduce((prev, current) => (prev.score > current.score) ? prev : current);
             socket.emitWinner(this.roomId, { username: winner.username });
         }
@@ -156,12 +161,12 @@ class GameLogic {
         } else if (this.hasPlayedCard(username)) {
             throw Error("You cannot play more than one card and one word");
         } else {
+            clearTimeout(this.nextRoundTimeout);
             this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
             const card = { username, cardId };
             this.playedCards.push(card);
             socket.emitPlayedCards(this.roomId, this.getHiddenPlayedCards());
-            this.status = statusTypes.WAITING_FOR_OTHER_PLAYERS;
-            socket.emitStatus(this.roomId, this.status);
+            this.setStatus(statusTypes.WAITING_FOR_OTHER_PLAYERS);
             this.currentWord = word;
             socket.emitWord(this.roomId, this.currentWord);
             this.markTurnAsFinished(username);
@@ -218,9 +223,8 @@ class GameLogic {
 
     /* Emit the played cards for voting */
     emitPlayedCards() {
-        this.status = statusTypes.WAITING_FOR_VOTES;
-        socket.emitStatus(this.roomId, this.status);
         socket.emitPlayedCards(this.roomId, this.getPlayedCards());
+        this.setStatus(statusTypes.WAITING_FOR_VOTES);
         socket.promptPlayersVote(this.roomId, this.currentPlayer, promptDuration);
         this.voteTimeout = setTimeout(this.emitVotes.bind(this), promptDuration);
     };
@@ -244,8 +248,8 @@ class GameLogic {
 
     /* Emit the votes to the players */
     emitVotes() {
-        this.status = statusTypes.DISPLAY_ALL_VOTES;
-        socket.emitStatus(this.roomId, this.status);
+        this.newCard();
+        this.setStatus(statusTypes.DISPLAY_ALL_VOTES);
         socket.emitAllVotes(this.roomId, this.votes);
         this.calcScores();
         this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), nextRoundDuration);
