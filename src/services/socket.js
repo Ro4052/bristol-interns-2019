@@ -5,7 +5,7 @@ import { setPlayedCards, setVoteCard, setVotedCard, setAllVotes } from '../compo
 import { setPlayCard, resetPlayedCardId, selectCardSuccess, fetchCards } from '../components/MyCards/MyCardsActions';
 import { playWord, setPlayWord, resetWord } from '../components/PlayWord/PlayWordActions';
 import { setPlayers, setCurrentPlayer } from '../components/Players/PlayersActions';
-import { setWinner, setDrawers } from '../components/GameOver/GameOverActions';
+import { setWinner } from '../components/GameOver/GameOverActions';
 import { setCurrentWord, setStatus, setRoundNumber } from '../components/Dashboard/DashboardActions';
 import { resetFinishRound } from '../components/PlayerInteractions/PlayerInteractionsActions';
 import { removeCard } from '../components/MyCards/MyCardsActions';
@@ -68,7 +68,7 @@ const connectSocket = () => {
         dispatch(setPlayCard(true));
     });
 
-    socket.on("play card", (timeoutDuration) => {
+    socket.on("play card", timeoutDuration => {
         dispatch(setPlayCard(true));
         dispatch(setPlayCardTimer(timeoutDuration));
     });
@@ -82,22 +82,18 @@ const connectSocket = () => {
         dispatch(setPlayedCards(msg));
     });
 
-    socket.on("vote", (timeoutDuration) => {
+    socket.on("vote", timeoutDuration => {
         dispatch(setVoteCard(true));
         dispatch(setVoteCardTimer(timeoutDuration));
     });
 
-    socket.on("all votes", (msg) => {
+    socket.on("all votes", msg => {
         dispatch(setAllVotes(msg));
         dispatch(setVoteCard(false));
     });
 
-    socket.on("winner", (msg) => {
+    socket.on("winner", msg => {
         dispatch(setWinner(msg));
-    });
-
-    socket.on("drawers", (msg) => {
-        dispatch(setDrawers(msg));
     });
 
     socket.on("end", () => {        

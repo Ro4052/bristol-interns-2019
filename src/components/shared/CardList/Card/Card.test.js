@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { Card } from './Card';
+import firstCard from '../../../../images/cards/card (1).jpg';
 
 const card1 = {
     cardId: 1,
