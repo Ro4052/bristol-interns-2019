@@ -64,9 +64,9 @@ const connectSocket = () => {
     });
 
     socket.on("play word and card", timeoutDuration => {
+        dispatch(setStorytellerTimer(timeoutDuration));
         dispatch(setPlayWord(true));
         dispatch(setPlayCard(true));
-        dispatch(setStorytellerTimer(timeoutDuration));
     });
 
     socket.on("play card", timeoutDuration => {
@@ -97,7 +97,7 @@ const connectSocket = () => {
         dispatch(setWinner(msg));
     });
 
-    socket.on("end", () => {        
+    socket.on("end", () => {
         dispatch(setStatus('NOT_STARTED'));
         dispatch(setRoundNumber(0));
         dispatch(setCurrentPlayer(null));
