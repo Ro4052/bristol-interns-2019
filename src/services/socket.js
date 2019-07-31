@@ -68,7 +68,7 @@ const connectSocket = () => {
         dispatch(setPlayCard(true));
     });
 
-    socket.on("play card", (timeoutDuration) => {
+    socket.on("play card", timeoutDuration => {
         dispatch(setPlayCard(true));
         dispatch(setPlayCardTimer(timeoutDuration));
     });
@@ -82,17 +82,17 @@ const connectSocket = () => {
         dispatch(setPlayedCards(msg));
     });
 
-    socket.on("vote", (timeoutDuration) => {
+    socket.on("vote", timeoutDuration => {
         dispatch(setVoteCard(true));
         dispatch(setVoteCardTimer(timeoutDuration));
     });
 
-    socket.on("all votes", (msg) => {
+    socket.on("all votes", msg => {
         dispatch(setAllVotes(msg));
         dispatch(setVoteCard(false));
     });
 
-    socket.on("winner", (msg) => {
+    socket.on("winner", msg => {
         dispatch(setWinner(msg));
     });
 
