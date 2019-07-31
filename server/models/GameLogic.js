@@ -24,7 +24,7 @@ class GameLogic {
         this.votes = [];
 
         // Initialise timers
-        this.playCardTimeout = null;
+        this.playRandomCardsTimeout = null;
         this.voteTimeout = null;
         this.nextRoundTimeout = null;
     }
@@ -95,13 +95,14 @@ class GameLogic {
     }
 
     /* Start the game with the players that have joined */
-    startGame() {        
-        if (this.status === statusTypes.NOT_STARTED && this.players.length >= minPlayers) {
-            this.nextRound();
-            socket.emitPlayers(this.roomId, this.getPlayers());
-            socket.emitStartGame(this.roomId);
+    startGame() {
+        if (this.status !== statusTypes.NOT_STARTED) {
+            throw Error("Game has already started");
+        } else if (this.players.length < minPlayers) {
+            throw Error("Insufficient number of players");
         } else {
-            throw Error("Cannot start game. Insufficient number of players");
+            socket.emitStartGame(this.roomId);
+            this.nextRound();
         }
     }
 
@@ -120,10 +121,10 @@ class GameLogic {
         clearTimeout(this.nextRoundTimeout);
         if (this.roundNum < rounds) {
             this.clearRoundData();
+            this.clearFinishedTurn();
             this.status = statusTypes.WAITING_FOR_CURRENT_PLAYER;
             this.roundNum++;
             this.currentPlayer = this.players[this.roundNum % this.players.length];
-            this.clearFinishedTurn();
             socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer);
             socket.promptCurrentPlayer(this.roomId, this.currentPlayer, promptDuration);
             this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), promptDuration);
@@ -135,6 +136,19 @@ class GameLogic {
         }
     }
 
+    /* Clean up stored data */
+    clearRoundData() {
+        this.currentWord = '';
+        this.playedCards = [];
+        this.votes = [];
+    }
+
+    /* Clears the bool for finished turn */
+    clearFinishedTurn() {
+        this.players.forEach(player => player.finishedTurn = false);
+        socket.emitPlayers(this.roomId, this.getPlayers());
+    }
+
     /* The storyteller plays a card and a word */
     playCardAndWord(username, cardId, word) {
         if (this.status !== statusTypes.WAITING_FOR_CURRENT_PLAYER) {
@@ -142,26 +156,32 @@ class GameLogic {
         } else if (this.hasPlayedCard(username)) {
             throw Error("You cannot play more than one card and one word");
         } else {
+            this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
             const card = { username, cardId };
             this.playedCards.push(card);
             socket.emitPlayedCards(this.roomId, this.getHiddenPlayedCards());
-            this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
             this.status = statusTypes.WAITING_FOR_OTHER_PLAYERS;
             socket.emitStatus(this.roomId, this.status);
             this.currentWord = word;
             socket.emitWord(this.roomId, this.currentWord);
             this.markTurnAsFinished(username);
             socket.promptOtherPlayers(this.roomId, this.currentPlayer, promptDuration);
-            this.playCardTimeout = setTimeout(this.playRandomCard.bind(this), promptDuration);
+            this.playRandomCardsTimeout = setTimeout(this.playRandomCards.bind(this), promptDuration);
         }
     }
 
+    /* Mark the player's turn as finished and notify the other players */
+    markTurnAsFinished(username) {
+        this.players.find(player => player.username === username).finishedTurn = true;
+        socket.emitPlayers(this.roomId, this.getPlayers());
+    }
+
     /* Random card pushed if player does not submit in time*/
-    playRandomCard() {
+    playRandomCards() {
         this.players.forEach(player => {
-            if(!this.isCurrentPlayer(player.username) && !this.hasPlayedCard(player.username)) {
+            if(!this.hasPlayedCard(player.username)) {
                 const cards = this.getCardsByUsername(player.username);
-                const randomCard = (cards[Math.floor(Math.random()*cards.length)]);
+                const randomCard = cards[Math.floor(Math.random()*cards.length)];
                 this.playCard(player.username, randomCard.cardId); 
             }
         });
@@ -189,7 +209,7 @@ class GameLogic {
             this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
             this.markTurnAsFinished(username);
             if (this.allPlayersPlayedCard()) {
-                clearTimeout(this.playCardTimeout);
+                clearTimeout(this.playRandomCardsTimeout);
                 this.clearFinishedTurn();
                 this.emitPlayedCards();
             }
@@ -199,8 +219,8 @@ class GameLogic {
     /* Emit the played cards for voting */
     emitPlayedCards() {
         this.status = statusTypes.WAITING_FOR_VOTES;
-        socket.emitPlayedCards(this.roomId, this.getPlayedCards());
         socket.emitStatus(this.roomId, this.status);
+        socket.emitPlayedCards(this.roomId, this.getPlayedCards());
         socket.promptPlayersVote(this.roomId, this.currentPlayer, promptDuration);
         this.voteTimeout = setTimeout(this.emitVotes.bind(this), promptDuration);
     };
@@ -248,19 +268,6 @@ class GameLogic {
         socket.emitPlayers(this.roomId, this.getPlayers());
     }
 
-    /* Mark the player's turn as finished and notify the other players */
-    markTurnAsFinished(username) {
-        this.players.find(player => player.username === username).finishedTurn = true;
-        socket.emitPlayers(this.roomId, this.getPlayers());
-    }
-
-    /* Clean up stored data */
-    clearRoundData() {
-        this.currentWord = '';
-        this.playedCards = [];
-        this.votes = [];
-    }
-
     /* Clear entire game state */
     clearGameState() {
         this.clearAllTimeouts();
@@ -273,15 +280,9 @@ class GameLogic {
 
     /* Clear timeouts */
     clearAllTimeouts() {
-        clearTimeout(this.playCardTimeout);
+        clearTimeout(this.playRandomCardsTimeout);
         clearTimeout(this.voteTimeout);
         clearTimeout(this.nextRoundTimeout);
-    }
-
-    /* Clears the bool for finished turn */
-    clearFinishedTurn() {
-        this.players.forEach(player => player.finishedTurn = false);
-        socket.emitPlayers(this.roomId, this.getPlayers());
     }
 }
 exports.GameLogic = GameLogic;
