@@ -121,7 +121,7 @@ Cypress.Commands.add('voteCard', () => {
     cy.wait('@voteCard');
 });
 
-Cypress.Commands.add('sendWord', () => {
+Cypress.Commands.add('sendInvalidWord', () => {
     cy.route({
         method: 'POST',
         url: '/api/validWord'
