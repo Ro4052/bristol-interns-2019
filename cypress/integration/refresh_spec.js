@@ -40,12 +40,12 @@ describe('Refresh page', () => {
         it('displays the cards after refresh', () => {
             cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => {
-                cy.playCard();
-                cy.voteCard();
-                cy.refreshPage();
+                cy.get('[data-cy="vote"]', { timeout: 10000 }).should('exist');
                 cy.get('[data-cy="vote-card"]').should('not.exist');
+                cy.refreshPage();
                 cy.get('[data-cy="vote"]').should('exist');
-            })
+                cy.get('[data-cy="vote-card"]').should('not.exist');
+            });
         });
-    })
+    });
 });

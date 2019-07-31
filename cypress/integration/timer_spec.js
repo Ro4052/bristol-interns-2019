@@ -7,40 +7,36 @@ describe('Timer', () => {
             cy.createRoom();
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => cy.get('[data-cy="room-title"]'))
-            .then(($title) => {
-                const id = $title.text().split(" ")[1];
-                return cy.request(`http://localhost:12346/joinRoom?roomId=${id}&url=${encodeURIComponent(Cypress.config().baseUrl)}`)
-            })
-            .then(() => {
-                cy.startGame();
-                cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`);
-            });
+            .then(() => cy.request(`http://localhost:12346/joinRoom?roomId=0&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
+            .then(() => cy.startGame())
+            .then(() => cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`))
+            .then(() => cy.get('[data-cy="play-card"]'));
         });
 
         it('displays the timer', () => {
             cy.get('[data-cy="card-timer"]');
         });
 
-        describe('after timeout', () => {
-            it('hides the timer', () => {
-                cy.get('[data-cy="card-timer"]', { timeout: promptDuration + 1000 }).should('not.exist');
+        describe('after play card timeout', () => {
+            beforeEach(() => {
+                cy.get('[data-cy="play-card"]', { timeout: promptDuration + 2000 }).should('not.exist');
             });
 
-            it('displays the vote prompt', () => {
-                cy.get('[data-cy="vote-card"]', { timeout: promptDuration + 1000 });
+            it('hides the play card timer and displays the vote prompt and timer', () => {
+                cy.get('[data-cy="card-timer"]').should('not.exist');
+                cy.get('[data-cy="vote-card"]');
+                cy.get('[data-cy="vote-timer"]');
             });
 
-            it('displays the vote timer', () => {
-                cy.get('[data-cy="vote-timer"]', { timeout: promptDuration + 1000 });
-            });
+            describe('after vote timeout', () => {
+                beforeEach(() => {
+                    cy.get('[data-cy="vote-card"]', { timeout: promptDuration + 2000 }).should('not.exist');
+                });
 
-            it('hides the timer', () => {
-                cy.get('[data-cy="card-timer"]', { timeout: promptDuration + 1000 }).should('not.exist');
-            });
-
-            it('displays all the cards', () => {
-                cy.get('[data-cy="card-timer"]', { timeout: promptDuration + 1000 }).should('not.exist');
-                cy.get('[data-cy="played-cards"]', {timeout: promptDuration + 1000 }).children().its('length').should('eq', 2);
+                it('hides the timer and displays the cards', () => {
+                    cy.get('[data-cy="vote-timer"]').should('not.exist');
+                    cy.get('[data-cy="played-cards"]').children().its('length').should('eq', 2);
+                });
             });
         });
     });
