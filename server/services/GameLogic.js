@@ -6,7 +6,7 @@ const { statusTypes } = require('./statusTypes');
 const promptDuration = process.env.NODE_ENV === 'testing' ? 2000 : 37000;
 const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 2000 : 5000;
 const rounds = 3;
-const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 2;
+const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 3;
 exports.minPlayers = minPlayers;
 
 class GameLogic {
@@ -123,25 +123,9 @@ class GameLogic {
             this.setStatus(statusTypes.GAME_OVER);
             socket.emitStatus(this.roomId, this.status);
             const winner = this.players.reduce((prev, current) => (prev.score > current.score) ? prev : current);
-            const drawers = this.calculateDrawers(winner.score);
-            if (drawers.length > 1) {
-                socket.emitDrawers(this.roomId, drawers);
-            } else {
-                socket.emitWinner(this.roomId, { username: winner.username });
-            }   
+            socket.emitWinner(this.roomId, { username: winner.username });
         }
     }
-
-    calculateDrawers(topscore) {
-        return this.players.reduce((accumulator, current) => {
-            if (current.score === topscore) {
-                return [...accumulator, current];
-            } else {
-                return accumulator;
-            }
-        },
-        []);
-    };
 
     /* The storyteller plays a card and a word */
     playCardAndWord(username, cardId, word) {
