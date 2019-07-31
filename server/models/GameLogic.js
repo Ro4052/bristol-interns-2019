@@ -6,7 +6,7 @@ const { statusTypes } = require('./statusTypes');
 const promptDuration = process.env.NODE_ENV === 'testing' ? 2000 : 20000;
 const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 2000 : 5000;
 const rounds = 3;
-const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 3;
+const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 2;
 exports.minPlayers = minPlayers;
 
 class GameLogic {
@@ -42,7 +42,7 @@ class GameLogic {
 
     /* Returns true if this is the current player */
     isCurrentPlayer(username) { return this.currentPlayer.username === username };
-    
+
     /* Get the list of cards for a specific player */
     getCardsByUsername(username) { return this.players.find(player => player.username === username).cards };
 
@@ -57,8 +57,6 @@ class GameLogic {
 
     /* Return an empty list of cards with size equal to the number of played cards */
     getHiddenPlayedCards() { return this.playedCards.map(() => ({})) };
-
-    
 
     /* Return true if the player has already played this round */
     hasPlayedCard(username) { return this.playedCards.some(card => card.username === username) };
@@ -81,7 +79,7 @@ class GameLogic {
         } else {
             const cards = cardsManager.assign(this.players, rounds);
             const player = { username, cards, score: 0, finishedTurn: false };
-            this.players.push(player);      
+            this.players.push(player);
             socket.emitPlayers(this.roomId, this.getPlayers());
         }
     }
@@ -99,7 +97,6 @@ class GameLogic {
     /* Start the game with the players that have joined */
     startGame() {        
         if (this.status === statusTypes.NOT_STARTED && this.players.length >= minPlayers) {
-            this.status = statusTypes.STARTED;
             this.nextRound();
             socket.emitPlayers(this.roomId, this.getPlayers());
             socket.emitStartGame(this.roomId);
@@ -120,7 +117,7 @@ class GameLogic {
 
     /* Move on to the next round, called when all players have finished their turn */
     nextRound() {
-        clearTimeout(this.storytellerTimeout);
+        clearTimeout(this.nextRoundTimeout);
         if (this.roundNum < rounds) {
             this.clearRoundData();
             this.status = statusTypes.WAITING_FOR_CURRENT_PLAYER;
@@ -129,7 +126,7 @@ class GameLogic {
             this.clearFinishedTurn();
             socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer);
             socket.promptCurrentPlayer(this.roomId, this.currentPlayer, promptDuration);
-            this.storytellerTimeout = setTimeout(this.nextRound.bind(this), promptDuration);
+            this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), promptDuration);
         } else {
             this.status = statusTypes.GAME_OVER;
             socket.emitStatus(this.roomId, this.status);
@@ -176,7 +173,7 @@ class GameLogic {
             const newCard = cardsManager.assign(this.players, 1);
             player.cards.push(newCard[0]);
         });
-    }  
+    }
 
     /* Adds player's card to list of played cards */
     playCard(username, cardId) {

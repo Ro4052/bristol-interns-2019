@@ -24,7 +24,7 @@ describe('on status NOT_STARTED', () => {
 
 describe('on any status other than NOT_STARTED', () => {
     it('displays cards', () => {
-        const wrapper = shallow(<Dashboard status={"STARTED"} authenticateUser={authenticateUserMock}/>);
+        const wrapper = shallow(<Dashboard status={"WAITING_FOR_CURRENT_PLAYER"} authenticateUser={authenticateUserMock}/>);
         expect(wrapper.exists(MyCards)).toEqual(true);
     });
 });
