@@ -43,8 +43,8 @@ describe('Refresh page', () => {
                 cy.playCard();
                 cy.voteCard();
                 cy.refreshPage();
-                cy.get('[data-cy="vote-card"]').should('not.exist');
                 cy.get('[data-cy="vote"]').should('exist');
+                cy.get('[data-cy="vote-card"]').should('not.exist');
             })
         });
     })
