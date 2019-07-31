@@ -39,6 +39,7 @@ router.post('/auth/logout', auth, (req, res) => {
         if (roomId !== null) {
             const room = Room.getById(roomId);
             if (room) Room.removePlayer(room, user);
+            emitRooms();
         }
         disconnectSocket(user);
         req.session.destroy();
