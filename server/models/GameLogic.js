@@ -1,9 +1,9 @@
-const cardManager = require('./cards');
-const socket = require('./socket');
+const cardManager = require('../services/cards');
+const socket = require('../services/socket');
 const { statusTypes } = require('./statusTypes');
 
 // Set durations
-const promptDuration = process.env.NODE_ENV === 'testing' ? 2000 : 37000;
+const promptDuration = process.env.NODE_ENV === 'testing' ? 2000 : 20000;
 const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 2000 : 5000;
 const rounds = 3;
 const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 3;
@@ -28,7 +28,7 @@ class GameLogic {
         this.voteTimeout = null;
         this.nextRoundTimeout = null;
     }
-  
+
     /* Get current state of the game (needed for a player after refresh of page) */
     getState(username) {
         return {
@@ -41,10 +41,10 @@ class GameLogic {
     }
 
     /* Set the status of the game */
-    setStatus(newStatus) { return this.status = newStatus };
+    setStatus(status) { this.status = status };
 
     /* Get the list of cards for a specific player */
-    getCardsByUsername(username) { return this.players.find(player => player.username === username).cards};
+    getCardsByUsername(username) { return this.players.find(player => player.username === username).cards };
 
     /* Returns true if this is the current player */
     isCurrentPlayer(username) { return this.currentPlayer.username === username };
@@ -126,13 +126,11 @@ class GameLogic {
 
     /* Move on to the next round, called when all players have finished their turn */
     nextRound() {
-        this.clearTimeouts();
         if (this.roundNum < rounds) {
             this.clearRoundData();
             this.setStatus(statusTypes.WAITING_FOR_CURRENT_PLAYER);
             this.roundNum++;
             this.currentPlayer = this.players[this.roundNum % this.players.length];
-            this.clearRoundData();
             this.clearFinishedTurn();
             socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer);
             socket.promptCurrentPlayer(this.roomId, this.currentPlayer);
@@ -146,7 +144,11 @@ class GameLogic {
 
     /* The storyteller plays a card and a word */
     playCardAndWord(username, cardId, word) {
-        if (this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER && !this.playerHasPlayedCard(username)) {
+        if (this.status !== statusTypes.WAITING_FOR_CURRENT_PLAYER) {
+            throw Error("Now is not the right time to play a card and a word");
+        } else if (this.playerHasPlayedCard(username)) {
+            throw Error("You cannot play more than one card and one word");
+        } else {
             const card = { username, cardId };
             this.playedCards.push(card);
             socket.emitPlayedCards(this.roomId, this.getHiddenPlayedCards());
@@ -157,11 +159,7 @@ class GameLogic {
             socket.emitWord(this.roomId, this.currentWord);
             this.markTurnAsFinished(username);
             socket.promptOtherPlayers(this.roomId, this.currentPlayer, promptDuration);
-            this.playCardTimeout = setTimeout(() => this.playRandomCard(), promptDuration);
-        } else {
-            // Cannot play card and word, the user sending the request is not the current player, the player has already played a card,
-            // or the game status is not appropriate for the request, server is responsible for generating an error
-            throw Error("You cannot play more than one card and one word, or now is not the right time to play a card and a word.");
+            this.playCardTimeout = setTimeout(this.playRandomCard.bind(this), promptDuration);
         }
     }
 
@@ -171,17 +169,11 @@ class GameLogic {
             if(!this.isCurrentPlayer(player.username) && !this.playerHasPlayedCard(player.username)) {
                 const cards = this.getCardsByUsername(player.username);
                 const randomCard = (cards[Math.floor(Math.random()*cards.length)]);
-                this.playedCards.push(randomCard);
-                socket.emitPlayedCards(this.roomId, this.getHiddenPlayedCards());
-                player.finishedTurn = true;
-                socket.emitPlayers(this.roomId, this.getPlayers());
-                cards.find(card => card.cardId === randomCard.cardId).played = true;
-                socket.emitPlayedCard(player.username, randomCard);
+                this.playCard(player.username, randomCard.cardId); 
             }
         });
-        this.emitPlayedCards();
     }
-    
+
     /* Draws a new card for the player's hand */
     newCard() {
         this.players.forEach(player => {
@@ -189,68 +181,60 @@ class GameLogic {
             player.cards.push(newCard[0]);
         });
     }  
-     
+
     /* Adds player's card to list of played cards */
-    playCard(username, cardId) {      
-        if (this.status === statusTypes.WAITING_FOR_OTHER_PLAYERS && !this.playerHasPlayedCard(username)) {
+    playCard(username, cardId) {
+        if (this.status !== statusTypes.WAITING_FOR_OTHER_PLAYERS) {
+            throw Error("Now is not the right time to play a card");
+        } else if (this.playerHasPlayedCard(username)) {
+            throw Error("You cannot play more than one card");
+        } else {
             const card = { username, cardId };
             this.playedCards.push(card);
             socket.emitPlayedCards(this.roomId, this.getHiddenPlayedCards());
+            socket.emitPlayedCard(username, card);
             this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
             this.markTurnAsFinished(username);
             if (this.allPlayersPlayedCard()) {
-                this.clearTimeouts();
+                clearTimeout(this.playCardTimeout);
                 this.clearFinishedTurn();
-                this.setStatus(statusTypes.WAITING_FOR_VOTES);
-                socket.emitPlayedCards(this.roomId, this.getPlayedCards());
-                socket.emitStatus(this.roomId, this.status);
-                socket.promptPlayersVote(this.roomId, this.currentPlayer, promptDuration);
-                this.voteTimeout = setTimeout(() => this.emitVotes(), promptDuration);
+                this.emitPlayedCards();
             }
-        } else {
-            // Cannot play card, the player has already played a card, or the game status is not
-            // appropriate for the request, server is responsible for generating an error.
-            throw Error("You cannot play more than one card, or now is not the right time to play a card.");
         }
     }
 
+    /* Emit the played cards for voting */
+    emitPlayedCards() {
+        this.setStatus(statusTypes.WAITING_FOR_VOTES);
+        socket.emitPlayedCards(this.roomId, this.getPlayedCards());
+        socket.emitStatus(this.roomId, this.status);
+        socket.promptPlayersVote(this.roomId, this.currentPlayer, promptDuration);
+        this.voteTimeout = setTimeout(this.emitVotes.bind(this), promptDuration);
+    };
+
     /* Vote for a card */
     voteCard(username, cardId) {
-        if (this.status === statusTypes.WAITING_FOR_VOTES && !this.playerHasVoted(username)) {
+        if (this.status !== statusTypes.WAITING_FOR_VOTES) {
+            throw Error("Now is not the right time to vote");
+        } else if (this.playerHasVoted(username)) {
+            throw Error("You cannot vote for a card more than once");
+        } else {
             const vote = { username, cardId };
             this.votes.push(vote);
             this.markTurnAsFinished(username);
             if (this.allPlayersVoted()) {
-                this.clearTimeouts();
-                this.setStatus(statusTypes.DISPLAY_ALL_VOTES);
-                socket.emitStatus(this.roomId, this.status);
-                socket.emitAllVotes(this.roomId, this.votes);
-                this.calcScores();
-                this.newCard();
-                this.nextRoundTimeout = setTimeout(() => this.nextRound(), nextRoundDuration);
+                clearTimeout(this.voteTimeout);
+                this.emitVotes();
             }
-        } else {
-            // Cannot vote for card, the player has already voted for a card, or the game status is not
-            // appropriate for the request, server is responsible for generating an error.
-            throw Error("You cannot vote for a card more than once, or now is not the right time to vote.");
         }
     }
-    
+
     emitVotes() {
-        this.clearTimeouts();
-        this.status = statusTypes.DISPLAY_ALL_VOTES;
+        this.setStatus(statusTypes.DISPLAY_ALL_VOTES);
         socket.emitStatus(this.roomId, this.status);
         socket.emitAllVotes(this.roomId, this.votes);
         this.calcScores();
-        this.nextRoundTimeout = setTimeout(() => this.nextRound(), nextRoundDuration);
-    };
-
-    emitPlayedCards() {
-        this.clearTimeouts();
-        this.status = statusTypes.WAITING_FOR_VOTES;
-        socket.emitPlayedCards(this.roomId, this.getPlayedCards());
-        socket.promptPlayersVote(this.roomId, this.currentPlayer, promptDuration);
-        this.voteTimeout = setTimeout(() => this.emitVotes(), promptDuration);
+        this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), nextRoundDuration);
     };
 
     /* Calculate the scores for this round */
