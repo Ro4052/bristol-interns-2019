@@ -7,9 +7,11 @@ const cx = classNames.bind(styles);
 
 
 export function Monster(props) {
+    const loser = props.winner && props.winner.username !== props.username;
+    const winner = props.winner && !loser;
     let bodyClass = styles.body;
     if (props.error) bodyClass = styles.disappointedBody;
-    if (props.winner) bodyClass = styles.victoryBody;
+    if (winner) bodyClass = styles.victoryBody;
     return (
         <div className={styles.ufo}>
             <div className={styles.monster}>
@@ -24,7 +26,7 @@ export function Monster(props) {
                         <div className={styles.eyes}>
                             <div className={styles.eye}>
                                 <div className={cx({ meaneye: props.error})}></div>
-                                {/* <div className={cx({tear: props.error})}></div> */}
+                                {props.winner && <div className={cx({tear: loser})}/>}
                             </div>
                         </div>
                     </div>
@@ -36,6 +38,7 @@ export function Monster(props) {
 
 const mapStateToProps = (state) => ({
     winner: state.gameOverReducer.winner,
+    username: state.authReducer.username,
     error: state.playWordReducer.error
 });
 

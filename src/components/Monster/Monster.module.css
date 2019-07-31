@@ -336,20 +336,20 @@
 
 @keyframes tear{
     0% {
-      opacity: 0;
-      transform: translate3d(0, 0, 0) scale(0);
+        opacity: 0;
+        transform: translate3d(0, 0, 0) scale(0);
     }
   
     5%{
-      opacity: 1;
-      transform: translate3d(0, 0, 0) scale(0);
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(0);
     }
   
     10%{
-      transform: translate3d(0, 25px, 0) scale(1);
+        transform: translate3d(0, 2vmin, 0) scale(1);
     }
   
     100%{
-      transform: translate3d(0, 175px, 0) scale(1);
-    }		
+        transform: translate3d(0, 10vmin, 0) scale(1);
+    }
   }	
