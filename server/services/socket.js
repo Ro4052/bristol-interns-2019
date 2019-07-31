@@ -88,7 +88,7 @@ const emitPlayers = (roomId, players) => sockets.forEach(socket => socket.handsh
 exports.emitPlayers = emitPlayers;
 
 // Let the players know about the next round
-exports.emitNewRound = (roomId, status, roundNum, currentPlayer) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("new round", { status, roundNum, currentPlayer}));
+exports.emitNewRound = (roomId, status, roundNum, currentPlayer) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("new round", { status, roundNum, currentPlayer }));
 
 // Get the current list of rooms
 exports.getRooms = () => rooms;

@@ -179,8 +179,16 @@ class GameLogic {
         this.emitPlayedCards();
     }
     
+    /* Draws a new card for the player's hand */
+    newCard() {
+        this.players.forEach(player => {
+            const newCard = cardManager.assign(this.players, 1);
+            player.cards.push(newCard[0]);
+        });
+    }  
+     
     /* Adds player's card to list of played cards */
-    playCard (username, cardId) {      
+    playCard(username, cardId) {      
         if (this.status === statusTypes.WAITING_FOR_OTHER_PLAYERS && !this.playerHasPlayedCard(username)) {
             const card = { username, cardId };
             this.playedCards.push(card);
@@ -213,6 +221,7 @@ class GameLogic {
                 socket.emitStatus(this.roomId, this.status);
                 socket.emitAllVotes(this.roomId, this.votes);
                 this.calcScores();
+                this.newCard();
                 this.nextRoundTimeout = setTimeout(() => this.nextRound(), nextRoundDuration);
             }
         } else {
