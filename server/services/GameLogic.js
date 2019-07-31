@@ -72,6 +72,9 @@ class GameLogic {
     /* Return the list of cards played this round, hiding who played them */
     getPlayedCards() { return this.shuffle(this.playedCards.map(card => ({ cardId: card.cardId }))) };
 
+    /* Return an empty list of cards with size equal to the number of played cards */
+    getHiddenPlayedCards() { return this.playedCards.map(card => {}) };
+
     /* Add the player to the game if possible */
     joinGame(username) {
         if (this.status !== statusTypes.NOT_STARTED) {
@@ -146,7 +149,7 @@ class GameLogic {
         if (this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER && !this.playerHasPlayedCard(username)) {
             const card = { username, cardId };
             this.playedCards.push(card);
-            socket.emitPlayedCards(this.roomId, this.getPlayedCards());
+            socket.emitPlayedCards(this.roomId, this.getHiddenPlayedCards());
             this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
             this.setStatus(statusTypes.WAITING_FOR_OTHER_PLAYERS);
             socket.emitStatus(this.roomId, this.status);
@@ -169,7 +172,7 @@ class GameLogic {
                 const cards = this.getCardsByUsername(player.username);
                 const randomCard = (cards[Math.floor(Math.random()*cards.length)]);
                 this.playedCards.push(randomCard);
-                socket.emitPlayedCards(this.roomId, this.getPlayedCards());
+                socket.emitPlayedCards(this.roomId, this.getHiddenPlayedCards());
                 player.finishedTurn = true;
                 socket.emitPlayers(this.roomId, this.getPlayers());
                 cards.find(card => card.cardId === randomCard.cardId).played = true;
@@ -184,7 +187,7 @@ class GameLogic {
         if (this.status === statusTypes.WAITING_FOR_OTHER_PLAYERS && !this.playerHasPlayedCard(username)) {
             const card = { username, cardId };
             this.playedCards.push(card);
-            socket.emitPlayedCards(this.roomId, this.getPlayedCards());
+            socket.emitPlayedCards(this.roomId, this.getHiddenPlayedCards());
             this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
             this.markTurnAsFinished(username);
             if (this.allPlayersPlayedCard()) {
