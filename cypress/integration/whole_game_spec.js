@@ -20,6 +20,20 @@ describe('Whole game', () => {
             .then(() => cy.get('[data-cy="game-over"]', { timeout: 10000 }));
         });
 
+        describe.skip('when there is a draw', () => {
+            it('displays the drawers', () => {
+                cy.get('[data-cy="drawers"]').should('exist');
+                cy.get('[data-cy="winner"]').should('not.exist');
+            });
+        });
+
+        describe('when there is a winner', () => {
+            it('displays the winner', () => {
+                cy.get('[data-cy="winner"]').should('exist');
+                cy.get('[data-cy="drawers"]').should('not.exist');
+            });
+        });
+
         describe('on clicking the new game button', () => {
             beforeEach(() => cy.newGame());
 

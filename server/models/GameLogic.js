@@ -121,9 +121,25 @@ class GameLogic {
             this.setStatus(statusTypes.GAME_OVER);
             socket.emitStatus(this.roomId, this.status);
             const winner = this.players.reduce((prev, current) => (prev.score > current.score) ? prev : current);
-            socket.emitWinner(this.roomId, { username: winner.username });
+            const drawers = this.calculateDrawers(winner.score);
+            if (drawers.length > 1) {
+                socket.emitDrawers(this.roomId, drawers);
+            } else {
+                socket.emitWinner(this.roomId, { username: winner.username });
+            }   
         }
     }
+
+    calculateDrawers(topscore) {
+        return this.players.reduce((accumulator, current) => {
+            if (current.score === topscore) {
+                return [...accumulator, current];
+            } else {
+                return accumulator;
+            }
+        },
+        []);
+    };
 
     /* The storyteller plays a card and a word */
     playCardAndWord(username, cardId, word) {
@@ -155,6 +171,14 @@ class GameLogic {
             }
         });
     }
+
+    /* Draws a new card for the player's hand */
+    newCard() {
+        this.players.forEach(player => {
+            const newCard = cardManager.assign(this.players, 1);
+            player.cards.push(newCard[0]);
+        });
+    }  
 
     /* Adds player's card to list of played cards */
     playCard(username, cardId) {
