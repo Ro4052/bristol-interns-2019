@@ -29,20 +29,20 @@ class GameLogic {
         this.nextRoundTimeout = null;
     }
 
-    /* Get current state of the game (needed for a player after refresh of page) */
+    /* Get current state of the game */
     getState(username) {
         return {
             playedCards: (this.status === statusTypes.WAITING_FOR_VOTES || this.status === statusTypes.DISPLAY_ALL_VOTES) ? this.getPlayedCards() : [],
-            playCard: (!this.playerHasPlayedCard(username) && this.currentPlayer.username === username && this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER)
-                    || (!this.playerHasPlayedCard(username) && this.status === statusTypes.WAITING_FOR_OTHER_PLAYERS),
+            playCard: (!this.hasPlayedCard(username) && this.currentPlayer.username === username && this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER)
+                    || (!this.hasPlayedCard(username) && this.status === statusTypes.WAITING_FOR_OTHER_PLAYERS),
             playWord: this.currentPlayer.username === username && !this.currentWord && this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER,
-            voteCard: !this.playerHasVoted(username) && this.currentPlayer.username !== username && this.status === statusTypes.WAITING_FOR_VOTES
+            voteCard: !this.hasVoted(username) && this.currentPlayer.username !== username && this.status === statusTypes.WAITING_FOR_VOTES
         }
     }
 
     /* Returns true if this is the current player */
     isCurrentPlayer(username) { return this.currentPlayer.username === username };
-
+    
     /* Get the list of cards for a specific player */
     getCardsByUsername(username) { return this.players.find(player => player.username === username).cards };
 
@@ -56,7 +56,21 @@ class GameLogic {
     getPlayedCards() { return cardsManager.shuffle(this.playedCards.map(card => ({ cardId: card.cardId }))) };
 
     /* Return an empty list of cards with size equal to the number of played cards */
-    getHiddenPlayedCards() { return this.playedCards.map(card => {}) };
+    getHiddenPlayedCards() { return this.playedCards.map(() => ({})) };
+
+    
+
+    /* Return true if the player has already played this round */
+    hasPlayedCard(username) { return this.playedCards.some(card => card.username === username) };
+
+    /* Return true if the player has already voted this round */
+    hasVoted(username) { return this.votes.some(vote => vote.username === username) };
+
+    /* Returns true if all players have played a card this round */
+    allPlayersPlayedCard () { return this.players.every(player => this.hasPlayedCard(player.username)) };
+
+    /* Returns true if all players (apart from the current player) have voted this round */
+    allPlayersVoted() { return this.players.every(player => player.username === this.currentPlayer.username || this.hasVoted(player.username)) };
 
     /* Add the player to the game if possible */
     joinGame(username) {
@@ -78,7 +92,6 @@ class GameLogic {
             this.players = this.players.filter((otherPlayer) => otherPlayer.username !== username);
             socket.emitPlayers(this.roomId, this.getPlayers());
         } else {
-            // Game has started, player can't quit, server is responsible for generating the error
             throw Error("Cannot log out of a running game.");
         }
     }
@@ -91,7 +104,6 @@ class GameLogic {
             socket.emitPlayers(this.roomId, this.getPlayers());
             socket.emitStartGame(this.roomId);
         } else {
-            // There aren't yet enough players in the game, server is responsible for generating the error
             throw Error("Cannot start game. Insufficient number of players");
         }
     }
@@ -102,7 +114,6 @@ class GameLogic {
             socket.emitEndGame(this.roomId);
             this.clearGameState();
         } else {
-            // Game is currently running and cannot be ended, server is responsible for generating the error
             throw Error("Cannot end game. Game is currently running");
         } 
     }
@@ -131,7 +142,7 @@ class GameLogic {
     playCardAndWord(username, cardId, word) {
         if (this.status !== statusTypes.WAITING_FOR_CURRENT_PLAYER) {
             throw Error("Now is not the right time to play a card and a word");
-        } else if (this.playerHasPlayedCard(username)) {
+        } else if (this.hasPlayedCard(username)) {
             throw Error("You cannot play more than one card and one word");
         } else {
             const card = { username, cardId };
@@ -151,7 +162,7 @@ class GameLogic {
     /* Random card pushed if player does not submit in time*/
     playRandomCard() {
         this.players.forEach(player => {
-            if(!this.isCurrentPlayer(player.username) && !this.playerHasPlayedCard(player.username)) {
+            if(!this.isCurrentPlayer(player.username) && !this.hasPlayedCard(player.username)) {
                 const cards = this.getCardsByUsername(player.username);
                 const randomCard = (cards[Math.floor(Math.random()*cards.length)]);
                 this.playCard(player.username, randomCard.cardId); 
@@ -171,7 +182,7 @@ class GameLogic {
     playCard(username, cardId) {
         if (this.status !== statusTypes.WAITING_FOR_OTHER_PLAYERS) {
             throw Error("Now is not the right time to play a card");
-        } else if (this.playerHasPlayedCard(username)) {
+        } else if (this.hasPlayedCard(username)) {
             throw Error("You cannot play more than one card");
         } else {
             const card = { username, cardId };
@@ -201,7 +212,7 @@ class GameLogic {
     voteCard(username, cardId) {
         if (this.status !== statusTypes.WAITING_FOR_VOTES) {
             throw Error("Now is not the right time to vote");
-        } else if (this.playerHasVoted(username)) {
+        } else if (this.hasVoted(username)) {
             throw Error("You cannot vote for a card more than once");
         } else {
             const vote = { username, cardId };
@@ -239,18 +250,6 @@ class GameLogic {
         }
         socket.emitPlayers(this.roomId, this.getPlayers());
     }
-
-    /* Return true if the player has already played this round */
-    playerHasPlayedCard(username) { return this.playedCards.some(card => card.username === username) };
-
-    /* Return true if the player has already voted this round */
-    playerHasVoted(username) { return this.votes.some(vote => vote.username === username) };
-
-    /* Returns true if all players have played a card this round */
-    allPlayersPlayedCard () { return this.players.every(player => this.playerHasPlayedCard(player.username)) };
-
-    /* Returns true if all players (apart from the current player) have voted this round */
-    allPlayersVoted() { return this.players.every(player => player.username === this.currentPlayer.username || this.playerHasVoted(player.username)) };
 
     /* Mark the player's turn as finished and notify the other players */
     markTurnAsFinished(username) {
