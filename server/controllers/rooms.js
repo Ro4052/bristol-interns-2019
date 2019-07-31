@@ -1,70 +1,29 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('./auth');
-const { GameLogic, minPlayers } = require('../services/GameLogic');
-const { createRoom, joinRoom, leaveRoom } = require('../services/socket');
+const auth = require('../middlewares/auth');
+const socket = require('../services/socket');
 
-/** @type {{ roomId: number, gameState: GameLogic }[]} */
-let rooms = [];
-let latestRoomId = 0;
-
-/* Helper functions */
-
-exports.resetRooms = () => {
-    latestRoomId = 0;
-    rooms = [];
-}
-
-const getGameStateById = roomId => {
-    const game = rooms.find(game => game.roomId === roomId);
-    if (game) return game.gameState;
-}
-exports.getGameStateById = getGameStateById;
-
-const deleteRoom = roomId => rooms = rooms.filter(game => game.roomId !== roomId);
-exports.deleteRoom = deleteRoom;
-
-const setupRoom = creator => {
-    const roomId = latestRoomId;
-    latestRoomId++;
-    const gameState = new GameLogic(roomId);
-    rooms.push({ roomId, gameState });
-    createRoom(roomId, minPlayers);
-    addPlayerToRoom(creator, roomId);
-    return roomId;
-};
-
-const removePlayerFromRoom = (username, roomId) => {
-    if (roomId !== null) {
-        const gameState = getGameStateById(roomId);
-        if (gameState && gameState.getPlayers().length > 1) {
-            gameState.quitGame(username);
-            leaveRoom(username, roomId);
-            if (!gameState.getPlayers().length) deleteRoom(roomId);
-        } else {
-            throw Error("You are the only player in your existing room");
-        }    
-    }
-};
-
-const addPlayerToRoom = (username, roomId) => {
-    const gameState = getGameStateById(roomId);
-    if (gameState) {
-        joinRoom(username, roomId);
-        gameState.joinGame(username);
-    } else {
-        throw Error("Room doesn't exist");
-    }
-}
-
-/* Endpoints */
+/* Model */
+const Room = require('../models/room');
 
 /* Create and join room */
 router.post('/create', auth, (req, res) => {
     const { user, roomId } = req.session;
     try {
-        removePlayerFromRoom(user, roomId);
-        req.session.roomId = setupRoom(user);
+        const room = Room.getById(roomId);
+        if (room) {
+            if (room.gameState.players.length === 1) {
+                throw Error("Cannot leave current room");
+            } else {
+                Room.removePlayer(room, user);
+            }
+        }
+        const newRoomId = Room.create(user);
+        const newRoom = Room.getById(newRoomId);
+        Room.addPlayer(newRoom, user);
+        socket.joinRoom(newRoomId, user);
+        socket.emitRooms();
+        req.session.roomId = newRoomId;
         res.sendStatus(200);
     } catch (err) {
         console.log(err);
@@ -76,12 +35,19 @@ router.post('/create', auth, (req, res) => {
 router.post('/join', auth, (req, res) => {
     const { user, roomId } = req.session;
     const newRoomId = req.body.roomId;
-    console.log(newRoomId);
     try {
-        removePlayerFromRoom(user, roomId);
+        const oldRoom = Room.getById(roomId);
+        if (oldRoom) {
+            Room.removePlayer(oldRoom, user);
+        }
         req.session.roomId = null;
-        addPlayerToRoom(user, newRoomId);
-        req.session.roomId = newRoomId;
+        const newRoom = Room.getById(newRoomId);
+        if (newRoom) {
+            Room.addPlayer(newRoom, user);
+            socket.joinRoom(newRoomId, user);
+            req.session.roomId = newRoomId;
+        }
+        socket.emitRooms();
         res.sendStatus(200);
     } catch (err) {
         console.log(err);
@@ -93,7 +59,11 @@ router.post('/join', auth, (req, res) => {
 router.post('/leave', auth, (req, res) => {
     const { user, roomId } = req.session;
     try {
-        removePlayerFromRoom(user, roomId);
+        const room = Room.getById(roomId);
+        if (room) {
+            Room.removePlayer(room, user);
+        }
+        socket.emitRooms();
         req.session.roomId = null;
         res.sendStatus(200);
     } catch (err) {
@@ -102,4 +72,4 @@ router.post('/leave', auth, (req, res) => {
     }
 });
 
-exports.roomsRouter = router;
+module.exports = router;
