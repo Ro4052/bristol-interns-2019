@@ -95,6 +95,9 @@ const connectSocket = () => {
 
     socket.on("winner", msg => {
         dispatch(setWinner(msg));
+        dispatch(setPlayCard(false));
+        dispatch(setVoteCard(false));
+        dispatch(setPlayWord(false));
     });
 
     socket.on("end", () => {
@@ -103,9 +106,6 @@ const connectSocket = () => {
         dispatch(setCurrentPlayer(null));
         dispatch(setCurrentWord(''));
         dispatch(setPlayedCards([]));
-        dispatch(setPlayCard(false));
-        dispatch(setVoteCard(false));
-        dispatch(setPlayWord(false));
         dispatch(setVotedCard(0));
         dispatch(playWord(""));
         dispatch(resetFinishRound());
