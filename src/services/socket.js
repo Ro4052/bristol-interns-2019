@@ -39,6 +39,9 @@ const connectSocket = () => {
     });
 
     socket.on("new round", msg => {
+        dispatch(setStorytellerTimer(0));
+        dispatch(setPlayCardTimer(0));
+        dispatch(setVoteCardTimer(0));
         dispatch(setStatus(msg.status));
         dispatch(setRoundNumber(msg.roundNum));
         dispatch(setCurrentPlayer(msg.currentPlayer));
