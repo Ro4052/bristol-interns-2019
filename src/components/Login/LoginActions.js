@@ -87,7 +87,7 @@ export const logOut = () => dispatch => {
 }
 
 export const retrieveGameState = () => dispatch => {
-    axiosInstance.get('/api/gameState')
+    axiosInstance.get('/api/game-state')
     .then(res => {
         dispatch(setPlayedCards(res.data.currentGameState.playedCards));
         dispatch(setPlayCard(res.data.currentGameState.playCard));
