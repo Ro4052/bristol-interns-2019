@@ -2,7 +2,7 @@ const promptDuration = 5000;
 
 describe('Timer', () => {
 
-    describe.skip('Storyteller Timer', () => {
+    describe('Storyteller Timer', () => {
         describe('when the game starts', () => {
             beforeEach(() => {
                 cy.login('unicorn')
@@ -16,7 +16,7 @@ describe('Timer', () => {
                 cy.get('[data-cy="storyteller-timer"]');
             });
 
-            describe('on refresh', () => {
+            describe.skip('on refresh', () => {
                 it("doesn't restart the timer", () => {
                     cy.get('[data-cy="storyteller-timer"]').should('contain', 2);
                     cy.get('[data-cy="storyteller-timer"]').should('contain', 1);
@@ -25,7 +25,7 @@ describe('Timer', () => {
                 });
             });
 
-            describe('on timeout', () => {
+            describe.skip('on timeout', () => {
                 it('should hide the timer', () => {
                     cy.get('[data-cy="storyteller-timer"]', { timeout: promptDuration + 2000 }).should('not.exist');
                 });
@@ -57,7 +57,7 @@ describe('Timer', () => {
                 .then(() => cy.startGame())
                 .then(() => cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`));
             });
-    
+
             it('should display the timer', () => {
                 cy.get('[data-cy="card-timer"]');
             });
