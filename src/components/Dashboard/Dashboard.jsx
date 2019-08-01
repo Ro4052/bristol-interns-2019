@@ -8,7 +8,7 @@ import Players from '../Players/Players';
 import GameOver from '../GameOver/GameOver';
 import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
 import Timer from '../Timer/Timer';
-import { setVoteCardTimer, setPlayCardTimer, setStorytellerTimer, resetVoteCardTimer, resetPlayCardTimer, resetStorytellerTimer } from '../Timer/TimerActions';
+import { setVoteCardTimer, setPlayCardTimer, setStorytellerTimer } from '../Timer/TimerActions';
 import Dixit from '../Dixit/Dixit';
 import { authenticateUser } from '../Login/LoginActions';
 
