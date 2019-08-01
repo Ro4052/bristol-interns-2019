@@ -5,6 +5,7 @@ import history from '../../services/history';
 import { setPlayCard } from "../MyCards/MyCardsActions";
 import { setPlayWord } from "../PlayWord/PlayWordActions";
 import { setVoteCard, setPlayedCards } from "../PlayedCards/PlayedCardsActions";
+import { setCurrentPlayer } from '../Players/PlayersActions';
 
 const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
@@ -92,6 +93,7 @@ export const retrieveGameState = () => dispatch => {
         dispatch(setPlayCard(res.data.currentGameState.playCard));
         dispatch(setPlayWord(res.data.currentGameState.playWord));
         dispatch(setVoteCard(res.data.currentGameState.voteCard));
+        dispatch(setCurrentPlayer(res.data.currentGameState.currentPlayer));
     })
     .catch(err => console.error(err.message));
 }
