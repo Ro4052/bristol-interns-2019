@@ -4,9 +4,7 @@ import styles from './Timer.module.css';
 export class Timer extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            seconds: this.props.duration
-        };
+        this.state = {};
         this.timeout = null;
         this.decrement = this.decrement.bind(this);
     }
@@ -21,18 +19,14 @@ export class Timer extends React.Component {
     }
 
     decrement() {
-        if (this.state.seconds > 0) {
-            this.setState({
-                seconds: this.state.seconds - 1
-            });
-            this.timeout = setTimeout(this.decrement, 1000);
-        };
+        this.props.setDuration(this.props.duration - 1);
+        this.timeout = setTimeout(this.decrement, 1000);
     }
 
     render() {
         return(
             <div data-cy={this.props.cy} className={styles.clock}>
-                <span className={styles.time}>{this.state.seconds}</span>
+                <span className={styles.time}>{this.props.duration}</span>
             </div>
         );
     };

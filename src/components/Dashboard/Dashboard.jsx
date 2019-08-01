@@ -8,7 +8,7 @@ import Players from '../Players/Players';
 import GameOver from '../GameOver/GameOver';
 import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
 import Timer from '../Timer/Timer';
-import { setVoteCardTimer, setPlayCardTimer, setStorytellerTimer } from '../Timer/TimerActions';
+import { setVoteCardTimer, setPlayCardTimer, setStorytellerTimer, resetVoteCardTimer, resetPlayCardTimer, resetStorytellerTimer } from '../Timer/TimerActions';
 import Dixit from '../Dixit/Dixit';
 import { authenticateUser } from '../Login/LoginActions';
 
@@ -33,9 +33,9 @@ export class Dashboard extends React.Component {
                 </div>
                 <div className={styles.main}>
                     <div className={styles.side}>
-                        {(this.props.status === 'WAITING_FOR_CURRENT_PLAYER' && this.props.storytellerDuration > 0) && <Timer cy="storyteller-timer" reset={() => this.props.setStorytellerTimer(0)} duration={this.props.storytellerDuration} />}
-                        {(this.props.status === 'WAITING_FOR_OTHER_PLAYERS' && this.props.playCardDuration > 0) && <Timer cy="card-timer" reset={() => this.props.setPlayCardTimer(0)} duration={this.props.playCardDuration} />}
-                        {(this.props.status === 'WAITING_FOR_VOTES' && this.props.voteCardDuration > 0) && <Timer cy="vote-timer" reset={() => this.props.setVoteCardTimer(0)} duration={this.props.voteCardDuration} />}
+                        {(this.props.status === 'WAITING_FOR_CURRENT_PLAYER' && this.props.storytellerDuration > 0) && <Timer cy="storyteller-timer" reset={this.props.resetStorytellerTimer} setDuration={this.props.setStorytellerTimer} duration={this.props.storytellerDuration} />}
+                        {(this.props.status === 'WAITING_FOR_OTHER_PLAYERS' && this.props.playCardDuration > 0) && <Timer cy="card-timer" reset={this.props.resetPlayCardTimer} setDuration={this.props.setPlayCardTimer} duration={this.props.playCardDuration} />}
+                        {(this.props.status === 'WAITING_FOR_VOTES' && this.props.voteCardDuration > 0) && <Timer cy="vote-timer" reset={this.props.resetVoteCardTimer} setDuration={this.props.setVoteCardTimer} duration={this.props.voteCardDuration} />}
                         <div className={styles.gameInfo}>
                             {this.props.status !== "NOT_STARTED" && <h2>Round: <span id="round-number" data-cy="round-number">{this.props.roundNum}</span></h2>}
                             {this.props.currentWord !== '' && <h2 id="message">Word: <span data-cy='current-word'>{this.props.currentWord}</span></h2>}
@@ -81,6 +81,9 @@ const mapDispatchToProps = (dispatch) => ({
     setPlayCardTimer: duration => dispatch(setPlayCardTimer(duration)),
     setVoteCardTimer: duration => dispatch(setVoteCardTimer(duration)),
     setStorytellerTimer: duration => dispatch(setStorytellerTimer(duration)),
+    resetPlayCardTimer: () => dispatch(resetPlayCardTimer()),
+    resetVoteCardTimer: () => dispatch(resetVoteCardTimer()),
+    resetStorytellerTimer: () => dispatch(resetStorytellerTimer()),
     authenticateUser: () => dispatch(authenticateUser())
 });
 
