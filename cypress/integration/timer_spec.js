@@ -2,7 +2,7 @@ const promptDuration = 5000;
 
 describe('Timer', () => {
 
-    describe('Storyteller Timer', () => {
+    describe.skip('Storyteller Timer', () => {
         describe('when the game starts', () => {
             beforeEach(() => {
                 cy.login('unicorn')
@@ -62,7 +62,7 @@ describe('Timer', () => {
                 cy.get('[data-cy="card-timer"]');
             });
 
-            describe('on timeout', () => {
+            describe.skip('on timeout', () => {
                 it('should hide the timer', () => {
                     cy.get('[data-cy="card-timer"]', { timeout: promptDuration + 2000 }).should('not.exist');
                 });
@@ -70,7 +70,7 @@ describe('Timer', () => {
         }); 
     });
 
-    describe('Vote Card Timer', () => {
+    describe.skip('Vote Card Timer', () => {
         describe('after everyone has played', () => {
             beforeEach(() => {
                 cy.login('unicorn')
