@@ -10,7 +10,7 @@ describe('Whole game', () => {
             .then(() => cy.startGame())
             // Round 1
             .then(() => cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`))
-            .then(() => cy.get('[data-cy="play-word"]', { timeout: 10000 }))
+            .then(() => cy.get('[data-cy="type-word"]', { timeout: 20000 }))
             // Round 2
             .then(() => cy.playCardWord())
             .then(() => cy.get('[data-cy="vote"]', { timeout: 10000 }))
@@ -50,17 +50,17 @@ describe('Whole game', () => {
                 .then(() => cy.joinRoom());
             });
     
+            it('can logout', () => {
+                cy.logout();
+                cy.url().should('eq', Cypress.config().baseUrl);
+            });
+
             it('can start a new game', () => {
                 cy.request(`http://localhost:12346/createRoom?url=${encodeURIComponent(url)}`)
                 .then(() => {
                     cy.joinRoom();
                     cy.startGame();
                 });
-            });
-    
-            it('can logout', () => {
-                cy.logout();
-                cy.url().should('eq', Cypress.config().baseUrl);
             });
         });
     });
