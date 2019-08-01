@@ -14,7 +14,7 @@ export class Timer extends React.Component {
     }
 
     componentWillUnmount() {
-        this.props.reset();
+        this.props.setDuration(0);
         clearTimeout(this.timeout);
     }
 
