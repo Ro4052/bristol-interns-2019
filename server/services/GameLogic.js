@@ -5,13 +5,13 @@ const { statusTypes } = require('./statusTypes');
 // Set durations
 const promptDuration = process.env.NODE_ENV === 'testing' ? 2000 : 37000;
 const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 2000 : 5000;
-const rounds = 3;
 const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 2;
 exports.minPlayers = minPlayers;
 
 class GameLogic {
-    constructor(roomId) {
+    constructor(roomId, number) {
         this.roomId = roomId;
+        this.rounds = number;
         this.status = statusTypes.NOT_STARTED;
         this.roundNum = 0;
         this.currentPlayer = null;
@@ -65,7 +65,7 @@ class GameLogic {
         } else if (this.players.some(player => player.username === username)) {
             throw Error("You have already joined this game");
         } else {
-            const cards = cardManager.assign(this.players, rounds);
+            const cards = cardManager.assign(this.players, 5);
             const player = { username, cards, score: 0 };
             this.players.push(player);      
             socket.emitPlayers(this.roomId, this.players);
@@ -110,7 +110,7 @@ class GameLogic {
     /* Move on to the next round, called when all players have finished their turn */
     nextRound() {
         this.clearTimeouts();
-        if (this.roundNum < rounds) {
+        if (this.roundNum < this.rounds) {
             this.clearRoundData();
             this.setStatus(statusTypes.WAITING_FOR_CURRENT_PLAYER);
             this.roundNum++;

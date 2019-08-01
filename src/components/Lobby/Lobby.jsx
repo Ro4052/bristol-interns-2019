@@ -7,6 +7,7 @@ import Button from '../shared/Button/Button';
 import Dixit from '../Dixit/Dixit';
 import Logout from '../Logout/Logout';
 import { authenticateUser } from '../Login/LoginActions';
+import RoundCount from '../RoundCount/RoundCount';
 
 export class Lobby extends React.Component {
     componentDidMount() {
@@ -23,23 +24,27 @@ export class Lobby extends React.Component {
                     </div>
                 </div>
                 <div className={styles.rooms}>
-                    <Button cy="create-room" handleClick={this.props.createRoom} text="Create Room" />
+                    <div className={styles.createRoom}>
+                        {!this.props.number ? <h1>Create room: </h1> : <Button cy="create-room" handleClick={() => this.props.createRoom(this.props.number)} text="Create Room" />}
+                        {!this.props.number && this.props.createRoom && <RoundCount />}
+                    </div>
                     <ul className={styles.currentRooms} data-cy="current-rooms">
                         {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}
                     </ul>
                 </div>
             </div>
-        )
+        );
     }
 }
 
 const mapStateToProps = (state) => ({
-    rooms: state.lobbyReducer.rooms
+    rooms: state.lobbyReducer.rooms,
+    number: state.roundCountReducer.number
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    createRoom: () => dispatch(createRoom()),
-    authenticateUser: () => dispatch(authenticateUser())
+    createRoom: number => dispatch(createRoom(number)),
+    authenticateUser: () => dispatch(authenticateUser()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Lobby);

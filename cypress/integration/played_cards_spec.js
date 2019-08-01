@@ -1,5 +1,5 @@
 describe('Played cards', () => {
-    const cardsNumber = 3;
+    const cardsNumber = 5;
     const numberOfPlayers = 2;
 
     describe("at end of round", () => {

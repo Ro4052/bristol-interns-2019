@@ -48,7 +48,17 @@ Cypress.Commands.add('createRoom', () => {
         method: 'POST',
         url: '/api/room/create'
     }).as('createRoom');
-    cy.get('[data-cy="create-room"]').click();
+    cy.get('[data-cy="Drop-Down"]').select('3');
+    cy.get('[data-cy="create-room"]').click()
+    cy.wait('@createRoom');
+});
+Cypress.Commands.add('twoRounds', () => {
+    cy.route({
+        method: 'POST',
+        url: '/api/room/create'
+    }).as('createRoom');
+    cy.get('[data-cy="Drop-Down"]').select('2');
+    cy.get('[data-cy="create-room"]').click()
     cy.wait('@createRoom');
 });
 

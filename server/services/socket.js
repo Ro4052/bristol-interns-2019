@@ -36,6 +36,9 @@ exports.createRoom = (username, roomId, minPlayers) => {
     }
 };
 
+// Set number of rounds
+exports.roundCount = (roomId, word) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("round count", word));
+
 // Join an existing room
 exports.joinRoom = (username, roomId) => {
     const room = rooms.find((room) => room.roomId === roomId);
