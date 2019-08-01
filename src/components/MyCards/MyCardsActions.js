@@ -37,7 +37,7 @@ export const selectCard = cardId => (dispatch, getState) => {
     if (status === "WAITING_FOR_CURRENT_PLAYER") {
         dispatch(selectCardSuccess(cardId));
     } else if (status === "WAITING_FOR_OTHER_PLAYERS") {
-        axiosInstance.post('/api/playCard', { cardId })
+        axiosInstance.post('/api/play-card', { cardId })
         .then(res => {
             if (res.status === 200) {
                 dispatch(selectCardSuccess(cardId));

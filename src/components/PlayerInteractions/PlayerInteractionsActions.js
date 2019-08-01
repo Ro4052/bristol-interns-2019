@@ -9,7 +9,7 @@ export const endTurn = () => (dispatch, getState) => {
     const state = getState();
     const cardId = state.myCardsReducer.playedCardId;
     const word = state.playWordReducer.word;
-    axiosInstance.post('/api/playCardWord', { cardId, word })
+    axiosInstance.post('/api/play-card-word', { cardId, word })
     .then(res => {
         if (res.status === 200) {
             dispatch(finishPlayCard());

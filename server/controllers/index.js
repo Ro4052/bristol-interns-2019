@@ -91,7 +91,7 @@ router.get('/api/end', auth, (req, res) => {
 });
 
 /* Current player plays a card and a word */
-router.post('/api/playCardWord', auth, (req, res) => {
+router.post('/api/play-card-word', auth, (req, res) => {
     if (Room.getById(req.session.roomId).gameState.isCurrentPlayer(req.session.user)) { /* Only current player is allowed to play both a word and a card */
         try {
             if (validWord.isValidWord(req.body.word)) {
@@ -110,7 +110,7 @@ router.post('/api/playCardWord', auth, (req, res) => {
 });
 
 /* Current player plays word only if it's a valid word */
-router.post('/api/validWord', auth, (req,res) => {
+router.post('/api/valid-word', auth, (req,res) => {
     if (validWord.isValidWord(req.body.word)) {
         res.sendStatus(200);
     } else {
@@ -119,7 +119,7 @@ router.post('/api/validWord', auth, (req,res) => {
 });
 
 /* Player plays a card */
-router.post('/api/playCard', auth, (req, res) => {
+router.post('/api/play-card', auth, (req, res) => {
     try {
         Room.getById(req.session.roomId).gameState.playCard(req.session.user, req.body.cardId)
         res.sendStatus(200);
@@ -129,7 +129,7 @@ router.post('/api/playCard', auth, (req, res) => {
 });
 
 /* Player votes for a card */
-router.post('/api/voteCard', auth, (req, res) => { 
+router.post('/api/vote-card', auth, (req, res) => { 
     if (!Room.getById(req.session.roomId).gameState.isCurrentPlayer(req.session.user)) { /* Any user apart from the current player is allowed to vote for a card */
         try {
             Room.getById(req.session.roomId).gameState.voteCard(req.session.user, req.body.cardId)
@@ -144,7 +144,7 @@ router.post('/api/voteCard', auth, (req, res) => {
 });
 
 /* Player refreshes the page and asks for the current game state */
-router.get('/api/gameState', auth, (req, res) => {
+router.get('/api/game-state', auth, (req, res) => {
     try {
         const currentGameState = Room.getById(req.session.roomId).gameState.getState(req.session.user);
         res.status(200).json({ currentGameState });
