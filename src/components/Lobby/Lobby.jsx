@@ -8,10 +8,14 @@ import Dixit from '../Dixit/Dixit';
 import Logout from '../Logout/Logout';
 import { authenticateUser } from '../Login/LoginActions';
 import RoundCount from '../RoundCount/RoundCount';
+import history from '../../services/history';
 
 export class Lobby extends React.Component {
     componentDidMount() {
         this.props.authenticateUser();
+        if (this.props.status !== 'NOT_STARTED') {
+            history.push('/dashboard');
+        }
     }
 
     render() {
@@ -39,7 +43,8 @@ export class Lobby extends React.Component {
 
 const mapStateToProps = (state) => ({
     rooms: state.lobbyReducer.rooms,
-    number: state.roundCountReducer.number
+    number: state.roundCountReducer.number,
+    status: state.dashboardReducer.status
 });
 
 const mapDispatchToProps = (dispatch) => ({

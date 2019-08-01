@@ -17,16 +17,7 @@ import './commands'
 
 beforeEach(() => {
     cy.server();
-    cy.request({
-        method: 'GET',
-        url: "http://localhost:12346/disconnect",
-        followRedirect: false
-    }).then(() => {
-        cy.request({
-            url: '/api/reset-server',
-            method: 'POST'
-        }).then(() => {
-            cy.visit('/');
-        });
-    });
+    cy.request("http://localhost:12346/disconnect")
+    .then(() => cy.request({ url: '/api/reset-server', method: 'POST' }))
+    .then(() => cy.visit('/'));
 });

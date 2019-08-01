@@ -135,7 +135,7 @@ app.get('/playCardWord', (req, res) => {
         cardId: cards[0].cardId,
         word: "Hello"
     };
-    axiosInstance.post('api/playCardWord', body)
+    axiosInstance.post('api/play-card-word', body)
     .then(() => res.sendStatus(200))
     .catch((err) =>  res.send(err));
 });
@@ -151,7 +151,7 @@ app.get('/playCard', (req, res) => {
     const body = { 
         cardId: cards[0].cardId
     };
-    axiosInstance.post('api/playCard', body)
+    axiosInstance.post('api/play-card', body)
     .then(() => res.sendStatus(200))
     .catch((err) =>  res.send(err));
 });
@@ -167,7 +167,7 @@ app.get('/voteCard', (req, res) => {
     const body = { 
         cardId: cards[0].cardId
     };
-    axiosInstance.post('api/voteCard', body)
+    axiosInstance.post('api/vote-card', body)
     .then(() => res.sendStatus(200))
     .catch((err) =>  res.send(err));
 });
