@@ -16,6 +16,15 @@ describe('Timer', () => {
                 cy.get('[data-cy="storyteller-timer"]');
             });
 
+            describe('on refresh', () => {
+                it("doesn't restart the timer", () => {
+                    cy.get('[data-cy="storyteller-timer"]').should('contain', 2);
+                    cy.get('[data-cy="storyteller-timer"]').should('contain', 1);
+                    cy.refreshPage();
+                    cy.get('[data-cy="storyteller-timer"]', { timeout: 0 }).should('not.contain', 2);
+                });
+            });
+
             describe('on timeout', () => {
                 it('should hide the timer', () => {
                     cy.get('[data-cy="storyteller-timer"]', { timeout: promptDuration + 2000 }).should('not.exist');
@@ -38,7 +47,7 @@ describe('Timer', () => {
         });
     });
 
-    describe.skip('Play Card Timer', () => {
+    describe('Play Card Timer', () => {
         describe('after storyteller plays', () => {
             beforeEach(() => {
                 cy.login('unicorn')
@@ -61,7 +70,7 @@ describe('Timer', () => {
         }); 
     });
 
-    describe.skip('Vote Card Timer', () => {
+    describe('Vote Card Timer', () => {
         describe('after everyone has played', () => {
             beforeEach(() => {
                 cy.login('unicorn')
