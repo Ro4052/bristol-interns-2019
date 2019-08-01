@@ -1,8 +1,8 @@
-exports.assign = (users, number_of_cards) => {
+exports.assign = (users, numberOfCards) => {
     const allCards = getAllCurrentCards(users);
     let cardsSet = [];
 
-    for (let j = 0; j < number_of_cards; j++) {
+    for (let j = 0; j < numberOfCards; j++) {
         const min = 1;
         const max = 249;
         let random = Math.floor(Math.random() * (max - min) + min);
