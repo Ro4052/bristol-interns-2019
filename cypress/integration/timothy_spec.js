@@ -5,19 +5,19 @@ describe('Timothy', () => {
         it('timothy is neutral', () => {
             cy.get('[data-cy="timothy-body"]').then(($wrapper) => {
                 const classList = Array.from($wrapper[0].classList);
-                expect(classList.some(cls => /disappointed/.test(cls))).to.equal(false);
+                expect(classList.some(cls => cls.includes('disappointed'))).to.equal(false);
             });
             cy.get('[data-cy="timothy-body"]').then(($wrapper) => {
                 const classList = Array.from($wrapper[0].classList);
-                expect(classList.some(cls => /victory/.test(cls))).to.equal(false);
+                expect(classList.some(cls => cls.includes('victory'))).to.equal(false);
             });
             cy.get('[data-cy="timothy-eyelid"]').then(($wrapper) => {
                 const classList = Array.from($wrapper[0].classList);
-                expect(classList.some(cls => /angry/.test(cls))).to.equal(false);
+                expect(classList.some(cls => cls.includes('angry'))).to.equal(false);
             });
             cy.get('[data-cy="timothy-meaneye"]').then(($wrapper) => {
                 const classList = Array.from($wrapper[0].classList);
-                expect(classList.some(cls => /mean/.test(cls))).to.equal(false);
+                expect(classList.some(cls => cls.includes('mean'))).to.equal(false);
             });
             cy.get('[data-cy="timothy-tear"]').should('not.exist');
         });
@@ -36,15 +36,15 @@ describe('Timothy', () => {
         it('timothy gets angry', () => {
             cy.get('[data-cy="timothy-body"]').then(($wrapper) => {
                 const classList = Array.from($wrapper[0].classList);
-                expect(classList.some(cls => /disappointed/.test(cls))).to.equal(true);
+                expect(classList.some(cls => cls.includes('disappointed'))).to.equal(true);
             });
             cy.get('[data-cy="timothy-eyelid"]').then(($wrapper) => {
                 const classList = Array.from($wrapper[0].classList);
-                expect(classList.some(cls => /angry/.test(cls))).to.equal(true);
+                expect(classList.some(cls => cls.includes('angry'))).to.equal(true);
             });
             cy.get('[data-cy="timothy-meaneye"]').then(($wrapper) => {
                 const classList = Array.from($wrapper[0].classList);
-                expect(classList.some(cls => /mean/.test(cls))).to.equal(true);
+                expect(classList.some(cls => cls.includes('mean'))).to.equal(true);
             });
         });
     });
@@ -63,18 +63,18 @@ describe('Timothy', () => {
         it('timothy does victory dance', () => {
             cy.get('[data-cy="timothy-body"]').then(($wrapper) => {
                 const classList = Array.from($wrapper[0].classList);
-                expect(classList.some(cls => /victory/.test(cls))).to.equal(true);
+                expect(classList.some(cls => cls.includes('victory'))).to.equal(true);
             });
         });
 
         it("timothy doesn't have tear victory dance", () => {
             cy.get('[data-cy="timothy-meaneye"]').then(($wrapper) => {
                 const classList = Array.from($wrapper[0].classList);
-                expect(classList.some(cls => /mean/.test(cls))).to.equal(false);
+                expect(classList.some(cls => cls.includes('mean'))).to.equal(false);
             });
             cy.get('[data-cy="timothy-eyelid"]').then(($wrapper) => {
                 const classList = Array.from($wrapper[0].classList);
-                expect(classList.some(cls => /angry/.test(cls))).to.equal(false);
+                expect(classList.some(cls => cls.includes('angry'))).to.equal(false);
             });
         });
     });

@@ -122,9 +122,8 @@ Cypress.Commands.add('voteCard', () => {
         url: '/api/vote-card'
     }).as('voteCard');
     cy.get('[data-cy="played-cards"] [data-cy="card-wrapper"]').first().then(($wrapper) => {
-        const disabled = /disabled/;
         const classList = Array.from($wrapper[0].classList);
-        if (classList.some(cls => disabled.test(cls))) $wrapper = $wrapper.next();
+        if (classList.some(cls => cls.includes('disabled'))) $wrapper = $wrapper.next();
         $wrapper.click();
     });
     cy.wait('@voteCard');
