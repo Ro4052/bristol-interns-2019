@@ -19,13 +19,13 @@ const emptyState = { authReducer: { username: 'unicorn' }, lobbyReducer: { rooms
 const emptyStore = mockStore(emptyState);
 
 describe('on render', () => {
-    it('renders a create room button', () => {
+    it('renders a drop down button', () => {
         const wrapper = mount(
             <Provider store={emptyStore}>
-                <Lobby authenticateUser={jest.fn()} rooms={[]} />
+                <Lobby authenticateUser={jest.fn()} rooms={[]} createRoom={jest.fn()}  />
             </Provider>
         );
-        expect(wrapper.exists({ 'data-cy': 'create-room' })).toEqual(true);
+        expect(wrapper.exists({ 'data-cy': 'Drop-Down' })).toEqual(true);
     });
 
     it('renders the list of rooms', () => {
@@ -60,12 +60,24 @@ describe('if given a list of rooms', () => {
     });
 });
 
+describe('on chosen a number', () => {
+    it('renders createRoom button', () => {
+        const createRoom = jest.fn();
+        const wrapper = mount(
+            <Provider store={emptyStore}>
+                <Lobby authenticateUser={jest.fn()} rooms={[]} createRoom={createRoom} number={1} />
+            </Provider>
+        );
+        expect(wrapper.exists({ 'data-cy': 'create-room' })).toEqual(true);
+    });
+});
+
 describe('on click the create room button', () => {
     it('calls createRoom', () => {
         const createRoom = jest.fn();
         const wrapper = mount(
             <Provider store={emptyStore}>
-                <Lobby authenticateUser={jest.fn()} rooms={[]} createRoom={createRoom} />
+                <Lobby authenticateUser={jest.fn()} rooms={[]} createRoom={createRoom} number={1} />
             </Provider>
         );
         wrapper.find({ 'data-cy': 'create-room' }).simulate('click');

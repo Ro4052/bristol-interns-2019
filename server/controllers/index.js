@@ -146,7 +146,10 @@ router.post('/api/vote-card', auth, (req, res) => {
 /* Player refreshes the page and asks for the current game state */
 router.get('/api/game-state', auth, (req, res) => {
     try {
+        console.log("here")
+        console.log(req.session.roomId)
         const currentGameState = Room.getById(req.session.roomId).gameState.getState(req.session.user);
+        console.log(currentGameState)
         res.status(200).json({ currentGameState });
     } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
         res.status(400).json({ message: err.message });

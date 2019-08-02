@@ -86,6 +86,7 @@ app.get('/startGame', (req, res) => {
 });
 
 app.get('/createRoom', (req, res) => {
+    console.log(req)
     const url = req.query.url;
     const axiosInstance = axios.create({
         baseURL: url,
@@ -93,7 +94,7 @@ app.get('/createRoom', (req, res) => {
         jar: cookieJar,
         withCredentials: true
     });
-    axiosInstance.post('api/room/create')
+    axiosInstance.post('api/room/create', { number: 3 })
     .then(() => res.sendStatus(200))
     .catch((err) => {
         console.log(err);

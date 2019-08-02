@@ -19,12 +19,13 @@ router.post('/create', auth, (req, res) => {
                 Room.removePlayer(room, user);
             }
         }
-        const newRoomId = Room.create(user, number);
+        const newRoomId = Room.create(number);
         const newRoom = Room.getById(newRoomId);
         Room.addPlayer(newRoom, user);
         socket.joinRoom(newRoomId, user);
         socket.emitRooms();
         req.session.roomId = newRoomId;
+
         res.sendStatus(200);
     } catch (err) {
         console.log(err);

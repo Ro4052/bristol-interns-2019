@@ -126,7 +126,7 @@ class GameLogic {
     /* Move on to the next round, called when all players have finished their turn */
     nextRound() {
         clearTimeout(this.nextRoundTimeout);
-        if (this.roundNum < rounds) {
+        if (this.roundNum < this.rounds) {
             this.clearRoundData();
             this.clearFinishedTurn();
             this.setStatus(statusTypes.WAITING_FOR_CURRENT_PLAYER);

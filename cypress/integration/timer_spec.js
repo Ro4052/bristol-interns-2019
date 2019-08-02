@@ -38,7 +38,7 @@ describe('Timer', () => {
         });
     });
 
-    describe.skip('Play Card Timer', () => {
+    describe('Play Card Timer', () => {
         describe('after storyteller plays', () => {
             beforeEach(() => {
                 cy.login('unicorn')
@@ -61,7 +61,7 @@ describe('Timer', () => {
         }); 
     });
 
-    describe.skip('Vote Card Timer', () => {
+    describe('Vote Card Timer', () => {
         describe('after everyone has played', () => {
             beforeEach(() => {
                 cy.login('unicorn')

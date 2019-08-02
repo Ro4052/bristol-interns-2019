@@ -52,6 +52,7 @@ Cypress.Commands.add('createRoom', () => {
     cy.get('[data-cy="create-room"]').click()
     cy.wait('@createRoom');
 });
+
 Cypress.Commands.add('twoRounds', () => {
     cy.route({
         method: 'POST',
