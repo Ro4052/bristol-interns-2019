@@ -3,9 +3,10 @@ const socket = require('../services/socket');
 const { statusTypes } = require('./statusTypes');
 
 // Set durations
-const promptDuration = process.env.NODE_ENV === 'testing' ? 2000 : 20000;
+const promptDuration = process.env.NODE_ENV === 'testing' ? 2000 : 30000;
+const storytellerDuration = process.env.NODE_ENV === 'testing' ? 2000 : 60000;
 const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 2000 : 5000;
-const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 2;
+const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 3;
 exports.minPlayers = minPlayers;
 
 class GameLogic {
@@ -133,8 +134,8 @@ class GameLogic {
             this.roundNum++;
             this.currentPlayer = this.players[this.roundNum % this.players.length];
             socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer);
-            socket.promptCurrentPlayer(this.roomId, this.currentPlayer, promptDuration);
-            this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), promptDuration);
+            socket.promptCurrentPlayer(this.roomId, this.currentPlayer, storytellerDuration);
+            this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), storytellerDuration);
         } else {
             this.setStatus(statusTypes.GAME_OVER);
             const winner = this.players.reduce((prev, current) => (prev.score > current.score) ? prev : current);
