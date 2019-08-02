@@ -20,15 +20,17 @@ export class PlayedCards extends React.Component {
     }
 
     render() {
-        const cards = this.props.cards.map(card => ({...card, votes: this.getVotesForCard(card)}));
+        const cards = (this.props.status === 'DISPLAY_ALL_VOTES') ? this.props.cards.map(card => ({...card, votes: this.getVotesForCard(card)})) : this.props.cards;
+        const hidden = !(this.props.status === 'DISPLAY_ALL_VOTES' || this.props.status === 'WAITING_FOR_VOTES');
         return (
-            <CardList cards={this.props.status === 'DISPLAY_ALL_VOTES' ? cards : this.props.cards} handleClick={this.props.voteForCard} isEnabled={this.isEnabled} cy="played-cards" />
+            <CardList cards={cards} handleClick={this.props.voteForCard} hidden={hidden} isEnabled={this.isEnabled} cy="played-cards" />
         );
     }
 }
 
 const mapStateToProps = (state) => ({
     cards: state.playedCardsReducer.cards,
+    hidden: state.playedCardsReducer.hidden,
     voteCard: state.playedCardsReducer.voteCard,
     playedCardId: state.myCardsReducer.playedCardId,
     votes: state.playedCardsReducer.votes,

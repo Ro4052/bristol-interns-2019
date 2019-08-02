@@ -7,13 +7,13 @@ const winner = { username: 'username' };
 const empty = [];
 const drawerstest = [{username:'one'}, {username:'two'}];
 
-describe('on winner', () => {
+describe('on render', () => {
     it("displays the winner's username", () => {
         const wrapper = shallow(<GameOver winner={winner} drawers={empty}/>);
         expect(wrapper.find({ 'data-cy': 'winner' }).text()).toEqual(winner.username);
-        expect(wrapper.find({ 'data-cy': 'drawers' }).children().length).toEqual(0);
     });
 });
+
 describe('on draw', () => {
     it("displays the drawers", () => {
         const wrapper = shallow(<GameOver drawers={drawerstest} winner= {emptywinner}/>);

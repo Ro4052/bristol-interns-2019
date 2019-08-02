@@ -25,7 +25,7 @@ describe('on status NOT_STARTED', () => {
 
 describe('on any status other than NOT_STARTED', () => {
     it('displays cards', () => {
-        const wrapper = shallow(<Dashboard status={"STARTED"} authenticateUser={authenticateUserMock} drawers={drawers}/>);
+        const wrapper = shallow(<Dashboard status={"WAITING_FOR_CURRENT_PLAYER"} authenticateUser={authenticateUserMock} drawers={drawers}/>);
         expect(wrapper.exists(MyCards)).toEqual(true);
     });
 });
@@ -67,7 +67,7 @@ describe('on vote card', () => {
 
 describe('on end of turn', () => {
     it('displays player interaction', () => {
-        const wrapper = shallow(<Dashboard finishedRound={false} username={'username'} drawers={drawers} currentPlayer={{ username: 'username' }} status={'WAITING_FOR_CURRENT_PLAYER'} playedCardId={1} authenticateUser={authenticateUserMock}/>);
+        const wrapper = shallow(<Dashboard finishedRound={false} username={'username'} currentPlayer={{ username: 'username' }} status={'WAITING_FOR_CURRENT_PLAYER'} playedCardId={1} authenticateUser={authenticateUserMock} drawers={drawers}/>);
         expect(wrapper.exists(PlayerInteractions)).toEqual(true);
     });
 });

@@ -3,7 +3,7 @@ const url = Cypress.config().baseUrl;
 describe('Refresh page', () => {
     beforeEach(() => {
         cy.login('unicorn');
-        cy.createRoom();
+        cy.createRoom(3);
         cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
         .then(() => cy.request(`http://localhost:12346/joinRoom?roomId=0&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
         .then(() => cy.startGame());
@@ -40,12 +40,11 @@ describe('Refresh page', () => {
         it('displays the cards after refresh', () => {
             cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => {
-                cy.playCard();
-                cy.voteCard();
+                cy.get('[data-cy="vote"]', { timeout: 10000 }).should('exist');
                 cy.refreshPage();
-                cy.get('[data-cy="vote-card"]').should('not.exist');
                 cy.get('[data-cy="vote"]').should('exist');
-            })
+                cy.get('[data-cy="vote-card"]').should('not.exist');
+            });
         });
-    })
+    });
 });

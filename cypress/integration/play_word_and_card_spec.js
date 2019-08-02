@@ -23,24 +23,33 @@ describe('Play word and card', () => {
             });
             it("its class is updated to selected", () => {
                 cy.get('[data-cy="my-cards"]').find('[data-cy="card-wrapper"]').first().then(($wrapper) => {
-                    const selected = /selected/;
                     const classList = Array.from($wrapper[0].classList);
-                    expect(classList.some(cls => selected.test(cls))).to.equal(true);
+                    expect(classList.some(cls => cls.includes('selected'))).to.equal(true);
                 });
             });
         });
 
         describe('on submit a bad word', () => {
             it('displays an error', () => {
-                cy.sendWord();
+                cy.sendInvalidWord();
                 cy.get('[data-cy="send-error"]').should('contain', 'Invalid word');
             });
         });   
 
         describe('on send a word and a card', () => {
-            it('displays the word', () => {
-                cy.playCardWord();            
+            beforeEach(() => {
+                cy.playCardWord();   
+            });
+
+            it('displays the word', () => {     
                 cy.get('[data-cy="current-word"]').should('have.text', 'word');
+            });
+
+            describe('at the end of the round', () => {
+                it('draws you a new card', () => {
+                    cy.get('[data-cy="round-number"]', { timeout: 10000 }).should('contain', '2');
+                    cy.get('[data-cy="my-cards"] [data-cy="card"]', { timeout: 10000 }).should('have.length', 5);
+                });
             });
         });  
     });

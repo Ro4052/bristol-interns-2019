@@ -7,10 +7,15 @@ import Button from '../shared/Button/Button';
 import Dixit from '../Dixit/Dixit';
 import Logout from '../Logout/Logout';
 import { authenticateUser } from '../Login/LoginActions';
+import RoundCount from '../RoundCount/RoundCount';
+import history from '../../services/history';
 
 export class Lobby extends React.Component {
     componentDidMount() {
         this.props.authenticateUser();
+        if (this.props.status !== 'NOT_STARTED') {
+            history.push('/dashboard');
+        }
     }
 
     render() {
@@ -23,22 +28,27 @@ export class Lobby extends React.Component {
                     </div>
                 </div>
                 <div className={styles.rooms}>
-                    <Button cy="create-room" handleClick={this.props.createRoom} text="Create Room" />
+                    <div className={styles.createRoom}>
+                        {!this.props.numRounds ? <h1>Create room: </h1> : <Button cy="create-room" handleClick={() => this.props.createRoom(this.props.numRounds)} text="Create Room" />}
+                        {!this.props.numRounds && <RoundCount />}
+                    </div>
                     <ul className={styles.currentRooms} data-cy="current-rooms">
                         {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}
                     </ul>
                 </div>
             </div>
-        )
+        );
     }
 }
 
 const mapStateToProps = (state) => ({
-    rooms: state.lobbyReducer.rooms
+    rooms: state.lobbyReducer.rooms,
+    numRounds: state.roundCountReducer.numRounds,
+    status: state.dashboardReducer.status
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    createRoom: () => dispatch(createRoom()),
+    createRoom: numRounds => dispatch(createRoom(numRounds)),
     authenticateUser: () => dispatch(authenticateUser())
 });
 

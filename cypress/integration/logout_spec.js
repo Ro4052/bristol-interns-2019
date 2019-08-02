@@ -13,7 +13,7 @@ describe('Logout', () => {
 
     describe("if a player in a room logs out before game has started", () => {
         beforeEach(() => {
-            cy.createRoom();
+            cy.createRoom(3);
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
             .then(() => cy.request(`http://localhost:12346/joinRoom?roomId=0&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
             .then(() => cy.request(`http://localhost:12346/logout?url=${encodeURIComponent(url)}`));

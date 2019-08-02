@@ -1,21 +1,13 @@
 const validWord = require('../services/validWord');
 const router = require('express').Router();
 const path = require('path');
-const auth = require('./auth');
-const { GameLogic, minPlayers } = require('../services/GameLogic');
-const { disconnectSocket, closeSockets, createRoom, joinRoom, leaveRoom, setRoomStarted, closeRoom } = require('../services/socket');
+const auth = require('../middlewares/auth');
+const Room = require('../models/room');
+const { emitRooms, disconnectSocket, closeRoom, disconnectAllSockets } = require('../services/socket');
 
 let currentUsers = [];
-let latestRoomId = 0;
-/** @type {{ roomId: number, gameState: GameLogic }[]} */
-let games = [];
 
-const getGameStateById = roomId => {
-    const game = games.find(game => game.roomId === roomId);
-    if (game) return game.gameState;
-}
-
-const removeGameById = roomId => games = games.filter(game => game.roomId !== roomId);
+router.use('/api/room', require('./rooms'));
 
 /* Check if player is logged in */
 router.get('/auth', (req, res) => {
@@ -45,12 +37,9 @@ router.post('/auth/logout', auth, (req, res) => {
     const { user, roomId } = req.session;
     try {
         if (roomId !== null) {
-            const gameState = getGameStateById(roomId);
-            if (gameState) {
-                gameState.quitGame(user);
-                if (gameState.getPlayers().length <= 0) games = games.filter(otherGame => otherGame !== gameState);
-                leaveRoom(user, roomId);
-            }   
+            const room = Room.getById(roomId);
+            if (room) Room.removePlayer(room, user);
+            emitRooms();
         }
         disconnectSocket(user);
         req.session.destroy();
@@ -62,79 +51,9 @@ router.post('/auth/logout', auth, (req, res) => {
     }
 });
 
-/* Create a room (a single instance of a game) */
-router.post('/api/room/create', auth, (req, res) => {
-    const { user } = req.session;
-    try {
-        if (req.session.roomId !== null) {
-            const oldRoomId = req.session.roomId;
-            const game = getGameStateById(oldRoomId);
-            if (game) {
-                game.quitGame(user);
-                if (!game.getPlayers().length) games = games.filter(otherGame => otherGame !== game);
-                leaveRoom(user, oldRoomId);
-            }
-            req.session.roomId = null;
-        }
-        const newGameState = new GameLogic(latestRoomId);
-        const newGameRoom = {roomId: latestRoomId, gameState: newGameState}
-        createRoom(user, latestRoomId, minPlayers);
-        games.push(newGameRoom);
-        newGameState.joinGame(user);
-        req.session.roomId = latestRoomId;    
-        res.sendStatus(200);
-        latestRoomId++;
-    } catch (err) {
-        console.log(err);
-        res.status(400).json({message: err.message});
-    }
-});
-
-/* Join a room */
-router.post('/api/room/join', auth, (req, res) => {
-    const { user } = req.session;
-    const { roomId } = req.body;
-    try {
-        if (req.session.roomId !== null) {
-            const oldRoomId = req.session.roomId;
-            const game = getGameStateById(oldRoomId);
-            if (game) {
-                game.quitGame(user);
-                if (!game.getPlayers().length) games = games.filter(otherGame => otherGame !== game);
-                leaveRoom(user, oldRoomId);
-            }
-            req.session.roomId = null;
-        }
-        joinRoom(user, roomId);
-        getGameStateById(roomId).joinGame(user);
-        req.session.roomId = roomId; 
-        res.sendStatus(200);
-    } catch (err) {
-        console.log(err);
-        res.status(400).json({message: err.message})
-    }
-});
-
-/* Leave a room */
-router.post('/api/room/leave', auth, (req, res) => {
-    const { user } = req.session;
-    const { roomId } = req.body;
-    try {
-        const game = getGameStateById(roomId);
-        game.quitGame(user);
-        if (game.getPlayers().length <= 0) games = games.filter(otherGame => otherGame !== game);
-        leaveRoom(user, roomId);
-        req.session.roomId = null;
-        res.sendStatus(200);
-    } catch (err) {
-        console.log(err);
-        res.status(400).json({message: err.message})
-    }
-});
-
 /* Get the players list of cards */
 router.get('/api/cards', auth, (req, res) => {
-    const gameState = getGameStateById(req.session.roomId);
+    const gameState = Room.getById(req.session.roomId).gameState;
     const cards = gameState.getUnplayedCardsByUsername(req.session.user);
     if (cards) {
         res.status(200).json(cards);
@@ -148,8 +67,8 @@ router.get('/api/cards', auth, (req, res) => {
 router.get('/api/start', auth, (req, res) => {
     try {
         const roomId = req.session.roomId;
-        getGameStateById(roomId).startGame();
-        setRoomStarted(roomId);
+        Room.getById(roomId).gameState.startGame();
+        emitRooms();
         res.sendStatus(200);
     } catch (err) {
         console.log(err);
@@ -161,9 +80,9 @@ router.get('/api/start', auth, (req, res) => {
 router.get('/api/end', auth, (req, res) => {
     const { roomId } = req.session;
     try {
-        const gameState = getGameStateById(req.session.roomId);
+        const gameState = Room.getById(req.session.roomId).gameState;
         gameState.endGame();
-        removeGameById(roomId);
+        Room.deleteById(roomId);
         closeRoom(roomId);
         res.sendStatus(200);
     } catch (err) {
@@ -172,11 +91,11 @@ router.get('/api/end', auth, (req, res) => {
 });
 
 /* Current player plays a card and a word */
-router.post('/api/playCardWord', auth, (req, res) => {
-    if (getGameStateById(req.session.roomId).isCurrentPlayer(req.session.user)) { /* Only current player is allowed to play both a word and a card */
+router.post('/api/play-card-word', auth, (req, res) => {
+    if (Room.getById(req.session.roomId).gameState.isCurrentPlayer(req.session.user)) { /* Only current player is allowed to play both a word and a card */
         try {
             if (validWord.isValidWord(req.body.word)) {
-                getGameStateById(req.session.roomId).playCardAndWord(req.session.user, req.body.cardId, req.body.word); 
+                Room.getById(req.session.roomId).gameState.playCardAndWord(req.session.user, req.body.cardId, req.body.word); 
                 res.sendStatus(200);
             } else { 
                 res.status(400).json({message: "Invalid word."});
@@ -191,7 +110,7 @@ router.post('/api/playCardWord', auth, (req, res) => {
 });
 
 /* Current player plays word only if it's a valid word */
-router.post('/api/validWord', auth, (req,res) => {
+router.post('/api/valid-word', auth, (req,res) => {
     if (validWord.isValidWord(req.body.word)) {
         res.sendStatus(200);
     } else {
@@ -200,9 +119,9 @@ router.post('/api/validWord', auth, (req,res) => {
 });
 
 /* Player plays a card */
-router.post('/api/playCard', auth, (req, res) => {
+router.post('/api/play-card', auth, (req, res) => {
     try {
-        getGameStateById(req.session.roomId).playCard(req.session.user, req.body.cardId)
+        Room.getById(req.session.roomId).gameState.playCard(req.session.user, req.body.cardId)
         res.sendStatus(200);
     } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
         res.status(400).json({ message: err.message});
@@ -210,10 +129,10 @@ router.post('/api/playCard', auth, (req, res) => {
 });
 
 /* Player votes for a card */
-router.post('/api/voteCard', auth, (req, res) => { 
-    if (!getGameStateById(req.session.roomId).isCurrentPlayer(req.session.user)) { /* Any user apart from the current player is allowed to vote for a card */
+router.post('/api/vote-card', auth, (req, res) => { 
+    if (!Room.getById(req.session.roomId).gameState.isCurrentPlayer(req.session.user)) { /* Any user apart from the current player is allowed to vote for a card */
         try {
-            getGameStateById(req.session.roomId).voteCard(req.session.user, req.body.cardId)
+            Room.getById(req.session.roomId).gameState.voteCard(req.session.user, req.body.cardId)
             res.sendStatus(200);
         } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
             console.log(err);
@@ -225,10 +144,10 @@ router.post('/api/voteCard', auth, (req, res) => {
 });
 
 /* Player refreshes the page and asks for the current game state */
-router.get('/api/gameState', auth, (req, res) => {
+router.get('/api/game-state', auth, (req, res) => {
     try {
-        const currentGameState = getGameStateById(req.session.roomId).getState(req.session.user);
-        res.status(200).json({currentGameState});
+        const currentGameState = Room.getById(req.session.roomId).gameState.getState(req.session.user);
+        res.status(200).json({ currentGameState });
     } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
         res.status(400).json({ message: err.message });
     }
@@ -237,19 +156,11 @@ router.get('/api/gameState', auth, (req, res) => {
 /* Check if in dev mode, and enable end game request */
 if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {
-        try {
-            games.forEach(game => game.gameState.clearGameState());
-            currentUsers = [];
-            latestRoomId = 0;
-            games = [];
-            res.sendStatus(200);
-        } catch (err) {
-            console.log(err);
-            res.status(400).json({ message: err.message});
-        } finally {
-            closeSockets();
-            req.session.destroy();
-        }
+        currentUsers = [];
+        disconnectAllSockets();
+        Room.reset();
+        req.session.destroy();
+        res.sendStatus(200);
     });
 }
 

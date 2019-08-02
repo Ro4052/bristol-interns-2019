@@ -1,8 +1,8 @@
-module.exports.assign = (users, number_of_cards) => {
+exports.assign = (users, numberOfCards) => {
     const allCards = getAllCurrentCards(users);
     let cardsSet = [];
 
-    for (let j = 0; j < number_of_cards; j++) {
+    for (let j = 0; j < numberOfCards; j++) {
         const min = 1;
         const max = 249;
         let random = Math.floor(Math.random() * (max - min) + min);
@@ -20,7 +20,7 @@ module.exports.assign = (users, number_of_cards) => {
     return cardsSet;
 }
 
-function getAllCurrentCards(users) {
+const getAllCurrentCards = users => {
     let all = [];
     for (let i = 0; i < users.length; i++) {
         for (let j = 0; j < users[i].cards.length; j++) {
@@ -29,3 +29,17 @@ function getAllCurrentCards(users) {
     }    
     return all;
 }
+
+/**
+ * Shuffles cards in place.
+ * @param {Array} cards
+*/
+exports.shuffle = cards => {
+    for (let i = cards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const x = cards[i];
+        cards[i] = cards[j];
+        cards[j] = x;
+    }
+    return cards;
+};
