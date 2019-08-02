@@ -25,20 +25,6 @@ exports.setupSocket = (server, session) => {
     });
 }
 
-// // Create a room
-// exports.createRoom = (username, roomId, minPlayers) => {
-    
-//     console.log("send it fucking piece of shit " + roomId)
-//     if (!rooms.some((room) => room.creator === username) && rooms.length < 10) {
-//         rooms.push({ roomId, started: false, creator: { username }, players: [{ username }], minPlayers });
-//         const socket = sockets.find(socket => socket.handshake.session.user === username);
-//         socket.handshake.session.roomId = roomId;
-//         this.emitRooms();
-//     } else {
-//         throw new Error("You cannot create two rooms or no more than 10 rooms can exist at the same time");
-//     }
-// };
-
 // Set number of rounds
 exports.roundCount = (roomId, word) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("round count", word));
 
@@ -69,7 +55,6 @@ exports.disconnectAllSockets = () => {
 
 // Join an existing room
 exports.joinRoom = (roomId, username) => {
-    console.log("in the fucking socket "+ roomId)
     const socket = sockets.find(socket => socket.handshake.session.user === username);
     if (socket) socket.handshake.session.roomId = roomId;
 }

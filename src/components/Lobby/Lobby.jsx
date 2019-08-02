@@ -30,7 +30,7 @@ export class Lobby extends React.Component {
                 <div className={styles.rooms}>
                     <div className={styles.createRoom}>
                         {!this.props.number ? <h1>Create room: </h1> : <Button cy="create-room" handleClick={() => this.props.createRoom(this.props.number)} text="Create Room" />}
-                        {!this.props.number && this.props.createRoom && <RoundCount />}
+                        {!this.props.number && <RoundCount />}
                     </div>
                     <ul className={styles.currentRooms} data-cy="current-rooms">
                         {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}
@@ -49,7 +49,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     createRoom: number => dispatch(createRoom(number)),
-    authenticateUser: () => dispatch(authenticateUser()),
+    authenticateUser: () => dispatch(authenticateUser())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Lobby);

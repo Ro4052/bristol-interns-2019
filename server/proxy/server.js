@@ -86,7 +86,6 @@ app.get('/startGame', (req, res) => {
 });
 
 app.get('/createRoom', (req, res) => {
-    console.log(req)
     const url = req.query.url;
     const axiosInstance = axios.create({
         baseURL: url,
