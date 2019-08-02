@@ -4,7 +4,7 @@ describe('Lobby', () => {
     describe('on clicking create room', () => {
         beforeEach(() => {
             cy.login('unicorn');
-            cy.createRoom();
+            cy.createRoom(3);
         });
 
         it('creates a new room and adds the player to that room', () => {
@@ -13,6 +13,13 @@ describe('Lobby', () => {
             cy.get('[data-cy="player-username"]').contains('unicorn');
             cy.get('[data-cy="leave-room"]').should('exist');
             cy.get('[data-cy="players-needed"]').contains('1');
+        });
+
+        describe('on clicking create room again', () => {
+            it("doesn't create a new room", () => {
+                cy.createRoom(3);
+                cy.get('[data-cy="room"]').contains('Room: 0');
+            });
         });
 
         describe('on clicking leave room', () => {
@@ -72,7 +79,7 @@ describe('Lobby', () => {
             });
 
             describe('on clicking the create room button', () => {
-                beforeEach(() => cy.createRoom());
+                beforeEach(() => cy.createRoom(3));
 
                 it('creates the room', () => {
                     cy.get('[data-cy="current-rooms"]').children().should('have.length', 2);

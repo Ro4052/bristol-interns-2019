@@ -27,7 +27,7 @@ export const resetWord = () => ({
 });
 
 export const validateWord = word => dispatch => {
-    axiosInstance.post('/api/validWord', { word })
+    axiosInstance.post('/api/valid-word', { word })
     .then(res => {
         if (res.status === 200) {
             dispatch(validateWordSuccess());

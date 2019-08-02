@@ -4,7 +4,7 @@ import storage from 'redux-persist/lib/storage';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import thunk from 'redux-thunk';
 
-import authReducer from '../components/shared/Auth/AuthReducer';
+import authReducer from '../components/Login/LoginReducer';
 import myCardsReducer from '../components/MyCards/MyCardsReducer';
 import playedCardsReducer from '../components/PlayedCards/PlayedCardsReducer';
 import playWordReducer from '../components/PlayWord/PlayWordReducer';
@@ -14,6 +14,7 @@ import dashboardReducer from '../components/Dashboard/DashboardReducer';
 import playerInteractionsReducer from '../components/PlayerInteractions/PlayerInteractionsReducer';
 import lobbyReducer from '../components/Lobby/LobbyReducer';
 import timerReducer from '../components/Timer/TimerReducer';
+import roundCountReducer from '../components/RoundCount/RoundCountReducer';
 
 // Combine all reducers
 const allReducers = combineReducers({
@@ -26,7 +27,8 @@ const allReducers = combineReducers({
     dashboardReducer,
     playerInteractionsReducer,
     lobbyReducer,
-    timerReducer
+    timerReducer,
+    roundCountReducer
 });
 
 // Wrap in reset functionality

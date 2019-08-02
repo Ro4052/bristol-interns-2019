@@ -10,7 +10,7 @@ export const setPlayedCards = cards => ({
 
 export const voteForCard = cardId => dispatch => {
     dispatch(voteForCardBegin());
-    axiosInstance.post('/api/voteCard', { cardId })
+    axiosInstance.post('/api/vote-card', { cardId })
     .then(res => {
         if (res.status === 200) {
             dispatch(voteForCardSuccess(cardId));

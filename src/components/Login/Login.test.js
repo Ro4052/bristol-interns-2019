@@ -1,56 +1,50 @@
 import React from 'react';
-import {Login} from './Login';
-import { shallow } from 'enzyme';
+import { Login } from './Login';
+import { shallow, mount } from 'enzyme';
+import { Provider } from 'react-redux';
+import configureStore from 'redux-mock-store';
 
-describe('on log in', () => {
-    it('is not able to submit a blank username', () => {
-        jest.spyOn(window, 'alert').mockImplementation(() => {});
-        const wrapper = shallow(<Login logIn={() => {}} authenticateUser={() => {}}/>);
-        const input = wrapper.find('input');
-        input.simulate('change', { preventDefault: () => {}, target: { value: '' } });
-        wrapper.find('form').simulate('submit', { preventDefault: () => {}});
-        expect(wrapper.state().error).toEqual('Username cannot be an empty string');
+const middlewares = [];
+const mockStore = configureStore(middlewares);
+const state = {
+    gameOverReducer: {},
+    playWordReducer: {},
+    authReducer: {}
+};
+const store = mockStore(state);
+
+describe('on render', () => {
+    it('calls authenticateUser', () => {
+        const authenticateUser = jest.fn();
+        mount(
+            <Provider store={store}>
+                <Login authenticateUser={authenticateUser} />
+            </Provider>
+        );
+        expect(authenticateUser).toHaveBeenCalled();
+        authenticateUser.mockRestore();
     });
-    it('is not able to submit a username with special characters', () => {
-        jest.spyOn(window, 'alert').mockImplementation(() => {});
-        const wrapper = shallow(<Login logIn={() => {}} authenticateUser={() => {}}/>);
-        const input = wrapper.find('input');
-        input.simulate('change', { preventDefault: () => {}, target: { value: 'unicorn_$$1' } });
-        wrapper.find('form').simulate('submit', { preventDefault: () => {}});
-        expect(wrapper.state().error).toEqual('Username can be comprised of numbers and latin letters only');
+});
+
+describe('on type in input', () => {
+    it('updates the state', () => {
+        const wrapper = shallow(<Login authenticateUser={jest.fn()}/>);
+        wrapper.find({ 'data-cy': 'username' }).simulate('change', { preventDefault: () => {}, target: { value: 'username' } });
+        expect(wrapper.state().value).toEqual('username');
     });
-    it('is not able to submit a username from a non-latin alphabet', () => {
-        jest.spyOn(window, 'alert').mockImplementation(() => {});
-        const wrapper = shallow(<Login logIn={() => {}} authenticateUser={() => {}}/>);
-        const input = wrapper.find('input');
-        input.simulate('change', { preventDefault: () => {}, target: { value: 'еднорог' } });
-        wrapper.find('form').simulate('submit', { preventDefault: () => {}});
-        expect(wrapper.state().error).toEqual('Username can be comprised of numbers and latin letters only');
-    });
-    it('is not able to submit a username with less than three characters', () => {
-        jest.spyOn(window, 'alert').mockImplementation(() => {});
-        const wrapper = shallow(<Login logIn={() => {}} authenticateUser={() => {}}/>);
-        const input = wrapper.find('input');
-        input.simulate('change', { preventDefault: () => {}, target: { value: 'do' } });
-        wrapper.find('form').simulate('submit', { preventDefault: () => {}});
-        expect(wrapper.state().error).toEqual('Username must be at least 3 characters');
-    });
-    it('is not able to submit a username with more than fifteen characters', () => {
-        jest.spyOn(window, 'alert').mockImplementation(() => {});
-        const wrapper = shallow(<Login logIn={() => {}} authenticateUser={() => {}}/>);
-        const input = wrapper.find('input');
-        input.simulate('change', { preventDefault: () => {}, target: { value: 'abcdefghijklmnop' } });
-        wrapper.find('form').simulate('submit', { preventDefault: () => {}});
-        expect(wrapper.state().error).toEqual('Username must be no longer than 15 characters');
-    });
-    it('is able to input a username', () => {
-        const spy = jest.spyOn(Login.prototype, 'sendLogin');
-        const wrapper = shallow(<Login logIn={() => {}} authenticateUser={() => {}}/>);
-        const input = wrapper.find('input');
-        input.simulate('change', { preventDefault: () => {}, target: { value: 'unicorn' } });
-        wrapper.find('form').simulate('submit', { preventDefault: () => {}});
-        expect(wrapper.state().value).toEqual('unicorn');
-        expect(spy).toHaveBeenCalled();
-        spy.mockRestore();
+});
+
+describe('on submit', () => {
+    it('calls the logIn function', () => {
+        const logIn = jest.fn();
+        const wrapper = mount(
+            <Provider store={store}>
+                <Login authenticateUser={jest.fn()} logIn={logIn} />
+            </Provider>
+        );
+        wrapper.find({ 'data-cy': 'username' }).simulate('change', { preventDefault: () => {}, target: { value: 'username' } });
+        wrapper.find({ 'data-cy': 'login-form' }).simulate('submit');
+        expect(logIn).toHaveBeenCalled();
+        logIn.mockRestore();
     });
 });

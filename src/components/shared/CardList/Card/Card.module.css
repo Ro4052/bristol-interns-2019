@@ -1,5 +1,5 @@
 .cardWrapper {
-    --width: 20vmin;
+    --width: 15vmin;
     border: calc(var(--width)/30) solid white;
     border-radius: calc(var(--width)/20);
     box-shadow: 0px 0px calc(var(--width)/15) 0px rgba(0, 0, 0, 0.2);
@@ -8,11 +8,11 @@
     overflow: hidden;
     position: relative;
     margin: 0 10px;
+    flex-shrink: 0;
 }
 
 .card {
-    height: 30vmin;
-    width: 20vmin;
+    height: 100%;
     object-fit: cover;
 }
 

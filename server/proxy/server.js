@@ -59,6 +59,19 @@ app.get('/connect', (req, res) => {
     }); 
 });
 
+app.get('/logout', (req, res) => {
+    const url = req.query.url;
+    const axiosInstance = axios.create({
+        baseURL: url,
+        timeout: 500,
+        jar: cookieJar,
+        withCredentials: true
+    });
+    axiosInstance.post('auth/logout')
+        .then(() => res.sendStatus(200))
+        .catch((err) =>  res.send(err));
+});
+
 app.get('/startGame', (req, res) => {
     const url = req.query.url;
     const axiosInstance = axios.create({
@@ -68,8 +81,8 @@ app.get('/startGame', (req, res) => {
         withCredentials: true
     });
     axiosInstance.get('api/start')
-        .then(() => res.sendStatus(200))
-        .catch((err) =>  res.send(err));
+    .then(() => res.sendStatus(200))
+    .catch((err) =>  res.send(err));
 });
 
 app.get('/createRoom', (req, res) => {
@@ -80,7 +93,7 @@ app.get('/createRoom', (req, res) => {
         jar: cookieJar,
         withCredentials: true
     });
-    axiosInstance.post('api/room/create')
+    axiosInstance.post('api/room/create', { numRounds: 3 })
     .then(() => res.sendStatus(200))
     .catch((err) => {
         console.log(err);
@@ -122,7 +135,7 @@ app.get('/playCardWord', (req, res) => {
         cardId: cards[0].cardId,
         word: "Hello"
     };
-    axiosInstance.post('api/playCardWord', body)
+    axiosInstance.post('api/play-card-word', body)
     .then(() => res.sendStatus(200))
     .catch((err) =>  res.send(err));
 });
@@ -138,7 +151,7 @@ app.get('/playCard', (req, res) => {
     const body = { 
         cardId: cards[0].cardId
     };
-    axiosInstance.post('api/playCard', body)
+    axiosInstance.post('api/play-card', body)
     .then(() => res.sendStatus(200))
     .catch((err) =>  res.send(err));
 });
@@ -154,7 +167,7 @@ app.get('/voteCard', (req, res) => {
     const body = { 
         cardId: cards[0].cardId
     };
-    axiosInstance.post('api/voteCard', body)
+    axiosInstance.post('api/vote-card', body)
     .then(() => res.sendStatus(200))
     .catch((err) =>  res.send(err));
 });
