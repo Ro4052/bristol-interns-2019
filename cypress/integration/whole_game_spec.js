@@ -58,7 +58,7 @@ describe('Whole game', () => {
         });
     });
 
-    describe.skip('when there is a draw', () => {
+    describe('when there is a draw', () => {
         it('displays the drawers', () => {
             cy.login('unicorn')
             .then(() => cy.createRoom(4))
