@@ -8,7 +8,8 @@ const middlewares = [];
 const mockStore = configureStore(middlewares);
 const state = {
     gameOverReducer: {},
-    playWordReducer: {}
+    playWordReducer: {},
+    authReducer: {}
 };
 const store = mockStore(state);
 
