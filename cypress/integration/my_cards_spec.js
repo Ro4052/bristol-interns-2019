@@ -11,7 +11,7 @@ describe('My Cards', () => {
     describe('when the game has started', () => {
         beforeEach(() => cy.startGame());
         it("displays the correct number of cards", () => {
-            cy.get('[data-cy="my-cards"]').children().its('length').should('eq', 5);
+            cy.get('[data-cy="my-cards"]').children().its('length').should('eq', 4);
         });
     });
 });
