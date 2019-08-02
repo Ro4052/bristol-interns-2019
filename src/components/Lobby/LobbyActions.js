@@ -1,5 +1,6 @@
 import { types } from './LobbyActionTypes';
 import axios from "axios";
+import { setRoundCount } from '../RoundCount/RoundCountActions';
 
 const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
@@ -23,10 +24,11 @@ export const leaveRoomFailure = error => ({
     error
 });
 
-export const createRoom = () => dispatch => {
-    axiosInstance.post('/api/room/create')
+export const createRoom = numRounds => dispatch => {
+    axiosInstance.post('/api/room/create', { numRounds })
     .then(res => {
         if (res.status !== 200) throw Error(res.data.message);
+        else dispatch(setRoundCount(null));
     })
     .catch(err => dispatch(createRoomFailure(err.message)));
 };

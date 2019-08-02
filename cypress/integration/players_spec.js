@@ -2,7 +2,7 @@ describe('Players', () => {
     describe('on login', () => {
         it('your name appears in the players list', () => {
             cy.login('player1');
-            cy.createRoom();
+            cy.createRoom(3);
             cy.get('[data-cy="player-username"]').first().should('have.text', 'player1');
         });
     });
@@ -12,7 +12,7 @@ describe('Players', () => {
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => {
                 cy.login('player1');
-                cy.createRoom();
+                cy.createRoom(3);
                 return cy.get('[data-cy="room-title"]');
             })
             .then(($title) => {
@@ -30,7 +30,7 @@ describe('Players', () => {
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => {
                 cy.login('player1');
-                cy.createRoom();
+                cy.createRoom(3);
                 return cy.get('[data-cy="room-title"]')
             })
             .then(($title) => {
@@ -48,7 +48,7 @@ describe('Players', () => {
     describe('on another player log in', () => {
         it('their name is added to the players list', () => {
             cy.login('player1');
-            cy.createRoom();
+            cy.createRoom(3);
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => cy.get('[data-cy="room-title"]'))
             .then(($title) => {
@@ -65,7 +65,7 @@ describe('Players', () => {
     describe('on completing a round', () => {
         it('updates the scores', () => {
             cy.login('player1');
-            cy.createRoom();
+            cy.createRoom(3);
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => cy.get('[data-cy="room-title"]'))
             .then(($title) => {

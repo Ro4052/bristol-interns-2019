@@ -43,11 +43,12 @@ Cypress.Commands.add('logout', () => {
     cy.wait('@logout');
 });
 
-Cypress.Commands.add('createRoom', () => {
+Cypress.Commands.add('createRoom', numRounds => {
     cy.route({
         method: 'POST',
         url: '/api/room/create'
     }).as('createRoom');
+    cy.get('[data-cy="num-rounds-options"]').select(numRounds.toString());
     cy.get('[data-cy="create-room"]').click();
     cy.wait('@createRoom');
 });

@@ -9,6 +9,7 @@ const Room = require('../models/room');
 /* Create and join room */
 router.post('/create', auth, (req, res) => {
     const { user, roomId } = req.session;
+    const { numRounds } = req.body;
     try {
         const room = Room.getById(roomId);
         if (room) {
@@ -18,7 +19,7 @@ router.post('/create', auth, (req, res) => {
                 Room.removePlayer(room, user);
             }
         }
-        const newRoomId = Room.create(user);
+        const newRoomId = Room.create(numRounds);
         const newRoom = Room.getById(newRoomId);
         Room.addPlayer(newRoom, user);
         socket.joinRoom(newRoomId, user);
