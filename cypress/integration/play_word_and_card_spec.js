@@ -47,12 +47,9 @@ describe('Play word and card', () => {
             });
 
             describe('at the end of the round', () => {
-                beforeEach(() => {
-                    cy.get('[data-cy="round-number"]', { timeout: 10000 }).should('contain', '2');
-                });
-
                 it('draws you a new card', () => {
-                    cy.get('[data-cy="my-cards"] [data-cy="card"]', { timeout: 10000 }).should('have.length', 3);
+                    cy.get('[data-cy="round-number"]', { timeout: 10000 }).should('contain', '2');
+                    cy.get('[data-cy="my-cards"] [data-cy="card"]', { timeout: 10000 }).should('have.length', 5);
                 });
             });
         });  
