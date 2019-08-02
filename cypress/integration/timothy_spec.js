@@ -67,7 +67,7 @@ describe('Timothy', () => {
             });
         });
 
-        it("timothy doesn't have tear victory dance", () => {
+        it("timothy doesn't have tear", () => {
             cy.get('[data-cy="timothy-meaneye"]').then(($wrapper) => {
                 const classList = Array.from($wrapper[0].classList);
                 expect(classList.some(cls => cls.includes('mean'))).to.equal(false);
