@@ -23,9 +23,8 @@ describe('Play word and card', () => {
             });
             it("its class is updated to selected", () => {
                 cy.get('[data-cy="my-cards"]').find('[data-cy="card-wrapper"]').first().then(($wrapper) => {
-                    const selected = /selected/;
                     const classList = Array.from($wrapper[0].classList);
-                    expect(classList.some(cls => selected.test(cls))).to.equal(true);
+                    expect(classList.some(cls => cls.includes('selected'))).to.equal(true);
                 });
             });
         });
