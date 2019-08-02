@@ -6,7 +6,7 @@ describe('on selects a drop down option', () => {
     it('calls setRoundCount()', () => {
         const setRoundCount = jest.fn();
         const wrapper = shallow(<RoundCount setRoundCount={setRoundCount} />);
-        wrapper.find({ 'data-cy': 'numRounds-options' }).simulate('change', { preventDefault: () => {}, target: { value: 1 } });
+        wrapper.find({ 'data-cy': 'num-rounds-options' }).simulate('change', { preventDefault: () => {}, target: { value: 1 } });
         expect(setRoundCount).toHaveBeenCalled();
         setRoundCount.mockRestore();
     });

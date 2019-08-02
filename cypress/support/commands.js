@@ -48,7 +48,7 @@ Cypress.Commands.add('createRoom', numRounds => {
         method: 'POST',
         url: '/api/room/create'
     }).as('createRoom');
-    cy.get('[data-cy="numRounds-options"]').select(numRounds.toString());
+    cy.get('[data-cy="num-rounds-options"]').select(numRounds.toString());
     cy.get('[data-cy="create-room"]').click();
     cy.wait('@createRoom');
 });

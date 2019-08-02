@@ -25,7 +25,7 @@ describe('on render', () => {
                 <Lobby authenticateUser={jest.fn()} rooms={[]} createRoom={jest.fn()}  />
             </Provider>
         );
-        expect(wrapper.exists({ 'data-cy': 'numRounds-options' })).toEqual(true);
+        expect(wrapper.exists({ 'data-cy': 'num-rounds-options' })).toEqual(true);
     });
 
     it('renders the list of rooms', () => {
