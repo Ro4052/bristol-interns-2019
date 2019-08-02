@@ -65,20 +65,7 @@ describe('Whole game', () => {
             .then(() => cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`))
             .then(() => cy.request(`http://localhost:12346/joinRoom?roomId=0&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
             .then(() => cy.startGame())
-            // Round 1
-            .then(() => cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`))
-            .then(() => cy.get('[data-cy="play-word"]', { timeout: 10000 }))
-            // Round 2
-            .then(() => cy.playCardWord())
-            .then(() => cy.get('[data-cy="vote"]', { timeout: 10000 }))
-            .then(() => cy.get('[data-cy="played-cards"]').children().should('not.exist', { timeout: 10000 }))
-            // Round 3
-            .then(() => cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`))
-            .then(() => cy.get('[data-cy="game-over"]', { timeout: 10000 }))
-            // Round 4
-            .then(() => cy.playCardWord())
-            .then(() => cy.get('[data-cy="vote"]', { timeout: 10000 }))
-            .then(() => cy.get('[data-cy="played-cards"]').children().should('not.exist', { timeout: 10000 }))
+            cy.get('[data-cy="game-over"]', { timeout: 20000 });
             cy.get('[data-cy="drawers"]').should('exist');
             cy.get('[data-cy="winner"]').should('not.exist');
         });
