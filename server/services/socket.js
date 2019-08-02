@@ -25,9 +25,6 @@ exports.setupSocket = (server, session) => {
     });
 }
 
-// Set number of rounds
-exports.roundCount = (roomId, word) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("round count", word));
-
 // Emit the rooms
 const emitRooms = () => {
     const rooms = Room.getAll().map(room => ({

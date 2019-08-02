@@ -6,7 +6,7 @@ describe('Played cards', () => {
         beforeEach(() => {
             cy.login('unicorn');
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
-            .then(() => cy.createRoom())
+            .then(() => cy.createRoom(3))
             .then(() => cy.get('[data-cy="room-title"]'))
             .then(() => cy.request(`http://localhost:12346/joinRoom?roomId=0&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
             .then(() => cy.startGame())

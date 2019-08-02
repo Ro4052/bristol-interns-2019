@@ -25,7 +25,6 @@ router.post('/create', auth, (req, res) => {
         socket.joinRoom(newRoomId, user);
         socket.emitRooms();
         req.session.roomId = newRoomId;
-
         res.sendStatus(200);
     } catch (err) {
         console.log(err);

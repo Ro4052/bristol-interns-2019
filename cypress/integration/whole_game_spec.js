@@ -4,7 +4,7 @@ describe('Whole game', () => {
     describe('when a whole game has been played', () => {
         beforeEach(() => {
             cy.login('unicorn')
-            .then(() => cy.createRoom())
+            .then(() => cy.createRoom(3))
             .then(() => cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`))
             .then(() => cy.request(`http://localhost:12346/joinRoom?roomId=0&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
             .then(() => cy.startGame())
@@ -35,7 +35,7 @@ describe('Whole game', () => {
             });
     
             it('can create a new room', () => {
-                cy.createRoom();
+                cy.createRoom(3);
             });
     
             it('can join an existing room', () => {
@@ -57,10 +57,11 @@ describe('Whole game', () => {
             });
         });
     });
+
     describe.skip('when there is a draw', () => {
         it('displays the drawers', () => {
             cy.login('unicorn')
-            .then(() => cy.twoRounds())
+            .then(() => cy.createRoom(2))
             .then(() => cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`))
             .then(() => cy.request(`http://localhost:12346/joinRoom?roomId=0&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
             .then(() => cy.startGame())
