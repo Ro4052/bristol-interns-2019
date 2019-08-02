@@ -29,8 +29,8 @@ export class Lobby extends React.Component {
                 </div>
                 <div className={styles.rooms}>
                     <div className={styles.createRoom}>
-                        {!this.props.number ? <h1>Create room: </h1> : <Button cy="create-room" handleClick={() => this.props.createRoom(this.props.number)} text="Create Room" />}
-                        {!this.props.number && <RoundCount />}
+                        {!this.props.numRounds ? <h1>Create room: </h1> : <Button cy="create-room" handleClick={() => this.props.createRoom(this.props.numRounds)} text="Create Room" />}
+                        {!this.props.numRounds && <RoundCount />}
                     </div>
                     <ul className={styles.currentRooms} data-cy="current-rooms">
                         {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}
@@ -43,7 +43,7 @@ export class Lobby extends React.Component {
 
 const mapStateToProps = (state) => ({
     rooms: state.lobbyReducer.rooms,
-    number: state.roundCountReducer.numRounds,
+    numRounds: state.roundCountReducer.numRounds,
     status: state.dashboardReducer.status
 });
 
