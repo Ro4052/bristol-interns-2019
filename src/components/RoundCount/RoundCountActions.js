@@ -1,6 +1,6 @@
 import { types } from './RoundCountActionTypes';
 
-export const setRoundCount = number => ({
+export const setRoundCount = numRounds => ({
     type: types.SET_ROUND_COUNT,
-    number
+    numRounds
 });

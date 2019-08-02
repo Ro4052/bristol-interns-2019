@@ -24,8 +24,8 @@ export const leaveRoomFailure = error => ({
     error
 });
 
-export const createRoom = number => dispatch => {
-    axiosInstance.post('/api/room/create', { number })
+export const createRoom = numRounds => dispatch => {
+    axiosInstance.post('/api/room/create', { numRounds })
     .then(res => {
         if (res.status !== 200) throw Error(res.data.message);
         else dispatch(setRoundCount(null));

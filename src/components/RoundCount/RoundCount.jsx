@@ -9,14 +9,14 @@ export class RoundCount extends React.Component {
         return (
             <select input="How many rounds in your game?" className={styles.roundCountBox} data-cy="numRounds-options" onChange={(event) => this.props.setRoundCount(event.target.value)}>
                 <option defaultValue disabled>How many rounds in your game?</option>
-                {options.map((number, key) => <option key={key}>{number}</option>)}
+                {options.map((numRounds, key) => <option key={key}>{numRounds}</option>)}
             </select>
         );
     }
 }
 
 const mapDispatchToProps = dispatch => ({
-    setRoundCount: number => dispatch(setRoundCount(number))
+    setRoundCount: numRounds => dispatch(setRoundCount(numRounds))
 });
 
 export default connect(null, mapDispatchToProps)(RoundCount);

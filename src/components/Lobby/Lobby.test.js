@@ -65,7 +65,7 @@ describe('on chosen a number', () => {
         const createRoom = jest.fn();
         const wrapper = mount(
             <Provider store={emptyStore}>
-                <Lobby authenticateUser={jest.fn()} rooms={[]} createRoom={createRoom} number={1} />
+                <Lobby authenticateUser={jest.fn()} rooms={[]} createRoom={createRoom} numRounds={1} />
             </Provider>
         );
         expect(wrapper.exists({ 'data-cy': 'create-room' })).toEqual(true);
@@ -77,7 +77,7 @@ describe('on click the create room button', () => {
         const createRoom = jest.fn();
         const wrapper = mount(
             <Provider store={emptyStore}>
-                <Lobby authenticateUser={jest.fn()} rooms={[]} createRoom={createRoom} number={1} />
+                <Lobby authenticateUser={jest.fn()} rooms={[]} createRoom={createRoom} numRounds={1} />
             </Provider>
         );
         wrapper.find({ 'data-cy': 'create-room' }).simulate('click');

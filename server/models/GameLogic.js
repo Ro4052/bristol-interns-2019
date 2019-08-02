@@ -9,9 +9,9 @@ const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 2;
 exports.minPlayers = minPlayers;
 
 class GameLogic {
-    constructor(roomId, number) {
+    constructor(roomId, numRounds) {
         this.roomId = roomId;
-        this.rounds = number;
+        this.rounds = numRounds;
         this.status = statusTypes.NOT_STARTED;
         this.roundNum = 0;
         this.currentPlayer = null;

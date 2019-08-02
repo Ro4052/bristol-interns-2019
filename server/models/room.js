@@ -8,10 +8,10 @@ exports.getAll = () => rooms;
 
 exports.getById = roomId => rooms.find(room => room.roomId === roomId);
 
-exports.create = number => {
+exports.create = numRounds => {
     const roomId = latestRoomId;
     latestRoomId++;
-    const gameState = new GameLogic(roomId, number);
+    const gameState = new GameLogic(roomId, numRounds);
     rooms.push({ roomId, gameState });
     return roomId;
 };

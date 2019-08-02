@@ -43,12 +43,12 @@ export class Lobby extends React.Component {
 
 const mapStateToProps = (state) => ({
     rooms: state.lobbyReducer.rooms,
-    number: state.roundCountReducer.number,
+    number: state.roundCountReducer.numRounds,
     status: state.dashboardReducer.status
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    createRoom: number => dispatch(createRoom(number)),
+    createRoom: numRounds => dispatch(createRoom(numRounds)),
     authenticateUser: () => dispatch(authenticateUser())
 });
 
