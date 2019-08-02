@@ -38,9 +38,22 @@ describe('Play word and card', () => {
         });   
 
         describe('on send a word and a card', () => {
-            it('displays the word', () => {
-                cy.playCardWord();            
+            beforeEach(() => {
+                cy.playCardWord();   
+            });
+
+            it('displays the word', () => {     
                 cy.get('[data-cy="current-word"]').should('have.text', 'word');
+            });
+
+            describe('at the end of the round', () => {
+                beforeEach(() => {
+                    cy.get('[data-cy="round-number"]', { timeout: 10000 }).should('contain', '2');
+                });
+
+                it('draws you a new card', () => {
+                    cy.get('[data-cy="my-cards"] [data-cy="card"]', { timeout: 10000 }).should('have.length', 3);
+                });
             });
         });  
     });

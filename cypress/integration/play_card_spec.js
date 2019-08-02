@@ -17,5 +17,15 @@ describe('Play card', () => {
         it('is prompted to play a card', () => {
             cy.get('[data-cy="play-card"]').should('exist')
         });
+
+        describe('at the end of the round', () => {
+            beforeEach(() => {
+                cy.get('[data-cy="round-number"]', { timeout: 10000 }).should('contain', '2');
+            });
+
+            it('draws you a new card', () => {
+                cy.get('[data-cy="my-cards"] [data-cy="card"]', { timeout: 10000 }).should('have.length', 3);
+            });
+        });
     });
 });
