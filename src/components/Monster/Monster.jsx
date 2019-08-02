@@ -6,7 +6,7 @@ import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 
 export function Monster(props) {
-    const winner = props.winner && props.winner.username === props.username;
+    const winner = (props.winner && props.winner.username === props.username) || props.drawers.some(drawer => drawer.username === props.username);
     let bodyClass = styles.body;
     if (props.error) bodyClass = styles.disappointedBody;
     if (winner) bodyClass = styles.victoryBody;
@@ -36,7 +36,8 @@ export function Monster(props) {
 const mapStateToProps = (state) => ({
     winner: state.gameOverReducer.winner,
     username: state.authReducer.username,
-    error: state.playWordReducer.error
+    error: state.playWordReducer.error,
+    drawers: state.gameOverReducer.drawers
 });
 
 export default connect(mapStateToProps)(Monster);
