@@ -79,7 +79,7 @@ describe('Lobby', () => {
             });
 
             describe('on clicking the create room button', () => {
-                beforeEach(() => cy.createRoom());
+                beforeEach(() => cy.createRoom(3));
 
                 it('creates the room', () => {
                     cy.get('[data-cy="current-rooms"]').children().should('have.length', 2);
