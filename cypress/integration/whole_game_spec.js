@@ -1,6 +1,19 @@
 const url = Cypress.config().baseUrl;
 
 describe('Whole game', () => {
+    describe('when there is a draw', () => {
+        it('displays the drawers', () => {
+            cy.login('unicorn')
+            .then(() => cy.createRoom(4))
+            .then(() => cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`))
+            .then(() => cy.request(`http://localhost:12346/joinRoom?roomId=0&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
+            .then(() => cy.startGame())
+            cy.get('[data-cy="game-over"]', { timeout: 20000 });
+            cy.get('[data-cy="drawers"]').should('exist');
+            cy.get('[data-cy="winner"]').should('not.exist');
+        });
+    });
+    
     describe('when a whole game has been played', () => {
         beforeEach(() => {
             cy.login('unicorn')
@@ -55,19 +68,6 @@ describe('Whole game', () => {
                     cy.startGame();
                 });
             });
-        });
-    });
-
-    describe('when there is a draw', () => {
-        it('displays the drawers', () => {
-            cy.login('unicorn')
-            .then(() => cy.createRoom(4))
-            .then(() => cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`))
-            .then(() => cy.request(`http://localhost:12346/joinRoom?roomId=0&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
-            .then(() => cy.startGame())
-            cy.get('[data-cy="game-over"]', { timeout: 20000 });
-            cy.get('[data-cy="drawers"]').should('exist');
-            cy.get('[data-cy="winner"]').should('not.exist');
         });
     });
 });
