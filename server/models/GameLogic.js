@@ -152,9 +152,8 @@ class GameLogic {
         return this.players.reduce((accumulator, current) => {
             if (current.score === topscore) {
                 return [...accumulator, current];
-            } else {
-                return accumulator;
             }
+            return accumulator;
         },
         []);
     };
