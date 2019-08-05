@@ -12,7 +12,6 @@ export class PlayerInteractions extends React.Component {
     render() {
         return (
             <div className={cx(styles.playerInteractions, {votePrompt: this.props.voteCard})}>
-                {this.props.playWord && !this.props.word && <Prompt cy="play-word" text="Type in a word" />}
                 {this.props.currentWord !== '' && <h2 className={styles.word} id="message">Word: <span data-cy='current-word'>"{this.props.currentWord}"</span></h2>}
                 {this.props.playCard && !this.props.playedCardId && <Prompt cy="play-card" text="Pick a card" />}
                 {this.props.voteCard && <Prompt cy="vote-card" text="Vote for a card" />}

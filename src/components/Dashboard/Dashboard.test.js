@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import { Dashboard } from './Dashboard';
 import GameOver from '../GameOver/GameOver';
 import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
-
+import PlayWord from '../PlayWord/PlayWord';
 const authenticateUserMock = jest.fn();
 const drawers = [];
 
@@ -52,9 +52,9 @@ describe('on play card', () => {
 });
 
 describe('on play word', () => {
-    it('displays player interaction', () => {
+    it('displays play word interaction', () => {
         const wrapper = shallow(<Dashboard playWord={true} authenticateUser={authenticateUserMock} drawers={drawers}/>);
-        expect(wrapper.exists(PlayerInteractions)).toEqual(true);
+        expect(wrapper.exists(PlayWord)).toEqual(true);
     });
 });
 
