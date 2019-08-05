@@ -67,7 +67,7 @@ describe('on vote card', () => {
 
 describe('on end of turn', () => {
     it('displays player interaction', () => {
-        const wrapper = shallow(<Dashboard finishedRound={false} username={'username'} currentPlayer={{ username: 'username' }} status={'WAITING_FOR_CURRENT_PLAYER'} playedCardId={1} authenticateUser={authenticateUserMock} drawers={drawers}/>);
+        const wrapper = shallow(<Dashboard finishedRound={false} username={'username'} currentPlayer={{ username: 'username' }} word={true} playedCardId={1} authenticateUser={authenticateUserMock} drawers={drawers}/>);
         expect(wrapper.exists(PlayerInteractions)).toEqual(true);
     });
 });

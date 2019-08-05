@@ -20,7 +20,7 @@ export class Dashboard extends React.Component {
 
     render() {
         const showPIright = this.props.voteCard || this.props.word || (!this.props.playWord && this.props.playCard);
-        const showPImiddle = this.props.playWord; 
+        const showPImiddle = this.props.playWord && !(this.props.winner || this.props.drawers.length > 1);
         return (
             <div className={styles.dashboard}>
                 <div className={styles.header}>
@@ -40,7 +40,7 @@ export class Dashboard extends React.Component {
                     </div>
                     <div className={styles.middle}>
                         <div className={styles.interactions}>
-                            {showPImiddle && !(this.props.winner || this.props.drawers.length > 1) && <PlayerInteractions />}
+                            {showPImiddle && <PlayerInteractions />}
                             {(this.props.winner || this.props.drawers.length > 1) && <GameOver />}
                             {this.props.status !== "GAME_OVER" && <PlayedCards />}
                         </div>
