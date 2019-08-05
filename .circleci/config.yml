@@ -41,7 +41,9 @@ jobs:
           name: Run E2E Tests
           command: |
             mkdir -p cypress/{videos,screenshots}
-            npx wait-on http://localhost:12345 && node run-cypress-test.js -r tap -- $(circleci tests split <(circleci tests glob 'cypress/integration/*_spec.js'))
+            npx wait-on http://localhost:12345 && node run-cypress-test.js -r tap -- $(circleci tests split --split-by=timings <(circleci tests glob 'cypress/integration/*_spec.js'))
+      - store_test_results:
+          path: results
       - store_artifacts:
           path: cypress/videos
       - store_artifacts:
