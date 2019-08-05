@@ -6,8 +6,6 @@ import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 
 export function Monster(props) {
-    console.log(props.drawers)
-    console.log(props.winner)
     const winner = (props.winner && props.winner.username === props.username) ||(props.drawers && props.drawers.some(drawer => drawer.username === props.username));
     let bodyClass = styles.body;
     if (props.error) bodyClass = styles.disappointedBody;
