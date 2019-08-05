@@ -42,7 +42,7 @@ describe('Play word and card', () => {
             });
 
             it('displays the word', () => {     
-                cy.get('[data-cy="current-word"]').should('have.text', 'word');
+                cy.get('[data-cy="current-word"]').should('have.text', '"word"');
             });
 
             describe('at the end of the round', () => {

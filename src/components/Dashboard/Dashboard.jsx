@@ -19,11 +19,8 @@ export class Dashboard extends React.Component {
     }
 
     render() {
-        const showPlayerInteractions = (this.props.playCard || this.props.playWord || this.props.voteCard)
-                                    || ((this.props.currentPlayer) && 
-                                        (!this.props.finishedRound && 
-                                        this.props.username === this.props.currentPlayer.username && 
-                                        this.props.playedCardId));
+        const showPIright = this.props.voteCard || this.props.word || (!this.props.playWord && this.props.playCard);
+        const showPImiddle = this.props.playWord; 
         return (
             <div className={styles.dashboard}>
                 <div className={styles.header}>
@@ -43,14 +40,14 @@ export class Dashboard extends React.Component {
                     </div>
                     <div className={styles.middle}>
                         <div className={styles.interactions}>
-                            {showPlayerInteractions && (this.props.playWord || this.props.playCard || (this.props.word && this.props.playedCardId && !this.props.finishedRound)) && !(this.props.winner || this.props.drawers.length > 1) && <PlayerInteractions />}
+                            {showPImiddle && !(this.props.winner || this.props.drawers.length > 1) && <PlayerInteractions />}
                             {(this.props.winner || this.props.drawers.length > 1) && <GameOver />}
                             {this.props.status !== "GAME_OVER" && <PlayedCards />}
                         </div>
                         {this.props.status !== "NOT_STARTED" && this.props.status !== "GAME_OVER" && <MyCards />}
                     </div>
                     <div className={styles.side}>
-                        {showPlayerInteractions && !this.props.playCard && !this.props.playWord && !(this.props.word && this.props.playedCardId && !this.props.finishedRound) && <PlayerInteractions />}
+                        {showPIright && <PlayerInteractions />}
                         <Monster />
                     </div>
                 </div>
