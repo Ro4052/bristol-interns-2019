@@ -6,7 +6,7 @@ const { statusTypes } = require('./statusTypes');
 const promptDuration = process.env.NODE_ENV === 'testing' ? 2000 : 30000;
 const storytellerDuration = process.env.NODE_ENV === 'testing' ? 2000 : 60000;
 const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 2000 : 5000;
-const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 3;
+const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 2;
 exports.minPlayers = minPlayers;
 
 class GameLogic {

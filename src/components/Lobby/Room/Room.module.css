@@ -14,3 +14,11 @@
 .room > h2 {
     margin-top: 0;
 }
+
+.room > ul {
+    font-family: var(--secondary-font);
+}
+
+.waiting {
+    margin-top: 1em;
+}

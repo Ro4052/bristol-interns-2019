@@ -7,7 +7,7 @@ import { joinRoom, leaveRoom } from '../LobbyActions';
 
 export class Room extends React.Component {
     render() {
-        const waiting = <span data-cy="players-needed">Waiting for {this.props.room.minPlayers - this.props.room.players.length} more players</span>;
+        const waiting = <span className = {styles.waiting} data-cy="players-needed">Waiting for {this.props.room.minPlayers - this.props.room.players.length} more players</span>;
         const inRoom = this.props.room.players.some(player => player.username === this.props.username);
         return (
             <li className={styles.room} key={this.props.room.roomId} data-cy="room">

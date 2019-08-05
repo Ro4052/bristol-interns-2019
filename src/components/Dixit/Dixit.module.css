@@ -1,5 +1,6 @@
 .dixit {
     text-align: center;
+    margin-bottom: 3em;
 }
 
 .letter {
@@ -11,7 +12,9 @@
     transform-style: preserve-3d;
     perspective: 400;
     z-index: 1;
-    font-family: 'Dilana';
+    font-family: var(--main-font);
+    letter-spacing: 0.15em;
+    font-stretch: wider;
 }
 
 .letter:before, .letter:after {

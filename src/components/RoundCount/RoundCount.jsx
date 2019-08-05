@@ -8,7 +8,7 @@ export class RoundCount extends React.Component {
         const options = [3, 4, 5, 6];
         return (
             <select input="How many rounds in your game?" className={styles.roundCountBox} data-cy="num-rounds-options" onChange={(event) => this.props.setRoundCount(event.target.value)}>
-                <option defaultValue disabled>How many rounds in your game?</option>
+                <option>How many rounds in your game?</option>
                 {options.map((numRounds, key) => <option key={key}>{numRounds}</option>)}
             </select>
         );
