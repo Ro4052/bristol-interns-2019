@@ -12,3 +12,9 @@ export const endGame = () => dispatch => {
     axiosInstance.get('/api/end')
     .catch(err => console.log(err));
 };
+
+export const setDrawers = drawers => ({
+    type: types.SET_DRAWERS,
+    drawers
+});
+

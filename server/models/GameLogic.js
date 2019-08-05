@@ -139,9 +139,24 @@ class GameLogic {
         } else {
             this.setStatus(statusTypes.GAME_OVER);
             const winner = this.players.reduce((prev, current) => (prev.score > current.score) ? prev : current);
-            socket.emitWinner(this.roomId, { username: winner.username });
+            const drawers = this.calculateDrawers(winner.score);
+            if (drawers.length > 1) {
+                socket.emitDrawers(this.roomId, drawers);
+            } else {
+                socket.emitWinner(this.roomId, { username: winner.username });
+            }
         }
     }
+
+    calculateDrawers(topscore) {
+        return this.players.reduce((accumulator, current) => {
+            if (current.score === topscore) {
+                return [...accumulator, current];
+            }
+            return accumulator;
+        },
+        []);
+    };
 
     /* Clean up stored data */
     clearRoundData() {

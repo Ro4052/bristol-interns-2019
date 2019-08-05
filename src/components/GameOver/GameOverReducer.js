@@ -2,6 +2,7 @@ import  { types } from './GameOverActionTypes';
 
 export const initialState = {
     winner: null, /* { username } */
+    drawers: []
 };
 
 const gameOverReducer = (state = initialState, action) => {
@@ -10,6 +11,8 @@ const gameOverReducer = (state = initialState, action) => {
             return {...state, winner: action.winner };
         default:
             return state;
+        case types.SET_DRAWERS:
+            return {...state, drawers: action.drawers};
     }
 };
 
