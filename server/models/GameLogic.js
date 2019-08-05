@@ -85,7 +85,7 @@ class GameLogic {
         } else if (this.players.some(player => player.username === username)) {
             throw Error("You have already joined this game");
         } else {
-            const cards = cardsManager.assign(this.players, 5);
+            const cards = cardsManager.assign(this.players, 4);
             const player = { username, cards, score: 0, finishedTurn: false };
             this.players.push(player);
             socket.emitPlayers(this.roomId, this.getPlayers());

@@ -1,5 +1,5 @@
 describe('Played cards', () => {
-    const cardsNumber = 5;
+    const cardsNumber = 4;
     const numberOfPlayers = 2;
 
     describe("when the storyteller has played", () => {
@@ -19,7 +19,6 @@ describe('Played cards', () => {
 
         it('all the played cards are displayed', () => {
             cy.playCard();
-            cy.get('[data-cy="my-cards"]').children().its('length').should('eq', cardsNumber - 1);
             cy.get('[data-cy="played-cards"]').children().its('length').should('eq', numberOfPlayers);
         });
     });

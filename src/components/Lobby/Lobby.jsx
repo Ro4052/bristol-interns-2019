@@ -29,8 +29,10 @@ export class Lobby extends React.Component {
                 </div>
                 <div className={styles.rooms}>
                     <div className={styles.createRoom}>
-                        {!this.props.numRounds ? <h1>Create room: </h1> : <Button cy="create-room" handleClick={() => this.props.createRoom(this.props.numRounds)} text="Create Room" />}
-                        {!this.props.numRounds && <RoundCount />}
+                        <h1>Create room: </h1>
+                        <RoundCount />
+                        {this.props.numRounds && <Button cy="create-room" handleClick={() => this.props.createRoom(this.props.numRounds)} text="Create Room" />}
+                        
                     </div>
                     <ul className={styles.currentRooms} data-cy="current-rooms">
                         {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}
