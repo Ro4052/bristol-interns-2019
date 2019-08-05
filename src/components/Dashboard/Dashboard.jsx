@@ -11,6 +11,7 @@ import Timer from '../Timer/Timer';
 import { setVoteCardTimer, setPlayCardTimer, setStorytellerTimer } from '../Timer/TimerActions';
 import Dixit from '../Dixit/Dixit';
 import { authenticateUser } from '../Login/LoginActions';
+import PlayWord from '../PlayWord/PlayWord';
 
 export class Dashboard extends React.Component {
 
@@ -19,8 +20,8 @@ export class Dashboard extends React.Component {
     }
 
     render() {
-        const showPIright = this.props.voteCard || this.props.word || (!this.props.playWord && this.props.playCard);
-        const showPImiddle = this.props.playWord && !(this.props.winner || this.props.drawers.length > 1);
+        const showPIright = (this.props.voteCard || this.props.word || (!this.props.playWord && this.props.playCard)) && !(this.props.winner || this.props.drawers.length > 1);
+        const showPImiddle = this.props.playWord && !this.props.word && !(this.props.winner || this.props.drawers.length > 1);
         return (
             <div className={styles.dashboard}>
                 <div className={styles.header}>
@@ -39,15 +40,17 @@ export class Dashboard extends React.Component {
                         </div>
                     </div>
                     <div className={styles.middle}>
-                        <div className={styles.interactions}>
-                            {showPImiddle && <PlayerInteractions />}
+                        <div className={styles.playWord}>
+                            {showPImiddle && <PlayWord />}
                             {(this.props.winner || this.props.drawers.length > 1) && <GameOver />}
                             {this.props.status !== "GAME_OVER" && <PlayedCards />}
                         </div>
                         {this.props.status !== "NOT_STARTED" && this.props.status !== "GAME_OVER" && <MyCards />}
                     </div>
                     <div className={styles.side}>
-                        {showPIright && <PlayerInteractions />}
+                        <div className={styles.interactions}>
+                            {showPIright && <PlayerInteractions />}
+                        </div>
                         <Monster />
                     </div>
                 </div>
