@@ -38,19 +38,19 @@ export class Dashboard extends React.Component {
                         {(this.props.status === 'WAITING_FOR_VOTES' && this.props.voteCardDuration > 0) && <Timer cy="vote-timer" setDuration={this.props.setVoteCardTimer} duration={this.props.voteCardDuration} />}
                         <div className={styles.gameInfo}>
                             {this.props.status !== "NOT_STARTED" && <h2>Round: <span id="round-number" data-cy="round-number">{this.props.roundNum}</span></h2>}
-                            {this.props.currentWord !== '' && <h2 id="message">Word: <span data-cy='current-word'>{this.props.currentWord}</span></h2>}
                             <Players />
                         </div>
                     </div>
                     <div className={styles.middle}>
                         <div className={styles.interactions}>
-                            {showPlayerInteractions && <PlayerInteractions />}
+                            {showPlayerInteractions && (this.props.playWord || this.props.playCard || (this.props.word && this.props.playedCardId && !this.props.finishedRound)) && !(this.props.winner || this.props.drawers.length > 1) && <PlayerInteractions />}
                             {(this.props.winner || this.props.drawers.length > 1) && <GameOver />}
                             {this.props.status !== "GAME_OVER" && <PlayedCards />}
                         </div>
                         {this.props.status !== "NOT_STARTED" && this.props.status !== "GAME_OVER" && <MyCards />}
                     </div>
                     <div className={styles.side}>
+                        {showPlayerInteractions && !this.props.playCard && !this.props.playWord && !(this.props.word && this.props.playedCardId && !this.props.finishedRound) && <PlayerInteractions />}
                         <Monster />
                     </div>
                 </div>
