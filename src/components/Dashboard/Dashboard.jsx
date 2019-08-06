@@ -20,7 +20,7 @@ export class Dashboard extends React.Component {
     }
 
     render() {
-        const showPlayerInteractions = this.props.voteCard || this.props.word || this.props.playCard && !(this.props.winner || this.props.drawers.length > 1);
+        const showPlayerInteractions = (this.props.voteCard || this.props.word || this.props.playCard) && !(this.props.winner || this.props.drawers.length > 1);
         const showPlayWord = this.props.playWord && !this.props.word && !this.props.playCard && !(this.props.winner || this.props.drawers.length > 1);
         return (
             <div className={styles.dashboard}>
