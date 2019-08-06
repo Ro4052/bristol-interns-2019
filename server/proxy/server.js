@@ -86,14 +86,14 @@ app.get('/startGame', (req, res) => {
 });
 
 app.get('/createRoom', (req, res) => {
-    const url = req.query.url;
+    const { url, rounds } = req.query;
     const axiosInstance = axios.create({
         baseURL: url,
         timeout: 500,
         jar: cookieJar,
         withCredentials: true
     });
-    axiosInstance.post('api/room/create', { numRounds: 3 })
+    axiosInstance.post('api/room/create', { numRounds: rounds })
     .then(() => res.sendStatus(200))
     .catch((err) => {
         console.log(err);
