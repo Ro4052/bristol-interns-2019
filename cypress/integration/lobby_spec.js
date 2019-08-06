@@ -58,7 +58,7 @@ describe('Lobby', () => {
     describe('on logging in when a room already exists', () => {
         beforeEach(() => {
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
-            .then(() => cy.request(`http://localhost:12346/createRoom?url=${encodeURIComponent(url)}`))
+            .then(() => cy.request(`http://localhost:12346/createRoom?rounds=3&url=${encodeURIComponent(url)}`))
             .then(() => cy.login('unicorn'));
         });
 
