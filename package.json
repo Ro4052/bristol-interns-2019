@@ -33,7 +33,7 @@
     "build": "react-scripts build",
     "test": "npm run test:client && npm run test:e2e",
     "test:client": "react-scripts test --coverage --watchAll=false",
-    "test:e2e": "concurrently --success first --kill-others \"npm run start:testserver\" \"node run-cypress-test.js -r tap\"",
+    "test:e2e": "concurrently --success first --kill-others \"npm run start:testserver\" \"cypress run --record false\"",
     "test:e2eUI": "concurrently --success first --kill-others \"npm run start:testserver\" \"cypress open\"",
     "cy:open": "cypress open",
     "eject": "react-scripts eject"
