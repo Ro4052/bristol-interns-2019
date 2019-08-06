@@ -11,6 +11,7 @@ import Timer from '../Timer/Timer';
 import { setVoteCardTimer, setPlayCardTimer, setStorytellerTimer } from '../Timer/TimerActions';
 import Dixit from '../Dixit/Dixit';
 import { authenticateUser } from '../Login/LoginActions';
+import PlayWord from '../PlayWord/PlayWord';
 
 export class Dashboard extends React.Component {
 
@@ -19,11 +20,8 @@ export class Dashboard extends React.Component {
     }
 
     render() {
-        const showPlayerInteractions = (this.props.playCard || this.props.playWord || this.props.voteCard)
-                                    || ((this.props.currentPlayer) && 
-                                        (!this.props.finishedRound && 
-                                        this.props.username === this.props.currentPlayer.username && 
-                                        this.props.playedCardId));
+        const showPlayerInteractions = (this.props.voteCard || this.props.word || (!this.props.playWord && this.props.playCard)) && !(this.props.winner || this.props.drawers.length > 1);
+        const showPlayWord = this.props.playWord && !this.props.word && !(this.props.winner || this.props.drawers.length > 1);
         return (
             <div className={styles.dashboard}>
                 <div className={styles.header}>
@@ -38,19 +36,21 @@ export class Dashboard extends React.Component {
                         {(this.props.status === 'WAITING_FOR_VOTES' && this.props.voteCardDuration > 0) && <Timer cy="vote-timer" setDuration={this.props.setVoteCardTimer} duration={this.props.voteCardDuration} />}
                         <div className={styles.gameInfo}>
                             {this.props.status !== "NOT_STARTED" && <h2>Round: <span id="round-number" data-cy="round-number">{this.props.roundNum}</span></h2>}
-                            {this.props.currentWord !== '' && <h2 id="message">Word: <span data-cy='current-word'>{this.props.currentWord}</span></h2>}
                             <Players />
                         </div>
                     </div>
                     <div className={styles.middle}>
-                        <div className={styles.interactions}>
-                            {showPlayerInteractions && <PlayerInteractions />}
+                        <div className={styles.playWord}>
+                            {showPlayWord && <PlayWord />}
                             {(this.props.winner || this.props.drawers.length > 1) && <GameOver />}
                             {this.props.status !== "GAME_OVER" && <PlayedCards />}
                         </div>
                         {this.props.status !== "NOT_STARTED" && this.props.status !== "GAME_OVER" && <MyCards />}
                     </div>
                     <div className={styles.side}>
+                        <div className={styles.interactions}>
+                            {showPlayerInteractions && <PlayerInteractions />}
+                        </div>
                         <Monster />
                     </div>
                 </div>

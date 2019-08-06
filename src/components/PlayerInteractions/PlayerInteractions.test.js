@@ -2,18 +2,6 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { PlayerInteractions } from './PlayerInteractions';
 import Prompt from '../shared/Prompt/Prompt';
-import PlayWord from '../PlayWord/PlayWord';
-
-describe('on play word flag', () => {
-    it('displays the play word prompt', () => {
-        const wrapper = shallow(<PlayerInteractions playWord={true} />);
-        expect(wrapper.find(Prompt).prop('cy')).toEqual('play-word');
-    });
-    it('displays the play word input', () => {
-        const wrapper = shallow(<PlayerInteractions playWord={true} />);
-        expect(wrapper.exists(PlayWord)).toEqual(true);
-    });
-});
 
 describe('on play card flag', () => {
     it('displays the play card prompt', () => {

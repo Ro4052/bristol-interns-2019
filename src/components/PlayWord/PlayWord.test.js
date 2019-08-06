@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { PlayWord } from './PlayWord';
 import Button from '../shared/Button/Button';
+import Prompt from '../shared/Prompt/Prompt';
 
 describe('on initial render', () => {
     it('the input is empty', () => {
@@ -43,7 +44,7 @@ describe('on button click', () => {
         wrapper.find({ 'data-cy': 'send-word' }).simulate('click');
         expect(validateWord).toHaveBeenCalled();
         validateWord.mockRestore();
-    })
+    });
 });
 
 describe('on receive 400 from server due to invalid word entered', () => {
@@ -57,4 +58,11 @@ describe('on receive 200 form server due to valid word entered', () => {
         const wrapper = shallow(<PlayWord error={""} validateWord={() => {}}/>);
         expect(wrapper.find({'data-cy' :"send-error"}).text()).toEqual('');
     });
-})
+});
+
+describe('on play card flag', () => {
+    it('displays the play word prompt', () => {
+        const wrapper = shallow(<PlayWord playWord={true} />);
+        expect(wrapper.find(Prompt).prop('cy')).toEqual('play-word');
+    });
+});
