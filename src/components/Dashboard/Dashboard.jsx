@@ -20,8 +20,8 @@ export class Dashboard extends React.Component {
     }
 
     render() {
-        const showPIright = (this.props.voteCard || this.props.word || (!this.props.playWord && this.props.playCard)) && !(this.props.winner || this.props.drawers.length > 1);
-        const showPImiddle = this.props.playWord && !this.props.word && !(this.props.winner || this.props.drawers.length > 1);
+        const showPlayerInteractions = (this.props.voteCard || this.props.word || (!this.props.playWord && this.props.playCard)) && !(this.props.winner || this.props.drawers.length > 1);
+        const showPlayWord = this.props.playWord && !this.props.word && !(this.props.winner || this.props.drawers.length > 1);
         return (
             <div className={styles.dashboard}>
                 <div className={styles.header}>
@@ -41,7 +41,7 @@ export class Dashboard extends React.Component {
                     </div>
                     <div className={styles.middle}>
                         <div className={styles.playWord}>
-                            {showPImiddle && <PlayWord />}
+                            {showPlayWord && <PlayWord />}
                             {(this.props.winner || this.props.drawers.length > 1) && <GameOver />}
                             {this.props.status !== "GAME_OVER" && <PlayedCards />}
                         </div>
@@ -49,7 +49,7 @@ export class Dashboard extends React.Component {
                     </div>
                     <div className={styles.side}>
                         <div className={styles.interactions}>
-                            {showPIright && <PlayerInteractions />}
+                            {showPlayerInteractions && <PlayerInteractions />}
                         </div>
                         <Monster />
                     </div>
