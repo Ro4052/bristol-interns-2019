@@ -91,11 +91,6 @@ const connectSocket = () => {
         dispatch(setVoteCardTimer(timeoutDuration));
     });
 
-    socket.on("all votes", msg => {
-        dispatch(setAllVotes(msg));
-        dispatch(setVoteCard(false));
-    });
-
     socket.on("winner", msg => {
         dispatch(setWinner(msg));
         dispatch(setPlayCard(false));

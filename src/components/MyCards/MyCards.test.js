@@ -8,6 +8,9 @@ import configureStore from 'redux-mock-store';
 const initialState = {
     myCardsReducer: {
         playedCardId: 2
+    },
+    dashboardReducer: {
+        status: ""
     }
 };
 const middlewares = [];

@@ -39,7 +39,7 @@ class GameLogic {
     /* Get current state of the game */
     getState(username) {
         return {
-            playedCards: (this.status === statusTypes.WAITING_FOR_VOTES || this.status === statusTypes.DISPLAY_ALL_VOTES) ? this.getPlayedCards() : [],
+            playedCards: (this.status === statusTypes.WAITING_FOR_VOTES || this.status === statusTypes.DISPLAY_ALL_VOTES) ? this.getPlayedCards() : this.getHiddenPlayedCards(),
             playCard: (!this.hasPlayedCard(username) && this.currentPlayer.username === username && this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER)
                     || (!this.hasPlayedCard(username) && this.status === statusTypes.WAITING_FOR_OTHER_PLAYERS),
             playWord: this.currentPlayer.username === username && !this.currentWord && this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER,
