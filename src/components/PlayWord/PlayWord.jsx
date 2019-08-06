@@ -27,7 +27,7 @@ export class PlayWord extends React.Component {
     render() {
         return (
             <div className={styles.sendWordBox}>
-                {this.props.playWord && !this.props.word && <Prompt cy="play-word" text="Type in a word" />}
+                <Prompt cy="play-word" text="Type in your word" />
                 <input className={styles.entryBox} onChange={this.handleChange} value={this.state.currentValue} placeholder="Type in your word" data-cy='type-word' />
                 <span className={styles.invalidWord} data-cy= 'send-error'>{this.props.error}</span>
                 <Button cy="send-word" handleClick={this.sendMessage} text="Send word" />

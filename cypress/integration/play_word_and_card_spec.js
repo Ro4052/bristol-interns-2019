@@ -14,7 +14,6 @@ describe('Play word and card', () => {
 
         it('prompts user to play a word and a card', () => {
             cy.get('[data-cy="play-word"]').should('exist');
-            cy.get('[data-cy="play-card"]').should('exist');
         });
 
         describe('player clicks on a card', () => {
