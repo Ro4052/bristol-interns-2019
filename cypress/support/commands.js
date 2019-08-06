@@ -29,7 +29,7 @@ Cypress.Commands.add('login', username => {
         method: 'POST',
         url: '/auth/login'
     }).as('login');
-    cy.get('input').type(username)
+    cy.get('[data-cy="username"]').type(username)
     .then(() => cy.get('[data-cy="login"]').click());
     cy.wait('@login');
 });
@@ -99,9 +99,9 @@ Cypress.Commands.add('playCardWord', () => {
         method: 'POST',
         url: '/api/play-card-word'
     }).as('playCardWord');
+    cy.get('[data-cy="my-cards"] [data-cy="card"]').first().click();
     cy.get('[data-cy="type-word"]').type('word');
     cy.get('[data-cy="send-word"]').click();
-    cy.get('[data-cy="my-cards"] [data-cy="card"]').first().click();
     cy.get('[data-cy="end-turn"]').click();
     cy.wait('@playCardWord');
 });
@@ -135,6 +135,7 @@ Cypress.Commands.add('sendInvalidWord', () => {
         method: 'POST',
         url: '/api/valid-word'
     }).as('validWord');
+    cy.get('[data-cy="my-cards"] [data-cy="card"]').first().click();
     cy.get('[data-cy="type-word"]').type('fuck');
     cy.get('[data-cy="send-word"]').click();
     cy.wait('@validWord');

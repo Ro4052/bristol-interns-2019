@@ -5,20 +5,17 @@ describe('Play word and card', () => {
         beforeEach(() => {
             cy.login('unicorn');
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
-            .then(() => cy.request(`http://localhost:12346/createRoom?url=${encodeURIComponent(Cypress.config().baseUrl)}`))
+            .then(() => cy.request(`http://localhost:12346/createRoom?rounds=3&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
             .then(() => {
                 cy.joinRoom();    
                 cy.startGame();
             });
         });
 
-        it('prompts user to play a word and a card', () => {
-            cy.get('[data-cy="play-word"]').should('exist');
-        });
-
         describe('player clicks on a card', () => {
             beforeEach(() => {
                 cy.get('[data-cy="my-cards"]').find('[data-cy="card"]').first().click();
+                cy.get('[data-cy="play-word"]').should('exist');
             });
             it("its class is updated to selected", () => {
                 cy.get('[data-cy="my-cards"]').find('[data-cy="card-wrapper"]').first().then(($wrapper) => {
