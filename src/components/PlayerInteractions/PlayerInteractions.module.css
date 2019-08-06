@@ -8,3 +8,8 @@
     margin: 2em;
     border: 3px solid black;
 }
+
+.word {
+    font-family: var(--secondary-font);
+    font-size: 2em;
+}

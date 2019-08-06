@@ -12,8 +12,8 @@ export class GameOver extends React.Component {
                 (this.props.drawers.length>1)
                 ? <h2 data-cy='drawers'>Draw between {this.props.drawers.map((player, key) => <span key={player.username}>{player.username}{key < this.props.drawers.length - 1 ? ' and' : ''} </span>)}</h2>
                 : (this.props.username === this.props.winner.username) 
-                    ? <h2>You win!</h2>
-                    : <h2>You lose! <br/> Winner is: <span data-cy='winner'>{this.props.winner.username}</span></h2>
+                    ? <h2>You win</h2>
+                    : <h2>You lose<br/> Winner is <span data-cy='winner'>{this.props.winner.username}</span></h2>
                 }
                 <Button cy="new-game" handleClick={this.props.endGame} text="Back to Lobby" />
             </div>

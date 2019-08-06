@@ -12,14 +12,10 @@ describe('Play word and card', () => {
             });
         });
 
-        it('prompts user to play a word and a card', () => {
-            cy.get('[data-cy="play-word"]').should('exist');
-            cy.get('[data-cy="play-card"]').should('exist');
-        });
-
         describe('player clicks on a card', () => {
             beforeEach(() => {
                 cy.get('[data-cy="my-cards"]').find('[data-cy="card"]').first().click();
+                cy.get('[data-cy="play-word"]').should('exist');
             });
             it("its class is updated to selected", () => {
                 cy.get('[data-cy="my-cards"]').find('[data-cy="card-wrapper"]').first().then(($wrapper) => {
@@ -42,7 +38,7 @@ describe('Play word and card', () => {
             });
 
             it('displays the word', () => {     
-                cy.get('[data-cy="current-word"]').should('have.text', 'word');
+                cy.get('[data-cy="current-word"]').should('have.text', '"word"');
             });
 
             describe('at the end of the round', () => {
