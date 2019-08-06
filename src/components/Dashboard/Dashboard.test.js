@@ -53,14 +53,14 @@ describe('on play card', () => {
 
 describe('on play word', () => {
     it('displays play word interaction', () => {
-        const wrapper = shallow(<Dashboard playWord={true} authenticateUser={authenticateUserMock} drawers={drawers}/>);
+        const wrapper = shallow(<Dashboard playWord={true} playedCardId={1} authenticateUser={authenticateUserMock} drawers={drawers}/>);
         expect(wrapper.exists(PlayWord)).toEqual(true);
     });
 });
 
 describe('on vote card', () => {
     it('displays player interaction', () => {
-        const wrapper = shallow(<Dashboard voteCard={true} authenticateUser={authenticateUserMock} drawers={drawers}/>);
+        const wrapper = shallow(<Dashboard voteCard={true} playCard={true} authenticateUser={authenticateUserMock} drawers={drawers}/>);
         expect(wrapper.exists(PlayerInteractions)).toEqual(true);
     });
 });

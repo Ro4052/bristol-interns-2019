@@ -23,7 +23,7 @@ describe('Whole game', () => {
             .then(() => cy.startGame())
             // Round 1
             .then(() => cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`))
-            .then(() => cy.get('[data-cy="type-word"]', { timeout: 20000 }))
+            .then(() => cy.get('[data-cy="round-number"]', { timeout: 20000 }).should('contain', 2))
             // Round 2
             .then(() => cy.playCardWord())
             .then(() => cy.get('[data-cy="vote"]', { timeout: 10000 }))
