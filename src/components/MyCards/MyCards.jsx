@@ -13,13 +13,14 @@ export class MyCards extends React.Component {
     render() {
         return (
             <div className={styles.myCards}>
-                <CardList cards={this.props.cards} handleClick={this.props.selectCard} hidden={false} isEnabled={() => this.props.playCard && !this.props.playedCardId} cy={"my-cards"} />
+                <CardList cards={this.props.cards} handleClick={this.props.selectCard} hidden={false} isEnabled={() => this.props.playCard || this.props.playWord} cy={"my-cards"} />
             </div>
         );
     }
 }
 
 const mapStateToProps = (state) => ({
+    playWord: state.playWordReducer.playWord,
     playCard: state.myCardsReducer.playCard,
     cards: state.myCardsReducer.cards,
     playedCardId: state.myCardsReducer.playedCardId
