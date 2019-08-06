@@ -29,7 +29,7 @@ Cypress.Commands.add('login', username => {
         method: 'POST',
         url: '/auth/login'
     }).as('login');
-    cy.get('input').type(username)
+    cy.get('[data-cy="username"]').type(username)
     .then(() => cy.get('[data-cy="login"]').click());
     cy.wait('@login');
 });

@@ -51,11 +51,11 @@ workflows:
           build: npm run build
       - cypress/run:
           name: e2e-tests
+          command: npx cypress run --record false --spec $((circleci tests split --split-by=timings <(circleci tests glob 'cypress/integration/*_spec.js')) | tr '\n' ',')
           requires:
             - build-app
           start: npm run start:testserver
           wait-on: 'http://localhost:12345'
-          record: true
           parallel: true
           parallelism: 3
           group: 3x
