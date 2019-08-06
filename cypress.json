@@ -3,6 +3,6 @@
   "baseUrl": "http://localhost:12345/",
   "reporter": "junit",
   "reporterOptions": {
-    "mochaFile": "cypress/results/results.xml"
+    "mochaFile": "test-results/cypress/results-[hash].xml"
   }
 }

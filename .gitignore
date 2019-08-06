@@ -10,11 +10,11 @@
 
 # testing
 /coverage
+/test-results
 /cypress/plugins/
 /cypress/videos/
 /cypress/screenshots/
 /cypress/fixtures/
-/cypress/results
 
 # production
 /build
