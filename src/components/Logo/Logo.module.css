@@ -1,5 +1,6 @@
-.dixit {
+.logo {
     text-align: center;
+    margin-bottom: 3em;
 }
 
 .letter {
@@ -11,7 +12,9 @@
     transform-style: preserve-3d;
     perspective: 400;
     z-index: 1;
-    font-family: 'Dilana';
+    font-family: var(--main-font);
+    letter-spacing: 0.15em;
+    font-stretch: wider;
 }
 
 .letter:before, .letter:after {
@@ -37,6 +40,8 @@
         -1px 0px 1px var(--orange),
         1px 0px 1px var(--golden);
     z-index: 3;
+    
+    transform-origin: -0.1em;
     transform:
         rotateX(0deg)
         rotateY(-15deg)
@@ -44,29 +49,29 @@
 }
 
 .letter:after { 
-  color: rgba(172, 106, 21, 0.11);
-  z-index:2;
-  transform:
-    scale(1.08,1)
-    rotateX(0deg)
-    rotateY(0deg)
-    rotateZ(0deg)
-    skew(0deg,1deg);
+    color: rgba(172, 106, 21, 0.11);
+    z-index:2;
+    transform:
+        scale(1.08,1)
+        rotateX(0deg)
+        rotateY(0deg)
+        rotateZ(0deg)
+        skew(0deg,1deg);
 }
 
 .letter:hover:before {
-  color: #1d1202;
-  transform:
-    rotateX(0deg)
-    rotateY(-40deg)
-    rotateZ(0deg);
+    color: #1d1202;
+    transform:
+        rotateX(0deg)
+        rotateY(-40deg)
+        rotateZ(0deg);
 }
 
 .letter:hover:after {
-  transform:
-    scale(1.08,1)
-    rotateX(0deg)
-    rotateY(40deg)
-    rotateZ(0deg)
-    skew(0deg,22deg);
+    transform:
+        scale(1.08,1)
+        rotateX(0deg)
+        rotateY(40deg)
+        rotateZ(0deg)
+        skew(0deg,22deg);
 }

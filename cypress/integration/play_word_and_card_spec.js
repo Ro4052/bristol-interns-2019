@@ -5,21 +5,17 @@ describe('Play word and card', () => {
         beforeEach(() => {
             cy.login('unicorn');
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
-            .then(() => cy.request(`http://localhost:12346/createRoom?url=${encodeURIComponent(Cypress.config().baseUrl)}`))
+            .then(() => cy.request(`http://localhost:12346/createRoom?rounds=3&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
             .then(() => {
                 cy.joinRoom();    
                 cy.startGame();
             });
         });
 
-        it('prompts user to play a word and a card', () => {
-            cy.get('[data-cy="play-word"]').should('exist');
-            cy.get('[data-cy="play-card"]').should('exist');
-        });
-
         describe('player clicks on a card', () => {
             beforeEach(() => {
-                cy.get('[data-cy="my-cards"]').find('[data-cy="card"]').first().click();
+                cy.get('[data-cy="my-cards"]').find('[data-cy="card-image"]').first().click();
+                cy.get('[data-cy="play-word"]').should('exist');
             });
             it("its class is updated to selected", () => {
                 cy.get('[data-cy="my-cards"]').find('[data-cy="card-wrapper"]').first().then(($wrapper) => {
@@ -31,7 +27,7 @@ describe('Play word and card', () => {
 
         describe('on submit a bad word', () => {
             it('displays an error', () => {
-                cy.sendInvalidWord();
+                cy.playCardWordInvalid();
                 cy.get('[data-cy="send-error"]').should('contain', 'Invalid word');
             });
         });   
@@ -42,13 +38,13 @@ describe('Play word and card', () => {
             });
 
             it('displays the word', () => {     
-                cy.get('[data-cy="current-word"]').should('have.text', 'word');
+                cy.get('[data-cy="current-word"]').should('have.text', '"word"');
             });
 
             describe('at the end of the round', () => {
                 it('draws you a new card', () => {
                     cy.get('[data-cy="round-number"]', { timeout: 10000 }).should('contain', '2');
-                    cy.get('[data-cy="my-cards"] [data-cy="card"]', { timeout: 10000 }).should('have.length', 4);
+                    cy.get('[data-cy="my-cards"] [data-cy="card-wrapper"]', { timeout: 10000 }).should('have.length', 4);
                 });
             });
         });  

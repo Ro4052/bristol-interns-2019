@@ -27,10 +27,10 @@ describe('Timothy', () => {
         beforeEach(() => {
             cy.login('unicorn');
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
-            .then(() => cy.request(`http://localhost:12346/createRoom?url=${encodeURIComponent(Cypress.config().baseUrl)}`))
+            .then(() => cy.request(`http://localhost:12346/createRoom?rounds=3&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
             .then(() => cy.joinRoom())
             .then(() => cy.startGame())
-            .then(() => cy.sendInvalidWord());
+            .then(() => cy.playCardWordInvalid());
         });
 
         it('timothy gets angry', () => {
@@ -53,10 +53,10 @@ describe('Timothy', () => {
         beforeEach(() => {
             cy.login('unicorn');
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
-            .then(() => cy.request(`http://localhost:12346/createRoom?url=${encodeURIComponent(Cypress.config().baseUrl)}`))
+            .then(() => cy.request(`http://localhost:12346/createRoom?rounds=3&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
             .then(() => cy.joinRoom())
             .then(() => cy.startGame())
-            .then(() => cy.sendInvalidWord())
+            .then(() => cy.playCardWordInvalid())
             .then(() => cy.get('[data-cy="game-over"]', { timeout: 20000 }));
         });
 

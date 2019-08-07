@@ -1,4 +1,8 @@
 {
-    "baseUrl": "http://localhost:12345/",
-    "reporter": "tap"
+  "projectId": "btfqr8",
+  "baseUrl": "http://localhost:12345/",
+  "reporter": "junit",
+  "reporterOptions": {
+    "mochaFile": "test-results/cypress/results-[hash].xml"
+  }
 }

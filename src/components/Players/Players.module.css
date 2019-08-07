@@ -6,6 +6,7 @@
 
 .playerUsername {
     width: 100%;
+    font-family: var(--secondary-font);
 }
 
 .current {

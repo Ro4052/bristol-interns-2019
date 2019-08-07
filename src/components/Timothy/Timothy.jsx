@@ -1,18 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import styles from './Monster.module.css';
+import styles from './Timothy.module.css';
 import classNames from 'classnames/bind';
 
 const cx = classNames.bind(styles);
 
-export function Monster(props) {
-    const winner = props.winner && props.winner.username === props.username;
+export function Timothy(props) {
+    const winner = (props.winner && props.winner.username === props.username) ||(props.drawers && props.drawers.some(drawer => drawer.username === props.username));
     let bodyClass = styles.body;
     if (props.error) bodyClass = styles.disappointedBody;
     if (winner) bodyClass = styles.victoryBody;
     return (
         <div data-cy='timothy' className={styles.ufo}>
-            <div className={styles.monster}>
+            <div className={styles.timothy}>
                 <div data-cy='timothy-body' className={bodyClass}> 
                     <div className={styles.ear}></div>
                     <div className={styles.ear}></div>
@@ -36,7 +36,8 @@ export function Monster(props) {
 const mapStateToProps = (state) => ({
     winner: state.gameOverReducer.winner,
     username: state.authReducer.username,
-    error: state.playWordReducer.error
+    error: state.playWordReducer.error,
+    drawers: state.gameOverReducer.drawers
 });
 
-export default connect(mapStateToProps)(Monster);
+export default connect(mapStateToProps)(Timothy);

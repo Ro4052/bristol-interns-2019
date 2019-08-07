@@ -2,9 +2,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
     background-color: #fac825;
     border-radius: 15px;
     padding: 0.5em 1em;
     margin: 2em;
     border: 3px solid black;
+}
+
+.word {
+    font-family: var(--secondary-font);
+    font-size: 2em;
 }

@@ -5,6 +5,7 @@
     align-items: center;
     justify-content: center;
     font-family: var(--main-font);
+    letter-spacing: 0.2em;
 }
 
 .loginForm {
@@ -42,7 +43,8 @@
     font-size: 3vh;
     text-align: center;
     color: rgb(0, 0, 0);
-    font-family: 'Dilana';
+    font-family: var(--main-font);
+    letter-spacing: 0.15em;
 }
 
 .errorText {

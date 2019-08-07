@@ -1,10 +1,12 @@
 version: 2.1
 
+orbs:
+  cypress: cypress-io/cypress@1
+
 jobs:
-  test:
+  client-tests:
     docker:
       - image: circleci/node:10
-    parallelism: 4
     steps:
       - checkout
       - restore_cache:
@@ -19,27 +21,6 @@ jobs:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
-
-  e2etest: 
-    docker: 
-      - image: cypress/base:10
-    parallelism: 1
-    steps:
-      - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
-      - run:
-          name: Setup Dependencies
-          command: npm ci
-      - run:
-          name: Run E2E Tests
-          command: |
-            mkdir -p cypress/{videos,screenshots}
-            npm run build && npm run test:e2e
-      - store_artifacts:
-          path: cypress/videos
-      - store_artifacts:
-          path: cypress/screenshots
 
   deploy-master:
     docker:
@@ -61,24 +42,39 @@ jobs:
           command: |
             git push https://heroku:${HEROKU_API_KEY}@git.heroku.com/${HEROKU_DEVELOP_APP_NAME}.git master
 
-
 workflows:
-  version: 2
-  test-deploy:
+  build:
     jobs:
-      - e2etest
-      - test
+      - client-tests
+      - cypress/install:
+          name: build-app
+          build: npm run build
+      - cypress/run:
+          name: e2e-tests
+          command: npx cypress run --record false --spec $((circleci tests split --split-by=timings <(circleci tests glob 'cypress/integration/*_spec.js')) | tr '\n' ',')
+          requires:
+            - build-app
+          start: npm run start:testserver
+          wait-on: 'http://localhost:12345'
+          parallel: true
+          parallelism: 3
+          group: 3x
+          store_artifacts: true
+          post-steps:
+            - store_test_results:
+                path: test-results/cypress
       - deploy-master:
           requires:
-            - test
+            - client-tests
+            - e2e-tests
           filters:
             branches:
               only:
                 - master
       - deploy-develop:
           requires:
-            - test
-            - e2etest
+            - client-tests
+            - e2e-tests
           filters:
             branches:
               only:

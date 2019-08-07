@@ -5,6 +5,7 @@
     color: var(--lighter-black);
     cursor: pointer;
     font-family: var(--main-font);
+    letter-spacing: 0.15em;
     font-size: 4vmin;
     margin: 0.4em;
     outline: none;

@@ -4,13 +4,32 @@
 }
 
 .sendWordBox {
-    width: 100%;
+    width: 70%;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     align-items: center;
+    text-align: center;
+    font-family: var(--secondary-font);
+    font-size: 0.8em;
+    background-color: #fac825;
+    border-radius: 15px;
+    padding: 0.5em 1em;
+    margin: 1em;
+    border: 3px solid black;
+    margin-top: 1em;
 }
 
 .sendWordBox > input {
     width: 80%;
     font-size: 1.2em;
+    font-family: var(--secondary-font)
 }
+
+.entryBox {
+    background-color: var(--orange);
+    border-radius: 15px;
+    padding: 0.5em 1em;
+    margin: 1em;
+    border: 3px solid black;
+    }

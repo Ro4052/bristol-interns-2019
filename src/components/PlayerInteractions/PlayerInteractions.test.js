@@ -2,18 +2,6 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { PlayerInteractions } from './PlayerInteractions';
 import Prompt from '../shared/Prompt/Prompt';
-import PlayWord from '../PlayWord/PlayWord';
-
-describe('on play word flag', () => {
-    it('displays the play word prompt', () => {
-        const wrapper = shallow(<PlayerInteractions playWord={true} />);
-        expect(wrapper.find(Prompt).prop('cy')).toEqual('play-word');
-    });
-    it('displays the play word input', () => {
-        const wrapper = shallow(<PlayerInteractions playWord={true} />);
-        expect(wrapper.exists(PlayWord)).toEqual(true);
-    });
-});
 
 describe('on play card flag', () => {
     it('displays the play card prompt', () => {
@@ -29,9 +17,16 @@ describe('on vote card flag', () => {
     });
 });
 
-describe('on played turn', () => {
-    it('displays end turn button', () => {
-        const wrapper = mount(<PlayerInteractions word={'word'} playedCardId={1} finishedRound={false} />);
-        expect(wrapper.exists({ 'data-cy': 'end-turn' })).toEqual(true);
+describe('on waiting for turn', () => {
+    it('displays the waiting prompt', () => {
+        const wrapper = shallow(<PlayerInteractions status={'WAITING_FOR_CURRENT_PLAYER'} />)
+        expect(wrapper.exists({ 'data-cy': 'wait-for-storyteller'})).toEqual(true);
+    });
+});
+
+describe('on word having been submitted', () => {
+    it('displays the word', () => {
+        const wrapper=shallow(<PlayerInteractions currentWord="dog" />)
+        expect(wrapper.exists({ 'data-cy': 'current-word'})).toEqual(true);
     });
 });

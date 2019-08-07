@@ -12,6 +12,13 @@
   src: local('Dilana'), url('./fonts/NotoSerif-Regular.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'FutureTimeSplitters';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Dilana'), url('./fonts/Future_TimeSplitters.otf') format('opentype');
+}
+
 * {
     box-sizing: border-box;
 }
@@ -37,7 +44,7 @@ body {
   --yellow: #F49100;
   --golden: rgba(73, 57, 4, 0.8);
   --lighter-black: rgba(0, 0, 0, 0.8);
-  --main-font: 'Dilana';
+  --main-font: 'FutureTimeSplitters';
   --secondary-font: 'NotoSerif';
 }
 

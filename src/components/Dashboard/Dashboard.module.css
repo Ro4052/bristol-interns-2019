@@ -34,6 +34,7 @@
 .gameInfo > h2 {
     font-size: 3vw;
     margin: 0;
+    letter-spacing: 0.15em;
 }
 
 .side {
@@ -67,6 +68,14 @@
 }
 
 .interactions {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.playWord {
     flex-grow: 1;
     display: flex;
     flex-direction: column;

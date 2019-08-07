@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styles from './Dashboard.module.css';
-import Monster from '../Monster/Monster';
+import Timothy from '../Timothy/Timothy';
 import PlayedCards from '../PlayedCards/PlayedCards';
 import MyCards from '../MyCards/MyCards';
 import Players from '../Players/Players';
@@ -9,8 +9,9 @@ import GameOver from '../GameOver/GameOver';
 import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
 import Timer from '../Timer/Timer';
 import { setVoteCardTimer, setPlayCardTimer, setStorytellerTimer } from '../Timer/TimerActions';
-import Dixit from '../Dixit/Dixit';
+import Logo from '../Logo/Logo';
 import { authenticateUser } from '../Login/LoginActions';
+import PlayWord from '../PlayWord/PlayWord';
 
 export class Dashboard extends React.Component {
 
@@ -19,16 +20,13 @@ export class Dashboard extends React.Component {
     }
 
     render() {
-        const showPlayerInteractions = (this.props.playCard || this.props.playWord || this.props.voteCard)
-                                    || ((this.props.currentPlayer) && 
-                                        (!this.props.finishedRound && 
-                                        this.props.username === this.props.currentPlayer.username && 
-                                        this.props.playedCardId));
+        const showPlayerInteractions = (this.props.playWord || !this.props.word || this.props.playedCardId) && !(this.props.winner || this.props.drawers.length > 1);
+        const showPlayWord = this.props.playWord && !this.props.word && this.props.playedCardId && !(this.props.winner || this.props.drawers.length > 1);
         return (
             <div className={styles.dashboard}>
                 <div className={styles.header}>
                     <div className={styles.logo}>
-                        <Dixit />
+                        <Logo />
                     </div>
                 </div>
                 <div className={styles.main}>
@@ -38,20 +36,22 @@ export class Dashboard extends React.Component {
                         {(this.props.status === 'WAITING_FOR_VOTES' && this.props.voteCardDuration > 0) && <Timer cy="vote-timer" setDuration={this.props.setVoteCardTimer} duration={this.props.voteCardDuration} />}
                         <div className={styles.gameInfo}>
                             {this.props.status !== "NOT_STARTED" && <h2>Round: <span id="round-number" data-cy="round-number">{this.props.roundNum}</span></h2>}
-                            {this.props.currentWord !== '' && <h2 id="message">Word: <span data-cy='current-word'>{this.props.currentWord}</span></h2>}
                             <Players />
                         </div>
                     </div>
                     <div className={styles.middle}>
-                        <div className={styles.interactions}>
-                            {showPlayerInteractions && <PlayerInteractions />}
-                            {this.props.winner && <GameOver />}
+                        <div className={styles.playWord}>
+                            {showPlayWord && <PlayWord />}
+                            {(this.props.winner || this.props.drawers.length > 1) && <GameOver />}
                             {this.props.status !== "GAME_OVER" && <PlayedCards />}
                         </div>
                         {this.props.status !== "NOT_STARTED" && this.props.status !== "GAME_OVER" && <MyCards />}
                     </div>
                     <div className={styles.side}>
-                        <Monster />
+                        <div className={styles.interactions}>
+                            {showPlayerInteractions && <PlayerInteractions />}
+                        </div>
+                        <Timothy />
                     </div>
                 </div>
             </div>
@@ -59,7 +59,7 @@ export class Dashboard extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     status: state.dashboardReducer.status,
     roundNum: state.dashboardReducer.roundNum,
     currentWord: state.dashboardReducer.currentWord,
@@ -67,17 +67,17 @@ const mapStateToProps = (state) => ({
     playCard: state.myCardsReducer.playCard,
     playWord: state.playWordReducer.playWord,
     voteCard: state.playedCardsReducer.voteCard,
-    finishedRound: state.playerInteractionsReducer.finishedRound,
     playedCardId: state.myCardsReducer.playedCardId,
     username: state.authReducer.username,
     winner: state.gameOverReducer.winner,
+    drawers: state.gameOverReducer.drawers,
     playCardDuration: state.timerReducer.playCardDuration,
     voteCardDuration: state.timerReducer.voteCardDuration,
     storytellerDuration: state.timerReducer.storytellerDuration,
     word: state.playWordReducer.word
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
     setPlayCardTimer: duration => dispatch(setPlayCardTimer(duration)),
     setVoteCardTimer: duration => dispatch(setVoteCardTimer(duration)),
     setStorytellerTimer: duration => dispatch(setStorytellerTimer(duration)),

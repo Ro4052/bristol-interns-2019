@@ -3,36 +3,35 @@ import { types } from './PlayWordActionTypes';
 
 const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
+export const resetWord = () => ({
+    type: types.RESET_PLAY_WORD
+});
+
 export const setPlayWord = playWord => ({
     type: types.SET_PLAY_WORD,
     playWord
 });
 
-export const validateWordSuccess = () => ({
-    type: types.VALIDATE_WORD_SUCCESS
-});
-
-export const validateWordFailure = error => ({
-    type: types.VALIDATE_WORD_FAILURE,
-    error
-});
-
-export const playWord = word => ({
-    type: types.PLAY_WORD,
+export const sendWordSuccess = word => ({
+    type: types.SEND_WORD_SUCCESS,
     word
 });
 
-export const resetWord = () => ({
-    type: types.RESET_PLAY_WORD
+export const sendWordFailure = error => ({
+    type: types.SEND_WORD_FAILURE,
+    error
 });
 
-export const validateWord = word => dispatch => {
-    axiosInstance.post('/api/valid-word', { word })
+export const sendWord = word => (dispatch, getState) => {
+    const state = getState();
+    const cardId = state.myCardsReducer.playedCardId;
+    axiosInstance.post('/api/play-card-word', { cardId, word })
     .then(res => {
         if (res.status === 200) {
-            dispatch(validateWordSuccess());
-            dispatch(playWord(word));
-        } else throw Error(res.data.message);
+            dispatch(sendWordSuccess(word));
+        } else {
+            throw Error(res.data.message);
+        }
     })
-    .catch(err => dispatch(validateWordFailure(err.message)));
+    .catch(err => dispatch(sendWordFailure(err.message)));
 };
