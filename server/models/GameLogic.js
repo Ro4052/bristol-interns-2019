@@ -252,10 +252,9 @@ class GameLogic {
 
     /* Emit the played cards for voting */
     emitPlayedCards() {
-        socket.emitPlayedCards(this.roomId, this.getPlayedCards());
-        this.shufflePlayedCards();
-        this.displayCardsTimeout = setTimeout(() => socket.emitPlayedCards(this.roomId, this.getPlayedCards()), 200);
         this.setStatus(statusTypes.WAITING_FOR_VOTES);
+        this.shufflePlayedCards();
+        socket.emitPlayedCards(this.roomId, this.getPlayedCards());
         socket.promptPlayersVote(this.roomId, this.currentPlayer, voteDuration);
         this.voteTimeout = setTimeout(this.emitVotes.bind(this), voteDuration);
     };
