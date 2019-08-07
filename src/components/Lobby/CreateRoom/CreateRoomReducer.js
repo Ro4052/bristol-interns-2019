@@ -1,10 +1,10 @@
-import { types } from './RoundCountActionTypes';
+import { types } from './CreateRoomActionTypes';
 
 export const initialState = {
     numRounds: null
 }
 
-const roundCountReducer = (state = initialState, action) => {
+const createRoomReducer = (state = initialState, action) => {
     switch (action.type) {
         case types.SET_ROUND_COUNT:
             return {...state, numRounds: action.numRounds};
@@ -13,4 +13,4 @@ const roundCountReducer = (state = initialState, action) => {
     }
 }
 
-export default roundCountReducer
+export default createRoomReducer;

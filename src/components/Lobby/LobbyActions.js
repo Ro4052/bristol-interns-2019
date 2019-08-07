@@ -1,6 +1,6 @@
 import { types } from './LobbyActionTypes';
 import axios from "axios";
-import { setRoundCount } from '../RoundCount/RoundCountActions';
+import { setRoundCount } from './CreateRoom/CreateRoomActions';
 
 const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 

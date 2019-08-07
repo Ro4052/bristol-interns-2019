@@ -3,11 +3,10 @@ import { connect } from 'react-redux';
 import styles from './Lobby.module.css';
 import { createRoom } from './LobbyActions';
 import Room from './Room/Room';
-import Button from '../shared/Button/Button';
 import Logo from '../Logo/Logo';
 import Logout from '../Logout/Logout';
 import { authenticateUser } from '../Login/LoginActions';
-import RoundCount from '../RoundCount/RoundCount';
+import CreateRoom from './CreateRoom/CreateRoom';
 import history from '../../services/history';
 
 export class Lobby extends React.Component {
@@ -26,11 +25,7 @@ export class Lobby extends React.Component {
                     <Logo />
                 </div>
                 <div className={styles.rooms}>
-                    <div className={styles.createRoom}>
-                        <h1>Create room: </h1>
-                        <RoundCount />
-                        {this.props.numRounds && <Button cy="create-room" handleClick={() => this.props.createRoom(this.props.numRounds)} text="Create Room" />}
-                    </div>
+                    <CreateRoom />
                     <ul className={styles.currentRooms} data-cy="current-rooms">
                         {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}
                     </ul>
@@ -42,7 +37,7 @@ export class Lobby extends React.Component {
 
 const mapStateToProps = state => ({
     rooms: state.lobbyReducer.rooms,
-    numRounds: state.roundCountReducer.numRounds,
+    numRounds: state.createRoomReducer.numRounds,
     status: state.dashboardReducer.status
 });
 
