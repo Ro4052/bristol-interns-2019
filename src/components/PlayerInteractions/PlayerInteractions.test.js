@@ -30,10 +30,3 @@ describe('on word having been submitted', () => {
         expect(wrapper.exists({ 'data-cy': 'current-word'})).toEqual(true);
     });
 });
-
-describe('on played turn', () => {
-    it('displays end turn button', () => {
-        const wrapper = mount(<PlayerInteractions word={'word'} playedCardId={1} finishedRound={false} />);
-        expect(wrapper.exists({ 'data-cy': 'end-turn' })).toEqual(true);
-    });
-});
