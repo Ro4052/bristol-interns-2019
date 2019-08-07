@@ -4,6 +4,7 @@ const { statusTypes } = require('./statusTypes');
 
 // Set durations
 const promptDuration = process.env.NODE_ENV === 'testing' ? 2000 : 30000;
+const voteDuration = process.env.NODE_ENV === 'testing' ? 5000 : 30000;
 const storytellerDuration = process.env.NODE_ENV === 'testing' ? 2000 : 60000;
 const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 2000 : 5000;
 const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 3;
@@ -38,8 +39,15 @@ class GameLogic {
 
     /* Get current state of the game */
     getState(username) {
+        let cards = this.getHiddenPlayedCards();
+        if (this.status === statusTypes.WAITING_FOR_VOTES || this.status === statusTypes.DISPLAY_ALL_VOTES) {
+            cards = this.getPlayedCards();
+            if (this.status === statusTypes.DISPLAY_ALL_VOTES) {
+                cards = cards.map(card => ({...card, votes: this.votes.reduce((sum, vote) => sum + (vote.cardId === card.cardId), 0)}));
+            }
+        }
         return {
-            playedCards: (this.status === statusTypes.WAITING_FOR_VOTES || this.status === statusTypes.DISPLAY_ALL_VOTES) ? this.getPlayedCards() : this.getHiddenPlayedCards(),
+            playedCards: cards,
             playCard: (!this.hasPlayedCard(username) && this.currentPlayer.username === username && this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER)
                     || (!this.hasPlayedCard(username) && this.status === statusTypes.WAITING_FOR_OTHER_PLAYERS),
             playWord: this.currentPlayer.username === username && !this.currentWord && this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER,
@@ -242,8 +250,8 @@ class GameLogic {
     emitPlayedCards() {
         socket.emitPlayedCards(this.roomId, this.getPlayedCards());
         this.setStatus(statusTypes.WAITING_FOR_VOTES);
-        socket.promptPlayersVote(this.roomId, this.currentPlayer, promptDuration);
-        this.voteTimeout = setTimeout(this.emitVotes.bind(this), promptDuration);
+        socket.promptPlayersVote(this.roomId, this.currentPlayer, voteDuration);
+        this.voteTimeout = setTimeout(this.emitVotes.bind(this), voteDuration);
     };
 
     /* Vote for a card */
@@ -267,7 +275,8 @@ class GameLogic {
     emitVotes() {
         this.newCard();
         this.setStatus(statusTypes.DISPLAY_ALL_VOTES);
-        socket.emitAllVotes(this.roomId, this.votes);
+        const cards = this.getPlayedCards().map(card => ({...card, votes: this.votes.reduce((sum, vote) => sum + (vote.cardId === card.cardId), 0)}));
+        socket.emitPlayedCards(this.roomId, cards);
         this.calcScores();
         this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), nextRoundDuration);
     };

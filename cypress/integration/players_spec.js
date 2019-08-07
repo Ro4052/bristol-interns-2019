@@ -8,40 +8,22 @@ describe('Players', () => {
     });
 
     describe('on enter room', () => {
-        it('displays the initial scores of zero', () => {
+        beforeEach(() => {
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
-            .then(() => {
-                cy.login('player1');
-                cy.createRoom(3);
-                return cy.get('[data-cy="room-title"]');
-            })
-            .then(($title) => {
-                const id = $title.text().split(" ")[1];
-                return cy.request(`http://localhost:12346/joinRoom?roomId=${id}&url=${encodeURIComponent(Cypress.config().baseUrl)}`);
-            })
-            .then(() => {
-                cy.startGame();
-                cy.get('[data-cy="player-score"]').first().should('have.text', '0');
-                cy.get('[data-cy="player-score"]').last().should('have.text', '0');
-            });
+            .then(() => cy.login('player1'));
+            cy.createRoom(3);
+            cy.request(`http://localhost:12346/joinRoom?roomId=0&url=${encodeURIComponent(Cypress.config().baseUrl)}`)
+            .then(() => cy.startGame());
+        });
+
+        it('displays the initial scores of zero', () => {
+            cy.get('[data-cy="player-score"]').first().should('have.text', '0');
+            cy.get('[data-cy="player-score"]').last().should('have.text', '0');
         });
         
         it('displays the players who have already joined', () => {
-            cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
-            .then(() => {
-                cy.login('player1');
-                cy.createRoom(3);
-                return cy.get('[data-cy="room-title"]')
-            })
-            .then(($title) => {
-                const id = $title.text().split(" ")[1];
-                return cy.request(`http://localhost:12346/joinRoom?roomId=${id}&url=${encodeURIComponent(Cypress.config().baseUrl)}`);
-            })
-            .then(() => {
-                cy.startGame();
-                cy.get('[data-cy="player-username"]').first().should('have.text', 'player1');
-                cy.get('[data-cy="player-username"]').last().should('have.text', 'halfling');
-            })
+            cy.get('[data-cy="player-username"]').first().should('have.text', 'player1');
+            cy.get('[data-cy="player-username"]').last().should('have.text', 'halfling');
         });
     });
 
@@ -63,28 +45,22 @@ describe('Players', () => {
     });
 
     describe('on completing a round', () => {
-        it('updates the scores', () => {
+        beforeEach(() => {
             cy.login('player1');
             cy.createRoom(3);
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
-            .then(() => cy.get('[data-cy="room-title"]'))
-            .then(($title) => {
-                const id = $title.text().split(" ")[1];
-                return cy.request(`http://localhost:12346/joinRoom?roomId=${id}&url=${encodeURIComponent(Cypress.config().baseUrl)}`);
-            })              
-            .then(() => {
-                cy.get('[data-cy="player-username"]').first().should('have.text', 'player1');
-                cy.get('[data-cy="player-username"]').last().should('have.text', 'halfling');
-                cy.startGame();
-                cy.get('[data-cy="start-game"]').should('not.exist');
-                return cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`);
-            })
-            .then(() => {
-                cy.playCard();
-                cy.voteCard();
-                cy.get('[data-cy="player-score"]').first().should('have.text', '2');
-                cy.get('[data-cy="player-score"]').last().should('have.text', '0');
-            });
+            .then(() => cy.request(`http://localhost:12346/joinRoom?roomId=0&url=${encodeURIComponent(Cypress.config().baseUrl)}`));
+            cy.get('[data-cy="player-username"]').first().should('have.text', 'player1');
+            cy.get('[data-cy="player-username"]').last().should('have.text', 'halfling');
+            cy.startGame();
+            cy.get('[data-cy="start-game"]').should('not.exist');
+            cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
+            .then(() => cy.get('[data-cy="round-number"]', { timeout: 20000 }).should('contain', '2'));
+        });
+
+        it('updates the scores', () => {
+            cy.get('[data-cy="player-score"]').first().should('have.text', '0');
+            cy.get('[data-cy="player-score"]').last().should('have.text', '3');
         });
     });
 });
