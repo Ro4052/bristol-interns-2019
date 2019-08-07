@@ -20,7 +20,7 @@ describe('on vote card flag', () => {
 describe('on waiting for turn', () => {
     it('displays the waiting prompt', () => {
         const wrapper = shallow(<PlayerInteractions status={'WAITING_FOR_CURRENT_PLAYER'} />)
-        expect(wrapper.exists({ 'data-cy': 'wait'})).toEqual(true);
+        expect(wrapper.exists({ 'data-cy': 'wait-for-storyteller'})).toEqual(true);
     });
 });
 
