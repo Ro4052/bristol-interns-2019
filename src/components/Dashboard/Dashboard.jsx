@@ -12,7 +12,6 @@ import { authenticateUser } from '../Login/LoginActions';
 import PlayWord from '../PlayWord/PlayWord';
 
 export class Dashboard extends React.Component {
-
     componentDidMount() {
         this.props.authenticateUser();
     }
@@ -35,7 +34,7 @@ export class Dashboard extends React.Component {
                         </div>
                     </div>
                     <div className={styles.middle}>
-                        <div className={styles.playWord}>
+                        <div className={styles.centerBox}>
                             {showPlayWord && <PlayWord />}
                             {(this.props.winner || this.props.drawers.length > 1) && <GameOver />}
                             {this.props.status !== "GAME_OVER" && <PlayedCards />}

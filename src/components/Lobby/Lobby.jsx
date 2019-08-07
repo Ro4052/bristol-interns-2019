@@ -23,16 +23,13 @@ export class Lobby extends React.Component {
             <div className={styles.lobby}>
                 <div className={styles.header}>
                     <Logout />
-                    <div className={styles.logo}>
-                        <Logo />
-                    </div>
+                    <Logo />
                 </div>
                 <div className={styles.rooms}>
                     <div className={styles.createRoom}>
                         <h1>Create room: </h1>
                         <RoundCount />
                         {this.props.numRounds && <Button cy="create-room" handleClick={() => this.props.createRoom(this.props.numRounds)} text="Create Room" />}
-                        
                     </div>
                     <ul className={styles.currentRooms} data-cy="current-rooms">
                         {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}
@@ -43,13 +40,13 @@ export class Lobby extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     rooms: state.lobbyReducer.rooms,
     numRounds: state.roundCountReducer.numRounds,
     status: state.dashboardReducer.status
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
     createRoom: numRounds => dispatch(createRoom(numRounds)),
     authenticateUser: () => dispatch(authenticateUser())
 });
