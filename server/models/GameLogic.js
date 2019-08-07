@@ -27,6 +27,7 @@ class GameLogic {
 
         // Initialise timers
         this.playRandomCardsTimeout = null;
+        this.displayCardsTimeout = null;
         this.voteTimeout = null;
         this.nextRoundTimeout = null;
     }
@@ -248,7 +249,8 @@ class GameLogic {
 
     /* Emit the played cards for voting */
     emitPlayedCards() {
-        socket.emitPlayedCards(this.roomId, this.getPlayedCards());
+        socket.emitPlayedCards(this.roomId, this.getHiddenPlayedCards());
+        this.displayCardsTimeout = setTimeout(() => socket.emitPlayedCards(this.roomId, this.getPlayedCards()), 200);
         this.setStatus(statusTypes.WAITING_FOR_VOTES);
         socket.promptPlayersVote(this.roomId, this.currentPlayer, voteDuration);
         this.voteTimeout = setTimeout(this.emitVotes.bind(this), voteDuration);
@@ -313,6 +315,7 @@ class GameLogic {
         clearTimeout(this.playRandomCardsTimeout);
         clearTimeout(this.voteTimeout);
         clearTimeout(this.nextRoundTimeout);
+        clearTimeout(this.displayCardsTimeout);
     }
 }
 exports.GameLogic = GameLogic;
