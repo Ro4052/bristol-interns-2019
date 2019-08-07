@@ -14,7 +14,7 @@ describe('Play word and card', () => {
 
         describe('player clicks on a card', () => {
             beforeEach(() => {
-                cy.get('[data-cy="my-cards"]').find('[data-cy="card"]').first().click();
+                cy.get('[data-cy="my-cards"]').find('[data-cy="card-image"]').first().click();
                 cy.get('[data-cy="play-word"]').should('exist');
             });
             it("its class is updated to selected", () => {
@@ -44,7 +44,7 @@ describe('Play word and card', () => {
             describe('at the end of the round', () => {
                 it('draws you a new card', () => {
                     cy.get('[data-cy="round-number"]', { timeout: 10000 }).should('contain', '2');
-                    cy.get('[data-cy="my-cards"] [data-cy="card"]', { timeout: 10000 }).should('have.length', 4);
+                    cy.get('[data-cy="my-cards"] [data-cy="card-wrapper"]', { timeout: 10000 }).should('have.length', 4);
                 });
             });
         });  

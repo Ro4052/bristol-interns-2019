@@ -59,7 +59,7 @@ export class Dashboard extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     status: state.dashboardReducer.status,
     roundNum: state.dashboardReducer.roundNum,
     currentWord: state.dashboardReducer.currentWord,
@@ -77,7 +77,7 @@ const mapStateToProps = (state) => ({
     word: state.playWordReducer.word
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
     setPlayCardTimer: duration => dispatch(setPlayCardTimer(duration)),
     setVoteCardTimer: duration => dispatch(setVoteCardTimer(duration)),
     setStorytellerTimer: duration => dispatch(setStorytellerTimer(duration)),

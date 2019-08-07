@@ -8,6 +8,9 @@ import configureStore from 'redux-mock-store';
 const initialState = {
     myCardsReducer: {
         playedCardId: 2
+    },
+    dashboardReducer: {
+        status: ""
     }
 };
 const middlewares = [];
@@ -38,7 +41,7 @@ describe('on clicking an enabled card', () => {
                 <MyCards fetchCards={jest.fn()} cards={cards} selectCard={selectCard} playCard={true} />
             </Provider>
         );
-        wrapper.find({ 'data-cy': 'card' }).first().simulate('click');
+        wrapper.find({ 'data-cy': 'card-image' }).first().simulate('click');
         expect(selectCard).toHaveBeenCalled();
         selectCard.mockRestore();
     }));
@@ -52,7 +55,7 @@ describe('on clicking a disabled card', () => {
                 <MyCards fetchCards={jest.fn()} cards={cards} selectCard={selectCard} />
             </Provider>
         );
-        wrapper.find({ 'data-cy': 'card' }).first().simulate('click');
+        wrapper.find({ 'data-cy': 'card-image' }).first().simulate('click');
         expect(selectCard).not.toHaveBeenCalled();
         selectCard.mockRestore();
     });
