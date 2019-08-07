@@ -109,15 +109,6 @@ router.post('/api/play-card-word', auth, (req, res) => {
     }
 });
 
-/* Current player plays word only if it's a valid word */
-router.post('/api/valid-word', auth, (req,res) => {
-    if (validWord.isValidWord(req.body.word)) {
-        res.sendStatus(200);
-    } else {
-        res.status(400).json({message: "Invalid word"});
-    }
-});
-
 /* Player plays a card */
 router.post('/api/play-card', auth, (req, res) => {
     try {

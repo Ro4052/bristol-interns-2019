@@ -62,12 +62,11 @@ describe('Whole game', () => {
             cy.url().should('eq', Cypress.config().baseUrl);
         });
 
-        it('can start a new game', () => {
+        it('can start a new game and the data has been reset', () => {
             cy.request(`http://localhost:12346/createRoom?rounds=3&url=${encodeURIComponent(url)}`)
-            .then(() => {
-                cy.joinRoom();
-                cy.startGame();
-            });
+            .then(() => cy.joinRoom());
+            cy.startGame();
+            
         });
     });
 });

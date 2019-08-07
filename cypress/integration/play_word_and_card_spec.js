@@ -27,7 +27,7 @@ describe('Play word and card', () => {
 
         describe('on submit a bad word', () => {
             it('displays an error', () => {
-                cy.sendInvalidWord();
+                cy.playCardWordInvalid();
                 cy.get('[data-cy="send-error"]').should('contain', 'Invalid word');
             });
         });   

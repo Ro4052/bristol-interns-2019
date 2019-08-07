@@ -102,7 +102,17 @@ Cypress.Commands.add('playCardWord', () => {
     cy.get('[data-cy="my-cards"] [data-cy="card-image"]').first().click();
     cy.get('[data-cy="type-word"]').type('word');
     cy.get('[data-cy="send-word"]').click();
-    cy.get('[data-cy="end-turn"]').click();
+    cy.wait('@playCardWord');
+});
+
+Cypress.Commands.add('playCardWordInvalid', () => {
+    cy.route({
+        method: 'POST',
+        url: '/api/play-card-word'
+    }).as('playCardWord');
+    cy.get('[data-cy="my-cards"] [data-cy="card"]').first().click();
+    cy.get('[data-cy="type-word"]').type('notaword');
+    cy.get('[data-cy="send-word"]').click();
     cy.wait('@playCardWord');
 });
 
@@ -132,17 +142,6 @@ Cypress.Commands.add('voteCard', () => {
         }
     })
     .then(() => cy.wait('@voteCard'));
-});
-
-Cypress.Commands.add('sendInvalidWord', () => {
-    cy.route({
-        method: 'POST',
-        url: '/api/valid-word'
-    }).as('validWord');
-    cy.get('[data-cy="my-cards"] [data-cy="card-image"]').first().click();
-    cy.get('[data-cy="type-word"]').type('fuck');
-    cy.get('[data-cy="send-word"]').click();
-    cy.wait('@validWord');
 });
 
 Cypress.Commands.add('newGame', () => {
