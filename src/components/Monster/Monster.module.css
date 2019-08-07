@@ -120,7 +120,7 @@
 .eyelid {
     background-color: white;
     border-radius: 0.5em 0.5em 0.5em 0.5em / 0.6em 0.6em 0.4em 0.4em;
-    box-shadow: 0.03em 0.14em rgba(0,0,0,0.2);
+    box-shadow: 0.01em 0.1em rgba(0,0,0,0.2);
 }
 
 .eye:after { /*pupil*/
@@ -241,7 +241,7 @@
     top: 50%;
     left: 0;
     z-index: 2;
-    animation: tear 2.5s cubic-bezier(.63, .49, 1, -.15) .2s  both;
+    animation: tear 0.8s cubic-bezier(.63, .49, 1, -.15) infinite;
 }
 
 .ear:before {
