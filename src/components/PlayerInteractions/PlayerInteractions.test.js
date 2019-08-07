@@ -16,10 +16,3 @@ describe('on vote card flag', () => {
         expect(wrapper.find(Prompt).prop('cy')).toEqual('vote-card');
     });
 });
-
-describe('on played turn', () => {
-    it('displays end turn button', () => {
-        const wrapper = mount(<PlayerInteractions word={'word'} playedCardId={1} finishedRound={false} />);
-        expect(wrapper.exists({ 'data-cy': 'end-turn' })).toEqual(true);
-    });
-});

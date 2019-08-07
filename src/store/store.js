@@ -11,7 +11,6 @@ import playWordReducer from '../components/PlayWord/PlayWordReducer';
 import playersReducer from '../components/Players/PlayersReducer';
 import gameOverReducer from '../components/GameOver/GameOverReducer';
 import dashboardReducer from '../components/Dashboard/DashboardReducer';
-import playerInteractionsReducer from '../components/PlayerInteractions/PlayerInteractionsReducer';
 import lobbyReducer from '../components/Lobby/LobbyReducer';
 import timerReducer from '../components/Timer/TimerReducer';
 import roundCountReducer from '../components/RoundCount/RoundCountReducer';
@@ -25,7 +24,6 @@ const allReducers = combineReducers({
     playersReducer,
     gameOverReducer,
     dashboardReducer,
-    playerInteractionsReducer,
     lobbyReducer,
     timerReducer,
     roundCountReducer
