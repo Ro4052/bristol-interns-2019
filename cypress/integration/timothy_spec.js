@@ -30,7 +30,7 @@ describe('Timothy', () => {
             .then(() => cy.request(`http://localhost:12346/createRoom?rounds=3&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
             .then(() => cy.joinRoom())
             .then(() => cy.startGame())
-            .then(() => cy.sendInvalidWord());
+            .then(() => cy.playCardWordInvalid());
         });
 
         it('timothy gets angry', () => {
@@ -56,7 +56,7 @@ describe('Timothy', () => {
             .then(() => cy.request(`http://localhost:12346/createRoom?rounds=3&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
             .then(() => cy.joinRoom())
             .then(() => cy.startGame())
-            .then(() => cy.sendInvalidWord())
+            .then(() => cy.playCardWordInvalid())
             .then(() => cy.get('[data-cy="game-over"]', { timeout: 20000 }));
         });
 
