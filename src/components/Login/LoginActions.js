@@ -89,11 +89,15 @@ export const logOut = () => dispatch => {
 export const retrieveGameState = () => dispatch => {
     axiosInstance.get('/api/game-state')
     .then(res => {
-        dispatch(setPlayedCards(res.data.currentGameState.playedCards));
-        dispatch(setPlayCard(res.data.currentGameState.playCard));
-        dispatch(setPlayWord(res.data.currentGameState.playWord));
-        dispatch(setVoteCard(res.data.currentGameState.voteCard));
-        dispatch(setCurrentPlayer(res.data.currentGameState.currentPlayer));
+        if (res.status === 200) {
+            dispatch(setPlayedCards(res.data.currentGameState.playedCards));
+            dispatch(setPlayCard(res.data.currentGameState.playCard));
+            dispatch(setPlayWord(res.data.currentGameState.playWord));
+            dispatch(setVoteCard(res.data.currentGameState.voteCard));
+            dispatch(setCurrentPlayer(res.data.currentGameState.currentPlayer));
+        } else {
+            throw Error(res.data.message);
+        }
     })
     .catch(err => console.error(err.message));
 }

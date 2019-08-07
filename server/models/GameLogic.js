@@ -38,7 +38,9 @@ class GameLogic {
 
     /* Get current state of the game */
     getState(username) {
-        return {
+        if (this.status === statusTypes.GAME_OVER) {
+            throw Error('This game has ended');
+        } else return {
             playedCards: (this.status === statusTypes.WAITING_FOR_VOTES || this.status === statusTypes.DISPLAY_ALL_VOTES) ? this.getPlayedCards() : [],
             playCard: (!this.hasPlayedCard(username) && this.currentPlayer.username === username && this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER)
                     || (!this.hasPlayedCard(username) && this.status === statusTypes.WAITING_FOR_OTHER_PLAYERS),
