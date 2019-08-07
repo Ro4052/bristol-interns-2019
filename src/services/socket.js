@@ -3,11 +3,10 @@ import history from './history';
 import { dispatch } from '../store/store';
 import { setPlayedCards, setVoteCard, setVotedCard } from '../components/PlayedCards/PlayedCardsActions';
 import { setPlayCard, resetPlayedCardId, selectCardSuccess, fetchCards } from '../components/MyCards/MyCardsActions';
-import { playWord, setPlayWord, resetWord } from '../components/PlayWord/PlayWordActions';
+import { setPlayWord, resetWord } from '../components/PlayWord/PlayWordActions';
 import { setPlayers, setCurrentPlayer } from '../components/Players/PlayersActions';
 import { setWinner, setDrawers } from '../components/GameOver/GameOverActions';
 import { setCurrentWord, setStatus, setRoundNumber } from '../components/Dashboard/DashboardActions';
-import { resetFinishRound } from '../components/PlayerInteractions/PlayerInteractionsActions';
 import { removeCard } from '../components/MyCards/MyCardsActions';
 import { setRooms } from '../components/Lobby/LobbyActions';
 import { setVoteCardTimer, setPlayCardTimer, setStorytellerTimer } from '../components/Timer/TimerActions';
@@ -53,8 +52,7 @@ const connectSocket = () => {
         dispatch(resetWord());
         dispatch(resetPlayedCardId());
         dispatch(setVotedCard(0));
-        dispatch(playWord(""));
-        dispatch(resetFinishRound());
+        dispatch(resetWord());
         dispatch(fetchCards());
     });
 
@@ -109,8 +107,7 @@ const connectSocket = () => {
         dispatch(setCurrentWord(''));
         dispatch(setPlayedCards([]));
         dispatch(setVotedCard(0));
-        dispatch(playWord(""));
-        dispatch(resetFinishRound());
+        dispatch(resetWord());
         dispatch(setWinner(null));
         history.push('/lobby');
     });
