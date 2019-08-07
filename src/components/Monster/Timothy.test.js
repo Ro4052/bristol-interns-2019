@@ -1,9 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Monster } from './Monster';
+import { Timothy } from './Timothy';
 
 describe('on render', () => {
     it('renders correctly', () => {
-        shallow(<Monster />);
+        shallow(<Timothy />);
     });
 });

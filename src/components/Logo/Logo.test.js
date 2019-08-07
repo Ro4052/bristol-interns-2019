@@ -1,9 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Dixit } from './Dixit';
+import { Logo } from './Logo';
 
 describe('on render', () => {
     it('renders correctly', () => {
-        shallow(<Dixit />);
+        shallow(<Logo />);
     });
 });
