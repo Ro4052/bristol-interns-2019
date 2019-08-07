@@ -37,7 +37,7 @@ describe('Refresh page', () => {
     });
 
     describe('when second player votes for a card', () => {
-        it('displays the cards after refresh', () => {
+        it('displays the votes after refresh', () => {
             cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => {
                 cy.get('[data-cy="vote"]', { timeout: 10000 }).should('exist');
