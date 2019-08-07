@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styles from './Dashboard.module.css';
-import Monster from '../Monster/Monster';
+import Timothy from '../Timothy/Timothy';
 import PlayedCards from '../PlayedCards/PlayedCards';
 import MyCards from '../MyCards/MyCards';
 import Players from '../Players/Players';
@@ -9,7 +9,7 @@ import GameOver from '../GameOver/GameOver';
 import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
 import Timer from '../Timer/Timer';
 import { setVoteCardTimer, setPlayCardTimer, setStorytellerTimer } from '../Timer/TimerActions';
-import Dixit from '../Dixit/Dixit';
+import Logo from '../Logo/Logo';
 import { authenticateUser } from '../Login/LoginActions';
 import PlayWord from '../PlayWord/PlayWord';
 
@@ -26,7 +26,7 @@ export class Dashboard extends React.Component {
             <div className={styles.dashboard}>
                 <div className={styles.header}>
                     <div className={styles.logo}>
-                        <Dixit />
+                        <Logo />
                     </div>
                 </div>
                 <div className={styles.main}>
@@ -51,7 +51,7 @@ export class Dashboard extends React.Component {
                         <div className={styles.interactions}>
                             {showPlayerInteractions && <PlayerInteractions />}
                         </div>
-                        <Monster />
+                        <Timothy />
                     </div>
                 </div>
             </div>

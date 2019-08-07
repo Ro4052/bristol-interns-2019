@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import styles from './Login.module.css';
-import Monster from '../Monster/Monster';
-import Dixit from '../Dixit/Dixit';
+import Timothy from '../Timothy/Timothy';
+import Logo from '../Logo/Logo';
 import Button from '../shared/Button/Button';
 import { authenticateUser, logIn } from './LoginActions';
 import classNames from 'classnames/bind';
@@ -38,8 +38,8 @@ export class Login extends React.Component {
         return (
             (!this.props.username) ?
                 <div className={styles.loginPage}>
-                    <Dixit />
-                    <Monster />
+                    <Logo />
+                    <Timothy />
                     <form className={styles.loginForm} onSubmit={this.sendLogin} data-cy='login-form' >
                         <h2 className={styles.formHeader}>Type a username to enter the game:</h2>
                         <input data-cy='username' className={cx(styles.loginInput, { inputError: this.props.error })} value={this.state.value} placeholder="Enter username" onChange={this.handleChange} autoFocus />

@@ -5,17 +5,17 @@
    height: 100%;
    width: 100%;
    text-align: center;
-   margin-top: 0.15em;
+   margin-top: 0.22em;
 }
 
 .clock {
    background-color: rgb(212, 1, 1);
    font-size: 0.7em;
    bottom: 5%;
-   width: 6em;
-   height: 6em;
+   width: 7em;
+   height: 7em;
    border-radius: 50%;
-   border: 0.07em solid;
+   border: 0.2em solid;
    position: absolute;
    left: 5%;
    bottom: 10%
