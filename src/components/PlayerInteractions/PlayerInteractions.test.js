@@ -16,3 +16,17 @@ describe('on vote card flag', () => {
         expect(wrapper.find(Prompt).prop('cy')).toEqual('vote-card');
     });
 });
+
+describe('on waiting for turn', () => {
+    it('displays the waiting prompt', () => {
+        const wrapper = shallow(<PlayerInteractions status={'WAITING_FOR_CURRENT_PLAYER'} />)
+        expect(wrapper.exists({ 'data-cy': 'wait-for-storyteller'})).toEqual(true);
+    });
+});
+
+describe('on word having been submitted', () => {
+    it('displays the word', () => {
+        const wrapper=shallow(<PlayerInteractions currentWord="dog" />)
+        expect(wrapper.exists({ 'data-cy': 'current-word'})).toEqual(true);
+    });
+});
