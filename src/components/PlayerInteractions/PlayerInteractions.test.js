@@ -17,6 +17,20 @@ describe('on vote card flag', () => {
     });
 });
 
+describe('on waiting for turn', () => {
+    it('displays the waiting prompt', () => {
+        const wrapper = shallow(<PlayerInteractions status={'WAITING_FOR_CURRENT_PLAYER'} />)
+        expect(wrapper.exists({ 'data-cy': 'wait'})).toEqual(true);
+    });
+});
+
+describe('on word having been submitted', () => {
+    it('displays the word', () => {
+        const wrapper=shallow(<PlayerInteractions currentWord="dog" />)
+        expect(wrapper.exists({ 'data-cy': 'current-word'})).toEqual(true);
+    });
+});
+
 describe('on played turn', () => {
     it('displays end turn button', () => {
         const wrapper = mount(<PlayerInteractions word={'word'} playedCardId={1} finishedRound={false} />);
