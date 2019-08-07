@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
 import history from './history';
 import { dispatch } from '../store/store';
-import { setPlayedCards, setVoteCard, setVotedCard, setAllVotes } from '../components/PlayedCards/PlayedCardsActions';
+import { setPlayedCards, setVoteCard, setVotedCard } from '../components/PlayedCards/PlayedCardsActions';
 import { setPlayCard, resetPlayedCardId, selectCardSuccess, fetchCards } from '../components/MyCards/MyCardsActions';
 import { playWord, setPlayWord, resetWord } from '../components/PlayWord/PlayWordActions';
 import { setPlayers, setCurrentPlayer } from '../components/Players/PlayersActions';
