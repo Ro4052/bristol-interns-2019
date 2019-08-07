@@ -32,7 +32,7 @@ describe('on click', () => {
     it('calls the handleClick function', () => {
         const handleClick = jest.spyOn(Card.prototype, 'handleClick');
         const wrapper = shallow(<Card card={card1} enabled={false} />);
-        wrapper.find({ 'data-cy': 'card-image' }).first().simulate('click');
+        wrapper.find({ 'data-cy': 'card' }).first().simulate('click');
         expect(handleClick).toHaveBeenCalled();
         handleClick.mockRestore();
     });
@@ -40,7 +40,7 @@ describe('on click', () => {
     it('calls the handleClick function from props if enabled', () => {
         const handleClick = jest.fn();
         const wrapper = shallow(<Card card={card1} enabled={true} handleClick={handleClick} />);
-        wrapper.find({ 'data-cy': 'card-image' }).first().simulate('click');
+        wrapper.find({ 'data-cy': 'card' }).first().simulate('click');
         expect(handleClick).toHaveBeenCalled();
         handleClick.mockRestore();
     });
@@ -48,7 +48,7 @@ describe('on click', () => {
     it("doesn't call the handleClick function from props if disabled", () => {
         const handleClick = jest.fn();
         const wrapper = shallow(<Card card={card1} enabled={false} handleClick={handleClick} />);
-        wrapper.find({ 'data-cy': 'card-image' }).first().simulate('click');
+        wrapper.find({ 'data-cy': 'card' }).first().simulate('click');
         expect(handleClick).not.toHaveBeenCalled();
         handleClick.mockRestore();
     });
