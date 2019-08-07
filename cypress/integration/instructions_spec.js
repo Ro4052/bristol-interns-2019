@@ -13,7 +13,7 @@ describe('Waiting', () => {
             });
         });
 
-        it.only('is told to wait', () => {
+        it('is told to wait', () => {
             cy.get('[data-cy="wait-for-storyteller"]').should('exist');
         });
     });
