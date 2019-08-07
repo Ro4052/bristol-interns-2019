@@ -12,6 +12,7 @@ export class PlayerInteractions extends React.Component {
     render() {
         return (
             <div className={cx(styles.playerInteractions, {votePrompt: this.props.voteCard})}>
+                {this.props.status === 'WAITING_FOR_CURRENT_PLAYER' && !this.props.playCard && !this.props.voteCard &&<h2 className={styles.justWait} id="justWait">Waiting for the storyteller to play their turn</h2>}
                 {this.props.currentWord !== '' && <h2 className={styles.word} id="message">Word: <span data-cy='current-word'>"{this.props.currentWord}"</span></h2>}
                 {this.props.playCard && !this.props.playedCardId && !this.props.currentWord && <Prompt cy="play-card" text="Pick a card" />}
                 {this.props.playCard && !this.props.playedCardId && this.props.currentWord && <Prompt cy="play-card" text="Pick a card that the word best fits" />}
@@ -23,6 +24,7 @@ export class PlayerInteractions extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+    status: state.dashboardReducer.status,
     playCard: state.myCardsReducer.playCard,
     playWord: state.playWordReducer.playWord,
     voteCard: state.playedCardsReducer.voteCard,
