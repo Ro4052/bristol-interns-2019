@@ -46,7 +46,7 @@ class GameLogic {
                     || (!this.hasPlayedCard(username) && this.status === statusTypes.WAITING_FOR_OTHER_PLAYERS),
             playWord: this.currentPlayer.username === username && !this.currentWord && this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER,
             voteCard: !this.hasVoted(username) && this.currentPlayer.username !== username && this.status === statusTypes.WAITING_FOR_VOTES,
-            currentPlayer: this.currentPlayer
+            currentPlayer: { username: this.currentPlayer.username }
         }
     }
 
