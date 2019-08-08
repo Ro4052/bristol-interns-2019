@@ -1,22 +1,15 @@
 @font-face {
-    font-family: 'Dilana';
-    font-style: normal;
-    font-weight: normal;
-    src: local('Dilana'), url('./fonts/fuente_dilana.ttf') format('truetype');
-}
-
-@font-face {
   font-family: 'NotoSerif';
   font-style: normal;
   font-weight: normal;
-  src: local('Dilana'), url('./fonts/NotoSerif-Regular.ttf') format('truetype');
+  src: local('NotoSerif'), url('./fonts/NotoSerif-Regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'FutureTimeSplitters';
   font-style: normal;
   font-weight: normal;
-  src: local('Dilana'), url('./fonts/Future_TimeSplitters.otf') format('opentype');
+  src: local('FutureTimeSplitters'), url('./fonts/Future_TimeSplitters.otf') format('opentype');
 }
 
 * {
@@ -26,9 +19,6 @@
 body {
   height: 100%;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
