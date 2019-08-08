@@ -6,7 +6,8 @@
 
 .currentRooms {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     flex-direction: row;
     flex-flow: row wrap;
+    align-items: center;
 }
