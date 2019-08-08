@@ -109,6 +109,7 @@ const connectSocket = () => {
         dispatch(setVotedCard(0));
         dispatch(resetWord());
         dispatch(setWinner(null));
+        dispatch(setDrawers([]));
         history.push('/lobby');
     });
 
