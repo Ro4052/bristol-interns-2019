@@ -3,9 +3,9 @@ const socket = require('../services/socket');
 const { statusTypes } = require('./statusTypes');
 
 // Set durations
-const promptDuration = process.env.NODE_ENV === 'testing' ? 2000 : 30000;
+const promptDuration = process.env.NODE_ENV === 'testing' ? 3000 : 30000;
 const voteDuration = process.env.NODE_ENV === 'testing' ? 5000 : 30000;
-const storytellerDuration = process.env.NODE_ENV === 'testing' ? 2000 : 60000;
+const storytellerDuration = process.env.NODE_ENV === 'testing' ? 3000 : 60000;
 const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 2000 : 5000;
 const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 3;
 exports.minPlayers = minPlayers;

@@ -8,7 +8,7 @@ describe('Whole game', () => {
             .then(() => cy.request(`http://localhost:12346/createRoom?rounds=1&url=${encodeURIComponent(url)}`))
             .then(() => cy.joinRoom())
             .then(() => cy.startGame())
-            .then(() => cy.get('[data-cy="game-over"]', { timeout: 10000 }));
+            .then(() => cy.get('[data-cy="game-over"]', { timeout: 20000 }));
         });
         it('displays the drawers', () => {
             cy.get('[data-cy="drawers"]').should('exist');
@@ -24,7 +24,7 @@ describe('Whole game', () => {
             .then(() => cy.joinRoom())
             .then(() => cy.startGame())
             .then(() => cy.playCardWord())
-            .then(() => cy.get('[data-cy="game-over"]', { timeout: 10000 }));
+            .then(() => cy.get('[data-cy="game-over"]', { timeout: 20000 }));
         });
 
         it('displays the winner', () => {
@@ -40,7 +40,7 @@ describe('Whole game', () => {
             .then(() => cy.request(`http://localhost:12346/createRoom?rounds=0&url=${encodeURIComponent(url)}`))
             .then(() => cy.joinRoom())
             .then(() => cy.startGame())
-            .then(() => cy.get('[data-cy="game-over"]', { timeout: 10000 }))
+            .then(() => cy.get('[data-cy="game-over"]', { timeout: 20000 }))
             .then(() => cy.newGame());
         });
 
