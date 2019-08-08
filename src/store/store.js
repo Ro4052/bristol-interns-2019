@@ -13,7 +13,7 @@ import gameOverReducer from '../components/GameOver/GameOverReducer';
 import dashboardReducer from '../components/Dashboard/DashboardReducer';
 import lobbyReducer from '../components/Lobby/LobbyReducer';
 import timerReducer from '../components/Timer/TimerReducer';
-import roundCountReducer from '../components/RoundCount/RoundCountReducer';
+import createRoomReducer from '../components/Lobby/CreateRoom/CreateRoomReducer';
 
 // Combine all reducers
 const allReducers = combineReducers({
@@ -26,7 +26,7 @@ const allReducers = combineReducers({
     dashboardReducer,
     lobbyReducer,
     timerReducer,
-    roundCountReducer
+    createRoomReducer
 });
 
 // Wrap in reset functionality

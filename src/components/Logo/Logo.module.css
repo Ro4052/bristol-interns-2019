@@ -1,4 +1,5 @@
 .logo {
+    flex-grow: 1;
     text-align: center;
     margin-bottom: 3em;
 }
@@ -18,7 +19,7 @@
 }
 
 .letter:before, .letter:after {
-    position:absolute;
+    position: absolute;
     content: attr(data-letter);
     transform-origin: top left;
     top: 0;
