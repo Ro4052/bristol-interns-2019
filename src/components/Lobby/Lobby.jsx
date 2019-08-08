@@ -23,10 +23,10 @@ export class Lobby extends React.Component {
                     <Logout />
                     <Logo />
                 </div>
-                <ul className={styles.currentRooms} data-cy="current-rooms">
+                <div className={styles.currentRooms} data-cy="current-rooms">
                     <CreateRoom />
                     {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}
-                </ul>
+                </div>
             </>
         );
     }

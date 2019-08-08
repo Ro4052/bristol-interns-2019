@@ -14,7 +14,7 @@ export class CreateRoom extends React.Component {
                     <select data-cy="num-rounds-options" onChange={event => this.props.setRoundCount(event.target.value)}>
                         {options.map((option, key) => <option key={key} value={option}>{option} rounds</option>)}
                     </select>
-                    {this.props.numRounds && <Button cy="create-room" handleClick={() => this.props.createRoom(this.props.numRounds)} text="Create" />}
+                    <Button cy="create-room" handleClick={() => this.props.createRoom(this.props.numRounds)} text="Create" />
                 </div>
             </div>
         );
