@@ -31,7 +31,6 @@ const mapStateToProps = state => ({
     word: state.playWordReducer.word,
     playedCardId: state.myCardsReducer.playedCardId,
     currentWord: state.dashboardReducer.currentWord,
-    status: state.dashboardReducer.status,
     playCardDuration: state.timerReducer.playCardDuration,
     voteCardDuration: state.timerReducer.voteCardDuration,
     storytellerDuration: state.timerReducer.storytellerDuration,
