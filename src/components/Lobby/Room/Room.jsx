@@ -10,7 +10,7 @@ export class Room extends React.Component {
         const waiting = <span className = {styles.waiting} data-cy="players-needed">Waiting for {this.props.room.minPlayers - this.props.room.players.length} more players</span>;
         const inRoom = this.props.room.players.some(player => player.username === this.props.username);
         return (
-            <li className={styles.room} key={this.props.room.roomId} data-cy="room">
+            <div className={styles.room} key={this.props.room.roomId} data-cy="room">
                 <h2 data-cy="room-title">{"Room: " + this.props.room.roomId}</h2>
                 <ul id="players" data-cy='room-players'>
                     {this.props.room.players.map((player, key) => <li key={key}><span data-cy='player-username'>{player.username}</span></li>)}
@@ -21,7 +21,7 @@ export class Room extends React.Component {
                     <Button cy="leave-room" handleClick={() => this.props.leaveRoom(this.props.room.roomId)} text="Leave room" /> :
                     <Button cy="join-room" handleClick={() => this.props.joinRoom(this.props.room.roomId)} text="Join room" />
                 )}
-            </li>
+            </div>
         );
     }
 }

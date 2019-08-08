@@ -1,23 +1,9 @@
-.time {
-   font-size: 4em;
-   display:table;
-   margin:0;
-   height: 100%;
-   width: 100%;
-   text-align: center;
-   margin-top: 0.22em;
-}
-
-.clock {
+.timer {
    background-color: rgb(212, 1, 1);
-   font-size: 0.7em;
-   bottom: 5%;
-   width: 7em;
-   height: 7em;
+   border: 2px solid black;
+   font-size: 2em;
+   width: 3em;
+   height: 3em;
+   line-height: 3em;
    border-radius: 50%;
-   border: 0.2em solid;
-   position: absolute;
-   left: 5%;
-   bottom: 10%
 }
-

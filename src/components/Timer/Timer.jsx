@@ -25,9 +25,7 @@ export class Timer extends React.Component {
 
     render() {
         return(
-            <div data-cy={this.props.cy} className={styles.clock}>
-                <span className={styles.time}>{this.props.duration}</span>
-            </div>
+            <div data-cy={this.props.cy} className={styles.timer}>{this.props.duration}</div>
         );
     };
 }

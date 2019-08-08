@@ -1,12 +1,18 @@
 .players {
-    min-width: 3vmin;
-    font-size: 3vmin;
-    margin: 1vmin;
+    table-layout: fixed;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.players tr {
+    display: flex;
 }
 
 .playerUsername {
-    width: 100%;
     font-family: var(--secondary-font);
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .current {
