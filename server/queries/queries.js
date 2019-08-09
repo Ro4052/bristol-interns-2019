@@ -3,6 +3,8 @@ const Promise = require('promise');
 
 let pool;
 
+console.log(process.env.DATABASE_URL);
+
 if (process.env.DATABASE_URL) {
     pool = new Client({
         connectionString: process.env.DATABASE_URL
@@ -20,6 +22,8 @@ if (process.env.DATABASE_URL) {
 pool.connect((err) => {
     if (err) {
         console.error('Connection error', err.stack);
+    } else {
+        console.log("Connected");
     }
 });
 
