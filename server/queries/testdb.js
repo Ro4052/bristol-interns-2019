@@ -8,7 +8,7 @@ module.exports.reset = () => {
     nextId = 0;
 }
 
-module.exports.findOrCreate = (username) => {
+module.exports.createUser = (username) => {
     return new Promise((resolve) => {
         const user = { username, id: nextId, score: 0 };
         nextId++;
