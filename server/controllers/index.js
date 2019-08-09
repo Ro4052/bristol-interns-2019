@@ -92,7 +92,7 @@ router.get('/api/end', auth, (req, res) => {
     try {
         const gameState = Room.getById(roomId).gameState;        
         gameState.getPlayers().forEach(player => {
-            db.updateScore(player.id)
+            db.updateScore(player.id, player.score)
             .then(() => {
                 gameState.endGame();
                 Room.deleteById(roomId);

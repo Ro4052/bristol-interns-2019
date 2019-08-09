@@ -38,11 +38,11 @@ module.exports.getUser = (callback) => {
     User.findAll().then(todos => callback(todos));
 }
 
-module.exports.updateScore = id => {
+module.exports.updateScore = (id, score) => {
     return new Promise((resolve, reject) => {
         User.findByPk(id).then(player => {
             player.update({
-                score: Sequelize.literal(`score + ${player.score}`)
+                score: Sequelize.literal(`score + ${score}`)
             }, {
                 where: {
                     id: id
