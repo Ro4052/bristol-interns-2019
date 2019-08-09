@@ -9,14 +9,9 @@ let currentUsers = [];
 let db;
 
 if (process.env.NODE_ENV === 'testing') {
-    db = {
-        user: require('./testqueries')
-    };
+    db = require('../queries/testdb');
 } else {
-    db = require('../queries');
-    db.sequelize.sync().then(() => {
-        console.log("Connected to database");
-    });
+    db = require('../queries/db');
 }
 
 router.use('/api/room', require('./rooms'));
@@ -34,15 +29,8 @@ router.get('/auth', (req, res) => {
 /* Log in the user */
 router.post('/auth/login', (req, res) => {
     const { username } = req.body;
-    db.user.findOrCreate({
-        where: {
-            name: username
-        },
-        defaults: { // set the default properties if it doesn't exist
-            name: username.trim(),
-            score: 0
-        }
-    }).then(users => {        
+    db.createUser(username)
+    .then(users => {        
         const id = users[0].dataValues.id;
         req.session.user = { username, id };
         req.session.roomId = null;
@@ -104,19 +92,14 @@ router.get('/api/end', auth, (req, res) => {
     try {
         const gameState = Room.getById(roomId).gameState;        
         gameState.getPlayers().forEach(player => {
-            db.user.update({
-                score: Sequelize.literal(`score + ${player.score}`)
-            },
-            {
-                where: {
-                    id: player.id
-                }
-            }).then(() => {
+            db.updateScore(player.id)
+            .then(() => {
                 gameState.endGame();
                 Room.deleteById(roomId);
                 closeRoom(roomId);
                 res.sendStatus(200);
-            }).catch(err => {
+            })
+            .catch(err => {
                 console.log(err);
                 res.status(400).json({ message: err.message });
             });
@@ -156,16 +139,12 @@ router.post('/api/play-card', auth, (req, res) => {
 router.post('/api/vote-card', auth, (req, res) => {
     const { user, roomId } = req.session;
     const { cardId } = req.body;
-    if (!Room.getById(roomId).gameState.isCurrentPlayer(user.username)) { /* Any user apart from the current player is allowed to vote for a card */
-        try {
-            Room.getById(roomId).gameState.voteCard(user.username, cardId)
-            res.sendStatus(200);
-        } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
-            console.log(err);
-            res.status(400).json({ message: err.message });
-        }
-    } else { /* Current player attempts to vote for their card */
-        res.status(400).json({ message: "You cannot vote for a card when it is your turn." });
+    try {
+        Room.getById(roomId).gameState.voteCard(user.username, cardId)
+        res.sendStatus(200);
+    } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate, or current player attempts to vote */
+        console.log(err);
+        res.status(400).json({ message: err.message });
     }
 });
 

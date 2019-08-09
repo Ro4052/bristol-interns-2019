@@ -20,7 +20,7 @@ module.exports.findOrCreate = (username) => {
     });
 }
 
-module.exports.update = () => {    
+module.exports.updateScore = () => {    
     return new Promise((resolve) => {
         resolve();
     });

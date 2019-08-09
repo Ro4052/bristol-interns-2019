@@ -271,6 +271,8 @@ class GameLogic {
             throw Error("Now is not the right time to vote");
         } else if (this.hasVoted(username)) {
             throw Error("You cannot vote for a card more than once");
+        } else if (username === this.currentPlayer.username) {
+            throw Error("You cannot vote for a card when it is your turn.");
         } else {
             const vote = { username, cardId };
             this.votes.push(vote);
