@@ -21,8 +21,8 @@ const deleteById = roomId => {
 };
 exports.deleteById = deleteById;
 
-exports.addPlayer = (room, username) => {
-    room.gameState.joinGame(username);
+exports.addPlayer = (room, user) => {
+    room.gameState.joinGame(user);
 };
 
 exports.removePlayer = (room, username) => {

@@ -39,7 +39,7 @@ exports.emitRooms = emitRooms;
 
 // Disconnect a single socket
 exports.disconnectSocket = username => {
-    const socket = sockets.find(socket => socket.handshake.session.user === username);
+    const socket = sockets.find(socket => socket.handshake.session.user.username === username);
     if (socket) socket.disconnect();
 };
 
@@ -52,13 +52,13 @@ exports.disconnectAllSockets = () => {
 
 // Join an existing room
 exports.joinRoom = (roomId, username) => {
-    const socket = sockets.find(socket => socket.handshake.session.user === username);
+    const socket = sockets.find(socket => socket.handshake.session.user.username === username);
     if (socket) socket.handshake.session.roomId = roomId;
 }
 
 // Leave the room that you are in
 exports.leaveRoom = username => {
-    const socket = sockets.find(socket => socket.handshake.session.user === username);
+    const socket = sockets.find(socket => socket.handshake.session.user.username === username);
     if (socket) socket.handshake.session.roomId = null;
 }
 
@@ -68,12 +68,18 @@ exports.closeRoom = roomId => {
     emitRooms();
 };
 
-
 // Emit all the players
 exports.emitPlayers = (roomId, players) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("players", { players }));
 
-// Let the players know about the next round
-exports.emitNewRound = (roomId, status, roundNum, currentPlayer) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("new round", { status, roundNum, currentPlayer }));
+// Let the players know about the next round and prompt the current player
+exports.emitNewRound = (roomId, status, roundNum, currentPlayer, timeoutDuration) => sockets.forEach(socket => {
+    if (socket.handshake.session.roomId === roomId) {
+        socket.emit("new round", { status, roundNum, currentPlayer });
+        if (socket.handshake.session.user.username === currentPlayer.username) {
+            socket.emit("play word and card", timeoutDuration/1000);
+        }
+    }
+});
 
 // Emit the new status of the game
 exports.emitStatus = (roomId, status) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("status", { status }));
@@ -85,7 +91,7 @@ exports.emitStartGame = roomId => sockets.forEach(socket => socket.handshake.ses
 exports.emitWord = (roomId, word) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("played word", word));
 
 exports.emitPlayedCard = (username, card) => {
-    const socket = sockets.find(socket => socket.handshake.session.user === username);
+    const socket = sockets.find(socket => socket.handshake.session.user.username === username);
     if (socket) socket.emit("played card", card);
 };
 
@@ -101,14 +107,8 @@ exports.emitDrawers = (roomId, players) => sockets.forEach(socket => socket.hand
 // When game is over, tell the users
 exports.emitEndGame = roomId => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("end"));
 
-// Ask the current player for a word and a card
-exports.promptCurrentPlayer = (roomId, currentPlayer, timeoutDuration) => {
-    const current = sockets.find(socket => (socket.handshake.session.user === currentPlayer.username && socket.handshake.session.roomId === roomId));
-    if (current) current.emit("play word and card", timeoutDuration/1000);
-};
-
 // Prompt the players to pick a card
-exports.promptOtherPlayers = (roomId, currentPlayer, timeoutDuration) => sockets.forEach(socket => socket.handshake.session.user !== currentPlayer.username && socket.handshake.session.roomId === roomId && socket.emit("play card", timeoutDuration/1000));
+exports.promptOtherPlayers = (roomId, currentPlayer, timeoutDuration) => sockets.forEach(socket => socket.handshake.session.user.username !== currentPlayer.username && socket.handshake.session.roomId === roomId && socket.emit("play card", timeoutDuration/1000));
 
 // Ask the other players to vote on the cards
-exports.promptPlayersVote = (roomId, currentPlayer, timeoutDuration) => sockets.forEach(socket => socket.handshake.session.user !== currentPlayer.username && socket.handshake.session.roomId === roomId && socket.emit("vote", timeoutDuration/1000));
+exports.promptPlayersVote = (roomId, currentPlayer, timeoutDuration) => sockets.forEach(socket => socket.handshake.session.user.username !== currentPlayer.username && socket.handshake.session.roomId === roomId && socket.emit("vote", timeoutDuration/1000));
