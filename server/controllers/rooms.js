@@ -16,13 +16,13 @@ router.post('/create', auth, (req, res) => {
             if (room.gameState.players.length === 1) {
                 throw Error("Cannot leave current room");
             } else {
-                Room.removePlayer(room, user);
+                Room.removePlayer(room, user.username);
             }
         }
         const newRoomId = Room.create(numRounds);
         const newRoom = Room.getById(newRoomId);
         Room.addPlayer(newRoom, user);
-        socket.joinRoom(newRoomId, user);
+        socket.joinRoom(newRoomId, user.username);
         socket.emitRooms();
         req.session.roomId = newRoomId;
         res.sendStatus(200);
@@ -39,13 +39,13 @@ router.post('/join', auth, (req, res) => {
     try {
         const oldRoom = Room.getById(roomId);
         if (oldRoom) {
-            Room.removePlayer(oldRoom, user);
+            Room.removePlayer(oldRoom, user.username);
         }
         req.session.roomId = null;
         const newRoom = Room.getById(newRoomId);
         if (newRoom) {
             Room.addPlayer(newRoom, user);
-            socket.joinRoom(newRoomId, user);
+            socket.joinRoom(newRoomId, user.username);
             req.session.roomId = newRoomId;
         }
         socket.emitRooms();
@@ -62,7 +62,7 @@ router.post('/leave', auth, (req, res) => {
     try {
         const room = Room.getById(roomId);
         if (room) {
-            Room.removePlayer(room, user);
+            Room.removePlayer(room, user.username);
             socket.leaveRoom(user);
         }
         socket.emitRooms();
