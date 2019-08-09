@@ -22,7 +22,7 @@ router.post('/create', auth, (req, res) => {
         const newRoomId = Room.create(numRounds);
         const newRoom = Room.getById(newRoomId);
         Room.addPlayer(newRoom, user);
-        socket.joinRoom(newRoomId, user);
+        socket.joinRoom(newRoomId, user.username);
         socket.emitRooms();
         req.session.roomId = newRoomId;
         res.sendStatus(200);
@@ -45,7 +45,7 @@ router.post('/join', auth, (req, res) => {
         const newRoom = Room.getById(newRoomId);
         if (newRoom) {
             Room.addPlayer(newRoom, user);
-            socket.joinRoom(newRoomId, user);
+            socket.joinRoom(newRoomId, user.username);
             req.session.roomId = newRoomId;
         }
         socket.emitRooms();

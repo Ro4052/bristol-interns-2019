@@ -18,7 +18,7 @@ class GameLogic {
         this.roundNum = 0;
         this.currentPlayer = null;
         this.currentWord = '';
-        /** @type {{ username: string, cards: {{ cardId: number, played: bool }[]}, score: number }[]} */
+        /** @type {{ username: string, id: number, cards: {{ cardId: number, played: bool }[]}, score: number }[]} */
         this.players = [];
         /** @type {{ username: string, cardId: number }[]} */
         this.playedCards = [];
@@ -62,7 +62,7 @@ class GameLogic {
     getUnplayedCardsByUsername(username) { return this.players.find(player => player.username === username).cards.filter(card => !card.played) };
 
     /* Return the list of players, hiding their assigned cards */
-    getPlayers() { return this.players.map(player => ({ username: player.username, score: player.score, finishedTurn: player.finishedTurn })) };
+    getPlayers() { return this.players.map(player => ({ username: player.username, id: player.id, score: player.score, finishedTurn: player.finishedTurn })) };
 
     /* Return the list of cards played this round, hiding who played them */
     getPlayedCards() {
@@ -88,14 +88,14 @@ class GameLogic {
     allPlayersVoted() { return this.players.every(player => player.username === this.currentPlayer.username || this.hasVoted(player.username)) };
 
     /* Add the player to the game if possible */
-    joinGame(username) {
+    joinGame(user) {        
         if (this.status !== statusTypes.NOT_STARTED) {
             throw Error("Game has already started");
-        } else if (this.players.some(player => player.username === username)) {
+        } else if (this.players.some(player => player.username === user.username)) {
             throw Error("You have already joined this game");
         } else {
             const cards = cardsManager.assign(this.players, 4);
-            const player = { username, cards, score: 0, finishedTurn: false };
+            const player = { username: user.username, id: user.id, cards, score: 0, finishedTurn: false };
             this.players.push(player);
             socket.emitPlayers(this.roomId, this.getPlayers());
         }
@@ -142,8 +142,8 @@ class GameLogic {
             this.setStatus(statusTypes.WAITING_FOR_CURRENT_PLAYER);
             this.roundNum++;
             this.currentPlayer = this.players[this.roundNum % this.players.length];
-            socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer);
-            socket.promptCurrentPlayer(this.roomId, this.currentPlayer, storytellerDuration);
+            socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer, storytellerDuration);
+            // socket.promptCurrentPlayer(this.roomId, this.currentPlayer, storytellerDuration);
             this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), storytellerDuration);
         } else {
             this.setStatus(statusTypes.GAME_OVER);
