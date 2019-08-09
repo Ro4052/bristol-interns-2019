@@ -1,4 +1,3 @@
-const validWord = require('../services/validWord');
 const router = require('express').Router();
 const path = require('path');
 const auth = require('../middlewares/auth');
@@ -9,10 +8,16 @@ let currentUsers = [];
 let db;
 
 if (process.env.NODE_ENV === 'testing') {
-    db = require('../queries/testqueries');
+    db = {
+        user: require('../queries/testqueries')
+    };
 } else {
-    db = require('../queries/queries');
+    db = require('../queries');
+    db.sequelize.sync().then(() => {
+        console.log("Connected to database");
+    });
 }
+
 
 router.use('/api/room', require('./rooms'));
 
@@ -29,28 +34,20 @@ router.get('/auth', (req, res) => {
 /* Log in the user */
 router.post('/auth/login', (req, res) => {
     const { username } = req.body;
-    db.get(username).then((user => {
-        if (!user) {
-            // TODO: Add this when we add authentication
-            // res.status(409).json({message: "Username already exists."});
-            try {
-                db.add(username).then((id) => {
-                    req.session.user = { username, id};
-                    req.session.roomId = null;
-                    currentUsers.push({ username });
-                    res.sendStatus(200);
-                });
-            } catch (err) {
-                console.log(err);
-                res.status(400).json({ message: err.message });
-            }  
-        } else {
-            req.session.roomId = null;
-            currentUsers.push({ username });
-            req.session.user = { username: user.name, id: user.id }
-            res.sendStatus(200);
+    db.user.findOrCreate({
+        where: {
+            name: username
+        },
+        defaults: { // set the default properties if it doesn't exist
+            name: username.trim(),
+            score: 0
         }
-    }));        
+    }).then(user => {        
+        req.session.user = { username, id: user.id };
+        req.session.roomId = null;
+        currentUsers.push({ username });
+        res.sendStatus(200);
+    }) 
 });
 
 /* Log out the user */
@@ -64,11 +61,11 @@ router.post('/auth/logout', auth, (req, res) => {
         }
         disconnectSocket(user.username);
         req.session.destroy();
-        currentUsers = currentUsers.filter((otherUser) => otherUser.username !== user.username);
+        currentUsers = currentUsers.filter(otherUser => otherUser.username !== user.username);
         res.sendStatus(200);
     } catch (err) {
         console.log(err);
-        res.status(400).json({message: err.message});
+        res.status(400).json({ message: err.message });
     }
 });
 
@@ -81,7 +78,7 @@ router.get('/api/cards', auth, (req, res) => {
         res.status(200).json(cards);
     }
     else {
-        res.status(404).json({message: "Cannot find cards: user does not exist."});
+        res.status(404).json({ message: "Cannot find cards: user does not exist." });
     }
 });
 
@@ -94,7 +91,7 @@ router.get('/api/start', auth, (req, res) => {
         res.sendStatus(200);
     } catch (err) {
         console.log(err);
-        res.status(400).json({message: err.message});
+        res.status(400).json({ message: err.message });
     }
 });
 
@@ -102,15 +99,30 @@ router.get('/api/start', auth, (req, res) => {
 router.get('/api/end', auth, (req, res) => {
     const { roomId } = req.session;
     try {
-        const gameState = Room.getById(roomId).gameState;
-        db.updateScores(gameState.getPlayers()).then((user) => {
-            gameState.endGame();
-            Room.deleteById(roomId);
-            closeRoom(roomId);
-            res.sendStatus(200);
+        const gameState = Room.getById(roomId).gameState;        
+        gameState.getPlayers().forEach(player => {
+            db.user.findByPk(player.id).then(users => {
+                console.log(users[0]);
+                const prevScore = users[0].dataValues.score;
+                db.user.update({
+                    score: player.score + prevScore
+                },
+                {
+                    where: {
+                        name: player.username
+                    }
+                }).then(() => {
+                    gameState.endGame();
+                    Room.deleteById(roomId);
+                    closeRoom(roomId);
+                    res.sendStatus(200);
+                });
+            }).catch(err => {
+                console.log(err);
+            })
         });
     } catch (err) {
-        res.status(400).json({message: err.message});
+        res.status(400).json({ message: err.message });
     }
 });
 
@@ -118,20 +130,12 @@ router.get('/api/end', auth, (req, res) => {
 router.post('/api/play-card-word', auth, (req, res) => {
     const { user, roomId } = req.session;
     const { word, cardId } = req.body;
-    if (Room.getById(roomId).gameState.isCurrentPlayer(user.username)) { /* Only current player is allowed to play both a word and a card */
-        try {
-            if (validWord.isValidWord(word)) {
-                Room.getById(roomId).gameState.playCardAndWord(user.username, cardId, word); 
-                res.sendStatus(200);
-            } else { 
-                res.status(400).json({message: "Invalid word."});
-            }
-        } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
-            console.log(err);
-            res.status(400).json({ message: err.message});
-        }
-    } else { /* Current player attempts to vote for their card */
-        res.status(400).json({ message: "You cannot play a word and a card when it is not your turn."});
+    try {
+        Room.getById(roomId).gameState.playCardAndWord(user.username, cardId, word); 
+        res.sendStatus(200);
+    } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
+        console.log(err);
+        res.status(400).json({ message: err.message });
     }
 });
 
@@ -143,7 +147,7 @@ router.post('/api/play-card', auth, (req, res) => {
         Room.getById(roomId).gameState.playCard(user.username, cardId)
         res.sendStatus(200);
     } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
-        res.status(400).json({ message: err.message});
+        res.status(400).json({ message: err.message });
     }
 });
 
@@ -157,10 +161,10 @@ router.post('/api/vote-card', auth, (req, res) => {
             res.sendStatus(200);
         } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
             console.log(err);
-            res.status(400).json({ message: err.message});
+            res.status(400).json({ message: err.message });
         }
     } else { /* Current player attempts to vote for their card */
-        res.status(400).json({ message: "You cannot vote for a card when it is your turn."});
+        res.status(400).json({ message: "You cannot vote for a card when it is your turn." });
     }
 });
 
@@ -178,7 +182,7 @@ router.get('/api/game-state', auth, (req, res) => {
 /* Check if in dev mode, and enable end game request */
 if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {
-        db.reset();
+        db.user.reset();
         currentUsers = [];
         disconnectAllSockets();
         Room.reset();

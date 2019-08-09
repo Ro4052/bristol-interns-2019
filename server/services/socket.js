@@ -71,7 +71,7 @@ exports.closeRoom = roomId => {
 // Emit all the players
 exports.emitPlayers = (roomId, players) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("players", { players }));
 
-// Let the players know about the next round
+// Let the players know about the next round and prompt the current player
 exports.emitNewRound = (roomId, status, roundNum, currentPlayer, timeoutDuration) => sockets.forEach(socket => {
     if (socket.handshake.session.roomId === roomId) {
         socket.emit("new round", { status, roundNum, currentPlayer });
@@ -106,12 +106,6 @@ exports.emitDrawers = (roomId, players) => sockets.forEach(socket => socket.hand
 
 // When game is over, tell the users
 exports.emitEndGame = roomId => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("end"));
-
-// Ask the current player for a word and a card
-exports.promptCurrentPlayer = (roomId, currentPlayer, timeoutDuration) => {
-    const current = sockets.find(socket => socket.handshake.session.user.username === currentPlayer.username && socket.handshake.session.roomId === roomId);
-    if (current) current.emit("play word and card", timeoutDuration/1000);
-};
 
 // Prompt the players to pick a card
 exports.promptOtherPlayers = (roomId, currentPlayer, timeoutDuration) => sockets.forEach(socket => socket.handshake.session.user.username !== currentPlayer.username && socket.handshake.session.roomId === roomId && socket.emit("play card", timeoutDuration/1000));
