@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const Sequelize = require('sequelize');
 const path = require('path');
 const auth = require('../middlewares/auth');
 const Room = require('../models/room');
@@ -41,12 +42,14 @@ router.post('/auth/login', (req, res) => {
             name: username.trim(),
             score: 0
         }
-    }).then(users => {
-        const id = users[0].dataValues.id
-        req.session.user = { username, id: id };
+    }).then(users => {        
+        const id = users[0].dataValues.id;
+        req.session.user = { username, id };
         req.session.roomId = null;
         currentUsers.push({ username });
         res.sendStatus(200);
+    }).catch(err => {
+        res.status(400).json({ message: err.message });
     });
 });
 
@@ -101,28 +104,25 @@ router.get('/api/end', auth, (req, res) => {
     try {
         const gameState = Room.getById(roomId).gameState;        
         gameState.getPlayers().forEach(player => {
-            console.log(player);
-            
-            db.user.findByPk(player.id).then(user => {
-                const prevScore = user.dataValues.score;
-                db.user.update({
-                    score: player.score + prevScore
-                },
-                {
-                    where: {
-                        name: player.username
-                    }
-                }).then(() => {
-                    gameState.endGame();
-                    Room.deleteById(roomId);
-                    closeRoom(roomId);
-                    res.sendStatus(200);
-                });
+            db.user.update({
+                score: Sequelize.literal(`score + ${player.score}`)
+            },
+            {
+                where: {
+                    id: player.id
+                }
+            }).then(() => {
+                gameState.endGame();
+                Room.deleteById(roomId);
+                closeRoom(roomId);
+                res.sendStatus(200);
             }).catch(err => {
                 console.log(err);
+                res.status(400).json({ message: err.message });
             });
         });
     } catch (err) {
+        console.log(err);
         res.status(400).json({ message: err.message });
     }
 });
