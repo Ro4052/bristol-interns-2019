@@ -3,10 +3,16 @@ const router = require('express').Router();
 const path = require('path');
 const auth = require('../middlewares/auth');
 const Room = require('../models/room');
-const db = require('../queries/queries');
 const { emitRooms, disconnectSocket, closeRoom, disconnectAllSockets } = require('../services/socket');
 
 let currentUsers = [];
+let db;
+
+if (process.env.NODE_ENV === 'testing') {
+    db = require('../queries/testqueries');
+} else {
+    db = require('../queries/queries');
+}
 
 router.use('/api/room', require('./rooms'));
 
