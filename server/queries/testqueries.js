@@ -18,7 +18,7 @@ module.exports.add = (username) => {
 }
 
 module.exports.get = (username) => {
-    return new Promise((resolve) => {
+    return new Promise((resolve) => {        
         resolve(users.find(user => user.username === username));
     })
 }
