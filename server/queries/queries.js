@@ -9,11 +9,11 @@ if (process.env.DATABASE_URL) {
     });
 } else {
     pool = new Client({
-        user: 'me',
-        host: 'localhost',
+        user: process.env.USER,
+        host: process.env.HOST,
         database: 'telltales',
-        password: 'password',
-        port: 5432
+        password: process.env.PASSWORD,
+        port: process.env.PORT
     });
 }
 
