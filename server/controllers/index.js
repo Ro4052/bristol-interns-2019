@@ -9,7 +9,7 @@ let db;
 
 if (process.env.NODE_ENV === 'testing') {
     db = {
-        user: require('../queries/testqueries')
+        user: require('./testqueries')
     };
 } else {
     db = require('../queries');
@@ -41,8 +41,9 @@ router.post('/auth/login', (req, res) => {
             name: username.trim(),
             score: 0
         }
-    }).then(user => {        
-        req.session.user = { username, id: user.id };
+    }).then(users => {
+        const id = users[0].dataValues.id
+        req.session.user = { username, id: id };
         req.session.roomId = null;
         currentUsers.push({ username });
         res.sendStatus(200);
@@ -100,6 +101,8 @@ router.get('/api/end', auth, (req, res) => {
     try {
         const gameState = Room.getById(roomId).gameState;        
         gameState.getPlayers().forEach(player => {
+            console.log(player);
+            
             db.user.findByPk(player.id).then(user => {
                 const prevScore = user.dataValues.score;
                 db.user.update({
