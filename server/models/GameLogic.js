@@ -88,7 +88,7 @@ class GameLogic {
     allPlayersVoted() { return this.players.every(player => player.username === this.currentPlayer.username || this.hasVoted(player.username)) };
 
     /* Add the player to the game if possible */
-    joinGame(user) {        
+    joinGame(user) {
         if (this.status !== statusTypes.NOT_STARTED) {
             throw Error("Game has already started");
         } else if (this.players.some(player => player.username === user.username)) {
@@ -143,7 +143,6 @@ class GameLogic {
             this.roundNum++;
             this.currentPlayer = this.players[this.roundNum % this.players.length];
             socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer, storytellerDuration);
-            // socket.promptCurrentPlayer(this.roomId, this.currentPlayer, storytellerDuration);
             this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), storytellerDuration);
         } else {
             this.setStatus(statusTypes.GAME_OVER);
