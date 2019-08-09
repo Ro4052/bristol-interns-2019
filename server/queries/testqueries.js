@@ -25,9 +25,9 @@ module.exports.findOrCreate = (username) => {
     })
 }
 
-module.exports.findByPk = (username) => {
+module.exports.findByPk = (id) => {
     return new Promise((resolve) => {        
-        resolve(users.find(user => user.username === username));
+        resolve(users.find(user => user.id === id));
     })
 }
 
