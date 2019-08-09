@@ -4,15 +4,12 @@ import styles from './LeaderBoard.module.css';
 import history from '../../services/history';
 
 export class LeaderBoard extends React.Component {
-    componentDidMount() {
-
-    }
-
-    render() {
+    render() {        
         return (
             <div className={styles.leaderBoardPage}>
                 <ul className={styles.leaderBoard}>
-                    <li>Someone</li>
+                    <h3>Leader Board</h3>
+                    {this.props.players.map(player => <li>{player}</li>)}
                 </ul>
             </div>
         );
@@ -20,6 +17,7 @@ export class LeaderBoard extends React.Component {
 }
 
 const mapStateToProps = state => ({
+    players: state.leaderBoardReducer.players
 });
 
 const mapDispatchToProps = dispatch => ({

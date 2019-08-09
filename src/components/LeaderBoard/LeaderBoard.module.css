@@ -1,4 +1,5 @@
 .leaderBoardPage {
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -6,5 +7,17 @@
 }
 
 .leaderBoard {
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10vmin 20vmin;
     background-color: white;
+    font-size: 2em;
+    overflow-y: scroll;
+}
+
+h3 {
+    margin-top: 0;
 }
