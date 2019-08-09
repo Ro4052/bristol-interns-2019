@@ -73,6 +73,16 @@ router.get('/api/cards', auth, (req, res) => {
     }
 });
 
+/* Get the list of all players ever created with their scores */
+router.get('/api/allPlayers', (req, res) => {
+    try {
+        db.getUsers().then(users => res.status(200).json(users));
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({ message: err.message });
+    }
+});
+
 /* Start the game */
 router.get('/api/start', auth, (req, res) => {
     try {

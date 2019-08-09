@@ -6,8 +6,8 @@ const axiosInstance = axios.create({ validateStatus: status => (status >= 200 &&
 export const setPlayers = () => dispatch => {
     axiosInstance.get('/api/allPlayers')
     .then(res => {
-        if (res.status !== 200) throw Error(res.data.message);
-        dispatch(setPlayersSuccess(res.data.players));
+        if (res.status !== 200) throw Error(res.data.message);        
+        dispatch(setPlayersSuccess(res.data));
     })
     .catch(err => dispatch(setPlayersFailure(err.message)));
 };

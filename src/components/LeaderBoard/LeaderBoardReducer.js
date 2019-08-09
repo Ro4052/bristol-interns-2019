@@ -6,11 +6,11 @@ export const initialState = {
 };
 
 const leaderBoardReducer = (state = initialState, action) => {
+    console.log(state);
+    
     switch (action.type) {
-        case types.SET_PLAYERS:
-            return {...state, players: action.players };
         case types.SET_PLAYERS_SUCCESS:
-            return {...state, error: null };
+            return {...state, players: action.players, error: null };
         case types.SET_PLAYERS_FAILURE:
             return {...state, error: action.error };
         default:

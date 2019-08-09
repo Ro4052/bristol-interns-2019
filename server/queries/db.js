@@ -34,8 +34,17 @@ module.exports.createUser = username => {
     });
 }
 
-module.exports.getUser = (callback) => {
-    User.findAll().then(todos => callback(todos));
+module.exports.getUsers = () => {
+    return new Promise((resolve, reject) => {
+        User.findAll()
+        .then(users => resolve(users))
+        .catch(err => {
+            reject({
+                code: 404,
+                msg: err.message
+            })
+        });
+    });
 }
 
 module.exports.updateScore = (id, score) => {
