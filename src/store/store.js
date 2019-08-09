@@ -14,6 +14,7 @@ import dashboardReducer from '../components/Dashboard/DashboardReducer';
 import lobbyReducer from '../components/Lobby/LobbyReducer';
 import timerReducer from '../components/Timer/TimerReducer';
 import createRoomReducer from '../components/Lobby/CreateRoom/CreateRoomReducer';
+import chatReducer from '../components/Chat/ChatReducer';
 
 // Combine all reducers
 const allReducers = combineReducers({
@@ -26,6 +27,7 @@ const allReducers = combineReducers({
     dashboardReducer,
     lobbyReducer,
     timerReducer,
+    chatReducer,
     createRoomReducer
 });
 

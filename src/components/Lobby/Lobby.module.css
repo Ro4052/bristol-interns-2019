@@ -11,3 +11,13 @@
     flex-flow: row wrap;
     align-items: center;
 }
+
+.chatArea {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    flex-flow: row wrap;
+    align-items: center;
+    width:40%;
+    height: 60%;
+}

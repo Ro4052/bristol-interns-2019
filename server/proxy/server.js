@@ -15,7 +15,6 @@ let cookieJar = new tough.CookieJar();
 const app = express();
 
 let socket;
-
 let cards;
 
 app.use(bodyParser.json());
@@ -57,6 +56,15 @@ app.get('/connect', (req, res) => {
         console.error(err);
         res.status(err.response.status).json(err.response.data);
     }); 
+});
+
+app.get('/send-message', (req,res) => {
+    const body = { 
+        username: 'halfling',
+        message: "message"
+    };
+    socket.emit('send message', body);
+    res.sendStatus(200);
 });
 
 app.get('/logout', (req, res) => {

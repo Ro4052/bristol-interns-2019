@@ -22,8 +22,16 @@ exports.setupSocket = (server, session) => {
         socket.on('disconnect', disconnected => {
             sockets = sockets.filter(socket => socket !== disconnected);
         });
+        socket.on('send message', msg => {
+            
+            const { username, message } = msg;
+            emitMessage(username, message);
+        });
     });
 }
+
+// Chat
+const emitMessage = (username, message) => sockets.forEach(socket => socket.emit("message sent", { username, message }));
 
 // Emit the rooms
 const emitRooms = () => {

@@ -10,8 +10,15 @@ import { setCurrentWord, setStatus, setRoundNumber } from '../components/Dashboa
 import { removeCard } from '../components/MyCards/MyCardsActions';
 import { setRooms } from '../components/Lobby/LobbyActions';
 import { setVoteCardTimer, setPlayCardTimer, setStorytellerTimer } from '../components/Timer/TimerActions';
+import { setChat } from '../components/Chat/ChatActions';
 
-const connectSocket = () => {
+let socket;
+
+export const sendMessage = (username, message) => {
+    socket.emit("send message", {username, message});
+}
+
+export const connectSocket = () => {
     let connectionString;
     if (process.env.NODE_ENV === "development") {
         connectionString = "ws://localhost:8080";
@@ -20,9 +27,14 @@ const connectSocket = () => {
         connectionString = `${wsProtocol}://${window.location.host}`;
     }
 
-    const socket = io(connectionString, {
+    socket = io(connectionString, {
         transports:  ['websocket'],
         upgrade: false
+    });
+
+    socket.on("message sent", msg => {
+        const {username, message} = msg;
+        dispatch(setChat(username, message));
     });
 
     socket.on("players", msg => {
@@ -120,5 +132,3 @@ const connectSocket = () => {
         socket.on('error', (err) => reject(err));
     });
 }
-
-export default connectSocket;

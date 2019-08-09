@@ -7,6 +7,7 @@ import Logout from '../Logout/Logout';
 import { authenticateUser } from '../Login/LoginActions';
 import CreateRoom from './CreateRoom/CreateRoom';
 import history from '../../services/history';
+import Chat from '../Chat/Chat';
 
 export class Lobby extends React.Component {
     componentDidMount() {
@@ -26,6 +27,9 @@ export class Lobby extends React.Component {
                 <div className={styles.currentRooms} data-cy="current-rooms">
                     <CreateRoom />
                     {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}
+                </div>
+                <div className={styles.chatArea}>
+                    <Chat />
                 </div>
             </>
         );
