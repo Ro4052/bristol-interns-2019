@@ -1,0 +1,10 @@
+.leaderBoardPage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.leaderBoard {
+    background-color: white;
+}
