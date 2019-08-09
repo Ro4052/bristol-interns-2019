@@ -18,7 +18,6 @@ if (process.env.NODE_ENV === 'testing') {
     });
 }
 
-
 router.use('/api/room', require('./rooms'));
 
 /* Check if player is logged in */
@@ -47,7 +46,7 @@ router.post('/auth/login', (req, res) => {
         req.session.roomId = null;
         currentUsers.push({ username });
         res.sendStatus(200);
-    }) 
+    });
 });
 
 /* Log out the user */
@@ -101,9 +100,8 @@ router.get('/api/end', auth, (req, res) => {
     try {
         const gameState = Room.getById(roomId).gameState;        
         gameState.getPlayers().forEach(player => {
-            db.user.findByPk(player.id).then(users => {
-                console.log(users[0]);
-                const prevScore = users[0].dataValues.score;
+            db.user.findByPk(player.id).then(user => {
+                const prevScore = user.dataValues.score;
                 db.user.update({
                     score: player.score + prevScore
                 },
