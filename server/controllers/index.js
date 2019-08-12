@@ -76,7 +76,10 @@ router.get('/api/cards', auth, (req, res) => {
 /* Get the list of all players ever created with their scores */
 router.get('/api/all-players', (req, res) => {
     try {
-        db.getUsers().then(users => res.status(200).json(users));
+        db.getUsers().then(users => {
+            console.log(users);
+            res.status(200).json(users);
+        });
     } catch (err) {
         console.log(err);
         res.status(400).json({ message: err.message });
