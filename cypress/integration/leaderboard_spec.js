@@ -5,8 +5,13 @@ let score;
 describe('Leaderboard', () => {
     describe('on logging in for the first time', () => {
         beforeEach(() => {
+            cy.route({
+                method: "GET",
+                url: "/api/game-state",
+            }).as('getState');
             cy.login('unicorn')
-            .then(() => cy.url().should('include', 'lobby'));
+            .then(() => cy.url().should('include', '/lobby'))
+            .then(() => cy.wait('@getState'));
         });
 
         it('displays the username with a score of zero', () => {
