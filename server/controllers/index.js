@@ -74,7 +74,7 @@ router.get('/api/cards', auth, (req, res) => {
 });
 
 /* Get the list of all players ever created with their scores */
-router.get('/api/allPlayers', (req, res) => {
+router.get('/api/all-players', (req, res) => {
     try {
         db.getUsers().then(users => res.status(200).json(users));
     } catch (err) {
@@ -172,7 +172,6 @@ router.get('/api/game-state', auth, (req, res) => {
 /* Check if in dev mode, and enable end game request */
 if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {
-        db.reset();
         currentUsers = [];
         disconnectAllSockets();
         Room.reset();

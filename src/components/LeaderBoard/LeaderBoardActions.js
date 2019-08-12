@@ -1,23 +1,23 @@
-import { types } from './LeaderBoardActionTypes';
+import { types } from './LeaderboardActionTypes';
 import axios from "axios";
 
 const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
-export const setPlayers = () => dispatch => {
-    axiosInstance.get('/api/allPlayers')
+export const getPlayers = () => dispatch => {
+    axiosInstance.get('/api/all-players')
     .then(res => {
         if (res.status !== 200) throw Error(res.data.message);        
-        dispatch(setPlayersSuccess(res.data));
+        dispatch(getPlayersSuccess(res.data));
     })
-    .catch(err => dispatch(setPlayersFailure(err.message)));
+    .catch(err => dispatch(getPlayersFailure(err.message)));
 };
 
-export const setPlayersSuccess = (players) => ({
-    type: types.SET_PLAYERS_SUCCESS,
+export const getPlayersSuccess = (players) => ({
+    type: types.GET_PLAYERS_SUCCESS,
     players
 });
 
-export const setPlayersFailure = (error) => ({
-    type: types.SET_PLAYERS_FAILURE,
+export const getPlayersFailure = (error) => ({
+    type: types.GET_PLAYERS_FAILURE,
     error
 });

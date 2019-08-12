@@ -1,21 +1,19 @@
-import { types } from './LeaderBoardActionTypes';
+import { types } from './LeaderboardActionTypes';
 
 export const initialState = {
     players: [],
     error: null
 };
 
-const leaderBoardReducer = (state = initialState, action) => {
-    console.log(state);
-    
+const leaderboardReducer = (state = initialState, action) => {    
     switch (action.type) {
-        case types.SET_PLAYERS_SUCCESS:
-            return {...state, players: action.players, error: null };
-        case types.SET_PLAYERS_FAILURE:
-            return {...state, error: action.error };
+        case types.GET_PLAYERS_SUCCESS:
+            return { ...state, players: action.players, error: null };
+        case types.GET_PLAYERS_FAILURE:
+            return { ...state, error: action.error };
         default:
             return state;
     }
 };
 
-export default leaderBoardReducer;
+export default leaderboardReducer;

@@ -1,33 +1,48 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import styles from './LeaderBoard.module.css';
+import styles from './Leaderboard.module.css';
 import history from '../../services/history';
-import { setPlayers } from './LeaderBoardActions';
+import { getPlayers } from './LeaderboardActions';
+import Button from '../shared/Button/Button';
 
-export class LeaderBoard extends React.Component {
+export class Leaderboard extends React.Component {
     componentDidMount() {
-        this.props.setPlayers();
+        this.props.getPlayers();
+    }
+
+    goToLobby() {
+        history.push('/lobby');
     }
 
     render() {
-        console.log(this.props.players);
         return (
-            <div className={styles.leaderBoardPage}>
-                <ul className={styles.leaderBoard}>
-                    <h3>Leader Board</h3>
-                    {this.props.players.map(player => <li>{player.score} {player.name}</li>)}
-                </ul>
+            <div className={styles.leaderboardPage}>
+                <div className={styles.backButton}>
+                    <Button data-cy="back" handleClick={this.goToLobby} text="Back" />
+                </div>
+                <div className={styles.leaderboard}>
+                    <h2>Leader Board</h2>
+                    <table>
+                        <tbody>
+                        <tr>
+                            <th><h3>Username</h3></th>
+                            <th><h3>Score</h3></th>
+                        </tr>
+                        {this.props.players.map(player => <tr key={player.id} data-cy="player-row"><td><h4 data-cy="player-username">{player.username}</h4></td><td><h4 data-cy="player-score">{player.score}</h4></td></tr>)}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         );
     }
 }
 
 const mapStateToProps = state => ({
-    players: state.leaderBoardReducer.players
+    players: state.leaderboardReducer.players
 });
 
 const mapDispatchToProps = dispatch => ({
-    setPlayers: () => dispatch(setPlayers())
+    getPlayers: () => dispatch(getPlayers())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LeaderBoard);
+export default connect(mapStateToProps, mapDispatchToProps)(Leaderboard);
