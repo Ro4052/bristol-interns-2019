@@ -28,7 +28,7 @@ export class Leaderboard extends React.Component {
                             <th><h3>Username</h3></th>
                             <th><h3>Score</h3></th>
                         </tr>
-                        {this.props.players.map(player => <tr key={player.id} data-cy="player-row"><td><h4 data-cy="player-username">{player.username}</h4></td><td><h4 data-cy="player-score">{player.score}</h4></td></tr>)}
+                        {this.props.players && this.props.players.map(player => <tr key={player.id} data-cy="player-row"><td><h4 data-cy="player-username">{player.username}</h4></td><td><h4 data-cy="player-score">{player.score}</h4></td></tr>)}
                         </tbody>
                     </table>
                 </div>
