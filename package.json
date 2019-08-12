@@ -22,10 +22,11 @@
     "redux": "^4.0.1",
     "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0",
-    "sequelize": "^5.13.0",
     "socket.io": "^2.2.0",
     "socket.io-mock": "^1.2.3",
-    "word-list": "^3.1.0"
+    "word-list": "^3.1.0",
+    "sequelize": "4.43.1",
+    "pg": "7.8.1"
   },
   "scripts": {
     "start": "node server.js",
