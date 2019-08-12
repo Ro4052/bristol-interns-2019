@@ -9,12 +9,18 @@ jobs:
       - image: circleci/node:10
     steps:
       - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}-1
       - run:
           name: Setup Dependencies
           command: npm ci
       - run:
           name: Run Client Tests
           command: npm run test:client
+      - save_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}-1
+          paths:
+            - ./node_modules
 
   deploy-master:
     docker:
