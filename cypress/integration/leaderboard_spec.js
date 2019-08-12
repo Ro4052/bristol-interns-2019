@@ -5,17 +5,12 @@ let score;
 describe('Leaderboard', () => {
     describe('on logging in for the first time', () => {
         beforeEach(() => {
-            cy.route({
-                method: "GET",
-                url: "/api/game-state",
-            }).as('getState');
             cy.login('unicorn')
-            .then(() => cy.url().should('include', '/lobby'))
-            .then(() => cy.wait('@getState'));
+            .then(() => cy.createRoom());
         });
 
         it('displays the username with a score of zero', () => {
-            cy.get('[data-cy="go-leaderboard"]').click()
+            cy.get('[data-cy="go-leaderboard"]').click();
             cy.get('[data-cy="player-username"]').contains('unicorn');
             score = cy.get('[data-cy="player-score"]').first().then($score => {
                 score = $score.text();
