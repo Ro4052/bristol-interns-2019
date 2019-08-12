@@ -6,11 +6,11 @@ describe('Leaderboard', () => {
     describe('on logging in for the first time', () => {
         beforeEach(() => {
             cy.login('unicorn')
-            .then(() => cy.createRoom());
+            .then(() => cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`))
+            .then(() => cy.get('[data-cy="go-leaderboard"]').click());
         });
 
         it('displays the username with a score of zero', () => {
-            cy.get('[data-cy="go-leaderboard"]').click();
             cy.get('[data-cy="player-username"]').contains('unicorn');
             score = cy.get('[data-cy="player-score"]').first().then($score => {
                 score = $score.text();
