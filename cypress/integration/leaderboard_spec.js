@@ -4,7 +4,17 @@ let score;
 
 describe('Leaderboard', () => {
     describe('on logging in for the first time', () => {
-        beforeEach(() => cy.login('unicorn'));
+        beforeEach(() => {
+            cy.login('unicorn')
+            .then(() => {
+                cy.route({
+                    method: "GET",
+                    url: "/api/game-state",
+                }).as('getState');
+                cy.visit('/lobby');
+                cy.wait('@getState');
+            })
+        });
 
         it('displays the username with a score of zero', () => {
             cy.getPlayers();
