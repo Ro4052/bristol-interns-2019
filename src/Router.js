@@ -3,7 +3,7 @@ import { Router, Route } from 'react-router-dom'
 import Dashboard from './components/Dashboard/Dashboard';
 import Lobby from './components/Lobby/Lobby';
 import Login from './components/Login/Login';
-import LeaderBoard from './components/Leaderboard/Leaderboard';
+import Leaderboard from './components/Leaderboard/Leaderboard';
 import history from './services/history';
 
 export default class Routes extends React.Component {
@@ -13,7 +13,7 @@ export default class Routes extends React.Component {
                 <Route exact path='/' component={Login}/>
                 <Route path='/lobby' component={Lobby}/>
                 <Route path='/dashboard' component={Dashboard}/>
-                <Route path='/leaderboard' component={LeaderBoard}/>
+                <Route path='/leaderboard' component={Leaderboard}/>
             </Router>
         );
     }
