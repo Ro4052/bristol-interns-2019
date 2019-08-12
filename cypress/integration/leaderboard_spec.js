@@ -6,6 +6,7 @@ describe('Leaderboard', () => {
     describe('on logging in for the first time', () => {
         beforeEach(() => {
             cy.login('unicorn')
+            .then(() => cy.url().should('contain', 'lobby'))
             .then(() => cy.get('[data-cy="go-leaderboard"]').click());
         });
 
