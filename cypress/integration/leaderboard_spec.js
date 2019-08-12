@@ -11,13 +11,12 @@ describe('Leaderboard', () => {
                     method: "GET",
                     url: "/api/game-state",
                 }).as('getState');
-                cy.visit('/lobby');
                 cy.wait('@getState');
             })
+            .then(() => cy.getPlayers());
         });
 
         it('displays the username with a score of zero', () => {
-            cy.getPlayers();
             cy.get('[data-cy="player-username"]').contains('unicorn');
             score = cy.get('[data-cy="player-score"]').first().then($score => {
                 score = $score.text();
