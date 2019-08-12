@@ -95,7 +95,7 @@ describe('if not started and not in room', () => {
         it('calls joinRoom', () => {
             const joinRoom = jest.fn();
             const wrapper = mount(<Room room={notEnoughPlayers} username="player2" joinRoom={joinRoom} />);
-            wrapper.find({ 'data-cy': 'join-room' }).simulate('click');
+            wrapper.find({ 'data-cy': 'join-room-form' }).simulate('submit');
             expect(joinRoom).toHaveBeenCalled();
             joinRoom.mockRestore();
         });
@@ -113,11 +113,11 @@ describe('if not started and in room', () => {
         expect(wrapper.exists({ 'data-cy': 'join-room' })).toEqual(false);
     });
 
-    describe('on click the leave room button', () => {
+    describe('on submit the leave room form', () => {
         it('calls leaveRoom', () => {
             const leaveRoom = jest.fn();
             const wrapper = mount(<Room room={notEnoughPlayers} username="player1" leaveRoom={leaveRoom} />);
-            wrapper.find({ 'data-cy': 'leave-room' }).simulate('click');
+            wrapper.find({ 'data-cy': 'leave-room-form' }).simulate('submit');
             expect(leaveRoom).toHaveBeenCalled();
             leaveRoom.mockRestore();
         });

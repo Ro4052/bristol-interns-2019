@@ -6,6 +6,22 @@ import Button from '../../shared/Button/Button';
 import { joinRoom, leaveRoom } from '../LobbyActions';
 
 export class Room extends React.Component {
+    constructor(props) {
+        super(props);
+        this.joinRoom = this.joinRoom.bind(this);
+        this.leaveRoom = this.leaveRoom.bind(this);
+    }
+
+    joinRoom(e) {
+        e.preventDefault();
+        this.props.joinRoom(this.props.room.roomId);
+    }
+
+    leaveRoom(e) {
+        e.preventDefault();
+        this.props.leaveRoom(this.props.room.roomId)
+    }
+
     render() {
         const waiting = <span className = {styles.waiting} data-cy="players-needed">Waiting for {this.props.room.minPlayers - this.props.room.players.length} more players</span>;
         const inRoom = this.props.room.players.some(player => player.username === this.props.username);
@@ -18,21 +34,26 @@ export class Room extends React.Component {
                 {!this.props.room.started && inRoom && !(this.props.room.minPlayers - this.props.room.players.length > 0) && <StartGame />}
                 {!this.props.room.started && (this.props.room.minPlayers - this.props.room.players.length > 0 ? waiting : null)}
                 {!this.props.room.started && (inRoom ?
-                    <Button cy="leave-room" handleClick={() => this.props.leaveRoom(this.props.room.roomId)} text="Leave room" /> :
-                    <Button cy="join-room" handleClick={() => this.props.joinRoom(this.props.room.roomId)} text="Join room" />
+                    <form data-cy="leave-room-form" onSubmit={this.leaveRoom}>
+                        <Button cy="leave-room" text="Leave room" />
+                    </form>
+                    :
+                    <form data-cy="join-room-form" onSubmit={this.joinRoom}>
+                        <Button cy="join-room" text="Join room" />
+                    </form>
                 )}
             </div>
         );
     }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     username: state.authReducer.username
 });
 
-const mapDispatchToProps = (dispatch) => ({
-    joinRoom: (roomId) => dispatch(joinRoom(roomId)),
-    leaveRoom: (roomId) => dispatch(leaveRoom(roomId))
+const mapDispatchToProps = dispatch => ({
+    joinRoom: roomId => dispatch(joinRoom(roomId)),
+    leaveRoom: roomId => dispatch(leaveRoom(roomId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Room);

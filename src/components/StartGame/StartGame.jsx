@@ -9,7 +9,8 @@ export class StartGame extends React.Component {
         this.startGame = this.startGame.bind(this);
     }
 
-    startGame() {
+    startGame(e) {
+        e.preventDefault();
         axios.get('/api/start')
         .then(() => history.push('/dashboard'))
         .catch(err => console.log(err));
@@ -17,7 +18,9 @@ export class StartGame extends React.Component {
 
     render() {
         return (
-            <Button cy="start-game" handleClick={this.startGame} text="Start game" />
+            <form onSubmit={this.startGame}>
+                <Button cy="start-game" text="Start game" />
+            </form>
         );
     }
 }

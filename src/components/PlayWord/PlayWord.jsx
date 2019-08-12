@@ -15,11 +15,13 @@ export class PlayWord extends React.Component {
         this.sendMessage = this.sendMessage.bind(this);
     }
 
-    handleChange(event) {
-        this.setState({ currentValue: event.target.value });
+    handleChange(e) {
+        e.preventDefault();
+        this.setState({ currentValue: e.target.value });
     }
 
-    sendMessage() {
+    sendMessage(e) {
+        e.preventDefault();
         this.props.sendWord(this.state.currentValue);
     }
 
@@ -27,9 +29,11 @@ export class PlayWord extends React.Component {
         return (
             <div className={styles.sendWordBox}>
                 <Prompt cy="play-word" text="Type in the word that best describes the card you picked" />
-                <input className={styles.entryBox} onChange={this.handleChange} value={this.state.currentValue} placeholder="Type a word" data-cy='type-word' />
-                <span className={styles.invalidWord} data-cy= 'send-error'>{this.props.error}</span>
-                <Button cy="send-word" handleClick={this.sendMessage} text="Send word" />
+                <form data-cy="word-form" onSubmit={this.sendMessage}>
+                    <input className={styles.entryBox} onChange={this.handleChange} value={this.state.currentValue} placeholder="Type a word" data-cy='type-word' autoFocus />
+                    <Button cy="send-word" text="Send word" />
+                    <span className={styles.invalidWord} data-cy= 'send-error'>{this.props.error}</span>
+                </form>
             </div>
         );
     }

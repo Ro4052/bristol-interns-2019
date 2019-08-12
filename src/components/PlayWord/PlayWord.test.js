@@ -31,17 +31,10 @@ describe('on player types in the box', () => {
 });
 
 describe('on button click', () => {
-    it('calls sendMessage', () => {
-        const spy = jest.spyOn(PlayWord.prototype, 'sendMessage');
-        const wrapper = mount(<PlayWord sendWord={jest.fn()}/>);
-        wrapper.find({ 'data-cy': 'send-word' }).simulate('click');
-        expect(spy).toHaveBeenCalled();
-        spy.mockRestore();
-    });
     it('calls sendWord', () => {
         const sendWord = jest.fn();
         const wrapper = mount(<PlayWord sendWord={sendWord} />);
-        wrapper.find({ 'data-cy': 'send-word' }).simulate('click');
+        wrapper.find({ 'data-cy': 'word-form' }).simulate('submit');
         expect(sendWord).toHaveBeenCalled();
         sendWord.mockRestore();
     });

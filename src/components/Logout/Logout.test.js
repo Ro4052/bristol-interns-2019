@@ -6,7 +6,7 @@ describe('on render', () => {
     it('renders correctly', () => {
         const logOut = jest.fn();
         const wrapper = mount(<Logout logOut={logOut} />);
-        wrapper.find({ 'data-cy': 'logout' }).simulate('click');
+        wrapper.find({ 'data-cy': 'logout-form' }).simulate('submit');
         expect(logOut).toHaveBeenCalled();
     });
 });

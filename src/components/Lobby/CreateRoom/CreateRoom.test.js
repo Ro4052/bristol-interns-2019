@@ -16,7 +16,7 @@ describe('on click create button', () => {
     it('calls createRoom', () => {
         const createRoom = jest.fn();
         const wrapper = mount(<CreateRoom createRoom={createRoom} />);
-        wrapper.find({ 'data-cy': 'create-room' }).simulate('click');
+        wrapper.find({ 'data-cy': 'room-form' }).simulate('submit');
         expect(createRoom).toHaveBeenCalled();
         createRoom.mockRestore();
     });

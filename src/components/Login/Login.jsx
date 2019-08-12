@@ -44,7 +44,7 @@ export class Login extends React.Component {
                         <h2 className={styles.formHeader}>Type a username to enter the game:</h2>
                         <input data-cy='username' className={cx(styles.loginInput, { inputError: this.props.error })} value={this.state.value} placeholder="Enter username" onChange={this.handleChange} autoFocus />
                         {this.props.error && <h3 data-cy="login-error" className={styles.errorText}>{this.props.error}</h3>}
-                        <Button cy="login" handeClick={this.sendLogin} type="submit" text="Log in" />
+                        <Button cy="login" text="Log in" />
                     </form>
                 </div>
             : <Redirect to='/lobby' />
@@ -52,13 +52,13 @@ export class Login extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     username: state.authReducer.username,
     error: state.authReducer.error
 });
 
-const mapDispatchToProps = (dispatch) => ({
-    logIn: (username) => dispatch(logIn(username)),
+const mapDispatchToProps = dispatch => ({
+    logIn: username => dispatch(logIn(username)),
     authenticateUser: () => dispatch(authenticateUser())
 });
 
