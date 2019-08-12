@@ -5,7 +5,7 @@ import Room from './Room/Room';
 import Logo from '../Logo/Logo';
 import Logout from '../Logout/Logout';
 import CreateRoom from './CreateRoom/CreateRoom';
-import LeaderBoardButton from '../Leaderboard/LeaderboardButton/LeaderBoardButton';
+import LeaderboardButton from '../Leaderboard/LeaderboardButton/LeaderboardButton';
 import { authenticateUser } from '../Login/LoginActions';
 import history from '../../services/history';
 
@@ -23,7 +23,7 @@ export class Lobby extends React.Component {
                 <div className={styles.header}>
                     <Logout />
                     <Logo />
-                    <LeaderBoardButton />
+                    <LeaderboardButton />
                 </div>
                 <div className={styles.currentRooms} data-cy="current-rooms">
                     <CreateRoom />
