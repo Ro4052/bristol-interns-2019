@@ -13,7 +13,7 @@ describe('Leaderboard', () => {
             cy.get('[data-cy="player-username"]').contains('unicorn');
             score = cy.get('[data-cy="player-score"]').first().then($score => {
                 score = $score.text();
-            })
+            });
         });
     });
 
