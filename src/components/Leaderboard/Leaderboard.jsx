@@ -15,6 +15,8 @@ export class Leaderboard extends React.Component {
     }
 
     render() {
+        console.log(this.props.players);
+        
         return (
             <div className={styles.leaderboardPage}>
                 <div className={styles.backButton}>

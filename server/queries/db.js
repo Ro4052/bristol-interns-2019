@@ -17,10 +17,10 @@ module.exports.createUser = username => {
     return new Promise((resolve, reject) => {
         User.findOrCreate({
             where: {
-                name: username
+                username: username
             },
             defaults: { // set the default properties if it doesn't exist
-                name: username.trim(),
+                username: username.trim(),
                 score: 0
             }
         })

@@ -7,7 +7,7 @@ module.exports.createUser = (username) => {
     return new Promise((resolve) => {        
         let user = users.find(user => user.username === username);
         if (!user) {
-            user = { username, id: nextId, score: 0 };
+            user = { name: username, id: nextId, score: 0 };
             nextId++;
             users.push({dataValues: user});
         }
