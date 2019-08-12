@@ -29,21 +29,16 @@ router.get('/auth', (req, res) => {
 /* Log in the user */
 router.post('/auth/login', (req, res) => {
     const { username } = req.body;
-    try {
-        db.createUser(username)
-        .then(users => {
-            const id = users[0].dataValues.id;
-            req.session.user = { username, id };
-            req.session.roomId = null;
-            currentUsers.push({ username });
-            res.sendStatus(200);
-        }).catch(err => {
-            res.status(400).json({ message: err.message });
-        });
-    } catch(err) {
-        console.log(err);
+    db.createUser(username)
+    .then(users => {
+        const id = users[0].dataValues.id;
+        req.session.user = { username, id };
+        req.session.roomId = null;
+        currentUsers.push({ username });
+        res.sendStatus(200);
+    }).catch(err => {
         res.status(400).json({ message: err.message });
-    }
+    });
 });
 
 /* Log out the user */
@@ -80,12 +75,12 @@ router.get('/api/cards', auth, (req, res) => {
 
 /* Get the list of all players ever created with their scores */
 router.get('/api/all-players', (req, res) => {
-    try {
-        db.getUsers().then(users => res.status(200).json(users));
-    } catch (err) {
+    db.getUsers()
+    .then(users => res.status(200).json(users))
+    .catch(err => {
         console.log(err);
         res.status(400).json({ message: err.message });
-    }
+    });
 });
 
 /* Start the game */

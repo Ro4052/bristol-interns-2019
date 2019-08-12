@@ -6,13 +6,6 @@ describe('Leaderboard', () => {
     describe('on logging in for the first time', () => {
         beforeEach(() => {
             cy.login('unicorn')
-            .then(() => {
-                cy.route({
-                    method: "GET",
-                    url: "/api/game-state",
-                }).as('getState');
-                cy.wait('@getState');
-            })
             .then(() => cy.getPlayers());
         });
 

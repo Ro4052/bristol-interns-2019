@@ -42,7 +42,7 @@ module.exports.getUsers = () => {
             reject({
                 code: 404,
                 msg: err.message
-            })
+            });
         });
     });
 }
