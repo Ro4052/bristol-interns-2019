@@ -4,20 +4,10 @@ let score;
 
 describe('Leaderboard', () => {
     describe('on logging in for the first time', () => {
-        beforeEach(() => {
-            cy.login('unicorn')
-            .then(() => {
-                return cy.route({
-                method: "GET",
-                url: "/api/game-state",
-            }).as('getState')})
-            .then(() => cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`));
-        });
+        beforeEach(() => cy.login('unicorn'));
 
         it('displays the username with a score of zero', () => {
-
-            cy.wait('@getState');
-            cy.get('[data-cy="go-leaderboard"]').click();
+            cy.getPlayers();
             cy.get('[data-cy="player-username"]').contains('unicorn');
             score = cy.get('[data-cy="player-score"]').first().then($score => {
                 score = $score.text();
@@ -38,7 +28,7 @@ describe('Leaderboard', () => {
         });
 
         it('updates the score of the player', () => {
-            cy.get('[data-cy="go-leaderboard"]').click();  
+            cy.getPlayers();
             cy.get('[data-cy="player-score"]').first().should('contain', (parseInt(score) + 3).toString());
         });
     });

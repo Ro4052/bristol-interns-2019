@@ -165,6 +165,7 @@ router.get('/api/game-state', auth, (req, res) => {
         const currentGameState = Room.getById(roomId).gameState.getState(user.username);
         res.status(200).json({ currentGameState });
     } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
+        console.log(err);
         res.status(400).json({ message: err.message });
     }
 });
