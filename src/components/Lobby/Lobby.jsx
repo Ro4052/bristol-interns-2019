@@ -7,7 +7,6 @@ import Logout from '../Logout/Logout';
 import { authenticateUser } from '../Login/LoginActions';
 import CreateRoom from './CreateRoom/CreateRoom';
 import history from '../../services/history';
-import LeaderBoardButton from '../Leaderboard/LeaderboardButton/LeaderboardButton';
 
 export class Lobby extends React.Component {
     componentDidMount() {
@@ -23,7 +22,6 @@ export class Lobby extends React.Component {
                 <div className={styles.header}>
                     <Logout />
                     <Logo />
-                    <LeaderBoardButton />
                 </div>
                 <div className={styles.currentRooms} data-cy="current-rooms">
                     <CreateRoom />
