@@ -19,19 +19,21 @@ export class Lobby extends React.Component {
 
     render() {
         return (
-            <>
+            <div className={styles.main}>
                 <div className={styles.header}>
                     <Logout />
                     <Logo />
                 </div>
-                <div className={styles.currentRooms} data-cy="current-rooms">
-                    <CreateRoom />
-                    {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}
+                <div className={styles.container}>
+                    <div className={styles.leftSide}>
+                        <CreateRoom />
+                        <Chat />
+                    </div>
+                    <div className={styles.roomArea} data-cy="current-rooms">
+                        {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}                    
+                    </div>
                 </div>
-                <div className={styles.chatArea}>
-                    <Chat />
-                </div>
-            </>
+            </div>
         );
     }
 }

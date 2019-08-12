@@ -1,10 +1,10 @@
 .chatRoom {
-    height: 100%;
     font-size: 1em;
     display: flex;
+    flex-grow: 1;
     justify-content: center;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     background-color: white;
     border: 2px solid black;
     border-radius: 1em;
@@ -14,14 +14,14 @@
 
 .chatBox {
     font-size: 1em;
-    height: 80%;
-    width: 90%;
     display: flex;
+    flex-grow: 1;
     flex-direction: column;
+    max-height: 35vh;
     background-color: white;
     border: 2px solid black;
     border-radius: 1em;
-    margin: 0.5em 0.5em 0.5em 0.5em;
+    margin: 0.5em;
     letter-spacing: 0.2em;
     overflow-y: scroll;
 }
@@ -31,14 +31,12 @@
     font-size: 0.7em;
     line-height: 90%;
     text-align: left;
-    margin-left: 1em;
+    margin: 1em;
 }
 
 .chatTop {
     display: flex;
     flex-direction: column;
-    width:100%;
-    height:80%;
     align-items: center;
     text-align: center;
 }
@@ -48,14 +46,13 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    width:100%;
-    height: 20%;
 }
 
 .input {
-    margin-left: 1em;
+    margin: 1em;
 }
 
 .header {
-    margin: 0.4em;
+    margin-top: 0.4em;
+    text-align: center;
 }
