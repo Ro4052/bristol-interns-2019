@@ -9,12 +9,9 @@ module.exports.createUser = (username) => {
         if (!user) {
             user = { username, id: nextId, score: 0 };
             nextId++;
-            users.push(user);
+            users.push({dataValues: user});
         }
-        const data = {
-            dataValues: user
-        }
-        resolve([data]);
+        resolve(users);
     });
 }
 
