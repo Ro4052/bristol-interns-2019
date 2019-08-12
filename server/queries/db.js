@@ -4,7 +4,11 @@ const UserModel = require("./user");
 const db_url = process.env.DATABASE_URL || `postgres://${process.env.DB_USER}:${process.env.DB_PASS}@localhost:5432/${process.env.DB_NAME}`;
 
 const sequelize = new Sequelize(db_url, {
-    logging: false
+    dialect: "postgres",
+    dialectOptions: {
+      ssl: process.env.DATABASE_SSL || false
+    },
+    dialectModule: require('pg')
 });
 
 const User = UserModel(sequelize, Sequelize);
