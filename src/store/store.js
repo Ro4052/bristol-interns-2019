@@ -14,6 +14,7 @@ import dashboardReducer from '../components/Dashboard/DashboardReducer';
 import lobbyReducer from '../components/Lobby/LobbyReducer';
 import timerReducer from '../components/Timer/TimerReducer';
 import createRoomReducer from '../components/Lobby/CreateRoom/CreateRoomReducer';
+import leaderboardReducer from '../components/Leaderboard/LeaderboardReducer';
 
 // Combine all reducers
 const allReducers = combineReducers({
@@ -26,7 +27,8 @@ const allReducers = combineReducers({
     dashboardReducer,
     lobbyReducer,
     timerReducer,
-    createRoomReducer
+    createRoomReducer,
+    leaderboardReducer
 });
 
 // Wrap in reset functionality
