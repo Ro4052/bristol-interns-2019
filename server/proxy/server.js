@@ -58,7 +58,7 @@ app.get('/connect', (req, res) => {
     }); 
 });
 
-app.get('/send-message', (req,res) => {
+app.get('/send-message', (req, res) => {
     const body = { 
         username: 'halfling',
         message: "message"

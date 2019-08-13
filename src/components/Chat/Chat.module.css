@@ -1,10 +1,10 @@
 .chatRoom {
-    font-size: 1em;
     display: flex;
     flex-grow: 1;
     justify-content: center;
     flex-direction: column;
     align-items: stretch;
+    max-height: 58%;
     background-color: white;
     border: 2px solid black;
     border-radius: 1em;
@@ -17,7 +17,6 @@
     display: flex;
     flex-grow: 1;
     flex-direction: column;
-    max-height: 35vh;
     background-color: white;
     border: 2px solid black;
     border-radius: 1em;
