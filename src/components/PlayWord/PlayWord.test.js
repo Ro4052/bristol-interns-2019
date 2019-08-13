@@ -1,7 +1,6 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { PlayWord } from './PlayWord';
-import Button from '../shared/Button/Button';
 import Prompt from '../shared/Prompt/Prompt';
 
 describe('on initial render', () => {
@@ -11,7 +10,7 @@ describe('on initial render', () => {
     });
     it('the submit button is visible', () => {
         const wrapper = shallow(<PlayWord />);
-        expect(wrapper.find(Button).prop('cy')).toEqual('send-word');
+        expect(wrapper.find({ 'data-cy': 'send-word' }));
     });
 });
 
@@ -31,17 +30,10 @@ describe('on player types in the box', () => {
 });
 
 describe('on button click', () => {
-    it('calls sendMessage', () => {
-        const spy = jest.spyOn(PlayWord.prototype, 'sendMessage');
-        const wrapper = mount(<PlayWord sendWord={jest.fn()}/>);
-        wrapper.find({ 'data-cy': 'send-word' }).simulate('click');
-        expect(spy).toHaveBeenCalled();
-        spy.mockRestore();
-    });
     it('calls sendWord', () => {
         const sendWord = jest.fn();
         const wrapper = mount(<PlayWord sendWord={sendWord} />);
-        wrapper.find({ 'data-cy': 'send-word' }).simulate('click');
+        wrapper.find({ 'data-cy': 'play-word-form' }).simulate('submit');
         expect(sendWord).toHaveBeenCalled();
         sendWord.mockRestore();
     });

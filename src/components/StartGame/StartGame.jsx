@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import Button from '../shared/Button/Button';
 import history from '../../services/history';
 
 export class StartGame extends React.Component {
@@ -17,7 +16,7 @@ export class StartGame extends React.Component {
 
     render() {
         return (
-            <Button cy="start-game" handleClick={this.startGame} text="Start game" />
+            <button onClick={this.startGame} data-cy="start-game" type='button'>Start game</button>
         );
     }
 }

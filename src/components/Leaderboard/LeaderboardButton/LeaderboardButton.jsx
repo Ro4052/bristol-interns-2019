@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from '../../shared/Button/Button';
 import history from '../../../services/history';
 
 export class LeaderboardButton extends React.Component {
@@ -10,7 +9,7 @@ export class LeaderboardButton extends React.Component {
     render() {
         return (
             <div>
-                <Button cy="go-leaderboard" handleClick={this.goToLeaderBoard} text="Leaderboard" />
+                <button onClick={this.goToLeaderBoard} data-cy="go-leaderboard" type='button'>Leaderboard</button>
             </div>
         );
     }

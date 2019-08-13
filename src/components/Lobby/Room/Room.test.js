@@ -113,7 +113,7 @@ describe('if not started and in room', () => {
         expect(wrapper.exists({ 'data-cy': 'join-room' })).toEqual(false);
     });
 
-    describe('on click the leave room button', () => {
+    describe('on submit the leave room form', () => {
         it('calls leaveRoom', () => {
             const leaveRoom = jest.fn();
             const wrapper = mount(<Room room={notEnoughPlayers} username="player1" leaveRoom={leaveRoom} />);
