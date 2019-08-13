@@ -14,7 +14,7 @@ export class Leaderboard extends React.Component {
         history.push('/lobby');
     }
 
-    render() {              
+    render() {
         return (
             <div className={styles.leaderboardPage}>
                 <div className={styles.backButton}>
