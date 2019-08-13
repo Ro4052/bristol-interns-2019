@@ -189,7 +189,7 @@ class GameLogic {
             throw Error("You cannot play a word and a card when it is not your turn.");
         } else if (word.trim().length <= 0) {
             throw Error("Word cannot be empty.");
-        } else if (!word.trim().length > 15) {
+        } else if (word.trim().length > 15) {
             throw Error("Word cannot be longer than 15 characters.");
         } else {
             clearTimeout(this.nextRoundTimeout);
