@@ -1,7 +1,6 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { Chat } from './Chat';
-import Button from '../shared/Button/Button';
 
 describe('on initial render', () => {
     it('the input is empty', () => {
@@ -10,7 +9,7 @@ describe('on initial render', () => {
     });
     it('the submit button is visible', () => {
         const wrapper = shallow(<Chat messages={[]} />);
-        expect(wrapper.find(Button).prop('cy')).toEqual('send-message');
+        expect(wrapper.exists({ 'data-cy': 'send-message' }));
     });
 });
 
