@@ -16,9 +16,7 @@ export class StartGame extends React.Component {
 
     render() {
         return (
-            <div>
-                <button onClick={this.startGame} data-cy="start-game" type='button'>Start game</button>
-            </div>
+            <button onClick={this.startGame} data-cy="start-game" type='button'>Start game</button>
         );
     }
 }

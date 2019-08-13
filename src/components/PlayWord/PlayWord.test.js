@@ -33,7 +33,7 @@ describe('on button click', () => {
     it('calls sendWord', () => {
         const sendWord = jest.fn();
         const wrapper = mount(<PlayWord sendWord={sendWord} />);
-        wrapper.find({ 'data-cy': 'word-form' }).simulate('submit');
+        wrapper.find({ 'data-cy': 'play-word-form' }).simulate('submit');
         expect(sendWord).toHaveBeenCalled();
         sendWord.mockRestore();
     });

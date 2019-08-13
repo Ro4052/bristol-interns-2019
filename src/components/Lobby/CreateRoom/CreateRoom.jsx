@@ -19,7 +19,7 @@ export class CreateRoom extends React.Component {
         return (
             <div className={styles.createRoom}>  
                 <h1>Create room</h1>
-                <form data-cy="room-form" onSubmit={this.createRoom}>
+                <form data-cy="create-room-form" onSubmit={this.createRoom}>
                     <select data-cy="num-rounds-options" onChange={event => this.props.setRoundCount(event.target.value)}>
                         {options.map((option, key) => <option key={key} value={option}>{option} rounds</option>)}
                     </select>
