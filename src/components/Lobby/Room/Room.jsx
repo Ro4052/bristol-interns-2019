@@ -10,7 +10,7 @@ export class Room extends React.Component {
         const waitingVisible = !this.props.room.started && (this.props.room.minPlayers - this.props.room.players.length > 0);
         return (
             <div className={styles.room} key={this.props.room.roomId} data-cy="room">
-                <h2 className={styles.roomHeader} data-cy="room-title" >{"Room: " + this.props.room.roomId}</h2>
+                <h2 className={styles.roomHeader} data-cy="room-title">{"Room: " + this.props.room.roomId}</h2>
                 <ul className={styles.roomPlayers} id="players" data-cy='room-players'>
                     {this.props.room.players.map((player, key) => <li key={key}><span className={styles.roomPlayer}data-cy='player-username'>{player.username}</span></li>)}
                 </ul>
