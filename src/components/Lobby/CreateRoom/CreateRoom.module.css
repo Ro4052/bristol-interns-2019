@@ -1,5 +1,6 @@
 .createRoom {
-    font-size: 1em;
+    height: 25%;
+    font-size: 2vmin;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,4 +9,13 @@
     border-radius: 1em;
     margin: 0 1em 1em 1em;
     letter-spacing: 0.2em;
+}
+
+.createRoomHeader {
+    height: 40%;
+    margin-bottom: 0;
+}
+
+.selectRounds {
+    height: 60%;
 }

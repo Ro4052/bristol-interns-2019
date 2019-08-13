@@ -48,11 +48,13 @@
     align-items: center;
 }
 
-.input {
+.chatInput {
     margin: 1em;
+    width: 100%;
 }
 
-.header {
+.chatHeader {
     margin-top: 0.4em;
+    font-size: 5vmin;
     text-align: center;
 }

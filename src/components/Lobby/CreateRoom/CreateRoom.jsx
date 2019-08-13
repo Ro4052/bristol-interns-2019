@@ -9,8 +9,8 @@ export class CreateRoom extends React.Component {
         const options = [3, 4, 5, 6];
         return (
             <div className={styles.createRoom}>  
-                <h1>Create room</h1>
-                <div>
+                <h1 className={styles.createRoomHeader}>Create room</h1>
+                <div className={styles.selectRounds}>
                     <select data-cy="num-rounds-options" onChange={event => this.props.setRoundCount(event.target.value)}>
                         {options.map((option, key) => <option key={key} value={option}>{option} rounds</option>)}
                     </select>

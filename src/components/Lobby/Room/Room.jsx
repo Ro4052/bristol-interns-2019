@@ -11,8 +11,8 @@ export class Room extends React.Component {
         const inRoom = this.props.room.players.some(player => player.username === this.props.username);
         return (
             <div className={styles.room} key={this.props.room.roomId} data-cy="room">
-                <h2 data-cy="room-title">{"Room: " + this.props.room.roomId}</h2>
-                <ul id="players" data-cy='room-players'>
+                <h2 className={styles.roomHeader} data-cy="room-title" >{"Room: " + this.props.room.roomId}</h2>
+                <ul className={styles.roomPlayers} id="players" data-cy='room-players'>
                     {this.props.room.players.map((player, key) => <li key={key}><span data-cy='player-username'>{player.username}</span></li>)}
                 </ul>
                 {!this.props.room.started && inRoom && !(this.props.room.minPlayers - this.props.room.players.length > 0) && <StartGame />}

@@ -11,7 +11,8 @@
     font-size: 1.5em;
 }
 
-.room > h2 {
+.roomHeader {
+    font-size: 3vmin;
     margin-top: 0;
 }
 
