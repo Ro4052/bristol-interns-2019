@@ -4,7 +4,7 @@
     justify-content: center;
     flex-direction: column;
     align-items: stretch;
-    max-height: 58%;
+    max-height: 70%;
     background-color: white;
     border: 2px solid black;
     border-radius: 1em;
@@ -48,11 +48,14 @@
     align-items: center;
 }
 
-.input {
-    margin: 1em;
+.chatInput {
+    margin: 2vmin;
+    padding: 2vmin;
+    width: 100%;
 }
 
-.header {
+.chatHeader {
     margin-top: 0.4em;
+    font-size: 5vmin;
     text-align: center;
 }

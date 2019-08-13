@@ -16,5 +16,7 @@ export const addMessage = (username, text) => ({
 });
 
 export const sendChat = (username, message) => () => {
-    sendMessage(username, message);
+    if (message.trim().length > 0) {
+        sendMessage(username, message);
+    }
 }

@@ -10,6 +10,7 @@ import { authenticateUser } from '../Login/LoginActions';
 import history from '../../services/history';
 import Chat from '../Chat/Chat';
 import { statusTypes } from '../../services/statusTypes';
+import { Timothy } from '../Timothy/Timothy';
 
 export class Lobby extends React.Component {
     componentDidMount() {
@@ -36,6 +37,7 @@ export class Lobby extends React.Component {
                         {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}                    
                     </div>
                 </div>
+                <Timothy />
             </div>
         );
     }
