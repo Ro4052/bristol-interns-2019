@@ -1,5 +1,4 @@
 const cardsManager = require('../services/cardsManager');
-const validWord = require('../services/validWord');
 const socket = require('../services/socket');
 const { statusTypes } = require('./statusTypes');
 
@@ -188,8 +187,10 @@ class GameLogic {
             throw Error("You cannot play more than one card and one word");
         } else if (username !== this.currentPlayer.username) {
             throw Error("You cannot play a word and a card when it is not your turn.");
-        } else if (!validWord.isValidWord(word)) {
-            throw Error("Invalid word.");
+        } else if (word.trim().length <= 0) {
+            throw Error("Word cannot be empty.");
+        } else if (word.trim().length > 15) {
+            throw Error("Word cannot be longer than 15 characters.");
         } else {
             clearTimeout(this.nextRoundTimeout);
             this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
