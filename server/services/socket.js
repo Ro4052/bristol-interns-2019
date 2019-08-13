@@ -25,7 +25,7 @@ exports.setupSocket = (server, session) => {
         }
         socket.on('disconnect', disconnected => {
             sockets = sockets.filter(socket => socket !== disconnected);
-        });      
+        });
     });
 }
 
