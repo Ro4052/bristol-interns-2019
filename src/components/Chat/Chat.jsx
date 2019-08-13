@@ -28,12 +28,12 @@ export class Chat extends React.Component {
         ));
         return (
             <div className={styles.chatRoom}>  
-                <h1 className={styles.header}>Chat</h1>
+                <h1 className={styles.chatHeader}>Chat</h1>
                 <div className={styles.chatBox}>
                     {messageList}
                 </div>
                 <div className={styles.chatBottom}>
-                    <input className={styles.input} data-cy='type-message' onChange={this.handleChange} value={this.state.currentValue} placeholder="Type a message" />
+                    <input className={styles.chatInput} data-cy='type-message' onChange={this.handleChange} value={this.state.currentValue} placeholder="Type a message" />
                     <button onClick={this.sendMessage} data-cy="send-message" type='button'>Send</button>
                 </div>
             </div>
