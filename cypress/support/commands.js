@@ -71,6 +71,11 @@ Cypress.Commands.add('leaveRoom', () => {
     cy.wait('@leaveRoom');
 });
 
+Cypress.Commands.add('sendMessage', () => {
+    cy.get('[data-cy="type-message"]').type('message');
+    cy.get('[data-cy="send-message"]').click();
+});
+
 Cypress.Commands.add('startGame', () => {
     cy.route({
         method: "GET",

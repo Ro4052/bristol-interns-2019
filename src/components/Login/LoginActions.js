@@ -1,5 +1,5 @@
 import axios from "axios";
-import connectSocket from '../../services/socket';
+import { connectSocket } from '../../services/socket';
 import { types } from './LoginActionTypes';
 import history from '../../services/history';
 import { setPlayCard } from "../MyCards/MyCardsActions";

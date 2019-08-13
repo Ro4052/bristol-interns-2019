@@ -37,6 +37,7 @@ router.post('/auth/login', (req, res) => {
         currentUsers.push({ username });
         res.sendStatus(200);
     }).catch(err => {
+        console.log(err);
         res.status(400).json({ message: err.message });
     });
 });
@@ -173,6 +174,7 @@ router.get('/api/game-state', auth, (req, res) => {
 /* Check if in dev mode, and enable end game request */
 if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {
+        db.reset();
         currentUsers = [];
         disconnectAllSockets();
         Room.reset();

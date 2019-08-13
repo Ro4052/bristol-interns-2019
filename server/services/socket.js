@@ -13,9 +13,13 @@ exports.setupSocket = (server, session) => {
     io.use(sharedsession(session));
     io.on('connection', socket => {
         if (socket.handshake.session.user) {
-            sockets = sockets.filter(otherSocket => otherSocket.handshake.session.user !== socket.handshake.session.user);
+            sockets = sockets.filter(otherSocket => otherSocket.handshake.session.user.username !== socket.handshake.session.user.username);
             sockets.push(socket);
             emitRooms();
+            socket.on('send message', msg => {  
+                const { username, message } = msg;                
+                emitMessage(username, message);
+            });
         } else {
             socket.disconnect();
         }
@@ -24,6 +28,9 @@ exports.setupSocket = (server, session) => {
         });
     });
 }
+
+// Chat
+const emitMessage = (username, message) => sockets.forEach(socket => socket.emit("message sent", { username, message }));
 
 // Emit the rooms
 const emitRooms = () => {

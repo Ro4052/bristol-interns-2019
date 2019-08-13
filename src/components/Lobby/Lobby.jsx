@@ -8,6 +8,7 @@ import CreateRoom from './CreateRoom/CreateRoom';
 import LeaderboardButton from '../Leaderboard/LeaderboardButton/LeaderboardButton';
 import { authenticateUser } from '../Login/LoginActions';
 import history from '../../services/history';
+import Chat from '../Chat/Chat';
 
 export class Lobby extends React.Component {
     componentDidMount() {
@@ -19,17 +20,22 @@ export class Lobby extends React.Component {
 
     render() {
         return (
-            <>
+            <div className={styles.main}>
                 <div className={styles.header}>
                     <Logout />
                     <Logo />
                     <LeaderboardButton />
                 </div>
-                <div className={styles.currentRooms} data-cy="current-rooms">
-                    <CreateRoom />
-                    {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}
+                <div className={styles.container}>
+                    <div className={styles.leftSide}>
+                        <CreateRoom />
+                        <Chat />
+                    </div>
+                    <div className={styles.roomArea} data-cy="current-rooms">
+                        {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}                    
+                    </div>
                 </div>
-            </>
+            </div>
         );
     }
 }
