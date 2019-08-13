@@ -73,6 +73,16 @@ router.get('/api/cards', auth, (req, res) => {
     }
 });
 
+/* Get the list of all players ever created with their scores */
+router.get('/api/all-players', (req, res) => {
+    db.getUsers()
+    .then(users => res.status(200).json(users))
+    .catch(err => {
+        console.log(err);
+        res.status(400).json({ message: err.message });
+    });
+});
+
 /* Start the game */
 router.get('/api/start', auth, (req, res) => {
     try {
@@ -155,6 +165,7 @@ router.get('/api/game-state', auth, (req, res) => {
         const currentGameState = Room.getById(roomId).gameState.getState(user.username);
         res.status(200).json({ currentGameState });
     } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
+        console.log(err);
         res.status(400).json({ message: err.message });
     }
 });
@@ -162,7 +173,6 @@ router.get('/api/game-state', auth, (req, res) => {
 /* Check if in dev mode, and enable end game request */
 if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {
-        db.reset();
         currentUsers = [];
         disconnectAllSockets();
         Room.reset();
