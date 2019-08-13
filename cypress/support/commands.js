@@ -153,7 +153,7 @@ Cypress.Commands.add('newGame', () => {
     cy.wait('@endGame');
 });
 
-Cypress.Commands.add('getPlayers', () => {
+Cypress.Commands.add('goToLeaderboard', () => {
     cy.route({
         method: 'GET',
         url: '/api/all-players'

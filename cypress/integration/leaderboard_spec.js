@@ -6,11 +6,12 @@ describe('Leaderboard', () => {
     describe('on logging in for the first time', () => {
         beforeEach(() => {
             cy.login('unicorn')
-            .then(() => cy.getPlayers());
+            .then(() => cy.goToLeaderboard());
         });
 
-        it('displays the username with a score of zero', () => {
+        it('displays the username of the player with their relevant score', () => {
             cy.get('[data-cy="player-username"]').contains('unicorn');
+            cy.get('[data-cy="player-score"]').should('exist');
             score = cy.get('[data-cy="player-score"]').first().then($score => {
                 score = $score.text();
             });
@@ -29,8 +30,8 @@ describe('Leaderboard', () => {
             .then(() => cy.newGame());
         });
 
-        it('updates the score of the player', () => {
-            cy.getPlayers();
+        it('updates the score of the player after a win', () => {
+            cy.goToLeaderboard();
             cy.get('[data-cy="player-score"]').first().should('contain', (parseInt(score) + 3).toString());
         });
     });

@@ -21,14 +21,19 @@ export class Leaderboard extends React.Component {
                     <Button data-cy="back" handleClick={this.goToLobby} text="Back" />
                 </div>
                 <div className={styles.leaderboard}>
-                    <h2>Leader Board</h2>
+                    <h2 className={styles.leaderboardHeader}>Leaderboard</h2>
                     <table>
                         <tbody>
                         <tr>
-                            <th><h3>Username</h3></th>
-                            <th><h3>Score</h3></th>
+                            <th><h3 className={styles.leaderboardTableColumn}>Username</h3></th>
+                            <th><h3 className={styles.leaderboardTableColumn}>Score</h3></th>
                         </tr>
-                        {this.props.players && this.props.players.map(player => <tr key={player.id} data-cy="player-row"><td><h4 data-cy="player-username">{player.username}</h4></td><td><h4 data-cy="player-score">{player.score}</h4></td></tr>)}
+                        {this.props.players.map(player => (
+                            <tr key={player.id} data-cy="player-row">
+                                <td><h4 data-cy="player-username" className={styles.leaderboardTableRow}>{player.username}</h4></td>
+                                <td><h4 data-cy="player-score" className={styles.leaderboardTableRow}>{player.score}</h4></td>
+                            </tr>
+                        ))}
                         </tbody>
                     </table>
                 </div>

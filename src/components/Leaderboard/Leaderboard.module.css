@@ -13,26 +13,21 @@
     padding: 10vmin 20vmin;
     background-color: white;
     font-size: 2em;
-    overflow-y: scroll;
     overflow-y: auto;
     list-style: none;
     border: 5px solid black;
     border-radius: 20px;
 }
-    
-table {
-    border-collapse: collapse;
-}
 
-h2 {
+.leaderboardHeader {
     margin-top: 0;
 }
 
-h3 {
+.leaderboardTableColumn {
     margin: 0 2vmin 2vmin 2vmin;
 }
 
-h4 {
+.leaderboardTableRow {
     margin: 0;
     text-align: center;
 }
