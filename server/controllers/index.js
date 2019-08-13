@@ -37,6 +37,7 @@ router.post('/auth/login', (req, res) => {
         currentUsers.push({ username });
         res.sendStatus(200);
     }).catch(err => {
+        console.log(err);
         res.status(400).json({ message: err.message });
     });
 });

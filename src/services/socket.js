@@ -34,6 +34,8 @@ export const connectSocket = () => {
 
     socket.on("message sent", msg => {
         const { username, message } = msg;
+        console.log("Hello");
+        
         dispatch(addMessage(username, message));
     });
 

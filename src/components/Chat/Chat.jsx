@@ -24,6 +24,8 @@ export class Chat extends React.Component {
     }
 
     render() {
+        console.log(this.props.messages);
+        
         const messageList = this.props.messages.map(message => (
             <h2 data-cy='messages' className={styles.chat}>{message.username} : {message.text}</h2>
         ));
