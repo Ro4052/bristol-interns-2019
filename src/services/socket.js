@@ -33,9 +33,7 @@ export const connectSocket = () => {
     });
 
     socket.on("message sent", msg => {
-        const { username, message } = msg;
-        console.log("Hello");
-        
+        const { username, message } = msg;        
         dispatch(addMessage(username, message));
     });
 

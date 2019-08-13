@@ -23,9 +23,7 @@ export class Chat extends React.Component {
         this.setState({ currentValue: '' });
     }
 
-    render() {
-        console.log(this.props.messages);
-        
+    render() {        
         const messageList = this.props.messages.map(message => (
             <h2 data-cy='messages' className={styles.chat}>{message.username} : {message.text}</h2>
         ));
