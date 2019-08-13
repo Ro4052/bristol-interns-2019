@@ -22,8 +22,7 @@ exports.setupSocket = (server, session) => {
         socket.on('disconnect', disconnected => {
             sockets = sockets.filter(socket => socket !== disconnected);
         });
-        socket.on('send message', msg => {
-            
+        socket.on('send message', msg => {  
             const { username, message } = msg;
             emitMessage(username, message);
         });

@@ -28,7 +28,7 @@ export class Chat extends React.Component {
         ));
         return (
             <div className={styles.chatRoom}>  
-                <h1 className={styles.header} >Chat</h1>
+                <h1 className={styles.header}>Chat</h1>
                 <div className={styles.chatBox}>
                     {messageList}
                 </div>

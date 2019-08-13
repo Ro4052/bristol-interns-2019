@@ -8,6 +8,9 @@ describe('on send a message', () => {
 
     it('displays the message', () => {     
         cy.get('[data-cy="messages"]').should('have.text', 'Bob : message');
+    })
+    it('clears the input', () => {
+        cy.get('[data-cy="type-message"]').should('be.empty');
     });
 });
 
