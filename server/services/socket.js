@@ -82,7 +82,10 @@ exports.emitPlayers = (roomId, players) => sockets.forEach(socket => socket.hand
 exports.emitNewRound = (roomId, status, roundNum, currentPlayer, timeoutDuration) => sockets.forEach(socket => {
     if (socket.handshake.session.roomId === roomId) {
         socket.emit("new round", { status, roundNum, currentPlayer });
+        console.log(socket.handshake.session.user);
         if (socket.handshake.session.user.username === currentPlayer.username) {
+            console.log("Timeout");
+            console.log(timeoutDuration);
             socket.emit("play word and card", timeoutDuration/1000);
         }
     }
