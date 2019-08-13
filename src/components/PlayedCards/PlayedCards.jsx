@@ -30,8 +30,7 @@ const mapStateToProps = state => ({
     cards: state.playedCardsReducer.cards,
     voteCard: state.playedCardsReducer.voteCard,
     playedCardId: state.myCardsReducer.playedCardId,
-    votes: state.playedCardsReducer.votes,
-    status: state.dashboardReducer.status
+    votes: state.playedCardsReducer.votes
 });
 
 const mapDispatchToProps = dispatch => ({

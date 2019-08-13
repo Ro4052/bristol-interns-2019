@@ -1,7 +1,8 @@
 import { types } from './DashboardActionTypes';
+import { statusTypes } from '../../services/statusTypes';
 
 export const initialState = {
-    status: "NOT_STARTED",
+    status: statusTypes.NOT_STARTED,
     roundNum: 0,
     currentWord: ''
 };

@@ -41,8 +41,7 @@ export class Card extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    playedCardId: state.myCardsReducer.playedCardId,
-    status: state.dashboardReducer.status
+    playedCardId: state.myCardsReducer.playedCardId
 });
 
 export default connect(mapStateToProps)(Card);

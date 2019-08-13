@@ -5,6 +5,8 @@ import { Dashboard } from './Dashboard';
 import GameOver from '../GameOver/GameOver';
 import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
 import PlayWord from '../PlayWord/PlayWord';
+import { statusTypes } from '../../services/statusTypes';
+
 const authenticateUserMock = jest.fn();
 const drawers = [];
 
@@ -18,14 +20,14 @@ describe('on initial render', () => {
 
 describe('on status NOT_STARTED', () => {
     it("doesn't display the cards", () => {
-        const wrapper = shallow(<Dashboard status={"NOT_STARTED"} authenticateUser={authenticateUserMock} drawers={drawers}/>);
+        const wrapper = shallow(<Dashboard status={statusTypes.NOT_STARTED} authenticateUser={authenticateUserMock} drawers={drawers}/>);
         expect(wrapper.exists(MyCards)).toEqual(false);
     });
 });
 
 describe('on any status other than NOT_STARTED', () => {
     it('displays cards', () => {
-        const wrapper = shallow(<Dashboard status={"WAITING_FOR_CURRENT_PLAYER"} authenticateUser={authenticateUserMock} drawers={drawers}/>);
+        const wrapper = shallow(<Dashboard status={statusTypes.WAITING_FOR_CURRENT_PLAYER} authenticateUser={authenticateUserMock} drawers={drawers}/>);
         expect(wrapper.exists(MyCards)).toEqual(true);
     });
 });
