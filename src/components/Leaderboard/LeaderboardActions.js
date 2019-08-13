@@ -3,9 +3,10 @@ import axios from "axios";
 
 const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
-const sortPlayers = (players) => {
+const sortPlayers = players => {
     return players.sort((first, next) => next.score - first.score);
 }
+
 export const getPlayers = () => dispatch => {
     axiosInstance.get('/api/all-players')
     .then(res => {
