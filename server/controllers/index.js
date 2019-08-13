@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const Sequelize = require('sequelize');
 const path = require('path');
 const auth = require('../middlewares/auth');
 const Room = require('../models/room');

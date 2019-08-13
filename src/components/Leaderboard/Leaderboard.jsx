@@ -14,7 +14,11 @@ export class Leaderboard extends React.Component {
         history.push('/lobby');
     }
 
-    render() {        
+    getSortedPlayers() {
+        return this.props.players.sort((one, next) => next.score - one.score);
+    }
+
+    render() {              
         return (
             <div className={styles.leaderboardPage}>
                 <div className={styles.backButton}>
@@ -28,7 +32,7 @@ export class Leaderboard extends React.Component {
                             <th><h3 className={styles.leaderboardTableColumn}>Username</h3></th>
                             <th><h3 className={styles.leaderboardTableColumn}>Score</h3></th>
                         </tr>
-                        {this.props.players.map(player => (
+                        {this.getSortedPlayers().map(player => (
                             <tr key={player.id} data-cy="player-row">
                                 <td><h4 data-cy="player-username" className={styles.leaderboardTableRow}>{player.username}</h4></td>
                                 <td><h4 data-cy="player-score" className={styles.leaderboardTableRow}>{player.score}</h4></td>
