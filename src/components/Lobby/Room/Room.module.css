@@ -12,14 +12,22 @@
 }
 
 .roomHeader {
-    font-size: 3vmin;
+    font-size: 4vmin;
     margin-top: 0;
 }
 
-.room > ul {
+.roomPlayers {
     font-family: var(--secondary-font);
+}
+
+.roomPlayer {
+    font-size: 4vmin;
 }
 
 .waiting {
     margin-top: 1em;
+}
+
+.roomButton {
+    font-size: 3vmin;
 }

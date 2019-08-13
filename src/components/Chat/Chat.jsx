@@ -2,7 +2,6 @@ import React from 'react';
 import { sendChat } from './ChatActions';
 import { connect } from 'react-redux';
 import styles from './Chat.module.css';
-import Button from '../shared/Button/Button';
 
 export class Chat extends React.Component {
     constructor(props) {
@@ -35,7 +34,7 @@ export class Chat extends React.Component {
                 </div>
                 <div className={styles.chatBottom}>
                     <input className={styles.chatInput} data-cy='type-message' onChange={this.handleChange} value={this.state.currentValue} placeholder="Type a message" />
-                    <Button cy="send-message" text="Send" handleClick={this.sendMessage} />
+                    <button onClick={this.sendMessage} data-cy="send-message" type='button'>Send</button>
                 </div>
             </div>
         );

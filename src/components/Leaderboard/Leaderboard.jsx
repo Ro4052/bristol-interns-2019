@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import styles from './Leaderboard.module.css';
 import history from '../../services/history';
 import { getPlayers } from './LeaderboardActions';
-import Button from '../shared/Button/Button';
 
 export class Leaderboard extends React.Component {
     componentDidMount() {
@@ -18,7 +17,7 @@ export class Leaderboard extends React.Component {
         return (
             <div className={styles.leaderboardPage}>
                 <div className={styles.backButton}>
-                    <Button data-cy="back" handleClick={this.goToLobby} text="Back" />
+                    <button onClick={this.goToLobby} data-cy="back" type='button'>Back</button>
                 </div>
                 <div className={styles.leaderboard}>
                     <h2 className={styles.leaderboardHeader}>Leaderboard</h2>

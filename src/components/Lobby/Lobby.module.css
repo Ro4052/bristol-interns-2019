@@ -36,4 +36,5 @@
     flex-direction: row;
     flex-flow: row wrap;
     align-items: flex-start;
+    overflow: auto;
 }

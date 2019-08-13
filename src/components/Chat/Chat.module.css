@@ -4,7 +4,7 @@
     justify-content: center;
     flex-direction: column;
     align-items: stretch;
-    max-height: 58%;
+    max-height: 70%;
     background-color: white;
     border: 2px solid black;
     border-radius: 1em;
@@ -49,7 +49,8 @@
 }
 
 .chatInput {
-    margin: 1em;
+    margin: 2vmin;
+    padding: 2vmin;
     width: 100%;
 }
 

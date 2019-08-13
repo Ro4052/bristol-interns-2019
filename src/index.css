@@ -72,3 +72,23 @@ select {
     border-radius: 6px;
     font-family: var(--secondary-font);
 }
+
+button {
+    background-color: var(--dark-orange);
+    border: 2px solid var(--lighter-black);
+    border-radius: 20px;
+    color: var(--lighter-black);
+    font-family: var(--main-font);
+    cursor: pointer;
+    letter-spacing: 0.15em;
+    font-size: 3vmin;
+    outline: none;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.5);
+    padding: 0.2em 0.5em;
+    margin: 0.5em;
+}
+
+button:hover,
+button:focus {
+    background-color: var(--light-orange);
+}
