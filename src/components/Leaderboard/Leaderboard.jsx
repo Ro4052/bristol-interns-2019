@@ -3,24 +3,22 @@ import { connect } from 'react-redux';
 import styles from './Leaderboard.module.css';
 import history from '../../services/history';
 import { getPlayers } from './LeaderboardActions';
-import Button from '../shared/Button/Button';
 
 export class Leaderboard extends React.Component {
     componentDidMount() {
         this.props.getPlayers();
     }
 
-    goToLobby(e) {
-        e.preventDefault();
+    goToLobby() {
         history.push('/lobby');
     }
 
     render() {        
         return (
             <div className={styles.leaderboardPage}>
-                <form onSubmit={this.goToLobby} className={styles.backButton}>
-                    <Button data-cy="back" text="Back" />
-                </form>
+                <div className={styles.backButton}>
+                    <button onClick={this.goToLobby} data-cy="back" type='button'>Back</button>
+                </div>
                 <div className={styles.leaderboard}>
                     <h2 className={styles.leaderboardHeader}>Leaderboard</h2>
                     <table>

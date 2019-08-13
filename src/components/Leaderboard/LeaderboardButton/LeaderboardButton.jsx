@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from '../../shared/Button/Button';
 import history from '../../../services/history';
 
 export class LeaderboardButton extends React.Component {
@@ -8,16 +7,15 @@ export class LeaderboardButton extends React.Component {
         this.goToLeaderBoard = this.goToLeaderBoard.bind(this);
     }
 
-    goToLeaderBoard(e) {
-        e.preventDefault();
+    goToLeaderBoard() {
         history.push('/leaderboard');
     }
 
     render() {
         return (
-            <form data-cy='go-leaderboard-form' onSubmit={this.goToLeaderBoard}>
-                <Button cy="go-leaderboard" text="Leaderboard" />
-            </form>
+            <div>
+                <button onClick={this.goToLeaderBoard} data-cy="go-leaderboard" type='button'>Leaderboard</button>
+            </div>
         );
     }
 }

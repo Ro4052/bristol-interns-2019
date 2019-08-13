@@ -8,8 +8,8 @@ const middlewares = [];
 const mockStore = configureStore(middlewares);
 
 const players = [
-    { username: "unicorn" },
-    { username: "halfling" }
+    { id: 1, username: "unicorn" },
+    { id: 2, username: "halfling" }
 ];
 
 const emptyState = { leaderboardReducer: { players: [] } };

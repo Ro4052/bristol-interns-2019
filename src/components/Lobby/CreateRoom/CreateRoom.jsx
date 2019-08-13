@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styles from './CreateRoom.module.css';
-import Button from '../../shared/Button/Button';
 import { setRoundCount, createRoom } from './CreateRoomActions';
 
 export class CreateRoom extends React.Component {
@@ -24,7 +23,7 @@ export class CreateRoom extends React.Component {
                     <select data-cy="num-rounds-options" onChange={event => this.props.setRoundCount(event.target.value)}>
                         {options.map((option, key) => <option key={key} value={option}>{option} rounds</option>)}
                     </select>
-                    <Button cy="create-room" text="Create" />
+                    <button data-cy="create-room" type='submit'>Create</button>
                 </form>
             </div>
         );

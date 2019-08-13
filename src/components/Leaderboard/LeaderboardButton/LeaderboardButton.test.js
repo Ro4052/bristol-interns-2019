@@ -6,7 +6,7 @@ describe('on render', () => {
     it('renders correctly', () => {
         const spy = jest.spyOn(LeaderboardButton.prototype, 'goToLeaderBoard');
         const wrapper = mount(<LeaderboardButton/>);
-        wrapper.find({ 'data-cy': 'go-leaderboard-form' }).simulate('submit');
+        wrapper.find({ 'data-cy': 'go-leaderboard' }).simulate('click');
         expect(spy).toHaveBeenCalled();
     });
 });

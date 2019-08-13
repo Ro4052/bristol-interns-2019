@@ -1,7 +1,6 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { PlayWord } from './PlayWord';
-import Button from '../shared/Button/Button';
 import Prompt from '../shared/Prompt/Prompt';
 
 describe('on initial render', () => {
@@ -11,7 +10,7 @@ describe('on initial render', () => {
     });
     it('the submit button is visible', () => {
         const wrapper = shallow(<PlayWord />);
-        expect(wrapper.find(Button).prop('cy')).toEqual('send-word');
+        expect(wrapper.find({ 'data-cy': 'send-word' }));
     });
 });
 

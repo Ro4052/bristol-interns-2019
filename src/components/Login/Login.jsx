@@ -4,7 +4,6 @@ import { Redirect } from 'react-router-dom';
 import styles from './Login.module.css';
 import Timothy from '../Timothy/Timothy';
 import Logo from '../Logo/Logo';
-import Button from '../shared/Button/Button';
 import { authenticateUser, logIn } from './LoginActions';
 import classNames from 'classnames/bind';
 
@@ -44,7 +43,7 @@ export class Login extends React.Component {
                         <h2 className={styles.formHeader}>Type a username to enter the game:</h2>
                         <input data-cy='username' className={cx(styles.loginInput, { inputError: this.props.error })} value={this.state.value} placeholder="Enter username" onChange={this.handleChange} autoFocus />
                         {this.props.error && <h3 data-cy="login-error" className={styles.errorText}>{this.props.error}</h3>}
-                        <Button cy="login" text="Log in" />
+                        <button data-cy="login" type='submit'>Login</button>
                     </form>
                 </div>
             : <Redirect to='/lobby' />
