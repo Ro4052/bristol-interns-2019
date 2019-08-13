@@ -10,7 +10,7 @@ import { setCurrentWord, setStatus, setRoundNumber } from '../components/Dashboa
 import { removeCard } from '../components/MyCards/MyCardsActions';
 import { setRooms } from '../components/Lobby/LobbyActions';
 import { setVoteCardTimer, setPlayCardTimer, setStorytellerTimer } from '../components/Timer/TimerActions';
-import { setChat } from '../components/Chat/ChatActions';
+import { addMessage } from '../components/Chat/ChatActions';
 
 let socket;
 
@@ -34,7 +34,7 @@ export const connectSocket = () => {
 
     socket.on("message sent", msg => {
         const { username, message } = msg;
-        dispatch(setChat(username, message));
+        dispatch(addMessage(username, message));
     });
 
     socket.on("players", msg => {
