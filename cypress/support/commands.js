@@ -111,7 +111,7 @@ Cypress.Commands.add('playCardWordInvalid', () => {
         url: '/api/play-card-word'
     }).as('playCardWord');
     cy.get('[data-cy="my-cards"] [data-cy="card"]').first().click();
-    cy.get('[data-cy="type-word"]').type('somethingeverylong');
+    cy.get('[data-cy="type-word"]').type('somethingverylong');
     cy.get('[data-cy="send-word"]').click();
     cy.wait('@playCardWord');
 });
