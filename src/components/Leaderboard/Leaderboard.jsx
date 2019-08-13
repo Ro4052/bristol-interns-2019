@@ -10,16 +10,17 @@ export class Leaderboard extends React.Component {
         this.props.getPlayers();
     }
 
-    goToLobby() {
+    goToLobby(e) {
+        e.preventDefault();
         history.push('/lobby');
     }
 
     render() {        
         return (
             <div className={styles.leaderboardPage}>
-                <div className={styles.backButton}>
-                    <Button data-cy="back" handleClick={this.goToLobby} text="Back" />
-                </div>
+                <form onSubmit={this.goToLobby} className={styles.backButton}>
+                    <Button data-cy="back" text="Back" />
+                </form>
                 <div className={styles.leaderboard}>
                     <h2 className={styles.leaderboardHeader}>Leaderboard</h2>
                     <table>

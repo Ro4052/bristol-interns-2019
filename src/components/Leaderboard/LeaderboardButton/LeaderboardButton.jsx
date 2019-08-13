@@ -3,15 +3,21 @@ import Button from '../../shared/Button/Button';
 import history from '../../../services/history';
 
 export class LeaderboardButton extends React.Component {
-    goToLeaderBoard() {
+    constructor() {
+        super();
+        this.goToLeaderBoard = this.goToLeaderBoard.bind(this);
+    }
+
+    goToLeaderBoard(e) {
+        e.preventDefault();
         history.push('/leaderboard');
     }
 
     render() {
         return (
-            <div>
-                <Button cy="go-leaderboard" handleClick={this.goToLeaderBoard} text="Leaderboard" />
-            </div>
+            <form data-cy='go-leaderboard-form' onSubmit={this.goToLeaderBoard}>
+                <Button cy="go-leaderboard" text="Leaderboard" />
+            </form>
         );
     }
 }
