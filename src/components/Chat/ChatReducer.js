@@ -9,9 +9,8 @@ const chatReducer = (state = initialState, action) => {
     switch (action.type) {
         case types.RESET_CHAT:
             return { ...state, messages: [], error: null };
-        case types.SET_CHAT:
-            const newMessage = { username: action.username, text: action.message };
-            return { ...state, messages: [...state.messages, newMessage], error: null };
+        case types.ADD_MESSAGE:
+            return { ...state, messages: [...state.messages, action.message], error: null };
         case types.SEND_CHAT_SUCCESS:
             return { ...state, error: null};
         case types.SEND_CHAT_FAILURE:

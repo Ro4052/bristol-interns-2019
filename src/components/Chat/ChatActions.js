@@ -10,10 +10,9 @@ export const sendChatFailure = error => ({
     error
 });
 
-export const setChat = (username, message) => ({
-    type: types.SET_CHAT,
-    username,
-    message
+export const addMessage = (username, text) => ({
+    type: types.ADD_MESSAGE,
+    message: { username, text }
 });
 
 export const sendChat = (username, message) => () => {
