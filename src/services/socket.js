@@ -33,7 +33,7 @@ export const connectSocket = () => {
     });
 
     socket.on("message sent", msg => {
-        const {username, message} = msg;
+        const { username, message } = msg;
         dispatch(setChat(username, message));
     });
 

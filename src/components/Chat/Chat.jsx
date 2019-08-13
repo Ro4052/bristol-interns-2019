@@ -20,6 +20,7 @@ export class Chat extends React.Component {
 
     sendMessage() {
         this.props.sendChat(this.props.username, this.state.currentValue);
+        this.setState({ currentValue: '' });
     }
 
     render() {
