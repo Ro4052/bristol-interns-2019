@@ -36,7 +36,6 @@ describe('Timer', () => {
 
                 describe('on another timeout', () => {
                     beforeEach(() => {
-                        cy.refreshPage();
                         cy.get('[data-cy="round-number"]', { timeout: promptDuration + 2000 }).should('contain', 3);
                     });
 
