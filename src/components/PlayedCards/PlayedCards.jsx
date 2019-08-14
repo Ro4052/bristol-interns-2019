@@ -7,12 +7,7 @@ export class PlayedCards extends React.Component {
     
     constructor(props) {
         super(props);
-        this.getVotesForCard = this.getVotesForCard.bind(this);
         this.isEnabled = this.isEnabled.bind(this);
-    }
-
-    getVotesForCard(card) {
-        return this.props.votes.reduce((sum, vote) => sum + (vote.cardId === card.cardId), 0);
     }
 
     isEnabled(cardId) {
