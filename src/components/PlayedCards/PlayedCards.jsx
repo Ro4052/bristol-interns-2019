@@ -15,7 +15,7 @@ export class PlayedCards extends React.Component {
         return this.props.voteCard && (cardId !== this.props.playedCardId);
     }
 
-    render() {        
+    render() {
         return (
             <CardList cards={this.props.cards} handleClick={this.props.voteForCard} isEnabled={this.isEnabled} cy="played-cards" />
         );

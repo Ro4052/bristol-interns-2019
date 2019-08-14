@@ -94,7 +94,7 @@ export const connectSocket = () => {
         dispatch(removeCard(card.cardId));
     });
 
-    socket.on("played cards", cards => {        
+    socket.on("played cards", cards => {
         dispatch(setPlayedCards(cards));
     });
 
