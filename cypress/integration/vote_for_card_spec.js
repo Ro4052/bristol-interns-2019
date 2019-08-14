@@ -32,7 +32,7 @@ describe('Vote for a card', () => {
                 cy.playCard();
                 cy.voteCard();
                 cy.get('[data-cy="vote-card"]').should('not.exist');
-                cy.get('[data-cy="vote"]').should('exist');
+                cy.get('[data-cy="voter"]').should('exist');
             });
         });
         it("marks the player's turn as finished", () => {
