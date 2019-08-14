@@ -22,7 +22,7 @@ export class Card extends React.Component {
     }
 
     getPlayersVoted(card) {
-        return (card.votes.length > 0) ? card.votes.map(vote => (<li>{vote.username}</li>)) : <li>0</li>;
+        return (card.votes.length > 0) ? card.votes.map((vote, index) => (<li key={index}>{vote.username}</li>)) : <li>0</li>;
     }
 
     render() {
@@ -35,8 +35,8 @@ export class Card extends React.Component {
                         <img data-cy='card-image' className={cx(styles.image, { fade: !this.props.enabled })} alt={alt} src={src} onLoad={this.handleImageLoaded} />
                         {this.props.card.votes !== undefined && 
                         <div className={styles.cardInfo}>
-                            <div className={styles.playerName} data-cy='vote'><span className={styles.playerText}>{this.props.card.username}</span><span className={styles}></span>+{this.props.newScores.find(score => score.username === this.props.card.username).score}</div>
-                            <div className={styles.votes} data-cy='vote'><span>Votes</span><span className={this.props.card.votes.length > 0 && styles.voteText}>{this.getPlayersVoted(this.props.card)}</span></div>
+                            <div className={styles.playerName} data-cy='player-name'><span className={styles.playerText}>{this.props.card.username}</span>+{this.props.newScores.find(score => score.username === this.props.card.username).score}</div>
+                            <div className={styles.votes}><span>Votes</span><span className={(this.props.card.votes.length) > 0 ? styles.voteText : ""} data-cy='voter'>{this.getPlayersVoted(this.props.card)}</span></div>
                         </div>}
                     </div>
                     <div className={styles.back}>

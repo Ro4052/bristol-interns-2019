@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { voteForCard } from './PlayedCardsActions';
 import CardList from '../shared/CardList/CardList';
-import { statusTypes } from '../../services/statusTypes';
 
 export class PlayedCards extends React.Component {
     
