@@ -34,9 +34,9 @@ export class Dashboard extends React.Component {
                         <div className={styles.centerBox}>
                             {showPlayWord && <PlayWord />}
                             {(this.props.winner || this.props.drawers.length > 1) && <GameOver />}
-                            {this.props.status !== statusTypes.GAME_OVER && <PlayedCards />}
+                            {this.props.status !== statusTypes.GAME_OVER && this.props.playedCards.length > 0 && <PlayedCards />}
+                            {this.props.playCard && <MyCards />}
                         </div>
-                        {this.props.status !== statusTypes.NOT_STARTED && this.props.status !== statusTypes.GAME_OVER && <MyCards />}
                     </div>
                     <div className={styles.side}>
                         <div className={styles.interactions}>
@@ -59,7 +59,8 @@ const mapStateToProps = state => ({
     playedCardId: state.myCardsReducer.playedCardId,
     winner: state.gameOverReducer.winner,
     drawers: state.gameOverReducer.drawers,
-    word: state.playWordReducer.word
+    word: state.playWordReducer.word,
+    playedCards: state.playedCardsReducer.cards
 });
 
 const mapDispatchToProps = dispatch => ({
