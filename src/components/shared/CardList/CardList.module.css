@@ -1,8 +1,66 @@
+.fade {
+    width: 100%;
+    position: relative;
+}
+
+.fade:before,
+.fade:after {
+    content: "";
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    pointer-events: none;
+    width: 6%;
+    height: calc(100% - 40px);
+}
+
+.fade:after {
+    right: 0;
+    background-image: linear-gradient(to right, rgba(223, 109, 15, 0), rgba(223, 109, 15, 1) 100%);
+}
+
+.fade:before {
+    left: 0;
+    background-image: linear-gradient(to left, rgba(223, 109, 15, 0), rgba(223, 109, 15, 1) 100%);
+}
+
 .cardList {
-    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: flex-end;
-    margin: 2em;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1em;
+}
+
+.cardList::-webkit-scrollbar {
+    height: 30px;
+}
+
+.cardList::-webkit-scrollbar-button:single-button {
+    display: block;
+    border-style: solid;
+    width: 30px;
+}
+
+.cardList::-webkit-scrollbar-button:single-button:horizontal:increment {
+    border-width: 15px 0 15px 30px;
+    border-color: transparent transparent transparent rgba(255, 255, 255, 0.5);
+}
+
+.cardList::-webkit-scrollbar-button:single-button:horizontal:decrement {
+    border-width: 15px 30px 15px 0;
+    border-color: transparent rgba(255, 255, 255, 0.5) transparent transparent;
+}
+
+.cardList::-webkit-scrollbar-button:single-button:horizontal:increment:hover {
+    border-color: transparent transparent transparent white;
+}
+
+.cardList::-webkit-scrollbar-button:single-button:horizontal:decrement:hover {
+    border-color: transparent white transparent transparent;
 }

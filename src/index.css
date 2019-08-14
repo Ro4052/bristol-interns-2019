@@ -41,7 +41,7 @@ body {
 #root {
   height: 100%;
   font-family: var(--main-font);
-  background: url('./images/back.jpg');
+  background-color: var(--dark-orange);
   background-size: cover;
 }
 
