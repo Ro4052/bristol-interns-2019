@@ -1,16 +1,56 @@
 .playerInteractions {
+    text-align: center;
+    position: relative;
+    margin-right: 5em;
+}
+
+.prompts {
     display: flex;
     flex-direction: column;
+    justify-content: flex-end;
     align-items: center;
     text-align: center;
     background-color: #fac825;
     border-radius: 15px;
     padding: 0.5em 1em;
-    margin: 2em;
     border: 3px solid black;
+}
+
+.prompts > h2 {
+    width: 80%;
 }
 
 .word {
     font-family: var(--secondary-font);
-    font-size: 2em;
+    font-size: 1.5em;
 }
+
+.circle1 {
+    border: 5px solid #fac825;
+    position: absolute;
+    width: 25px;
+    padding: 20px;
+    border-radius: 50%;
+    right: -55px;
+    bottom: 85px;
+}
+  
+  .circle1:before {
+    content: "";
+    position: absolute;
+    width: 25px;
+    padding: 20px;
+    border-radius: 50%;
+    right: 0px;
+    top: 0px;
+  }
+  
+  .circle2 {
+    border: 5px solid #fac825;
+    position: absolute;
+    width: 5px;
+    padding: 10px 15px;
+    border-radius: 50%;
+    right: -100px;
+    bottom: 120px;
+  }
