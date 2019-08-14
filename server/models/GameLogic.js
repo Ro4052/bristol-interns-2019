@@ -7,7 +7,7 @@ const promptDuration = process.env.NODE_ENV === 'testing' ? 4000 : 30000;
 const voteDuration = process.env.NODE_ENV === 'testing' ? 5000 : 30000;
 const storytellerDuration = process.env.NODE_ENV === 'testing' ? 4000 : 60000;
 const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 2000 : 5000;
-const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 3;
+const minPlayers = process.env.NODE_ENV === 'testing' ? 1 : 3;
 exports.minPlayers = minPlayers;
 
 class GameLogic {

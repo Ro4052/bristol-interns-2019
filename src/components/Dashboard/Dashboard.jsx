@@ -6,6 +6,7 @@ import PlayedCards from '../PlayedCards/PlayedCards';
 import MyCards from '../MyCards/MyCards';
 import Players from '../Players/Players';
 import GameOver from '../GameOver/GameOver';
+import Chat from '../Chat/Chat';
 import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
 import Logo from '../Logo/Logo';
 import { authenticateUser } from '../Login/LoginActions';
@@ -22,17 +23,13 @@ export class Dashboard extends React.Component {
         const showPlayWord = this.props.playWord && !this.props.word && this.props.playedCardId && !(this.props.winner || this.props.drawers.length > 1);
         return (
             <div className={styles.dashboard}>
-                <div className={styles.header}>
-                    <div className={styles.logo}>
-                        <Logo />
-                    </div>
-                </div>
                 <div className={styles.main}>
                     <div className={styles.side}>
                         <div className={styles.gameInfo}>
                             {this.props.status !== statusTypes.NOT_STARTED && <h2>Round: <span id="round-number" data-cy="round-number">{this.props.roundNum}</span></h2>}
                             <Players />
                         </div>
+                        <Chat />
                     </div>
                     <div className={styles.middle}>
                         <div className={styles.centerBox}>

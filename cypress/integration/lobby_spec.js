@@ -11,7 +11,6 @@ describe('Lobby', () => {
             cy.get('[data-cy="room"]').should('have.length', 1);
             cy.get('[data-cy="player-username"]').contains('unicorn');
             cy.get('[data-cy="leave-room"]').should('exist');
-            cy.get('[data-cy="players-needed"]').contains('1');
         });
 
         describe('on clicking create room again', () => {
