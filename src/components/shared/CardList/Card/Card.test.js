@@ -28,7 +28,7 @@ describe('on disabled', () => {
 
 describe('on votes prop', () => {
     it("displays the votes", () => {
-        const wrapper = shallow(<Card card={card1} newScores={newScores} enabled={false} />);        
+        const wrapper = shallow(<Card card={card1} newScores={newScores} enabled={false} />);
         expect(wrapper.find({ 'data-cy': 'voter' }).first().text()).toEqual('unicorn');
     });
 });
