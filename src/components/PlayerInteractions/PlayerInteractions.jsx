@@ -14,7 +14,7 @@ export class PlayerInteractions extends React.Component {
         return (
             <div className={cx(styles.playerInteractions, {votePrompt: this.props.voteCard})}>
                 {this.props.status === statusTypes.WAITING_FOR_CURRENT_PLAYER && !this.props.playCard && !this.props.voteCard && <h2 data-cy='wait-for-storyteller' className={styles.justWait}>Waiting for the storyteller to play their turn</h2>}
-                {this.props.currentWord !== '' && <h2 className={styles.word} id="message">Word: <span data-cy='current-word'>"{this.props.currentWord}"</span></h2>}
+                {this.props.currentWord !== '' && <h2 id="message">Word: <span className={styles.word} data-cy='current-word'>"{this.props.currentWord}"</span></h2>}
                 {this.props.playCard && !this.props.playedCardId && <Prompt cy="play-card" text={(this.props.currentWord ? "Pick the card from your hand that the word best fits" : "Pick a card")} />}
                 {this.props.voteCard && <Prompt cy="vote-card" text="Vote for the card from the list of played cards that the word best fits" />}
                 {(this.props.status === statusTypes.WAITING_FOR_CURRENT_PLAYER && this.props.storytellerDuration > 0) && <Timer cy="storyteller-timer" setDuration={this.props.setStorytellerTimer} duration={this.props.storytellerDuration} />}

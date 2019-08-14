@@ -4,7 +4,7 @@ import { dispatch } from '../store/store';
 import { setPlayedCards, setVoteCard, setVotedCard } from '../components/PlayedCards/PlayedCardsActions';
 import { setPlayCard, resetPlayedCardId, selectCardSuccess, fetchCards } from '../components/MyCards/MyCardsActions';
 import { setPlayWord, resetWord } from '../components/PlayWord/PlayWordActions';
-import { setPlayers, setCurrentPlayer } from '../components/Players/PlayersActions';
+import { setPlayers, setCurrentPlayer, setScoresForRound } from '../components/Players/PlayersActions';
 import { setWinner, setDrawers } from '../components/GameOver/GameOverActions';
 import { setCurrentWord, setStatus, setRoundNumber } from '../components/Dashboard/DashboardActions';
 import { removeCard } from '../components/MyCards/MyCardsActions';
@@ -38,6 +38,7 @@ export const connectSocket = () => {
     });
 
     socket.on("players", msg => {
+        dispatch(setScoresForRound(msg.players));
         dispatch(setPlayers(msg.players));
     });
 
@@ -93,8 +94,8 @@ export const connectSocket = () => {
         dispatch(removeCard(card.cardId));
     });
 
-    socket.on("played cards", msg => {
-        dispatch(setPlayedCards(msg));
+    socket.on("played cards", cards => {        
+        dispatch(setPlayedCards(cards));
     });
 
     socket.on("vote", timeoutDuration => {

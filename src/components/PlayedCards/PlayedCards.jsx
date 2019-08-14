@@ -2,24 +2,20 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { voteForCard } from './PlayedCardsActions';
 import CardList from '../shared/CardList/CardList';
+import { statusTypes } from '../../services/statusTypes';
 
 export class PlayedCards extends React.Component {
     
     constructor(props) {
         super(props);
-        this.getVotesForCard = this.getVotesForCard.bind(this);
         this.isEnabled = this.isEnabled.bind(this);
-    }
-
-    getVotesForCard(card) {
-        return this.props.votes.reduce((sum, vote) => sum + (vote.cardId === card.cardId), 0);
     }
 
     isEnabled(cardId) {
         return this.props.voteCard && (cardId !== this.props.playedCardId);
     }
 
-    render() {
+    render() {        
         return (
             <CardList cards={this.props.cards} handleClick={this.props.voteForCard} isEnabled={this.isEnabled} cy="played-cards" />
         );
