@@ -22,7 +22,7 @@ export class Card extends React.Component {
     }
 
     getPlayersVoted(card) {
-        return (card.votes.length > 0) ? card.votes.map((vote, index) => (<li key={index}>{vote.username}</li>)) : <li>0</li>;
+        return (card.votes.length > 0) ? card.votes.map((vote, index) => <li key={index}>{vote.username}</li>) : <li>0</li>;
     }
 
     render() {
