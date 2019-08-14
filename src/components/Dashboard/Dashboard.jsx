@@ -35,7 +35,7 @@ export class Dashboard extends React.Component {
                             {showPlayWord && <PlayWord />}
                             {(this.props.winner || this.props.drawers.length > 1) && <GameOver />}
                             {this.props.status !== statusTypes.GAME_OVER && this.props.playedCards.length > 0 && <PlayedCards />}
-                            {this.props.playCard && <MyCards />}
+                            {(this.props.playCard || showPlayWord) && <MyCards />}
                         </div>
                     </div>
                     <div className={styles.side}>
