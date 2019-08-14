@@ -130,12 +130,12 @@ describe('if not started and in room', () => {
     });
 
     describe('on click the add automated player button', () => {
-        it('calls addAutoPlayer', () => {
-            const addAutoPlayer = jest.fn();
-            const wrapper = mount(<Room room={notEnoughPlayers} username="player1" addAutoPlayer={addAutoPlayer} />);
+        it('calls addAIPlayer', () => {
+            const addAIPlayer = jest.fn();
+            const wrapper = mount(<Room room={notEnoughPlayers} username="player1" addAIPlayer={addAIPlayer} />);
             wrapper.find({ 'data-cy': 'automated-player' }).simulate('click');
-            expect(addAutoPlayer).toHaveBeenCalled();
-            addAutoPlayer.mockRestore();
+            expect(addAIPlayer).toHaveBeenCalled();
+            addAIPlayer.mockRestore();
         });
     });
 });

@@ -66,7 +66,7 @@ class GameLogic {
     /* Return the list of players, hiding their assigned cards */
     getPlayers() { return this.players.map(player => ({ username: player.username, id: player.id, score: player.score, finishedTurn: player.finishedTurn })) };
 
-    getNumberofAutoPlayers() { return this.players.filter(player => player.real === false).length };
+    getNumberOfAIPlayers() { return this.players.filter(player => !player.real).length };
     
     /* Return the list of cards played this round, hiding who played them */
     getPlayedCards() {
@@ -249,7 +249,7 @@ class GameLogic {
     /* Adds player's card to list of played cards */
     playCard(username, cardId) {
         if (this.status !== statusTypes.WAITING_FOR_OTHER_PLAYERS) {
-            throw Error("Now is not the right time to play a card" + username);
+            throw Error("Now is not the right time to play a card");
         } else if (this.hasPlayedCard(username)) {
             throw Error("You cannot play more than one card");
         } else {

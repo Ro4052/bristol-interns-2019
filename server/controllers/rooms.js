@@ -57,11 +57,11 @@ router.post('/join', auth, (req, res) => {
 });
 
 /* Add an automated player to the room */
-router.post('/addAutoPlayer', (req, res) => {
+router.post('/addAIPlayer', (req, res) => {
     try {
-        const { roomId }= req.body;
-        const x = Room.getById(roomId).gameState.getNumberofAutoPlayers();
-        const user = { username: "Computer " + x, id: 0, real: false};
+        const { roomId } = req.body;
+        const numAutos = Room.getById(roomId).gameState.getNumberOfAIPlayers();
+        const user = { username: "Computer " + numAutos, id: 0, real: false};
         const room = Room.getById(roomId);
         Room.addPlayer(room, user);
         socket.emitRooms();

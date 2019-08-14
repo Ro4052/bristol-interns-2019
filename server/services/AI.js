@@ -3,9 +3,9 @@
 /* Random card picked*/
 exports.autoPickCard = cards => {
     const randomCard = cards[Math.floor(Math.random()*cards.length)];
-    return cardId = randomCard.cardId;
+    return randomCard.cardId;
 }
 
 exports.autoWord = () => {
-    return word = "hello";
+    return "hello";
 }

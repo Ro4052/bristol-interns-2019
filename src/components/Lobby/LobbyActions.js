@@ -39,8 +39,8 @@ export const leaveRoom = roomId => dispatch => {
     .catch(err => dispatch(joinRoomFailure(err.message)));
 };
 
-export const addAutoPlayer = roomId => dispatch => {
-    axiosInstance.post('/api/room/addAutoPlayer', { roomId })
+export const addAIPlayer = roomId => dispatch => {
+    axiosInstance.post('/api/room/addAIPlayer', { roomId })
     .then(res => {
         if (res.status !== 200) throw Error(res.data.message);
     })
