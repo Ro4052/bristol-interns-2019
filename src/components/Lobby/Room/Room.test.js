@@ -73,10 +73,11 @@ describe('if already started', () => {
         expect(wrapper.exists({ 'data-cy': 'players-needed' })).toEqual(false);
     });
 
-    it("doesn't display the join or leave room buttons", () => {
+    it("doesn't display the join or leave room or add automated player buttons", () => {
         const wrapper = mount(<Room room={alreadyStarted} />);
         expect(wrapper.exists({ 'data-cy': 'join-room' })).toEqual(false);
         expect(wrapper.exists({ 'data-cy': 'leave-room' })).toEqual(false);
+        expect(wrapper.exists({ 'data-cy': 'automated-player' })).toEqual(false);
     });
 });
 
@@ -107,6 +108,11 @@ describe('if not started and in room', () => {
         const wrapper = mount(<Room room={notEnoughPlayers} username="player1" />);
         expect(wrapper.exists({ 'data-cy': 'leave-room' })).toEqual(true);
     });
+    
+    it('displays the add automated player button', () => {
+        const wrapper = mount(<Room room={readyToStart} username="player3" />);
+        expect(wrapper.exists({ 'data-cy': 'automated-player' })).toEqual(false);
+    });
 
     it("doesn't display the join room button", () => {
         const wrapper = mount(<Room room={readyToStart} username="player2" />);
@@ -120,6 +126,16 @@ describe('if not started and in room', () => {
             wrapper.find({ 'data-cy': 'leave-room' }).simulate('click');
             expect(leaveRoom).toHaveBeenCalled();
             leaveRoom.mockRestore();
+        });
+    });
+
+    describe('on click the add automated player button', () => {
+        it('calls addAutoPlayer', () => {
+            const addAutoPlayer = jest.fn();
+            const wrapper = mount(<Room room={notEnoughPlayers} username="player1" addAutoPlayer={addAutoPlayer} />);
+            wrapper.find({ 'data-cy': 'automated-player' }).simulate('click');
+            expect(addAutoPlayer).toHaveBeenCalled();
+            addAutoPlayer.mockRestore();
         });
     });
 });

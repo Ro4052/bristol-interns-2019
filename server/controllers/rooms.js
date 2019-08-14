@@ -60,7 +60,8 @@ router.post('/join', auth, (req, res) => {
 router.post('/addAutoPlayer', (req, res) => {
     try {
         const { roomId }= req.body;
-        const user = { username: "Computer 1", id: 0, real: false};
+        const x = Room.getById(roomId).gameState.getNumberofAutoPlayers();
+        const user = { username: "Computer " + x, id: 0, real: false};
         const room = Room.getById(roomId);
         Room.addPlayer(room, user);
         socket.emitRooms();

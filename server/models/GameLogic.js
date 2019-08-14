@@ -66,6 +66,8 @@ class GameLogic {
     /* Return the list of players, hiding their assigned cards */
     getPlayers() { return this.players.map(player => ({ username: player.username, id: player.id, score: player.score, finishedTurn: player.finishedTurn })) };
 
+    getNumberofAutoPlayers() { return this.players.filter(player => player.real === false).length };
+    
     /* Return the list of cards played this round, hiding who played them */
     getPlayedCards() {
         if (this.status === statusTypes.WAITING_FOR_VOTES) {
@@ -146,11 +148,11 @@ class GameLogic {
             this.currentPlayer = this.players[this.roundNum % this.players.length];
             socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer, storytellerDuration);
             this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), storytellerDuration);
-            if (this.currentPlayer.real === false) {
+            if (!this.currentPlayer.real) {
                 const cards = this.getCardsByUsername(this.currentPlayer.username);
                 const cardId = AI.autoPickCard(cards);
                 const word = AI.autoWord();
-                this.playCardAndWord(this.currentPlayer.username, cardId, word)
+                this.playCardAndWord(this.currentPlayer.username, cardId, word);
             }
         } else {
             this.setStatus(statusTypes.GAME_OVER);
@@ -209,10 +211,10 @@ class GameLogic {
             this.markTurnAsFinished(username);
             socket.promptOtherPlayers(this.roomId, this.currentPlayer, promptDuration);
             this.players.forEach(player => {
-                if (player.real === false) {
+                if (!player.real && !this.isCurrentPlayer(player.username)) {
                     const cards = this.getCardsByUsername(player.username);
                     const cardId = AI.autoPickCard(cards);
-                    this.playCard(player.username, cardId); 
+                    this.playCard(player.username, cardId);
                 }
             });
             this.playRandomCardsTimeout = setTimeout(this.playRandomCards.bind(this), promptDuration);
@@ -247,7 +249,7 @@ class GameLogic {
     /* Adds player's card to list of played cards */
     playCard(username, cardId) {
         if (this.status !== statusTypes.WAITING_FOR_OTHER_PLAYERS) {
-            throw Error("Now is not the right time to play a card");
+            throw Error("Now is not the right time to play a card" + username);
         } else if (this.hasPlayedCard(username)) {
             throw Error("You cannot play more than one card");
         } else {
@@ -277,10 +279,10 @@ class GameLogic {
         socket.emitPlayedCards(this.roomId, this.getPlayedCards());
         socket.promptPlayersVote(this.roomId, this.currentPlayer, voteDuration);
         this.players.forEach(player => {
-            if (player.real === false) {
-                const cards = this.getPlayedCards()
+            if (!player.real && !this.isCurrentPlayer(player.username)) {
+                const cards = this.getPlayedCards();
                 const cardId = AI.autoPickCard(cards);
-                this.voteCard(player.username, cardId); 
+                this.voteCard(player.username, cardId);
             }
         });
         this.voteTimeout = setTimeout(this.emitVotes.bind(this), voteDuration);
