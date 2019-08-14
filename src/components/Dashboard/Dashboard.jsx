@@ -8,7 +8,6 @@ import Players from '../Players/Players';
 import GameOver from '../GameOver/GameOver';
 import Chat from '../Chat/Chat';
 import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
-import Logo from '../Logo/Logo';
 import { authenticateUser } from '../Login/LoginActions';
 import PlayWord from '../PlayWord/PlayWord';
 import { statusTypes } from '../../services/statusTypes';
