@@ -18,11 +18,11 @@ export class Chat extends React.Component {
     }
 
     sendMessage() {
-        this.props.sendChat(this.props.username, this.state.currentValue);
+        this.props.sendChat(this.state.currentValue);
         this.setState({ currentValue: '' });
     }
 
-    render() {        
+    render() {
         const messageList = this.props.messages.map(message => (
             <h2 data-cy='messages' className={styles.chat}>{message.username} : {message.text}</h2>
         ));
@@ -42,12 +42,11 @@ export class Chat extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    messages: state.chatReducer.messages,
-    username: state.authReducer.username
+    messages: state.chatReducer.messages
 });
 
 const mapDispatchToProps = dispatch => ({
-    sendChat: (username, message) => dispatch(sendChat(username, message))
+    sendChat: message => dispatch(sendChat(message))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Chat);

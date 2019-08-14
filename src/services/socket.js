@@ -10,12 +10,12 @@ import { setCurrentWord, setStatus, setRoundNumber } from '../components/Dashboa
 import { removeCard } from '../components/MyCards/MyCardsActions';
 import { setRooms } from '../components/Lobby/LobbyActions';
 import { setVoteCardTimer, setPlayCardTimer, setStorytellerTimer } from '../components/Timer/TimerActions';
-import { addMessage } from '../components/Chat/ChatActions';
+import { addMessage, resetChat } from '../components/Chat/ChatActions';
 
 let socket;
 
-export const sendMessage = (username, message) => {
-    socket.emit("send message", {username, message});
+export const sendMessage = message => {
+    socket.emit("send message", message);
 }
 
 export const connectSocket = () => {
@@ -33,8 +33,8 @@ export const connectSocket = () => {
     });
 
     socket.on("message sent", msg => {
-        const { username, message } = msg;        
-        dispatch(addMessage(username, message));
+        const { senderUsername, message } = msg;
+        dispatch(addMessage(senderUsername, message));
     });
 
     socket.on("players", msg => {
@@ -46,6 +46,7 @@ export const connectSocket = () => {
     });
 
     socket.on("start", () => {
+        dispatch(resetChat());
         history.push('/dashboard');
     });
 
@@ -122,6 +123,7 @@ export const connectSocket = () => {
         dispatch(resetWord());
         dispatch(setWinner(null));
         dispatch(setDrawers([]));
+        dispatch(resetChat());
         history.push('/lobby');
     });
 
