@@ -6,7 +6,7 @@ import configureStore from 'redux-mock-store';
 
 const middlewares = [];
 const mockStore = configureStore(middlewares);
-const emptyState = { myCardsReducer: {} };
+const emptyState = { myCardsReducer: {}, playersReducer: {} };
 const emptyStore = mockStore(emptyState);
 
 const cardsList = [
