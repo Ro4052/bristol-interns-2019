@@ -3,8 +3,8 @@ const url = Cypress.config().baseUrl;
 describe('My Cards', () => {
     describe('when you are the storyteller', () => {
         beforeEach(() => {
-            cy.login('unicorn');
-            cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
+            cy.login('unicorn')
+            .then(() => cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`))
             .then(() => cy.request(`http://localhost:12346/createRoom?rounds=3&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
             .then(() => cy.joinRoom())
             .then(() => cy.startGame());
