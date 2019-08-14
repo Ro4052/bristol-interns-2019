@@ -10,7 +10,6 @@ import { authenticateUser } from '../Login/LoginActions';
 import history from '../../services/history';
 import Chat from '../Chat/Chat';
 import { statusTypes } from '../../services/statusTypes';
-import { Timothy } from '../Timothy/Timothy';
 
 export class Lobby extends React.Component {
     componentDidMount() {
