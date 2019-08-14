@@ -37,7 +37,6 @@ export class Lobby extends React.Component {
                         {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}                    
                     </div>
                 </div>
-                <Timothy />
             </div>
         );
     }
