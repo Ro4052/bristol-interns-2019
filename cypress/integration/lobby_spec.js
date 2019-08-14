@@ -8,8 +8,7 @@ describe('Lobby', () => {
         });
 
         it('creates a new room and adds the player to that room', () => {
-            cy.get('[data-cy="current-rooms"]').children().should('have.length', 1);
-            cy.get('[data-cy="room"]').should('exist');
+            cy.get('[data-cy="room"]').should('have.length', 1);
             cy.get('[data-cy="player-username"]').contains('unicorn');
             cy.get('[data-cy="leave-room"]').should('exist');
             cy.get('[data-cy="players-needed"]').contains('1');
@@ -26,7 +25,7 @@ describe('Lobby', () => {
             beforeEach(() => cy.leaveRoom());
 
             it('deletes the room', () => {
-                cy.get('[data-cy="current-rooms"]').children().should('have.length', 0);
+                cy.get('[data-cy="room"]').should('have.length', 0);
             });
         });
 
@@ -63,7 +62,7 @@ describe('Lobby', () => {
         });
 
         it('displays the existing room', () => {
-            cy.get('[data-cy="current-rooms"]').children().should('have.length', 1);
+            cy.get('[data-cy="room"]').should('have.length', 1);
             cy.get('[data-cy="room"]').should('exist');
             cy.get('[data-cy="player-username"]').first().should('have.text', 'halfling');
             cy.get('[data-cy="join-room"]').should('exist');
@@ -82,7 +81,7 @@ describe('Lobby', () => {
                 beforeEach(() => cy.createRoom(3));
 
                 it('creates the room', () => {
-                    cy.get('[data-cy="current-rooms"]').children().should('have.length', 2);
+                    cy.get('[data-cy="room"]').should('have.length', 2);
                     cy.get('[data-cy="room-title"]').contains('Room: 1');
                 });
 
@@ -99,7 +98,7 @@ describe('Lobby', () => {
                     });
 
                     it('deletes your room', () => {
-                        cy.get('[data-cy="current-rooms"]').children().should('have.length', 1);
+                        cy.get('[data-cy="room"]').should('have.length', 1);
                         cy.get('[data-cy="room"]').contains('Room: 0');
                     });
                 });

@@ -1,38 +1,38 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styles from './Room.module.css';
-import StartGame from '../../StartGame/StartGame';
-import Button from '../../shared/Button/Button';
-import { joinRoom, leaveRoom } from '../LobbyActions';
+import { startGame, joinRoom, leaveRoom } from '../LobbyActions';
 
 export class Room extends React.Component {
     render() {
-        const waiting = <span className = {styles.waiting} data-cy="players-needed">Waiting for {this.props.room.minPlayers - this.props.room.players.length} more players</span>;
         const inRoom = this.props.room.players.some(player => player.username === this.props.username);
+        const startGameVisible = !this.props.room.started && inRoom && !(this.props.room.minPlayers - this.props.room.players.length > 0);
+        const waitingVisible = !this.props.room.started && (this.props.room.minPlayers - this.props.room.players.length > 0);
         return (
-            <li className={styles.room} key={this.props.room.roomId} data-cy="room">
-                <h2 data-cy="room-title">{"Room: " + this.props.room.roomId}</h2>
-                <ul id="players" data-cy='room-players'>
-                    {this.props.room.players.map((player, key) => <li key={key}><span data-cy='player-username'>{player.username}</span></li>)}
+            <div className={styles.room} key={this.props.room.roomId} data-cy="room">
+                <h2 className={styles.roomHeader} data-cy="room-title">{"Room: " + this.props.room.roomId}</h2>
+                <ul className={styles.roomPlayers} id="players" data-cy='room-players'>
+                    {this.props.room.players.map((player, key) => <li key={key}><span className={styles.roomPlayer}data-cy='player-username'>{player.username}</span></li>)}
                 </ul>
-                {!this.props.room.started && inRoom && !(this.props.room.minPlayers - this.props.room.players.length > 0) && <StartGame />}
-                {!this.props.room.started && (this.props.room.minPlayers - this.props.room.players.length > 0 ? waiting : null)}
+                {startGameVisible && <button className={styles.roomButton} onClick={this.props.startGame} data-cy="start-game" type='button'>Start game</button>}
+                {waitingVisible && <span className = {styles.waiting} data-cy="players-needed">Waiting for {this.props.room.minPlayers - this.props.room.players.length} more players</span>}
                 {!this.props.room.started && (inRoom ?
-                    <Button cy="leave-room" handleClick={() => this.props.leaveRoom(this.props.room.roomId)} text="Leave room" /> :
-                    <Button cy="join-room" handleClick={() => this.props.joinRoom(this.props.room.roomId)} text="Join room" />
+                    <button className={styles.roomButton} onClick={() => this.props.leaveRoom(this.props.room.roomId)} data-cy="leave-room" type='button'>Leave room</button> :
+                    <button className={styles.roomButton} onClick={() => this.props.joinRoom(this.props.room.roomId)} data-cy="join-room" type='button'>Join room</button>
                 )}
-            </li>
+            </div>
         );
     }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     username: state.authReducer.username
 });
 
-const mapDispatchToProps = (dispatch) => ({
-    joinRoom: (roomId) => dispatch(joinRoom(roomId)),
-    leaveRoom: (roomId) => dispatch(leaveRoom(roomId))
+const mapDispatchToProps = dispatch => ({
+    joinRoom: roomId => dispatch(joinRoom(roomId)),
+    leaveRoom: roomId => dispatch(leaveRoom(roomId)),
+    startGame: () => dispatch(startGame())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Room);

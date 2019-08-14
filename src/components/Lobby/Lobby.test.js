@@ -15,7 +15,7 @@ const room = {
     ]
 };
 
-const emptyState = { authReducer: { username: 'unicorn' }, lobbyReducer: { rooms: [] }, dashboardReducer: { status: '' } };
+const emptyState = { authReducer: { username: 'unicorn' }, lobbyReducer: { rooms: [] }, dashboardReducer: { status: '' }, createRoomReducer: {}, chatReducer: {messages: []} };
 const emptyStore = mockStore(emptyState);
 
 describe('on render', () => {
@@ -45,7 +45,7 @@ describe('if given an empty list rooms', () => {
                 <Lobby authenticateUser={jest.fn()} rooms={[]} />
             </Provider>
         );
-        expect(wrapper.find({ 'data-cy': 'current-rooms' }).children().length).toEqual(0);
+        expect(wrapper.find({ 'data-cy': 'room' }).length).toEqual(0);
     });
 });
 
@@ -56,32 +56,6 @@ describe('if given a list of rooms', () => {
                 <Lobby authenticateUser={jest.fn()} rooms={[room]} />
             </Provider>
         );
-        expect(wrapper.find({ 'data-cy': 'current-rooms' }).children().length).toEqual(1);
-    });
-});
-
-describe('on chosen a number', () => {
-    it('renders createRoom button', () => {
-        const createRoom = jest.fn();
-        const wrapper = mount(
-            <Provider store={emptyStore}>
-                <Lobby authenticateUser={jest.fn()} rooms={[]} createRoom={createRoom} numRounds={1} />
-            </Provider>
-        );
-        expect(wrapper.exists({ 'data-cy': 'create-room' })).toEqual(true);
-    });
-});
-
-describe('on click the create room button', () => {
-    it('calls createRoom', () => {
-        const createRoom = jest.fn();
-        const wrapper = mount(
-            <Provider store={emptyStore}>
-                <Lobby authenticateUser={jest.fn()} rooms={[]} createRoom={createRoom} numRounds={1} />
-            </Provider>
-        );
-        wrapper.find({ 'data-cy': 'create-room' }).simulate('click');
-        expect(createRoom).toHaveBeenCalled();
-        createRoom.mockRestore();
+        expect(wrapper.find({ 'data-cy': 'room' }).length).toEqual(1);
     });
 });

@@ -3,9 +3,9 @@ const socket = require('../services/socket');
 const { statusTypes } = require('./statusTypes');
 
 // Set durations
-const promptDuration = process.env.NODE_ENV === 'testing' ? 2000 : 30000;
+const promptDuration = process.env.NODE_ENV === 'testing' ? 4000 : 30000;
 const voteDuration = process.env.NODE_ENV === 'testing' ? 5000 : 30000;
-const storytellerDuration = process.env.NODE_ENV === 'testing' ? 2000 : 60000;
+const storytellerDuration = process.env.NODE_ENV === 'testing' ? 4000 : 60000;
 const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 2000 : 5000;
 const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 3;
 exports.minPlayers = minPlayers;
@@ -18,7 +18,7 @@ class GameLogic {
         this.roundNum = 0;
         this.currentPlayer = null;
         this.currentWord = '';
-        /** @type {{ username: string, cards: {{ cardId: number, played: bool }[]}, score: number }[]} */
+        /** @type {{ username: string, id: number, cards: {{ cardId: number, played: bool }[]}, score: number }[]} */
         this.players = [];
         /** @type {{ username: string, cardId: number }[]} */
         this.playedCards = [];
@@ -62,7 +62,7 @@ class GameLogic {
     getUnplayedCardsByUsername(username) { return this.players.find(player => player.username === username).cards.filter(card => !card.played) };
 
     /* Return the list of players, hiding their assigned cards */
-    getPlayers() { return this.players.map(player => ({ username: player.username, score: player.score, finishedTurn: player.finishedTurn })) };
+    getPlayers() { return this.players.map(player => ({ username: player.username, id: player.id, score: player.score, finishedTurn: player.finishedTurn })) };
 
     /* Return the list of cards played this round, hiding who played them */
     getPlayedCards() {
@@ -88,14 +88,14 @@ class GameLogic {
     allPlayersVoted() { return this.players.every(player => player.username === this.currentPlayer.username || this.hasVoted(player.username)) };
 
     /* Add the player to the game if possible */
-    joinGame(username) {
+    joinGame(user) {
         if (this.status !== statusTypes.NOT_STARTED) {
             throw Error("Game has already started");
-        } else if (this.players.some(player => player.username === username)) {
+        } else if (this.players.some(player => player.username === user.username)) {
             throw Error("You have already joined this game");
         } else {
             const cards = cardsManager.assign(this.players, 4);
-            const player = { username, cards, score: 0, finishedTurn: false };
+            const player = { username: user.username, id: user.id, cards, score: 0, finishedTurn: false };
             this.players.push(player);
             socket.emitPlayers(this.roomId, this.getPlayers());
         }
@@ -142,8 +142,7 @@ class GameLogic {
             this.setStatus(statusTypes.WAITING_FOR_CURRENT_PLAYER);
             this.roundNum++;
             this.currentPlayer = this.players[this.roundNum % this.players.length];
-            socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer);
-            socket.promptCurrentPlayer(this.roomId, this.currentPlayer, storytellerDuration);
+            socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer, storytellerDuration);
             this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), storytellerDuration);
         } else {
             this.setStatus(statusTypes.GAME_OVER);
@@ -186,6 +185,12 @@ class GameLogic {
             throw Error("Now is not the right time to play a card and a word");
         } else if (this.hasPlayedCard(username)) {
             throw Error("You cannot play more than one card and one word");
+        } else if (username !== this.currentPlayer.username) {
+            throw Error("You cannot play a word and a card when it is not your turn.");
+        } else if (word.trim().length <= 0) {
+            throw Error("Word cannot be empty.");
+        } else if (word.trim().length > 15) {
+            throw Error("Word cannot be longer than 15 characters.");
         } else {
             clearTimeout(this.nextRoundTimeout);
             this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
@@ -267,6 +272,8 @@ class GameLogic {
             throw Error("Now is not the right time to vote");
         } else if (this.hasVoted(username)) {
             throw Error("You cannot vote for a card more than once");
+        } else if (username === this.currentPlayer.username) {
+            throw Error("You cannot vote for a card when it is your turn.");
         } else {
             const vote = { username, cardId };
             this.votes.push(vote);

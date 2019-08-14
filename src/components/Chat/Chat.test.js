@@ -1,0 +1,39 @@
+import React from 'react';
+import { shallow, mount } from 'enzyme';
+import { Chat } from './Chat';
+
+describe('on initial render', () => {
+    it('the input is empty', () => {
+        const wrapper = shallow(<Chat messages={[]} />);
+        expect(wrapper.find({ 'data-cy': 'type-message' }).text()).toEqual('');
+    });
+    it('the submit button is visible', () => {
+        const wrapper = shallow(<Chat messages={[]} />);
+        expect(wrapper.exists({ 'data-cy': 'send-message' }));
+    });
+});
+
+describe('on player types in the box', () => {
+    it('calls handle change', () => {
+        const spy = jest.spyOn(Chat.prototype, 'handleChange');
+        const wrapper = shallow(<Chat messages={[]} />);
+        wrapper.find({ 'data-cy': 'type-message' }).simulate('change',  { preventDefault: () => {}, target: { value: 'test' } });
+        expect(spy).toHaveBeenCalled();
+        spy.mockRestore();
+    });
+    it('updates the state', () => {
+        const wrapper = shallow(<Chat messages={[]} />);
+        wrapper.find({ 'data-cy': 'type-message' }).simulate('change',  { preventDefault: () => {}, target: { value: 'test' } });
+        expect(wrapper.state().currentValue).toEqual('test');
+    });
+});
+
+describe('on click send button', () => {
+    it('calls sendMessage', () => {
+        const spy = jest.spyOn(Chat.prototype, 'sendMessage');
+        const wrapper = mount(<Chat sendChat={jest.fn()} messages={[]} />);
+        wrapper.find({ 'data-cy': 'send-message' }).simulate('click');
+        expect(spy).toHaveBeenCalled();
+        spy.mockRestore();
+    });
+});

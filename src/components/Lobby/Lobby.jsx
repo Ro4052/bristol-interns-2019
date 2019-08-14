@@ -1,56 +1,54 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styles from './Lobby.module.css';
-import { createRoom } from './LobbyActions';
 import Room from './Room/Room';
-import Button from '../shared/Button/Button';
 import Logo from '../Logo/Logo';
 import Logout from '../Logout/Logout';
+import CreateRoom from './CreateRoom/CreateRoom';
+import LeaderboardButton from '../Leaderboard/LeaderboardButton/LeaderboardButton';
 import { authenticateUser } from '../Login/LoginActions';
-import RoundCount from '../RoundCount/RoundCount';
 import history from '../../services/history';
+import Chat from '../Chat/Chat';
+import { statusTypes } from '../../services/statusTypes';
+import { Timothy } from '../Timothy/Timothy';
 
 export class Lobby extends React.Component {
     componentDidMount() {
         this.props.authenticateUser();
-        if (this.props.status !== 'NOT_STARTED') {
+        if (this.props.status !== statusTypes.NOT_STARTED) {
             history.push('/dashboard');
         }
     }
 
     render() {
         return (
-            <div className={styles.lobby}>
+            <div className={styles.main}>
                 <div className={styles.header}>
                     <Logout />
-                    <div className={styles.logo}>
-                        <Logo />
+                    <Logo />
+                    <LeaderboardButton />
+                </div>
+                <div className={styles.container}>
+                    <div className={styles.leftSide}>
+                        <CreateRoom />
+                        <Chat />
+                    </div>
+                    <div className={styles.roomArea} data-cy="current-rooms">
+                        {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}                    
                     </div>
                 </div>
-                <div className={styles.rooms}>
-                    <div className={styles.createRoom}>
-                        <h1>Create room: </h1>
-                        <RoundCount />
-                        {this.props.numRounds && <Button cy="create-room" handleClick={() => this.props.createRoom(this.props.numRounds)} text="Create Room" />}
-                        
-                    </div>
-                    <ul className={styles.currentRooms} data-cy="current-rooms">
-                        {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}
-                    </ul>
-                </div>
+                <Timothy />
             </div>
         );
     }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     rooms: state.lobbyReducer.rooms,
-    numRounds: state.roundCountReducer.numRounds,
     status: state.dashboardReducer.status
 });
 
-const mapDispatchToProps = (dispatch) => ({
-    createRoom: numRounds => dispatch(createRoom(numRounds)),
+const mapDispatchToProps = dispatch => ({
     authenticateUser: () => dispatch(authenticateUser())
 });
 

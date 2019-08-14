@@ -71,6 +71,11 @@ Cypress.Commands.add('leaveRoom', () => {
     cy.wait('@leaveRoom');
 });
 
+Cypress.Commands.add('sendMessage', () => {
+    cy.get('[data-cy="type-message"]').type('message');
+    cy.get('[data-cy="send-message"]').click();
+});
+
 Cypress.Commands.add('startGame', () => {
     cy.route({
         method: "GET",
@@ -111,7 +116,7 @@ Cypress.Commands.add('playCardWordInvalid', () => {
         url: '/api/play-card-word'
     }).as('playCardWord');
     cy.get('[data-cy="my-cards"] [data-cy="card"]').first().click();
-    cy.get('[data-cy="type-word"]').type('notaword');
+    cy.get('[data-cy="type-word"]').type('somethingverylong');
     cy.get('[data-cy="send-word"]').click();
     cy.wait('@playCardWord');
 });
@@ -151,4 +156,13 @@ Cypress.Commands.add('newGame', () => {
     }).as('endGame');
     cy.get('[data-cy="new-game"]').click();
     cy.wait('@endGame');
+});
+
+Cypress.Commands.add('goToLeaderboard', () => {
+    cy.route({
+        method: 'GET',
+        url: '/api/all-players'
+    }).as('getPlayers');
+    cy.get('[data-cy="go-leaderboard"]').click();
+    cy.wait('@getPlayers');
 });

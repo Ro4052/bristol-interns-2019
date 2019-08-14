@@ -1,17 +1,12 @@
 import { types } from './LobbyActionTypes';
 import axios from "axios";
-import { setRoundCount } from '../RoundCount/RoundCountActions';
+import history from '../../services/history';
 
 const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
 export const setRooms = rooms => ({
     type: types.SET_ROOMS,
     rooms
-});
-
-export const createRoomFailure = error => ({
-    type: types.CREATE_ROOM_FAILURE,
-    error
 });
 
 export const joinRoomFailure = error => ({
@@ -24,14 +19,10 @@ export const leaveRoomFailure = error => ({
     error
 });
 
-export const createRoom = numRounds => dispatch => {
-    axiosInstance.post('/api/room/create', { numRounds })
-    .then(res => {
-        if (res.status !== 200) throw Error(res.data.message);
-        else dispatch(setRoundCount(null));
-    })
-    .catch(err => dispatch(createRoomFailure(err.message)));
-};
+export const startGameFailure = error => ({
+    type: types.START_GAME_FAILURE,
+    error
+});
 
 export const joinRoom = roomId => dispatch => {
     axiosInstance.post('/api/room/join', { roomId })
@@ -41,10 +32,19 @@ export const joinRoom = roomId => dispatch => {
     .catch(err => dispatch(joinRoomFailure(err.message)));
 };
 
-export const leaveRoom = roomId => dispatch => {
+export const leaveRoom = () => dispatch => {
     axiosInstance.post('/api/room/leave')
     .then(res => {
         if (res.status !== 200) throw Error(res.data.message);
     })
     .catch(err => dispatch(joinRoomFailure(err.message)));
+};
+
+export const startGame = () => dispatch => {
+    axiosInstance.get('/api/start')
+    .then(res => {
+        if (res.status !== 200) throw Error(res.data.message);
+        history.push('/dashboard');
+    })
+    .catch(err => dispatch(startGameFailure(err.message)));
 };

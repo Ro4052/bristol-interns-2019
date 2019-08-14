@@ -28,7 +28,7 @@ describe('Play word and card', () => {
         describe('on submit a bad word', () => {
             it('displays an error', () => {
                 cy.playCardWordInvalid();
-                cy.get('[data-cy="send-error"]').should('contain', 'Invalid word');
+                cy.get('[data-cy="send-error"]').should('contain', 'Word cannot be longer than 15 characters.');
             });
         });   
 
@@ -43,8 +43,8 @@ describe('Play word and card', () => {
 
             describe('at the end of the round', () => {
                 it('draws you a new card', () => {
-                    cy.get('[data-cy="round-number"]', { timeout: 10000 }).should('contain', '2');
-                    cy.get('[data-cy="my-cards"] [data-cy="card-wrapper"]', { timeout: 10000 }).should('have.length', 4);
+                    cy.get('[data-cy="round-number"]', { timeout: 20000 }).should('contain', '2');
+                    cy.get('[data-cy="my-cards"] [data-cy="card-wrapper"]', { timeout: 20000 }).should('have.length', 4);
                 });
             });
         });  

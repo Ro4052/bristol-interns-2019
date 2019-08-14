@@ -1,7 +1,6 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { Room } from './Room';
-import StartGame from '../../StartGame/StartGame';
 
 const emptyRoom = { roomId: 0, players: [], minPlayers: 0, started: false };
 const notEnoughPlayers = { roomId: 0, players: [{ username: "player1" }], minPlayers: 2, started: false };
@@ -38,14 +37,14 @@ describe('on not started and enough players', () => {
     describe('if in room', () => {
         it('displays the start game button', () => {
             const wrapper = shallow(<Room room={readyToStart} username='player1' />);
-            expect(wrapper.exists(StartGame)).toEqual(true);
+            expect(wrapper.exists({ 'data-cy': 'start-game' })).toEqual(true);
         });
     });
 
     describe('if not in room', () => {
         it('displays the start game button', () => {
             const wrapper = shallow(<Room room={readyToStart} username='player3' />);
-            expect(wrapper.exists(StartGame)).toEqual(false);
+            expect(wrapper.exists({ 'data-cy': 'start-game' })).toEqual(false);
         });
     });
 });
@@ -53,7 +52,7 @@ describe('on not started and enough players', () => {
 describe('if not enough players and not started', () => {
     it("doesn't display the start button", () => {
         const wrapper = shallow(<Room room={notEnoughPlayers} />);
-        expect(wrapper.exists(StartGame)).toEqual(false);
+        expect(wrapper.exists({ 'data-cy': 'start-game' })).toEqual(false);
     });
     
     it('shows how many players are needed', () => {
@@ -65,7 +64,7 @@ describe('if not enough players and not started', () => {
 describe('if already started', () => {
     it("doesn't display the start button", () => {
         const wrapper = shallow(<Room room={alreadyStarted} />);
-        expect(wrapper.exists(StartGame)).toEqual(false);
+        expect(wrapper.exists({ 'data-cy': 'start-game' })).toEqual(false);
     });
 
     it("doesn't show waiting for players", () => {
@@ -113,7 +112,7 @@ describe('if not started and in room', () => {
         expect(wrapper.exists({ 'data-cy': 'join-room' })).toEqual(false);
     });
 
-    describe('on click the leave room button', () => {
+    describe('on submit the leave room form', () => {
         it('calls leaveRoom', () => {
             const leaveRoom = jest.fn();
             const wrapper = mount(<Room room={notEnoughPlayers} username="player1" leaveRoom={leaveRoom} />);
