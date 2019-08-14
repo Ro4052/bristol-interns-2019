@@ -17,7 +17,8 @@ describe('Play word and card', () => {
                 cy.get('[data-cy="my-cards"]').find('[data-cy="card-image"]').first().click();
                 cy.get('[data-cy="play-word"]').should('exist');
             });
-            it("its class is updated to selected", () => {
+            
+            it.skip("its class is updated to selected", () => {
                 cy.get('[data-cy="my-cards"]').find('[data-cy="card-wrapper"]').first().then(($wrapper) => {
                     const classList = Array.from($wrapper[0].classList);
                     expect(classList.some(cls => cls.includes('selected'))).to.equal(true);
