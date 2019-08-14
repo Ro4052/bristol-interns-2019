@@ -34,7 +34,7 @@ export class Chat extends React.Component {
                 </div>
                 <div className={styles.chatBottom}>
                     <input className={styles.chatInput} data-cy='type-message' onChange={this.handleChange} value={this.state.currentValue} placeholder="Type a message" />
-                    <button onClick={this.sendMessage} data-cy="send-message" type='button'>Send</button>
+                    <button onClick={this.sendMessage} data-cy="send-message" type='submit'>Send</button>
                 </div>
             </div>
         );
