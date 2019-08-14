@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import styles from './Room.module.css';
 import StartGame from '../../StartGame/StartGame';
 import Button from '../../shared/Button/Button';
-import { joinRoom, leaveRoom } from '../LobbyActions';
+import { joinRoom, leaveRoom, addAutoPlayer } from '../LobbyActions';
 
 export class Room extends React.Component {
     render() {
@@ -21,6 +21,7 @@ export class Room extends React.Component {
                     <Button cy="leave-room" handleClick={() => this.props.leaveRoom(this.props.room.roomId)} text="Leave room" /> :
                     <Button cy="join-room" handleClick={() => this.props.joinRoom(this.props.room.roomId)} text="Join room" />
                 )}
+                {!this.props.room.started && inRoom && <Button cy="automated-player" handleClick={() => this.props.addAutoPlayer(this.props.room.roomId)} text="Add automated player" />}
             </div>
         );
     }
@@ -32,7 +33,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     joinRoom: (roomId) => dispatch(joinRoom(roomId)),
-    leaveRoom: (roomId) => dispatch(leaveRoom(roomId))
+    leaveRoom: (roomId) => dispatch(leaveRoom(roomId)),
+    addAutoPlayer: (roomId) => dispatch(addAutoPlayer(roomId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Room);

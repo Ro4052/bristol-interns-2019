@@ -2,6 +2,7 @@ const cardsManager = require('../services/cardsManager');
 const validWord = require('../services/validWord');
 const socket = require('../services/socket');
 const { statusTypes } = require('./statusTypes');
+const AI = require('../services/AI');
 
 // Set durations
 const promptDuration = process.env.NODE_ENV === 'testing' ? 4000 : 30000;
@@ -19,7 +20,7 @@ class GameLogic {
         this.roundNum = 0;
         this.currentPlayer = null;
         this.currentWord = '';
-        /** @type {{ username: string, id: number, cards: {{ cardId: number, played: bool }[]}, score: number }[]} */
+        /** @type {{ username: string, id: number, cards: {{ cardId: number, played: bool }[]}, score: number, real: bool }[]} */
         this.players = [];
         /** @type {{ username: string, cardId: number }[]} */
         this.playedCards = [];
@@ -96,7 +97,7 @@ class GameLogic {
             throw Error("You have already joined this game");
         } else {
             const cards = cardsManager.assign(this.players, 4);
-            const player = { username: user.username, id: user.id, cards, score: 0, finishedTurn: false };
+            const player = { username: user.username, id: user.id, cards, score: 0, real: user.real, finishedTurn: false };
             this.players.push(player);
             socket.emitPlayers(this.roomId, this.getPlayers());
         }
@@ -145,6 +146,12 @@ class GameLogic {
             this.currentPlayer = this.players[this.roundNum % this.players.length];
             socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer, storytellerDuration);
             this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), storytellerDuration);
+            if (this.currentPlayer.real === false) {
+                const cards = this.getCardsByUsername(this.currentPlayer.username);
+                const cardId = AI.autoPickCard(cards);
+                const word = AI.autoWord();
+                this.playCardAndWord(this.currentPlayer.username, cardId, word)
+            }
         } else {
             this.setStatus(statusTypes.GAME_OVER);
             const winner = this.players.reduce((prev, current) => (prev.score > current.score) ? prev : current);
@@ -201,6 +208,13 @@ class GameLogic {
             socket.emitWord(this.roomId, this.currentWord);
             this.markTurnAsFinished(username);
             socket.promptOtherPlayers(this.roomId, this.currentPlayer, promptDuration);
+            this.players.forEach(player => {
+                if (player.real === false) {
+                    const cards = this.getCardsByUsername(player.username);
+                    const cardId = AI.autoPickCard(cards);
+                    this.playCard(player.username, cardId); 
+                }
+            });
             this.playRandomCardsTimeout = setTimeout(this.playRandomCards.bind(this), promptDuration);
         }
     }
@@ -214,7 +228,7 @@ class GameLogic {
     /* Random card pushed if player does not submit in time*/
     playRandomCards() {
         this.players.forEach(player => {
-            if(!this.hasPlayedCard(player.username)) {
+            if (!this.hasPlayedCard(player.username)) {
                 const cards = this.getCardsByUsername(player.username);
                 const randomCard = cards[Math.floor(Math.random()*cards.length)];
                 this.playCard(player.username, randomCard.cardId); 
@@ -262,6 +276,13 @@ class GameLogic {
         this.shufflePlayedCards();
         socket.emitPlayedCards(this.roomId, this.getPlayedCards());
         socket.promptPlayersVote(this.roomId, this.currentPlayer, voteDuration);
+        this.players.forEach(player => {
+            if (player.real === false) {
+                const cards = this.getPlayedCards()
+                const cardId = AI.autoPickCard(cards);
+                this.voteCard(player.username, cardId); 
+            }
+        });
         this.voteTimeout = setTimeout(this.emitVotes.bind(this), voteDuration);
     };
 

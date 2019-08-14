@@ -13,6 +13,11 @@ export const joinRoomFailure = error => ({
     error
 });
 
+export const addAutoFailure = error => ({
+    type: types.ADD_AUTO_FAILURE,
+    error
+});
+
 export const leaveRoomFailure = error => ({
     type: types.LEAVE_ROOM_FAILURE,
     error
@@ -33,3 +38,11 @@ export const leaveRoom = roomId => dispatch => {
     })
     .catch(err => dispatch(joinRoomFailure(err.message)));
 };
+
+export const addAutoPlayer = roomId => dispatch => {
+    axiosInstance.post('/api/room/addAutoPlayer', { roomId })
+    .then(res => {
+        if (res.status !== 200) throw Error(res.data.message);
+    })
+    .catch(err => dispatch(addAutoFailure(err.message)));
+}

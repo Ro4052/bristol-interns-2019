@@ -56,6 +56,23 @@ router.post('/join', auth, (req, res) => {
     }
 });
 
+/* Add an automated player to the room */
+router.post('/addAutoPlayer', (req, res) => {
+    try {
+        const { roomId }= req.body;
+        const user = { username: "Computer 1", id: 0, real: false};
+        const room = Room.getById(roomId);
+        Room.addPlayer(room, user);
+        socket.emitRooms();
+        req.session.roomId = roomId;
+        res.sendStatus(200);
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({ message: err.message })
+    }
+});
+
+
 /* Leave a room */
 router.post('/leave', auth, (req, res) => {
     const { user, roomId } = req.session;
