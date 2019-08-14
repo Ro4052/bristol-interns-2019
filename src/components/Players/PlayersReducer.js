@@ -7,7 +7,6 @@ export const initialState = {
 };
 
 const playersReducer = (state = initialState, action) => {
-    
     switch (action.type) {
         case types.SET_PLAYERS:
             return { ...state, players: action.players };
