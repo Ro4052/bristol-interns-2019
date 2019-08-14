@@ -69,7 +69,7 @@ class GameLogic {
         if (this.status === statusTypes.WAITING_FOR_VOTES) {
             return this.playedCards.map(card => ({ cardId: card.cardId }));
         } else if (this.status === statusTypes.DISPLAY_ALL_VOTES) {
-            return this.playedCards.map(card => ({...card, votes: this.votes.filter(vote => vote.cardId === card.cardId) || []}));
+            return this.playedCards.map(card => ({...card, votes: this.votes.filter(vote => vote.cardId === card.cardId)}));
         } else {
             return this.playedCards.map(() => ({}));
         }
