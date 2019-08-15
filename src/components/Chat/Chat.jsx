@@ -18,7 +18,6 @@ export class Chat extends React.Component {
         this.showChat = this.showChat.bind(this);
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     }
-
       
     componentDidMount() {
         this.updateWindowDimensions();
@@ -69,7 +68,7 @@ export class Chat extends React.Component {
                     </form>
                 </div>
             </div>
-        )
+        );
     }
 }
 
