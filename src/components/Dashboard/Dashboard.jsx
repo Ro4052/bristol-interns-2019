@@ -31,12 +31,15 @@ export class Dashboard extends React.Component {
                         <Chat />
                     </div>
                     <div className={styles.middle}>
-                        <div className={styles.interactions}>
+                        {(showPlayerInteractions || showPlayWord) && <div className={styles.interactions}>
                             {showPlayerInteractions && <PlayerInteractions />}
-                        <Timothy />
-                        </div>
-                        <div className={styles.centerBox}>
                             {showPlayWord && <PlayWord />}
+                            <div className={styles.circle1}/>
+                            <div className={styles.circle2}/>
+                            <div className={styles.circle3}/>
+                            <Timothy />
+                        </div>}
+                        <div className={styles.centerBox}>
                             {(this.props.winner || this.props.drawers.length > 1) && <GameOver />}
                             {this.props.status !== statusTypes.GAME_OVER && this.props.playedCards.length > 0 && <PlayedCards />}
                             {this.props.playCard && <MyCards />}
