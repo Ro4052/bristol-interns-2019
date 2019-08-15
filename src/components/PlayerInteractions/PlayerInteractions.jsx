@@ -4,7 +4,7 @@ import Prompt from '../shared/Prompt/Prompt';
 import Timer from '../Timer/Timer';
 import styles from './PlayerInteractions.module.css';
 import classNames from 'classnames/bind';
-import { setVoteCardTimer, setPlayCardTimer, setStorytellerTimer } from '../Timer/TimerActions';
+import { setVoteCardTimer, setPlayCardTimer, setStorytellerTimer, requestNextRound } from '../Timer/TimerActions';
 import { statusTypes } from '../../services/statusTypes';
 
 const cx = classNames.bind(styles);
@@ -13,19 +13,17 @@ export class PlayerInteractions extends React.Component {
     render() {
         return (
             <div className={cx(styles.playerInteractions, {votePrompt: this.props.voteCard})}>
-                <div className={styles.prompts}>
-                    {this.props.status === statusTypes.WAITING_FOR_CURRENT_PLAYER && !this.props.playCard && !this.props.voteCard && <h2 data-cy='wait-for-storyteller' className={styles.justWait}>Waiting for the storyteller to play their turn</h2>}
-                    {this.props.currentWord !== '' && <h2 id="message">Word: <span className={styles.word} data-cy='current-word'>"{this.props.currentWord}"</span></h2>}
-                    {this.props.playCard && !this.props.playedCardId && <Prompt cy="play-card" text={(this.props.currentWord ? "Pick the card from your hand that the word best fits" : "Pick a card")} />}
-                    {this.props.voteCard && <Prompt cy="vote-card" text="Vote for the card from the list of played cards that the word best fits" />}
-                    {(this.props.status === statusTypes.WAITING_FOR_CURRENT_PLAYER && this.props.storytellerDuration > 0) && <Timer cy="storyteller-timer" setDuration={this.props.setStorytellerTimer} duration={this.props.storytellerDuration} />}
-                    {(this.props.status === statusTypes.WAITING_FOR_OTHER_PLAYERS && this.props.playCardDuration > 0) && <Timer cy="card-timer" setDuration={this.props.setPlayCardTimer} duration={this.props.playCardDuration} />}
-                    {this.props.status === statusTypes.WAITING_FOR_OTHER_PLAYERS && this.props.playCardDuration > 0 && !this.props.playCard && <h2 data-cy='wait-for-cards' className={styles.justWait}>Waiting for the other players to play their cards</h2>}
-                    {(this.props.status === statusTypes.WAITING_FOR_VOTES && this.props.voteCardDuration > 0) && <Timer cy="vote-timer" setDuration={this.props.setVoteCardTimer} duration={this.props.voteCardDuration} />}
-                    {this.props.status === statusTypes.WAITING_FOR_VOTES && this.props.voteCardDuration > 0 && !this.props.voteCard && <h2 data-cy='wait-for-votes' className={styles.justWait}>Waiting for the other players to vote</h2>}
-                </div>
-                <div className={styles.circle1}/>
-                <div className={styles.circle2}/>
+                {this.props.status === statusTypes.WAITING_FOR_CURRENT_PLAYER && !this.props.playCard && !this.props.voteCard && <h2 data-cy='wait-for-storyteller' className={styles.justWait}>Waiting for the storyteller to play their turn</h2>}
+                {this.props.status !== statusTypes.DISPLAY_ALL_VOTES && this.props.currentWord !== '' && <h2 id="message">Word: <span className={styles.word} data-cy='current-word'>"{this.props.currentWord}"</span></h2>}
+                {this.props.playCard && !this.props.playedCardId && <Prompt cy="play-card" text={(this.props.currentWord ? "Pick the card from your hand that the word best fits" : "Pick a card")} />}
+                {this.props.voteCard && <Prompt cy="vote-card" text="Vote for the card from the list of played cards that the word best fits" />}
+                {(this.props.status === statusTypes.WAITING_FOR_CURRENT_PLAYER && this.props.storytellerDuration > 0) && <Timer cy="storyteller-timer" setDuration={this.props.setStorytellerTimer} duration={this.props.storytellerDuration} />}
+                {(this.props.status === statusTypes.WAITING_FOR_OTHER_PLAYERS && this.props.playCardDuration > 0) && <Timer cy="card-timer" setDuration={this.props.setPlayCardTimer} duration={this.props.playCardDuration} />}
+                {this.props.status === statusTypes.WAITING_FOR_OTHER_PLAYERS && this.props.playCardDuration > 0 && !this.props.playCard && <h2 data-cy='wait-for-cards' className={styles.justWait}>Waiting for the other players to play their cards</h2>}
+                {(this.props.status === statusTypes.WAITING_FOR_VOTES && this.props.voteCardDuration > 0) && <Timer cy="vote-timer" setDuration={this.props.setVoteCardTimer} duration={this.props.voteCardDuration} />}
+                {this.props.status === statusTypes.WAITING_FOR_VOTES && this.props.voteCardDuration > 0 && !this.props.voteCard && <h2 data-cy='wait-for-votes' className={styles.justWait}>Waiting for the other players to vote</h2>}
+                {this.props.status === statusTypes.DISPLAY_ALL_VOTES && <button onClick={this.props.requestNextRound} data-cy='next-round'>Next round</button>}
+                {this.props.error && <h2>Error: {this.props.error}</h2>}
             </div>
         );
     }
@@ -41,12 +39,14 @@ const mapStateToProps = state => ({
     playCardDuration: state.timerReducer.playCardDuration,
     voteCardDuration: state.timerReducer.voteCardDuration,
     storytellerDuration: state.timerReducer.storytellerDuration,
+    error: state.timerReducer.error
 });
 
 const mapDispatchToProps = dispatch => ({
     setPlayCardTimer: duration => dispatch(setPlayCardTimer(duration)),
     setVoteCardTimer: duration => dispatch(setVoteCardTimer(duration)),
     setStorytellerTimer: duration => dispatch(setStorytellerTimer(duration)),
+    requestNextRound: () => dispatch(requestNextRound())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayerInteractions);

@@ -96,6 +96,18 @@ router.get('/api/start', auth, (req, res) => {
     }
 });
 
+/* Invoke the new round */
+router.get('/api/nextRound', auth, (req, res) => {    
+    try {
+        const roomId = req.session.roomId;
+        Room.getById(roomId).gameState.nextRound();
+        res.sendStatus(200);
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({ message: err.message });
+    }
+});
+
 /* End the game */
 router.get('/api/end', auth, (req, res) => {
     const { roomId } = req.session;

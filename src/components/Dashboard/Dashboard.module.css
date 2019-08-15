@@ -80,3 +80,33 @@
     justify-content: center;
     height: 50%;
 }
+
+.circle1 {
+    border: 5px solid #fac825;
+    padding: 20px 25px;
+    border-radius: 50%;
+    margin: 10px;
+    margin-bottom: 30px;
+}
+  
+.circle1:before {
+    content: "";
+    padding: 0px;
+    border-radius: 50%;
+}
+  
+.circle2 {
+    border: 5px solid #fac825;
+    padding: 10px 15px;
+    border-radius: 50%;
+    margin: 10px;
+    margin-bottom: 50px;
+}
+
+.circle3 {
+    border: 5px solid #fac825;
+    padding: 5px 10px;
+    border-radius: 50%;
+    margin: 10px;
+    margin-bottom: 70px;
+}
