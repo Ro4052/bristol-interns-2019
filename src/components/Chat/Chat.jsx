@@ -56,8 +56,8 @@ export class Chat extends React.Component {
         ));
         return (
             <div className={styles.chatArea}>
-                <div className={cx({ showChatArrow: !this.state.showChat, hideChatArrow: this.state.showChat })} onClick={this.showChat}/>
-                <div className={cx(styles.chatRoom, { shown: this.state.showChat, hidden: !this.state.showChat })}>
+                <div className={cx({ showChatArrow: !this.state.showChat, hideChatArrow: this.state.showChat })} data-cy='chat-arrow' onClick={this.showChat}/>
+                <div className={cx(styles.chatRoom, { shown: this.state.showChat, hidden: !this.state.showChat })} data-cy='chat-room'>
                     <h1 className={styles.chatHeader}>Chat</h1>
                     <div className={styles.chatBox}>
                         {messageList}
