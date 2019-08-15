@@ -43,6 +43,8 @@ class GameLogic {
     getState(username) {
         if (this.status === statusTypes.GAME_OVER) {
             throw Error('This game has ended');
+        } else if (this.status === statusTypes.NOT_STARTED) {
+            throw Error('This game has not started');
         } else return {
             playedCards: this.getPlayedCards(),
             playCard: (!this.hasPlayedCard(username) && this.currentPlayer.username === username && this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER)
@@ -52,7 +54,7 @@ class GameLogic {
             currentPlayer: { username: this.currentPlayer.username }
         }
     }
-
+    
     /* Returns true if this is the current player */
     isCurrentPlayer(username) { return this.currentPlayer.username === username };
 

@@ -12,8 +12,17 @@ exports.setupSocket = (server, session) => {
     io = socketio(server);
     io.use(sharedsession(session));
     io.on('connection', socket => {
-        if (socket.handshake.session.user) {
-            sockets = sockets.filter(otherSocket => otherSocket.handshake.session.user.username !== socket.handshake.session.user.username);
+        const { user, roomId } = socket.handshake.session;
+        if (user) {
+            if (roomId !== null) {
+                try {
+                    const gameState = Room.getById(roomId).gameState.getState(user.username);
+                    socket.emit('game state', gameState);
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+            sockets = sockets.filter(otherSocket => otherSocket.handshake.session.user.username !== user.username);
             sockets.push(socket);
             emitRooms();
             socket.on('send message', message => {

@@ -89,23 +89,13 @@ Cypress.Commands.add('startGame', () => {
         method: "GET",
         url: "/api/start",
     }).as('start');
-    cy.route({
-        method: "GET",
-        url: "/api/game-state",
-    }).as('getState');
     cy.get('[data-cy="start-game"]').click();
     cy.wait('@start');
-    cy.wait('@getState');
     cy.hideChat();
 });
 
 Cypress.Commands.add('refreshPage', () => {
-    cy.route({
-        method: "GET",
-        url: "/api/game-state",
-    }).as('getState');
     cy.visit('/dashboard');
-    cy.wait('@getState');
 });
 
 Cypress.Commands.add('playCardWord', () => {
