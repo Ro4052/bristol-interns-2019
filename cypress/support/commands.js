@@ -106,6 +106,7 @@ Cypress.Commands.add('refreshPage', () => {
     }).as('getState');
     cy.visit('/dashboard');
     cy.wait('@getState');
+    cy.hideChat();
 });
 
 Cypress.Commands.add('playCardWord', () => {
