@@ -32,7 +32,7 @@ describe('on click send button', () => {
     it('calls sendMessage', () => {
         const spy = jest.spyOn(Chat.prototype, 'sendMessage');
         const wrapper = mount(<Chat sendChat={jest.fn()} messages={[]} />);
-        wrapper.find({ 'data-cy': 'send-message' }).simulate('click');
+        wrapper.find({ 'data-cy': 'message-form' }).simulate('submit');
         expect(spy).toHaveBeenCalled();
         spy.mockRestore();
     });

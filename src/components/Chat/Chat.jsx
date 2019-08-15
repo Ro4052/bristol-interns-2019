@@ -17,7 +17,8 @@ export class Chat extends React.Component {
         this.setState({ currentValue: event.target.value });
     }
 
-    sendMessage() {
+    sendMessage(e) {
+        e.preventDefault();
         this.props.sendChat(this.state.currentValue);
         this.setState({ currentValue: '' });
     }
@@ -32,10 +33,10 @@ export class Chat extends React.Component {
                 <div className={styles.chatBox}>
                     {messageList}
                 </div>
-                <div className={styles.chatBottom}>
-                    <input className={styles.chatInput} data-cy='type-message' onChange={this.handleChange} value={this.state.currentValue} placeholder="Type a message" />
-                    <button onClick={this.sendMessage} data-cy="send-message" type='button'>Send</button>
-                </div>
+                <form data-cy="message-form" onSubmit={this.sendMessage} className={styles.chatBottom}>
+                    <input className={styles.chatInput} data-cy='type-message' onChange={this.handleChange} value={this.state.currentValue} placeholder="Type a message" autoFocus />
+                    <button data-cy="send-message" type='submit'>Send</button>
+                </form>
             </div>
         );
     }
