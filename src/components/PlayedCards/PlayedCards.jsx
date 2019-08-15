@@ -19,10 +19,11 @@ export class PlayedCards extends React.Component {
     render() {
         return (
             <div className={styles.playedCards}>
-                <div className={styles.myCard}>
-                    {this.props.myCard && <Card card={this.props.myCard} />}
+                {this.props.myCard &&
+                <div data-cy="played-card" className={styles.myCard}>
+                    <Card card={this.props.myCard} />
                     <h2 className={styles.text}>Your card</h2>
-                </div>
+                </div>}
                 <div className={styles.otherCards}>
                     <div className={styles.inner}>
                         <CardList cards={this.props.cards} handleClick={this.props.voteForCard} isEnabled={this.isEnabled} cy="played-cards" />
