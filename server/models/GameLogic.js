@@ -148,7 +148,7 @@ class GameLogic {
             socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer, storytellerDuration);
             this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), storytellerDuration);
             if (!this.currentPlayer.real) {
-            this.AIsPlayCardAndWord();
+                this.AIsPlayCardAndWord();
             }
         } else {
             this.setStatus(statusTypes.GAME_OVER);
