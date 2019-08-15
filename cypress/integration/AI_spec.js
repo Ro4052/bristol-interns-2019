@@ -1,5 +1,3 @@
-import { isTSAnyKeyword } from "@babel/types";
-
 describe("when click add auto button", () => {
     beforeEach(() => {
         cy.login('unicorn');
