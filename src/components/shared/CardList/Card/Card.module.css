@@ -27,6 +27,10 @@
     transform-style: preserve-3d;
 }
 
+.storyteller {
+    border-color: green;
+}
+
 .flip {
     transform: rotateY( 180deg );
     transition: transform 2s;
