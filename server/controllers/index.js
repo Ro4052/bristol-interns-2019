@@ -30,8 +30,9 @@ router.post('/auth/login', (req, res) => {
     const { username } = req.body;
     db.createUser(username)
     .then(users => {
+        const real = true;
         const id = users[0].dataValues.id;
-        req.session.user = { username, id };
+        req.session.user = { username, id, real };
         req.session.roomId = null;
         currentUsers.push({ username });
         res.sendStatus(200);
