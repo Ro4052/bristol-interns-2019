@@ -75,4 +75,8 @@ describe('when all the votes are displayed', () => {
         expect(requestNextRound).toHaveBeenCalled();
         requestNextRound.mockRestore();
     });
+    it('displays an error if calling next round is not allowed', () => {
+        const wrapper = mount(<PlayerInteractions error={"Next round is not allowed."} />);
+        expect(wrapper.find({ 'data-cy': 'error' }).text()).toEqual("Error: Next round is not allowed.");
+    });
 });  

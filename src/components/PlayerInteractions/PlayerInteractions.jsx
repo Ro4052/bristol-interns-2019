@@ -23,7 +23,7 @@ export class PlayerInteractions extends React.Component {
                 {(this.props.status === statusTypes.WAITING_FOR_VOTES && this.props.voteCardDuration > 0) && <Timer cy="vote-timer" setDuration={this.props.setVoteCardTimer} duration={this.props.voteCardDuration} />}
                 {this.props.status === statusTypes.WAITING_FOR_VOTES && this.props.voteCardDuration > 0 && !this.props.voteCard && <h2 data-cy='wait-for-votes' className={styles.justWait}>Waiting for the other players to vote</h2>}
                 {this.props.status === statusTypes.DISPLAY_ALL_VOTES && <button onClick={this.props.requestNextRound} data-cy='next-round'>Next round</button>}
-                {this.props.error && <h2>Error: {this.props.error}</h2>}
+                {this.props.error && <h2 data-cy='error'>Error: {this.props.error}</h2>}
             </div>
         );
     }
