@@ -41,8 +41,8 @@ export class Dashboard extends React.Component {
                             <Timothy />
                         </div>
                         <div className={styles.centerBox}>
-                        {this.props.status !== statusTypes.WAITING_FOR_OTHER_PLAYERS && this.props.playedCards.length > 0 && <PlayedCards />}
-                            {(this.props.playCard || showPlayWord) && <MyCards />}
+                        {this.props.status !== statusTypes.GAME_OVER && !this.props.playCard && this.props.playedCards.length > 0 && <PlayedCards />}
+                        {(this.props.playCard || showPlayWord) && <MyCards />}
                         </div>
                     </div>
                 </div>
