@@ -3,9 +3,23 @@ import axios from "axios";
 
 const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
 
-export const setPlayedCards = cards => ({
+export const setPlayedCards = allCards => (dispatch, getState) => {
+    const state = getState();
+    const playedCardId = state.myCardsReducer.playedCardId;
+    const cards = allCards.filter(card => card.cardId !== playedCardId);
+    const myCard = allCards.find(card => card.cardId === playedCardId);
+    dispatch(setFilteredCards(cards));
+    dispatch(setMyCard(myCard));
+};
+
+export const setFilteredCards = cards => ({
     type: types.SET_PLAYED_CARDS,
     cards
+});
+
+export const setMyCard = myCard => ({
+    type: types.SET_MY_CARD,
+    myCard
 });
 
 export const voteForCard = cardId => dispatch => {

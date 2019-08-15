@@ -6,7 +6,6 @@ describe('Played cards', () => {
             cy.login('unicorn');
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => cy.createRoom(3))
-            .then(() => cy.get('[data-cy="room-title"]'))
             .then(() => cy.request(`http://localhost:12346/joinRoom?roomId=0&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
             .then(() => cy.startGame())
             .then(() => cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`));
@@ -18,7 +17,8 @@ describe('Played cards', () => {
 
         it('all the played cards are displayed', () => {
             cy.playCard();
-            cy.get('[data-cy="played-cards"] [data-cy="card-wrapper"]').its('length').should('eq', numberOfPlayers);
+            cy.get('[data-cy="played-card"]');
+            cy.get('[data-cy="played-cards"] [data-cy="card-wrapper"]').its('length').should('eq', numberOfPlayers - 1);
         });
     });
 });

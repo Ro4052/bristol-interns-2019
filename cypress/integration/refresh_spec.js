@@ -31,7 +31,8 @@ describe('Refresh page', () => {
                 cy.playCard();
                 cy.refreshPage();
                 cy.get('[data-cy="vote-card"]').should('exist');
-                cy.get('[data-cy="played-cards"] [data-cy="card-wrapper"]').its('length').should('eq', 2);
+                cy.get('[data-cy="played-card"]');
+                cy.get('[data-cy="played-cards"] [data-cy="card-wrapper"]').its('length').should('eq', 1);
             });
         });
     });
