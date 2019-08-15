@@ -26,7 +26,8 @@ describe("when click add auto button", () => {
                 cy.playCardWord();
             });
             it("plays a random card and votes for a random card", () => {
-                cy.get('[data-cy="played-cards"] [data-cy="card-wrapper"]').should('have.length', 2);
+                cy.get('[data-cy="played-card"]');
+                cy.get('[data-cy="played-cards"] [data-cy="card-wrapper"]').should('have.length', 1);
                 cy.get('[data-cy="finished-turn"]').should('have.text', '✓');
             });           
         });
