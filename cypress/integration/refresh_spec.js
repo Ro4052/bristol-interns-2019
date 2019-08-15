@@ -31,7 +31,7 @@ describe('Refresh page', () => {
                 cy.playCard();
                 cy.refreshPage();
                 cy.get('[data-cy="vote-card"]').should('exist');
-                cy.get('[data-cy="played-cards"]').children().its('length').should('eq', 2);
+                cy.get('[data-cy="played-cards"] [data-cy="card-wrapper"]').its('length').should('eq', 2);
             });
         });
     });
@@ -40,9 +40,9 @@ describe('Refresh page', () => {
         it('displays the votes after refresh', () => {
             cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => {
-                cy.get('[data-cy="vote"]', { timeout: 20000 }).should('exist');
+                cy.get('[data-cy="voter"]', { timeout: 20000 }).should('exist');
                 cy.refreshPage();
-                cy.get('[data-cy="vote"]').should('exist');
+                cy.get('[data-cy="voter"]').should('exist');
                 cy.get('[data-cy="vote-card"]').should('not.exist');
             });
         });

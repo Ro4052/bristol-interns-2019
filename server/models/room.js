@@ -8,6 +8,8 @@ exports.getAll = () => rooms;
 
 exports.getById = roomId => rooms.find(room => room.roomId === roomId);
 
+exports.isStarted = room => room.gameState.status !== 'NOT_STARTED';
+
 exports.create = numRounds => {
     const roomId = latestRoomId;
     latestRoomId++;

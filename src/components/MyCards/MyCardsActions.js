@@ -1,4 +1,5 @@
 import { types } from './MyCardsActionTypes';
+import { statusTypes } from '../../services/statusTypes';
 import axios from "axios";
 
 const axiosInstance = axios.create({ validateStatus: status => (status >= 200 && status < 500) });
@@ -34,9 +35,9 @@ export const removeCard = cardId => ({
 
 export const selectCard = cardId => (dispatch, getState) => {
     const status = getState().dashboardReducer.status;
-    if (status === "WAITING_FOR_CURRENT_PLAYER") {
+    if (status === statusTypes.WAITING_FOR_CURRENT_PLAYER) {
         dispatch(selectCardSuccess(cardId));
-    } else if (status === "WAITING_FOR_OTHER_PLAYERS") {
+    } else if (status === statusTypes.WAITING_FOR_OTHER_PLAYERS) {
         axiosInstance.post('/api/play-card', { cardId })
         .then(res => {
             if (res.status === 200) {

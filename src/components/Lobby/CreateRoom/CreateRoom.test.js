@@ -12,11 +12,11 @@ describe('on selects a drop down option', () => {
     });
 });
 
-describe('on click create button', () => {
+describe('on submit the create room form', () => {
     it('calls createRoom', () => {
         const createRoom = jest.fn();
         const wrapper = mount(<CreateRoom createRoom={createRoom} />);
-        wrapper.find({ 'data-cy': 'create-room' }).simulate('click');
+        wrapper.find({ 'data-cy': 'create-room-form' }).simulate('submit');
         expect(createRoom).toHaveBeenCalled();
         createRoom.mockRestore();
     });

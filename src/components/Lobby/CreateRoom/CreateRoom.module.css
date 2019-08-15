@@ -1,11 +1,32 @@
 .createRoom {
-    font-size: 1em;
+    height: 25%;
+    font-size: 2vmin;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     background-color: white;
     border: 2px solid black;
     border-radius: 1em;
     margin: 0 1em 1em 1em;
     letter-spacing: 0.2em;
+    padding: 1em;
+}
+
+.createRoomHeader {
+    font-size: 4vmin;
+}
+
+.createRoomButton {
+    font-size: 3vmin;
+}
+
+.createRoomForm {
+    height: 50%;
+    display: flex;
+    align-items: center;
+}
+
+.selectRounds {
+    font-size: 2vmin;
 }

@@ -16,9 +16,8 @@ exports.setupSocket = (server, session) => {
             sockets = sockets.filter(otherSocket => otherSocket.handshake.session.user.username !== socket.handshake.session.user.username);
             sockets.push(socket);
             emitRooms();
-            socket.on('send message', msg => {  
-                const { username, message } = msg;                
-                emitMessage(username, message);
+            socket.on('send message', message => {
+                emitMessage(socket, message);
             });
         } else {
             socket.disconnect();
@@ -29,8 +28,23 @@ exports.setupSocket = (server, session) => {
     });
 }
 
-// Chat
-const emitMessage = (username, message) => sockets.forEach(socket => socket.emit("message sent", { username, message }));
+// Emit message in the lobby or in a specific room
+const emitMessage = (socket, message) => {
+    const senderRoomId = socket.handshake.session.roomId;
+    const senderUsername = socket.handshake.session.user.username;
+    const senderRoom = Room.getAll().find(room => room.roomId === senderRoomId);
+    const senderRoomStarted = senderRoom && Room.isStarted(senderRoom);
+    if (senderRoomStarted) {
+        sockets.forEach(socket => socket.handshake.session.roomId === senderRoomId && socket.emit("message sent", { senderUsername, message }));
+    } else {
+        sockets.forEach(socket => {
+            const socketRoomId = socket.handshake.session.roomId;
+            const socketRoom = Room.getAll().find(room => room.roomId === socketRoomId);
+            const socketRoomStarted = socketRoom && Room.isStarted(socketRoom);
+            return !socketRoomStarted && socket.emit("message sent", { senderUsername, message })
+        });
+    }
+};
 
 // Emit the rooms
 const emitRooms = () => {

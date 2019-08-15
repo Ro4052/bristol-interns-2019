@@ -1,5 +1,4 @@
 const cardsManager = require('../services/cardsManager');
-const validWord = require('../services/validWord');
 const socket = require('../services/socket');
 const { statusTypes } = require('./statusTypes');
 const AI = require('../services/AI');
@@ -9,7 +8,7 @@ const promptDuration = process.env.NODE_ENV === 'testing' ? 4000 : 30000;
 const voteDuration = process.env.NODE_ENV === 'testing' ? 5000 : 30000;
 const storytellerDuration = process.env.NODE_ENV === 'testing' ? 4000 : 60000;
 const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 2000 : 5000;
-const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 3;
+const minPlayers = process.env.NODE_ENV === 'testing' ? 1 : 3;
 exports.minPlayers = minPlayers;
 
 class GameLogic {
@@ -73,7 +72,7 @@ class GameLogic {
         if (this.status === statusTypes.WAITING_FOR_VOTES) {
             return this.playedCards.map(card => ({ cardId: card.cardId }));
         } else if (this.status === statusTypes.DISPLAY_ALL_VOTES) {
-            return this.playedCards.map(card => ({...card, votes: this.votes.reduce((sum, vote) => sum + (vote.cardId === card.cardId), 0)}));
+            return this.playedCards.map(card => ({...card, votes: this.votes.filter(vote => vote.cardId === card.cardId)}));
         } else {
             return this.playedCards.map(() => ({}));
         }
@@ -98,7 +97,7 @@ class GameLogic {
         } else if (this.players.some(player => player.username === user.username)) {
             throw Error("You have already joined this game");
         } else {
-            const cards = cardsManager.assign(this.players, 4);
+            const cards = cardsManager.assign(this.players, 6);
             const player = { username: user.username, id: user.id, cards, score: 0, real: user.real, finishedTurn: false };
             this.players.push(player);
             socket.emitPlayers(this.roomId, this.getPlayers());
@@ -202,8 +201,10 @@ class GameLogic {
             throw Error("You cannot play more than one card and one word");
         } else if (username !== this.currentPlayer.username) {
             throw Error("You cannot play a word and a card when it is not your turn.");
-        } else if (!validWord.isValidWord(word)) {
-            throw Error("Invalid word.");
+        } else if (word.trim().length <= 0) {
+            throw Error("Word cannot be empty.");
+        } else if (word.trim().length > 15) {
+            throw Error("Word cannot be longer than 15 characters.");
         } else {
             clearTimeout(this.nextRoundTimeout);
             this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;

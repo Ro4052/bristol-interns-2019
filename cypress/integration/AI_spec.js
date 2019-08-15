@@ -23,10 +23,10 @@ describe("when click add auto button", () => {
                 cy.playCard();
                 cy.voteCard();
                 cy.get('[data-cy="play-card"]', {timeout: 5000}).should('exist')
-                .then(cy.playCardWord());
+                cy.playCardWord();
             });
             it("plays a random card and votes for a random card", () => {
-                cy.get('[data-cy="played-cards"] [data-cy="card-wrapper"]').should('have length', 2);
+                cy.get('[data-cy="played-cards"] [data-cy="card-wrapper"]').should('have.length', 2);
                 cy.get('[data-cy="finished-turn"]').should('have.text', '✓');
             });           
         });

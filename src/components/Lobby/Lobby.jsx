@@ -9,11 +9,12 @@ import LeaderboardButton from '../Leaderboard/LeaderboardButton/LeaderboardButto
 import { authenticateUser } from '../Login/LoginActions';
 import history from '../../services/history';
 import Chat from '../Chat/Chat';
+import { statusTypes } from '../../services/statusTypes';
 
 export class Lobby extends React.Component {
     componentDidMount() {
         this.props.authenticateUser();
-        if (this.props.status !== 'NOT_STARTED') {
+        if (this.props.status !== statusTypes.NOT_STARTED) {
             history.push('/dashboard');
         }
     }

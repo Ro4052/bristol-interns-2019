@@ -2,7 +2,6 @@ import React from 'react';
 import { sendChat } from './ChatActions';
 import { connect } from 'react-redux';
 import styles from './Chat.module.css';
-import Button from '../shared/Button/Button';
 
 export class Chat extends React.Component {
     constructor(props) {
@@ -18,37 +17,37 @@ export class Chat extends React.Component {
         this.setState({ currentValue: event.target.value });
     }
 
-    sendMessage() {
-        this.props.sendChat(this.props.username, this.state.currentValue);
+    sendMessage(e) {
+        e.preventDefault();
+        this.props.sendChat(this.state.currentValue);
         this.setState({ currentValue: '' });
     }
 
-    render() {        
+    render() {
         const messageList = this.props.messages.map(message => (
             <h2 data-cy='messages' className={styles.chat}>{message.username} : {message.text}</h2>
         ));
         return (
             <div className={styles.chatRoom}>  
-                <h1 className={styles.header}>Chat</h1>
+                <h1 className={styles.chatHeader}>Chat</h1>
                 <div className={styles.chatBox}>
                     {messageList}
                 </div>
-                <div className={styles.chatBottom}>
-                    <input className={styles.input} data-cy='type-message' onChange={this.handleChange} value={this.state.currentValue} placeholder="Type a message" />
-                    <Button cy="send-message" text="Send" handleClick={this.sendMessage} />
-                </div>
+                <form data-cy="message-form" onSubmit={this.sendMessage} className={styles.chatBottom}>
+                    <input className={styles.chatInput} data-cy='type-message' onChange={this.handleChange} value={this.state.currentValue} placeholder="Type a message" autoFocus />
+                    <button data-cy="send-message" type='submit'>Send</button>
+                </form>
             </div>
         );
     }
 }
 
 const mapStateToProps = state => ({
-    messages: state.chatReducer.messages,
-    username: state.authReducer.username
+    messages: state.chatReducer.messages
 });
 
 const mapDispatchToProps = dispatch => ({
-    sendChat: (username, message) => dispatch(sendChat(username, message))
+    sendChat: message => dispatch(sendChat(message))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Chat);
