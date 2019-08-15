@@ -2,6 +2,7 @@ import { types } from './PlayedCardsActionTypes';
 
 export const initialState = {
     cards: [],
+    myCard: null,
     voteCard: false,
     votedCardId: null,
     error: null,
@@ -12,6 +13,8 @@ const playedCardsReducer = (state = initialState, action) => {
     switch (action.type) {
         case types.SET_PLAYED_CARDS:
             return { ...state, cards: action.cards };
+        case types.SET_MY_CARD:
+            return { ...state, myCard: action.myCard };
         case types.SET_VOTE_CARD:
             return { ...state, voteCard: action.voteCard };
         case types.VOTE_FOR_CARD_BEGIN:

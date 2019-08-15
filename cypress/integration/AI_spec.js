@@ -24,7 +24,8 @@ describe("when click add auto button", () => {
                 cy.voteCard();
                 cy.get('[data-cy="play-card"]', {timeout: 15000}).should('exist');
                 cy.playCardWord();
-                cy.get('[data-cy="played-cards"] [data-cy="card-wrapper"]').should('have.length', 2);
+                cy.get('[data-cy="played-card"]');
+                cy.get('[data-cy="played-cards"] [data-cy="card-wrapper"]').should('have.length', 1);
                 cy.get('[data-cy="finished-turn"]').should('have.text', '✓');
             });           
         });
