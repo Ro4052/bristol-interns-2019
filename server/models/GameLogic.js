@@ -149,10 +149,7 @@ class GameLogic {
             socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer, storytellerDuration);
             this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), storytellerDuration);
             if (!this.currentPlayer.real) {
-                const cards = this.getCardsByUsername(this.currentPlayer.username);
-                const cardId = AI.autoPickCard(cards);
-                const word = AI.autoWord();
-                this.playCardAndWord(this.currentPlayer.username, cardId, word);
+            this.AIsPlayCardAndWord();
             }
         } else {
             this.setStatus(statusTypes.GAME_OVER);
@@ -164,6 +161,14 @@ class GameLogic {
                 socket.emitWinner(this.roomId, { username: winner.username });
             }
         }
+    }
+
+    /*AIs play card and word*/
+    AIsPlayCardAndWord() {
+        const cards = this.getCardsByUsername(this.currentPlayer.username);
+        const cardId = AI.autoPickCard(cards);
+        const word = AI.autoWord();
+        this.playCardAndWord(this.currentPlayer.username, cardId, word);
     }
 
     calculateDrawers(topscore) {
@@ -210,15 +215,20 @@ class GameLogic {
             socket.emitWord(this.roomId, this.currentWord);
             this.markTurnAsFinished(username);
             socket.promptOtherPlayers(this.roomId, this.currentPlayer, promptDuration);
-            this.players.forEach(player => {
-                if (!player.real && !this.isCurrentPlayer(player.username)) {
-                    const cards = this.getCardsByUsername(player.username);
-                    const cardId = AI.autoPickCard(cards);
-                    this.playCard(player.username, cardId);
-                }
-            });
+            this.AIsPlayCard();
             this.playRandomCardsTimeout = setTimeout(this.playRandomCards.bind(this), promptDuration);
         }
+    }
+
+    /* AIs play a card */
+    AIsPlayCard() {
+        this.players.forEach(player => {
+            if (!player.real && !this.isCurrentPlayer(player.username)) {
+                const cards = this.getCardsByUsername(player.username);
+                const cardId = AI.autoPickCard(cards);
+                this.playCard(player.username, cardId);
+            }
+        });
     }
 
     /* Mark the player's turn as finished and notify the other players */
@@ -278,6 +288,12 @@ class GameLogic {
         this.shufflePlayedCards();
         socket.emitPlayedCards(this.roomId, this.getPlayedCards());
         socket.promptPlayersVote(this.roomId, this.currentPlayer, voteDuration);
+        this.AIsVote();
+        this.voteTimeout = setTimeout(this.emitVotes.bind(this), voteDuration);
+    };
+
+    /* AI votes for a card */
+    AIsVote() {
         this.players.forEach(player => {
             if (!player.real && !this.isCurrentPlayer(player.username)) {
                 const cards = this.getPlayedCards();
@@ -285,8 +301,7 @@ class GameLogic {
                 this.voteCard(player.username, cardId);
             }
         });
-        this.voteTimeout = setTimeout(this.emitVotes.bind(this), voteDuration);
-    };
+    }
 
     /* Vote for a card */
     voteCard(username, cardId) {
