@@ -3,6 +3,19 @@ import { shallow, mount } from 'enzyme';
 import { PlayerInteractions } from './PlayerInteractions';
 import Prompt from '../shared/Prompt/Prompt';
 import { statusTypes } from '../../services/statusTypes';
+import { Provider } from 'react-redux';
+import configureStore from 'redux-mock-store';
+
+const middlewares = [];
+const mockStore = configureStore(middlewares);
+const state = {
+    dashboardReducer: {},
+    myCardsReducer: {},
+    playedCardsReducer: {},
+    playWordReducer: {},
+    timerReducer: {}
+};
+const store = mockStore(state);
 
 describe('on play card flag', () => {
     it('displays the play card prompt', () => {
@@ -44,4 +57,22 @@ describe('when you have played your card and are waiting for others to do so', (
         const wrapper = mount(<PlayerInteractions status={statusTypes.WAITING_FOR_OTHER_PLAYERS} playCardDuration={2} />);
         expect(wrapper.exists({ 'data-cy': 'wait-for-cards' })).toEqual(true);
     });
-});      
+});  
+
+describe('when all the votes are displayed', () => {
+    it('displays the next round button', () => {
+        const wrapper = mount(<PlayerInteractions status={statusTypes.DISPLAY_ALL_VOTES} />);
+        expect(wrapper.exists({ 'data-cy': 'next-round' })).toEqual(true);
+    });
+    it('calls requestNextRound when button is clicked', () => {
+        const requestNextRound = jest.fn();
+        const wrapper = mount(
+            <Provider store={store}>
+                <PlayerInteractions status={statusTypes.DISPLAY_ALL_VOTES} requestNextRound={requestNextRound} />
+            </Provider>
+        );
+        wrapper.find({ 'data-cy': 'next-round' }).simulate('click');
+        expect(requestNextRound).toHaveBeenCalled();
+        requestNextRound.mockRestore();
+    });
+});  

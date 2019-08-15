@@ -30,8 +30,8 @@ export class PlayWord extends React.Component {
                 <form data-cy="play-word-form" onSubmit={this.playWord}>
                     <input className={styles.entryBox} onChange={this.handleChange} value={this.state.currentValue} placeholder="Type a word" data-cy='type-word' autoFocus />
                     <button data-cy="send-word" type='submit'>Send word</button>
-                    <span className={styles.invalidWord} data-cy= 'send-error'>{this.props.error}</span>
                 </form>
+                <span className={styles.invalidWord} data-cy= 'send-error'>{this.props.error}</span>
             </div>
         );
     }
