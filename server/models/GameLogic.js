@@ -166,8 +166,11 @@ class GameLogic {
     AIsPlayCardAndWord() {
         const cards = this.getCardsByUsername(this.currentPlayer.username);
         const cardId = AI.autoPickCard(cards);
-        const word = AI.autoWord();
-        this.playCardAndWord(this.currentPlayer.username, cardId, word);
+        AI.autoWord(cardId).then((word) => {
+            this.playCardAndWord(this.currentPlayer.username, cardId, word);
+        }).catch( error => {
+            console.error(error);
+        });
     }
 
     calculateDrawers(topscore) {
@@ -203,7 +206,7 @@ class GameLogic {
             throw Error("You cannot play a word and a card when it is not your turn.");
         } else if (word.trim().length <= 0) {
             throw Error("Word cannot be empty.");
-        } else if (word.trim().length > 15) {
+        } else if (word.trim().length > 25) {
             throw Error("Word cannot be longer than 15 characters.");
         } else {
             clearTimeout(this.nextRoundTimeout);
