@@ -22,7 +22,7 @@ describe("when click add auto button", () => {
             beforeEach(() => {
                 cy.playCard();
                 cy.voteCard();
-                cy.get('[data-cy="play-card"]', {timeout: 5000}).should('exist')
+                cy.get('[data-cy="play-card"]', {timeout: 5000}).should('exist');
                 cy.playCardWord();
             });
             it("plays a random card and votes for a random card", () => {

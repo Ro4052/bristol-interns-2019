@@ -20,7 +20,7 @@ export class Room extends React.Component {
                     <button className={styles.roomButton} onClick={() => this.props.leaveRoom(this.props.room.roomId)} data-cy="leave-room" type='button'>Leave room</button> :
                     <button className={styles.roomButton} onClick={() => this.props.joinRoom(this.props.room.roomId)} data-cy="join-room" type='button'>Join room</button>
                 )}
-                {!this.props.room.started && inRoom && <button data-cy="automated-player" onClick={() => this.props.addAIPlayer(this.props.room.roomId)} >Add AI player</button>}
+                {!this.props.room.started && inRoom && <button className={styles.roomButton} data-cy="automated-player" onClick={() => this.props.addAIPlayer(this.props.room.roomId)} >Add AI player</button>}
             </div>
         );
     }
