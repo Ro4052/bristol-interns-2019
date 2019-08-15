@@ -30,7 +30,7 @@ export class Lobby extends React.Component {
                 <div className={styles.container}>
                     <div className={styles.leftSide}>
                         <CreateRoom />
-                        <Chat />
+                        <Chat showOnDefault={true} />
                     </div>
                     <div className={styles.roomArea} data-cy="current-rooms">
                         {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}                    
