@@ -131,6 +131,3 @@ exports.promptOtherPlayers = (roomId, currentPlayer, timeoutDuration) => sockets
 
 // Ask the other players to vote on the cards
 exports.promptPlayersVote = (roomId, currentPlayer, timeoutDuration) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("vote", { voteCard: socket.handshake.session.user.username !== currentPlayer.username, timeoutDuration: timeoutDuration/1000 }));
-
-// Tell the remaining player/s about the timer duration
-const promptRemaining = (socket, timeoutDuration) => socket.emit("timer", timeoutDuration); 
