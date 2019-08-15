@@ -30,7 +30,6 @@
     height: 100%;
     background-color: rgb(212, 1, 1);
     border-radius: inherit;
-    position: absolute;
     transform-origin: bottom center;
     animation: shake_head alternate infinite 200ms 40ms ease-in-out;
 }
@@ -299,10 +298,10 @@
 }
 @keyframes shake_head {
     from {
-        transform: rotate(-25deg);
+        transform: rotate(-15deg);
     }
     to {
-        transform: rotate(25deg);
+        transform: rotate(15deg);
     }
 }
 @keyframes victory {
