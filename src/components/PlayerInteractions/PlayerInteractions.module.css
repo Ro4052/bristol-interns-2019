@@ -35,7 +35,7 @@
     bottom: 85px;
 }
   
-  .circle1:before {
+.circle1:before {
     content: "";
     position: absolute;
     width: 25px;
@@ -43,9 +43,9 @@
     border-radius: 50%;
     right: 0px;
     top: 0px;
-  }
+}
   
-  .circle2 {
+.circle2 {
     border: 5px solid #fac825;
     position: absolute;
     width: 5px;
@@ -53,4 +53,4 @@
     border-radius: 50%;
     right: -100px;
     bottom: 120px;
-  }
+}
