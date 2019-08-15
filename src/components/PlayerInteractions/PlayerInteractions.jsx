@@ -10,15 +10,6 @@ import { statusTypes } from '../../services/statusTypes';
 const cx = classNames.bind(styles);
 
 export class PlayerInteractions extends React.Component {
-    constructor(props) {
-        super(props);
-        this.requestNextRound = this.requestNextRound.bind(this);
-    }
-
-    requestNextRound() {
-        this.props.requestNextRound();
-    }
-
     render() {
         return (
             <div className={cx(styles.playerInteractions, {votePrompt: this.props.voteCard})}>
@@ -31,7 +22,7 @@ export class PlayerInteractions extends React.Component {
                 {this.props.status === statusTypes.WAITING_FOR_OTHER_PLAYERS && this.props.playCardDuration > 0 && !this.props.playCard && <h2 data-cy='wait-for-cards' className={styles.justWait}>Waiting for the other players to play their cards</h2>}
                 {(this.props.status === statusTypes.WAITING_FOR_VOTES && this.props.voteCardDuration > 0) && <Timer cy="vote-timer" setDuration={this.props.setVoteCardTimer} duration={this.props.voteCardDuration} />}
                 {this.props.status === statusTypes.WAITING_FOR_VOTES && this.props.voteCardDuration > 0 && !this.props.voteCard && <h2 data-cy='wait-for-votes' className={styles.justWait}>Waiting for the other players to vote</h2>}
-                {this.props.status === statusTypes.DISPLAY_ALL_VOTES && <button onClick={this.requestNextRound} data-cy='next-round'>Next round</button>}
+                {this.props.status === statusTypes.DISPLAY_ALL_VOTES && <button onClick={this.this.props.requestNextRound} data-cy='next-round'>Next round</button>}
                 {this.props.error && <h2>Error: {this.props.error}</h2>}
             </div>
         );
