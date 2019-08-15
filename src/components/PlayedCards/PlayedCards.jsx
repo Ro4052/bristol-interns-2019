@@ -28,7 +28,6 @@ export class PlayedCards extends React.Component {
                     <div className={styles.inner}>
                         <CardList cards={this.props.cards} handleClick={this.props.voteForCard} isEnabled={this.isEnabled} cy="played-cards" />
                     </div>
-                    
                 </div>            
             </div>
         );

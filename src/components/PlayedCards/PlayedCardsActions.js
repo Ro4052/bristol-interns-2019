@@ -6,11 +6,8 @@ const axiosInstance = axios.create({ validateStatus: status => (status >= 200 &&
 export const setPlayedCards = allCards => (dispatch, getState) => {
     const state = getState();
     const playedCardId = state.myCardsReducer.playedCardId;
-    console.log("allCards", allCards);
     const cards = allCards.filter(card => card.cardId !== playedCardId);
-    console.log("cards", cards);
     const myCard = allCards.find(card => card.cardId === playedCardId);
-    console.log("myCard", myCard);
     dispatch(setFilteredCards(cards));
     dispatch(setMyCard(myCard));
 };
