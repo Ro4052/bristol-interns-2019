@@ -57,7 +57,7 @@ describe('Timothy', () => {
             .then(() => cy.joinRoom())
             .then(() => cy.startGame())
             .then(() => cy.playCardWordInvalid())
-            .then(() => cy.get('[data-cy="game-over"]', { timeout: 20000 }));
+            .then(() => cy.get('[data-cy="game-over"]', { timeout: 23000 }));
         });
 
         it('timothy does victory dance', () => {

@@ -18,10 +18,10 @@ describe('Timer', () => {
 
             describe('on refresh', () => {
                 it("doesn't restart the timer", () => {
-                    cy.get('[data-cy="storyteller-timer"]').should('contain', 2);
-                    cy.get('[data-cy="storyteller-timer"]').should('contain', 1);
+                    cy.get('[data-cy="storyteller-timer"]').should('contain', 7);
+                    cy.get('[data-cy="storyteller-timer"]').should('contain', 6);
                     cy.refreshPage();
-                    cy.get('[data-cy="storyteller-timer"]', { timeout: 0 }).should('not.contain', 2);
+                    cy.get('[data-cy="storyteller-timer"]', { timeout: 0 }).should('not.contain', 7);
                 });
             });
 
@@ -31,16 +31,16 @@ describe('Timer', () => {
                 });
 
                 it('should move onto the next round', () => {
-                    cy.get('[data-cy="round-number"]', { timeout: promptDuration + 2000 }).should('contain', 2);
+                    cy.get('[data-cy="round-number"]', { timeout: 20000 }).should('contain', 2);
                 });
 
                 describe('on another timeout', () => {
                     beforeEach(() => {
-                        cy.get('[data-cy="round-number"]', { timeout: 2*promptDuration + 2000 }).should('contain', 3);
+                        cy.get('[data-cy="round-number"]', { timeout: 20000 }).should('contain', 3);
                     });
 
                     it('should display the timer again', () => {
-                        cy.get('[data-cy="storyteller-timer"]', { timeout: promptDuration + 2000 }).should('exist');
+                        cy.get('[data-cy="storyteller-timer"]', { timeout: 20000 }).should('exist');
                     });
                 });
             });
@@ -64,7 +64,7 @@ describe('Timer', () => {
 
             describe('on timeout', () => {
                 it('should hide the timer', () => {
-                    cy.get('[data-cy="card-timer"]', { timeout: promptDuration + 2000 }).should('not.exist');
+                    cy.get('[data-cy="card-timer"]', { timeout: 20000 }).should('not.exist');
                 });
             });
         }); 
@@ -88,7 +88,7 @@ describe('Timer', () => {
 
             describe('on timeout', () => {
                 it('should hide the timer', () => {
-                    cy.get('[data-cy="vote-timer"]', { timeout: promptDuration + 2000 }).should('not.exist');
+                    cy.get('[data-cy="vote-timer"]', { timeout: 20000 }).should('not.exist');
                 });
             });
         });
