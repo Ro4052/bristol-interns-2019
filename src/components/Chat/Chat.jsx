@@ -30,7 +30,7 @@ export class Chat extends React.Component {
       
     updateWindowDimensions() {
         this.setState({
-            showChat: window.innerWidth > 950
+            showChat: window.innerWidth > 950 && this.state.showChat
         });
     }
 
