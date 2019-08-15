@@ -18,22 +18,22 @@ export const setStorytellerTimer = storytellerDuration => ({
     storytellerDuration
 });
 
-export const newRoundSuccess = () => ({
-    type: types.REQUEST_NEW_ROUND_SUCCESS
+export const nextRoundSuccess = () => ({
+    type: types.REQUEST_NEXT_ROUND_SUCCESS
 });
 
-export const newRoundFailure = (error) => ({
-    type: types.REQUEST_NEW_ROUND_FAILURE,
+export const nextRoundFailure = (error) => ({
+    type: types.REQUEST_NEXT_ROUND_FAILURE,
     error
 });
 
-export const requestNewRound = () => dispatch => {
-    axiosInstance.get('/api/newRound')
+export const requestNextRound = () => dispatch => {
+    axiosInstance.get('/api/nextRound')
     .then((res) => {
         if (res.status === 200) {
-            dispatch(newRoundSuccess());
+            dispatch(nextRoundSuccess());
         } else {
-            dispatch(newRoundFailure(res.data.message));
+            dispatch(nextRoundFailure(res.data.message));
         }
     })
     .catch(err => console.error(err.message));

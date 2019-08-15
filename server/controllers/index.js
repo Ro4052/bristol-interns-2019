@@ -97,7 +97,7 @@ router.get('/api/start', auth, (req, res) => {
 });
 
 /* Invoke the new round */
-router.get('/api/newRound', auth, (req, res) => {    
+router.get('/api/nextRound', auth, (req, res) => {    
     try {
         const roomId = req.session.roomId;
         Room.getById(roomId).gameState.nextRound();

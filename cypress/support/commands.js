@@ -149,6 +149,15 @@ Cypress.Commands.add('voteCard', () => {
     .then(() => cy.wait('@voteCard'));
 });
 
+Cypress.Commands.add('nextRound', () => {
+    cy.route({
+        method: 'GET',
+        url: '/api/nextRound'
+    }).as('nextRound');
+    cy.get('[data-cy="next-round"]').click();
+    cy.wait('@nextRound');
+});
+
 Cypress.Commands.add('newGame', () => {
     cy.route({
         method: 'GET',

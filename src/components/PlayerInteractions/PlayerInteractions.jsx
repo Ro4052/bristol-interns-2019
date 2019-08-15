@@ -4,7 +4,7 @@ import Prompt from '../shared/Prompt/Prompt';
 import Timer from '../Timer/Timer';
 import styles from './PlayerInteractions.module.css';
 import classNames from 'classnames/bind';
-import { setVoteCardTimer, setPlayCardTimer, setStorytellerTimer, requestNewRound } from '../Timer/TimerActions';
+import { setVoteCardTimer, setPlayCardTimer, setStorytellerTimer, requestNextRound } from '../Timer/TimerActions';
 import { statusTypes } from '../../services/statusTypes';
 
 const cx = classNames.bind(styles);
@@ -12,11 +12,11 @@ const cx = classNames.bind(styles);
 export class PlayerInteractions extends React.Component {
     constructor(props) {
         super(props);
-        this.requestNewRound = this.requestNewRound.bind(this);
+        this.requestNextRound = this.requestNextRound.bind(this);
     }
 
-    requestNewRound() {
-        this.props.requestNewRound();
+    requestNextRound() {
+        this.props.requestNextRound();
     }
 
     render() {
@@ -31,7 +31,7 @@ export class PlayerInteractions extends React.Component {
                 {this.props.status === statusTypes.WAITING_FOR_OTHER_PLAYERS && this.props.playCardDuration > 0 && !this.props.playCard && <h2 data-cy='wait-for-cards' className={styles.justWait}>Waiting for the other players to play their cards</h2>}
                 {(this.props.status === statusTypes.WAITING_FOR_VOTES && this.props.voteCardDuration > 0) && <Timer cy="vote-timer" setDuration={this.props.setVoteCardTimer} duration={this.props.voteCardDuration} />}
                 {this.props.status === statusTypes.WAITING_FOR_VOTES && this.props.voteCardDuration > 0 && !this.props.voteCard && <h2 data-cy='wait-for-votes' className={styles.justWait}>Waiting for the other players to vote</h2>}
-                {this.props.status === statusTypes.DISPLAY_ALL_VOTES && <button onClick={this.requestNewRound}>New round</button>}
+                {this.props.status === statusTypes.DISPLAY_ALL_VOTES && <button onClick={this.requestNextRound} data-cy='next-round'>Next round</button>}
                 {this.props.error && <h2>Error: {this.props.error}</h2>}
             </div>
         );
@@ -55,7 +55,7 @@ const mapDispatchToProps = dispatch => ({
     setPlayCardTimer: duration => dispatch(setPlayCardTimer(duration)),
     setVoteCardTimer: duration => dispatch(setVoteCardTimer(duration)),
     setStorytellerTimer: duration => dispatch(setStorytellerTimer(duration)),
-    requestNewRound: () => dispatch(requestNewRound())
+    requestNextRound: () => dispatch(requestNextRound())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayerInteractions);
