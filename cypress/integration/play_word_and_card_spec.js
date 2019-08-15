@@ -29,7 +29,7 @@ describe('Play word and card', () => {
         describe('on submit a bad word', () => {
             it('displays an error', () => {
                 cy.playCardWordInvalid();
-                cy.get('[data-cy="send-error"]').should('contain', 'Word cannot be longer than 15 characters.');
+                cy.get('[data-cy="send-error"]').should('contain', 'Word cannot be longer than 25 characters.');
             });
         });   
 

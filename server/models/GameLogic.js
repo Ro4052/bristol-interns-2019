@@ -6,7 +6,7 @@ const AI = require('../services/AI');
 // Set durations
 const promptDuration = process.env.NODE_ENV === 'testing' ? 4000 : 30000;
 const voteDuration = process.env.NODE_ENV === 'testing' ? 5000 : 30000;
-const storytellerDuration = process.env.NODE_ENV === 'testing' ? 4000 : 60000;
+const storytellerDuration = process.env.NODE_ENV === 'testing' ? 7000 : 60000;
 const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 2000 : 5000;
 const minPlayers = process.env.NODE_ENV === 'testing' ? 1 : 3;
 exports.minPlayers = minPlayers;
@@ -207,7 +207,7 @@ class GameLogic {
         } else if (word.trim().length <= 0) {
             throw Error("Word cannot be empty.");
         } else if (word.trim().length > 25) {
-            throw Error("Word cannot be longer than 15 characters.");
+            throw Error("Word cannot be longer than 25 characters.");
         } else {
             clearTimeout(this.nextRoundTimeout);
             this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
