@@ -31,7 +31,7 @@ export class Dashboard extends React.Component {
                         <Chat />
                     </div>
                     <div className={styles.middle}>
-                        {<div className={styles.interactions}>
+                        <div className={styles.interactions}>
                             {showPlayerInteractions && <PlayerInteractions />}
                             {showPlayWord && <PlayWord />}
                             {(this.props.winner || this.props.drawers.length > 1) && <GameOver />}
@@ -39,7 +39,7 @@ export class Dashboard extends React.Component {
                             <div className={styles.circle2}/>
                             <div className={styles.circle3}/>
                             <Timothy />
-                        </div>}
+                        </div>
                         <div className={styles.centerBox}>
                             {this.props.status !== statusTypes.GAME_OVER && this.props.playedCards.length > 0 && <PlayedCards />}
                             {this.props.playCard && <MyCards />}
