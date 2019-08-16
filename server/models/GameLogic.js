@@ -7,7 +7,7 @@ const AI = require('../services/AI');
 const promptDuration = process.env.NODE_ENV === 'testing' ? 4000 : 30000;
 const voteDuration = process.env.NODE_ENV === 'testing' ? 5000 : 30000;
 const storytellerDuration = process.env.NODE_ENV === 'testing' ? 4000 : 60000;
-const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 2000 : 5000;
+const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 3000 : 5000;
 const minPlayers = process.env.NODE_ENV === 'testing' ? 1 : 3;
 exports.minPlayers = minPlayers;
 
@@ -145,8 +145,11 @@ class GameLogic {
             this.clearRoundData();
             this.clearFinishedTurn();
             this.setStatus(statusTypes.WAITING_FOR_CURRENT_PLAYER);
+            console.log(this.status);
             this.roundNum++;
+            console.log(this.roundNum);
             this.currentPlayer = this.players[this.roundNum % this.players.length];
+            console.log(this.currentPlayer);
             socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer, storytellerDuration);
             this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), storytellerDuration);
             if (!this.currentPlayer.real) {
@@ -166,7 +169,7 @@ class GameLogic {
 
     /*AIs play card and word*/
     AIsPlayCardAndWord() {
-        const cards = this.getCardsByUsername(this.currentPlayer.username);
+        const cards = this.getUnplayedCardsByUsername(this.currentPlayer.username);
         const cardId = AI.autoPickCard(cards);
         const word = AI.autoWord();
         this.playCardAndWord(this.currentPlayer.username, cardId, word);
@@ -227,7 +230,7 @@ class GameLogic {
     AIsPlayCard() {
         this.players.forEach(player => {
             if (!player.real && !this.isCurrentPlayer(player.username)) {
-                const cards = this.getCardsByUsername(player.username);
+                const cards = this.getUnplayedCardsByUsername(player.username);
                 const cardId = AI.autoPickCard(cards);
                 this.playCard(player.username, cardId);
             }
@@ -341,6 +344,8 @@ class GameLogic {
         if ((correctVotes.length % this.votes.length) === 0) {
             this.players.forEach(player => {if (player !== this.currentPlayer) player.score += 2});
         } else {
+            console.log("status", this.status);
+            console.log("roundNum", this.roundNum);
             this.currentPlayer.score += 3;
             correctVotes.forEach(vote => this.players.find(player => player.username === vote.username).score += 3);
             this.votes.filter(vote => vote.cardId !== correctCard.cardId).forEach(vote => {
