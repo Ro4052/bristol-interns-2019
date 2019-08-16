@@ -1,7 +1,6 @@
 .playerInteractions {
     display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+    flex-direction: row;
     align-items: center;
     text-align: center;
     background-color: #fac825;
@@ -10,8 +9,9 @@
     border: 3px solid black;
 }
 
-.prompts > h2 {
-    width: 80%;
+.text {
+    margin: 1em;
+    font-size: 1.6em;
 }
 
 .word {

@@ -1,7 +1,6 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { PlayWord } from './PlayWord';
-import Prompt from '../shared/Prompt/Prompt';
 
 describe('on initial render', () => {
     it('the input is empty', () => {
@@ -55,6 +54,6 @@ describe('on receive 200 form server due to valid word entered', () => {
 describe('on play card flag', () => {
     it('displays the play word prompt', () => {
         const wrapper = shallow(<PlayWord playWord={true} />);
-        expect(wrapper.find(Prompt).prop('cy')).toEqual('play-word');
+        expect(wrapper.find({'data-cy' :"play-word"}));
     });
 });
