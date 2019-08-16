@@ -138,31 +138,27 @@ class GameLogic {
 
     /* Move on to the next round, called when all players have finished their turn */
     nextRound() {
-        try {
-            clearTimeout(this.nextRoundTimeout);
-            if (this.roundNum < this.rounds) {
-                this.clearRoundData();
-                this.clearFinishedTurn();
-                this.setStatus(statusTypes.WAITING_FOR_CURRENT_PLAYER);
-                this.roundNum++;
-                this.currentPlayer = this.players[this.roundNum % this.players.length];
-                socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer, storytellerDuration);
-                this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), storytellerDuration);
-                if (!this.currentPlayer.real) {
-                    this.AIsPlayCardAndWord();
-                }
-            } else {
-                this.setStatus(statusTypes.GAME_OVER);
-                const winner = this.players.reduce((prev, current) => (prev.score > current.score) ? prev : current);
-                const drawers = this.calculateDrawers(winner.score);
-                if (drawers.length > 1) {
-                    socket.emitDrawers(this.roomId, drawers);
-                } else {
-                    socket.emitWinner(this.roomId, { username: winner.username });
-                }
+        clearTimeout(this.nextRoundTimeout);
+        if (this.roundNum < this.rounds) {
+            this.clearRoundData();
+            this.clearFinishedTurn();
+            this.setStatus(statusTypes.WAITING_FOR_CURRENT_PLAYER);
+            this.roundNum++;
+            this.currentPlayer = this.players[this.roundNum % this.players.length];
+            socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer, storytellerDuration);
+            this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), storytellerDuration);
+            if (!this.currentPlayer.real) {
+                this.AIsPlayCardAndWord();
             }
-        } catch (err) {
-            console.log(err);
+        } else {
+            this.setStatus(statusTypes.GAME_OVER);
+            const winner = this.players.reduce((prev, current) => (prev.score > current.score) ? prev : current);
+            const drawers = this.calculateDrawers(winner.score);
+            if (drawers.length > 1) {
+                socket.emitDrawers(this.roomId, drawers);
+            } else {
+                socket.emitWinner(this.roomId, { username: winner.username });
+            }
         }
     }
 
@@ -343,6 +339,8 @@ class GameLogic {
         if ((correctVotes.length % this.votes.length) === 0) {
             this.players.forEach(player => {if (player !== this.currentPlayer) player.score += 2});
         } else {
+            console.log("status", this.status);
+            console.log("roundNum", this.roundNum);
             this.currentPlayer.score += 3;
             correctVotes.forEach(vote => this.players.find(player => player.username === vote.username).score += 3);
             this.votes.filter(vote => vote.cardId !== correctCard.cardId).forEach(vote => {
