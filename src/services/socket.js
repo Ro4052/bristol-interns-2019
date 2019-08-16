@@ -32,6 +32,14 @@ export const connectSocket = () => {
         upgrade: false
     });
 
+    socket.on("game state", currentGameState => {
+        dispatch(setPlayedCards(currentGameState.playedCards));
+        dispatch(setPlayCard(currentGameState.playCard));
+        dispatch(setPlayWord(currentGameState.playWord));
+        dispatch(setVoteCard(currentGameState.voteCard));
+        dispatch(setCurrentPlayer(currentGameState.currentPlayer));
+    });
+
     socket.on("message sent", msg => {
         const { senderUsername, message } = msg;
         dispatch(addMessage(senderUsername, message));
