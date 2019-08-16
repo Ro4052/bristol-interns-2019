@@ -54,7 +54,7 @@ class GameLogic {
             currentPlayer: { username: this.currentPlayer.username }
         }
     }
-    
+
     /* Returns true if this is the current player */
     isCurrentPlayer(username) { return this.currentPlayer.username === username };
 
