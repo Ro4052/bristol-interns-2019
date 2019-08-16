@@ -28,7 +28,7 @@ export class Dashboard extends React.Component {
                             {this.props.status !== statusTypes.NOT_STARTED && <h2>Round: <span id="round-number" data-cy="round-number">{this.props.roundNum}</span></h2>}
                             <Players />
                         </div>
-                        <Chat />
+                        <Chat showOnDefault={false} />
                     </div>
                     <div className={styles.middle}>
                         <div className={styles.interactions}>
