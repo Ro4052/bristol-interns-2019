@@ -12,13 +12,13 @@ describe('Played cards', () => {
         });
 
         it('a hidden card is displayed after first player plays', () => {
-            cy.get('[data-cy="played-cards"] [data-cy="card-wrapper"]').its('length').should('eq', 1);
+            cy.get('[data-cy="played-cards"] [data-cy="card-wrapper"]', { timeout: 5000 }).its('length').should('eq', 1);
         });
 
         it('all the played cards are displayed', () => {
             cy.playCard();
             cy.get('[data-cy="played-card"]');
-            cy.get('[data-cy="played-cards"] [data-cy="card-wrapper"]', { timeout: 5000 }).its('length').should('eq', numberOfPlayers - 1);
+            cy.get('[data-cy="played-cards"] [data-cy="card-wrapper"]').its('length').should('eq', numberOfPlayers - 1);
         });
     });
 });
