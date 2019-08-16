@@ -121,6 +121,7 @@ class GameLogic {
         } else if (this.players.length < minPlayers) {
             throw Error("Insufficient number of players");
         } else {
+            this.clearGameState();
             socket.emitStartGame(this.roomId);
             this.nextRound();
         }
