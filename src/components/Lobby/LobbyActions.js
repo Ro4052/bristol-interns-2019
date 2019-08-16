@@ -19,6 +19,11 @@ export const addAutoFailure = error => ({
     error
 });
 
+export const removeAutoFailure = error => ({
+    type: types.REMOVE_AUTO_FAILURE,
+    error
+});
+
 export const leaveRoomFailure = error => ({
     type: types.LEAVE_ROOM_FAILURE,
     error
@@ -51,6 +56,14 @@ export const addAIPlayer = roomId => dispatch => {
         if (res.status !== 200) throw Error(res.data.message);
     })
     .catch(err => dispatch(addAutoFailure(err.message)));
+};
+
+export const removeAIPlayer = (roomId, username) => dispatch => {
+    axiosInstance.post('/api/room/removeAIPlayer', { roomId, username })
+    .then(res => {
+        if (res.status !== 200) throw Error(res.data.message);
+    })
+    .catch(err => dispatch(removeAutoFailure(err.message)));
 };
 
 export const startGame = () => dispatch => {

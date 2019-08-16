@@ -73,6 +73,19 @@ router.post('/addAIPlayer', (req, res) => {
     }
 });
 
+/* Removes an automated player from the room */
+router.post('/removeAIPlayer', (req, res) => {
+    try {
+        const { roomId, username } = req.body;
+        const room = Room.getById(roomId);
+        Room.removePlayer(room, username);
+        socket.emitRooms();
+        res.sendStatus(200);
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({ message: err.message })
+    }
+});
 
 /* Leave a room */
 router.post('/leave', auth, (req, res) => {
