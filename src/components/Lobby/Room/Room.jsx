@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styles from './Room.module.css';
-import { startGame, joinRoom, leaveRoom, addAIPlayer } from '../LobbyActions';
+import { startGame, joinRoom, leaveRoom, addAIPlayer, removeAIPlayer } from '../LobbyActions';
 
 export class Room extends React.Component {
     render() {
@@ -12,7 +12,12 @@ export class Room extends React.Component {
             <div className={styles.room} key={this.props.room.roomId} data-cy="room">
                 <h2 className={styles.roomHeader} data-cy="room-title">{"Room: " + this.props.room.roomId}</h2>
                 <ul className={styles.roomPlayers} id="players" data-cy='room-players'>
-                    {this.props.room.players.map((player, key) => <li key={key}><span className={styles.roomPlayer}data-cy='player-username'>{player.username}</span></li>)}
+                    {this.props.room.players.map((player, key) => (
+                        <li key={key}>
+                            <span className={styles.roomPlayer}data-cy='player-username'>{player.username}</span>
+                            {player.username.includes("Computer") && <button onClick={() => this.props.removeAIPlayer(this.props.room.roomId, player.username)}>-</button>}
+                        </li>
+                    ))}
                 </ul>
                 {startGameVisible && <button className={styles.roomButton} onClick={this.props.startGame} data-cy="start-game" type='button'>Start game</button>}
                 {waitingVisible && <span className = {styles.waiting} data-cy="players-needed">Waiting for {this.props.room.minPlayers - this.props.room.players.length} more players</span>}
@@ -33,6 +38,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = (dispatch) => ({
     joinRoom: (roomId) => dispatch(joinRoom(roomId)),
     leaveRoom: (roomId) => dispatch(leaveRoom(roomId)),
+    removeAIPlayer: (roomId, username) => dispatch(removeAIPlayer(roomId, username)),
     addAIPlayer: (roomId) => dispatch(addAIPlayer(roomId)),
     startGame: () => dispatch(startGame())
 });
