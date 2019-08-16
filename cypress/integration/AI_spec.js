@@ -1,4 +1,4 @@
-describe.skip("when click add auto button", () => {
+describe("when click add auto button", () => {
     beforeEach(() => {
         cy.login('unicorn');
         cy.createRoom(3);
