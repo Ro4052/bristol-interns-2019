@@ -1,7 +1,7 @@
 const socketio = require('socket.io');
 const sharedsession = require("express-socket.io-session");
 const { statusTypes } = require('../models/statusTypes');
-const { minPlayers } = require('../models/GameLogic');
+const { minPlayers, maxPlayers } = require('../models/GameLogic');
 const Room = require("../models/room");
 
 let io;
@@ -61,7 +61,8 @@ const emitRooms = () => {
         roomId: room.roomId,
         started: room.gameState.status !== statusTypes.NOT_STARTED,
         players: room.gameState.players,
-        minPlayers
+        minPlayers,
+        maxPlayers
     }));
     sockets.forEach(socket => socket.emit("rooms", rooms));
 }

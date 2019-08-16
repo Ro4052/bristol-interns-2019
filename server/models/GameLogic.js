@@ -11,6 +11,7 @@ const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 3000 : 10000;
 const minPlayers = process.env.NODE_ENV === 'testing' ? 1 : 3;
 const maxPlayers = 6;
 exports.minPlayers = minPlayers;
+exports.maxPlayers = maxPlayers;
 
 class GameLogic {
     constructor(roomId, numRounds) {
@@ -99,7 +100,7 @@ class GameLogic {
             throw Error("Game has already started");
         } else if (this.players.some(player => player.username === user.username)) {
             throw Error("You have already joined this game");
-        } else if (this.players.length === 6) {
+        } else if (this.players.length === maxPlayers) {
             throw Error("The room has reached its capacity");
         } else {
             const cards = cardsManager.assign(this.players, 6);
