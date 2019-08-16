@@ -27,19 +27,23 @@ router.get('/auth', (req, res) => {
 
 /* Log in the user */
 router.post('/auth/login', (req, res) => {
-    const { username } = req.body;
-    db.createUser(username)
-    .then(users => {
-        const real = true;
-        const id = users[0].dataValues.id;
-        req.session.user = { username, id, real };
-        req.session.roomId = null;
-        currentUsers.push({ username });
-        res.sendStatus(200);
-    }).catch(err => {
-        console.log(err);
-        res.status(400).json({ message: err.message });
-    });
+    const { username } = req.body;    
+    if (currentUsers.some(user => user.username === username)) {
+        res.status(400).json({ message: "A user with this username is currently in the game" });
+    } else {
+        db.createUser(username)
+        .then(users => {
+            const real = true;
+            const id = users[0].dataValues.id;
+            req.session.user = { username, id, real };
+            req.session.roomId = null;
+            currentUsers.push({ username });
+            res.sendStatus(200);
+        }).catch(err => {
+            console.log(err);
+            res.status(400).json({ message: err.message });
+        });
+    }
 });
 
 /* Log out the user */
