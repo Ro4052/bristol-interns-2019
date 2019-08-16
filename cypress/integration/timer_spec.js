@@ -27,16 +27,16 @@ describe('Timer', () => {
 
             describe('on timeout', () => {
                 it('should move onto the next round', () => {
-                    cy.get('[data-cy="round-number"]', { timeout: promptDuration + 3000 }).should('contain', 2);
+                    cy.get('[data-cy="round-number"]', { timeout: promptDuration + 2000 }).should('contain', 2);
                 });
 
                 describe('on another timeout', () => {
                     beforeEach(() => {
-                        cy.get('[data-cy="round-number"]', { timeout: 2*promptDuration + 3000 }).should('contain', 3);
+                        cy.get('[data-cy="round-number"]', { timeout: 2*promptDuration + 2000 }).should('contain', 3);
                     });
 
                     it('should display the timer again', () => {
-                        cy.get('[data-cy="storyteller-timer"]', { timeout: promptDuration + 3000 }).should('exist');
+                        cy.get('[data-cy="storyteller-timer"]', { timeout: promptDuration + 2000 }).should('exist');
                     });
                 });
             });

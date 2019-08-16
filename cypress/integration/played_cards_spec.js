@@ -1,6 +1,6 @@
 describe('Played cards', () => {
     const numberOfPlayers = 2;
-    
+
     describe("when the storyteller has played", () => {
         beforeEach(() => {
             cy.login('unicorn');
