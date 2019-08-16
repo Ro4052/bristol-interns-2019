@@ -339,6 +339,8 @@ class GameLogic {
         if ((correctVotes.length % this.votes.length) === 0) {
             this.players.forEach(player => {if (player !== this.currentPlayer) player.score += 2});
         } else {
+            console.log("status", this.status);
+            console.log("roundNum", this.roundNum);
             this.currentPlayer.score += 3;
             correctVotes.forEach(vote => this.players.find(player => player.username === vote.username).score += 3);
             this.votes.filter(vote => vote.cardId !== correctCard.cardId).forEach(vote => {
