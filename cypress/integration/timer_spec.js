@@ -26,10 +26,6 @@ describe('Timer', () => {
             });
 
             describe('on timeout', () => {
-                it('should hide the timer', () => {
-                    cy.get('[data-cy="storyteller-timer"]', { timeout: promptDuration + 2000 }).should('not.exist');
-                });
-
                 it('should move onto the next round', () => {
                     cy.get('[data-cy="round-number"]', { timeout: promptDuration + 2000 }).should('contain', 2);
                 });

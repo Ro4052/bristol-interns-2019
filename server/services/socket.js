@@ -96,9 +96,7 @@ exports.emitPlayers = (roomId, players) => sockets.forEach(socket => socket.hand
 exports.emitNewRound = (roomId, status, roundNum, currentPlayer, timeoutDuration) => sockets.forEach(socket => {
     if (socket.handshake.session.roomId === roomId) {
         socket.emit("new round", { status, roundNum, currentPlayer });
-        if (socket.handshake.session.user.username === currentPlayer.username) {
-            socket.emit("play word and card", timeoutDuration/1000);
-        }
+        socket.emit("play word and card", { playWordAndCard: socket.handshake.session.user.username === currentPlayer.username, timeoutDuration: timeoutDuration/1000 });
     }
 });
 
@@ -129,7 +127,7 @@ exports.emitDrawers = (roomId, players) => sockets.forEach(socket => socket.hand
 exports.emitEndGame = roomId => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("end"));
 
 // Prompt the players to pick a card
-exports.promptOtherPlayers = (roomId, currentPlayer, timeoutDuration) => sockets.forEach(socket => socket.handshake.session.user.username !== currentPlayer.username && socket.handshake.session.roomId === roomId && socket.emit("play card", timeoutDuration/1000));
+exports.promptOtherPlayers = (roomId, currentPlayer, timeoutDuration) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("play card", { playCard: socket.handshake.session.user.username !== currentPlayer.username, timeoutDuration: timeoutDuration/1000 }));
 
 // Ask the other players to vote on the cards
-exports.promptPlayersVote = (roomId, currentPlayer, timeoutDuration) => sockets.forEach(socket => socket.handshake.session.user.username !== currentPlayer.username && socket.handshake.session.roomId === roomId && socket.emit("vote", timeoutDuration/1000));
+exports.promptPlayersVote = (roomId, currentPlayer, timeoutDuration) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("vote", { voteCard: socket.handshake.session.user.username !== currentPlayer.username, timeoutDuration: timeoutDuration/1000 }));
