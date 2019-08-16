@@ -121,7 +121,6 @@ class GameLogic {
         } else if (this.players.length < minPlayers) {
             throw Error("Insufficient number of players");
         } else {
-            this.status = statusTypes.NOT_STARTED;
             socket.emitStartGame(this.roomId);
             this.nextRound();
         }
@@ -139,11 +138,16 @@ class GameLogic {
 
     /* Move on to the next round, called when all players have finished their turn */
     nextRound() {
+        console.log("hi");
         clearTimeout(this.nextRoundTimeout);
+        console.log("hi1");
         if (this.roundNum < this.rounds) {
             this.clearRoundData();
+            console.log("hi2");
             this.clearFinishedTurn();
+            console.log("hi3");
             this.setStatus(statusTypes.WAITING_FOR_CURRENT_PLAYER);
+            console.log("hi4");
             this.roundNum++;
             this.currentPlayer = this.players[this.roundNum % this.players.length];
             socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer, storytellerDuration);
