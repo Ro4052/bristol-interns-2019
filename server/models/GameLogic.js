@@ -143,7 +143,9 @@ class GameLogic {
             this.clearRoundData();
             this.clearFinishedTurn();
             this.setStatus(statusTypes.WAITING_FOR_CURRENT_PLAYER);
+            console.log(this.status);
             this.roundNum++;
+            console.log(this.roundNum);
             this.currentPlayer = this.players[this.roundNum % this.players.length];
             console.log(this.currentPlayer);
             socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer, storytellerDuration);
