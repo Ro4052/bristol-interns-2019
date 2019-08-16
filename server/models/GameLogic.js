@@ -164,7 +164,7 @@ class GameLogic {
 
     /*AIs play card and word*/
     AIsPlayCardAndWord() {
-        const cards = this.getCardsByUsername(this.currentPlayer.username);
+        const cards = this.getUnplayedCardsByUsername(this.currentPlayer.username);
         const cardId = AI.autoPickCard(cards);
         const word = AI.autoWord();
         this.playCardAndWord(this.currentPlayer.username, cardId, word);
@@ -225,7 +225,7 @@ class GameLogic {
     AIsPlayCard() {
         this.players.forEach(player => {
             if (!player.real && !this.isCurrentPlayer(player.username)) {
-                const cards = this.getCardsByUsername(player.username);
+                const cards = this.getUnplayedCardsByUsername(player.username);
                 const cardId = AI.autoPickCard(cards);
                 this.playCard(player.username, cardId);
             }
