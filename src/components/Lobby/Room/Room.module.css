@@ -31,3 +31,18 @@
 .roomButton {
     font-size: 3vmin;
 }
+
+.removeAIButton {
+    width: 4vmin;
+    height: 4vmin;
+    padding: 0;
+    font-size: 2.8vmin;
+    letter-spacing: 0;
+    text-align: center;
+}
+
+.playerInRoom {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
