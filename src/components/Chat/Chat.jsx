@@ -22,7 +22,7 @@ export class Chat extends React.Component {
     componentDidMount() {
         this.updateWindowDimensions();        
         this.setState({
-            showChat: this.props.showOnDefault
+            showChat: this.props.showOnDefault || window.innerWidth > 1500
         });
         window.addEventListener('resize', this.updateWindowDimensions);
     }
