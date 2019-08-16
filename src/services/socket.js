@@ -4,18 +4,18 @@ import { dispatch } from '../store/store';
 import { setPlayedCards, setVoteCard, setVotedCard } from '../components/PlayedCards/PlayedCardsActions';
 import { setPlayCard, resetPlayedCardId, selectCardSuccess, fetchCards } from '../components/MyCards/MyCardsActions';
 import { setPlayWord, resetWord } from '../components/PlayWord/PlayWordActions';
-import { setPlayers, setCurrentPlayer } from '../components/Players/PlayersActions';
+import { setPlayers, setCurrentPlayer, setScoresForRound } from '../components/Players/PlayersActions';
 import { setWinner, setDrawers } from '../components/GameOver/GameOverActions';
 import { setCurrentWord, setStatus, setRoundNumber } from '../components/Dashboard/DashboardActions';
 import { removeCard } from '../components/MyCards/MyCardsActions';
 import { setRooms } from '../components/Lobby/LobbyActions';
 import { setVoteCardTimer, setPlayCardTimer, setStorytellerTimer } from '../components/Timer/TimerActions';
-import { addMessage } from '../components/Chat/ChatActions';
+import { addMessage, resetChat } from '../components/Chat/ChatActions';
 
 let socket;
 
-export const sendMessage = (username, message) => {
-    socket.emit("send message", {username, message});
+export const sendMessage = message => {
+    socket.emit("send message", message);
 }
 
 export const connectSocket = () => {
@@ -32,12 +32,21 @@ export const connectSocket = () => {
         upgrade: false
     });
 
+    socket.on("game state", currentGameState => {
+        dispatch(setPlayedCards(currentGameState.playedCards));
+        dispatch(setPlayCard(currentGameState.playCard));
+        dispatch(setPlayWord(currentGameState.playWord));
+        dispatch(setVoteCard(currentGameState.voteCard));
+        dispatch(setCurrentPlayer(currentGameState.currentPlayer));
+    });
+
     socket.on("message sent", msg => {
-        const { username, message } = msg;        
-        dispatch(addMessage(username, message));
+        const { senderUsername, message } = msg;
+        dispatch(addMessage(senderUsername, message));
     });
 
     socket.on("players", msg => {
+        dispatch(setScoresForRound(msg.players));
         dispatch(setPlayers(msg.players));
     });
 
@@ -46,6 +55,7 @@ export const connectSocket = () => {
     });
 
     socket.on("start", () => {
+        dispatch(resetChat());
         history.push('/dashboard');
     });
 
@@ -76,15 +86,15 @@ export const connectSocket = () => {
         dispatch(setCurrentWord(msg));
     });
 
-    socket.on("play word and card", timeoutDuration => {
-        dispatch(setStorytellerTimer(timeoutDuration));
-        dispatch(setPlayWord(true));
-        dispatch(setPlayCard(true));
+    socket.on("play word and card", msg => {
+        dispatch(setStorytellerTimer(msg.timeoutDuration));
+        dispatch(setPlayWord(msg.playWordAndCard));
+        dispatch(setPlayCard(msg.playWordAndCard));
     });
 
-    socket.on("play card", timeoutDuration => {
-        dispatch(setPlayCard(true));
-        dispatch(setPlayCardTimer(timeoutDuration));
+    socket.on("play card", msg => {
+        dispatch(setPlayCard(msg.playCard));
+        dispatch(setPlayCardTimer(msg.timeoutDuration));
     });
 
     socket.on("played card", card => {
@@ -92,13 +102,13 @@ export const connectSocket = () => {
         dispatch(removeCard(card.cardId));
     });
 
-    socket.on("played cards", msg => {
-        dispatch(setPlayedCards(msg));
+    socket.on("played cards", cards => {
+        dispatch(setPlayedCards(cards));
     });
 
-    socket.on("vote", timeoutDuration => {
-        dispatch(setVoteCard(true));
-        dispatch(setVoteCardTimer(timeoutDuration));
+    socket.on("vote", msg => {
+        dispatch(setVoteCard(msg.voteCard));
+        dispatch(setVoteCardTimer(msg.timeoutDuration));
     });
 
     socket.on("winner", msg => {
@@ -122,6 +132,7 @@ export const connectSocket = () => {
         dispatch(resetWord());
         dispatch(setWinner(null));
         dispatch(setDrawers([]));
+        dispatch(resetChat());
         history.push('/lobby');
     });
 

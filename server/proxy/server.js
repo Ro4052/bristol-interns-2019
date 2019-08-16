@@ -59,11 +59,7 @@ app.get('/connect', (req, res) => {
 });
 
 app.get('/send-message', (req, res) => {
-    const body = { 
-        username: 'halfling',
-        message: "message"
-    };
-    socket.emit('send message', body);
+    socket.emit('send message', "message");
     res.sendStatus(200);
 });
 

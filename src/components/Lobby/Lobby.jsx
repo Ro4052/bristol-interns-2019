@@ -10,7 +10,6 @@ import { authenticateUser } from '../Login/LoginActions';
 import history from '../../services/history';
 import Chat from '../Chat/Chat';
 import { statusTypes } from '../../services/statusTypes';
-import { Timothy } from '../Timothy/Timothy';
 
 export class Lobby extends React.Component {
     componentDidMount() {
@@ -31,13 +30,12 @@ export class Lobby extends React.Component {
                 <div className={styles.container}>
                     <div className={styles.leftSide}>
                         <CreateRoom />
-                        <Chat />
+                        <Chat showOnDefault={true} />
                     </div>
                     <div className={styles.roomArea} data-cy="current-rooms">
                         {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}                    
                     </div>
                 </div>
-                <Timothy />
             </div>
         );
     }

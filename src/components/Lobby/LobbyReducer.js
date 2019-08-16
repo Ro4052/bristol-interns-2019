@@ -13,6 +13,8 @@ const lobbyReducer = (state = initialState, action) => {
             return {...state, error: action.error };
         case types.LEAVE_ROOM_FAILURE:
             return {...state, error: action.error };
+        case types.ADD_AUTO_FAILURE:
+            return {...state, error: action.error };
         case types.START_GAME_FAILURE:
             return {...state, error: action.error };
         default:

@@ -1,13 +1,14 @@
 const cardsManager = require('../services/cardsManager');
 const socket = require('../services/socket');
 const { statusTypes } = require('./statusTypes');
+const AI = require('../services/AI');
 
 // Set durations
 const promptDuration = process.env.NODE_ENV === 'testing' ? 4000 : 30000;
 const voteDuration = process.env.NODE_ENV === 'testing' ? 5000 : 30000;
 const storytellerDuration = process.env.NODE_ENV === 'testing' ? 4000 : 60000;
-const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 2000 : 5000;
-const minPlayers = process.env.NODE_ENV === 'testing' ? 2 : 3;
+const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 3000 : 10000;
+const minPlayers = process.env.NODE_ENV === 'testing' ? 1 : 3;
 exports.minPlayers = minPlayers;
 
 class GameLogic {
@@ -18,7 +19,7 @@ class GameLogic {
         this.roundNum = 0;
         this.currentPlayer = null;
         this.currentWord = '';
-        /** @type {{ username: string, id: number, cards: {{ cardId: number, played: bool }[]}, score: number }[]} */
+        /** @type {{ username: string, id: number, cards: {{ cardId: number, played: bool }[]}, score: number, real: bool }[]} */
         this.players = [];
         /** @type {{ username: string, cardId: number }[]} */
         this.playedCards = [];
@@ -42,6 +43,8 @@ class GameLogic {
     getState(username) {
         if (this.status === statusTypes.GAME_OVER) {
             throw Error('This game has ended');
+        } else if (this.status === statusTypes.NOT_STARTED) {
+            throw Error('This game has not started');
         } else return {
             playedCards: this.getPlayedCards(),
             playCard: (!this.hasPlayedCard(username) && this.currentPlayer.username === username && this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER)
@@ -64,12 +67,14 @@ class GameLogic {
     /* Return the list of players, hiding their assigned cards */
     getPlayers() { return this.players.map(player => ({ username: player.username, id: player.id, score: player.score, finishedTurn: player.finishedTurn })) };
 
+    getNumberOfAIPlayers() { return this.players.filter(player => !player.real).length };
+    
     /* Return the list of cards played this round, hiding who played them */
     getPlayedCards() {
         if (this.status === statusTypes.WAITING_FOR_VOTES) {
             return this.playedCards.map(card => ({ cardId: card.cardId }));
         } else if (this.status === statusTypes.DISPLAY_ALL_VOTES) {
-            return this.playedCards.map(card => ({...card, votes: this.votes.reduce((sum, vote) => sum + (vote.cardId === card.cardId), 0)}));
+            return this.playedCards.map(card => ({...card, votes: this.votes.filter(vote => vote.cardId === card.cardId)}));
         } else {
             return this.playedCards.map(() => ({}));
         }
@@ -94,8 +99,8 @@ class GameLogic {
         } else if (this.players.some(player => player.username === user.username)) {
             throw Error("You have already joined this game");
         } else {
-            const cards = cardsManager.assign(this.players, 4);
-            const player = { username: user.username, id: user.id, cards, score: 0, finishedTurn: false };
+            const cards = cardsManager.assign(this.players, 6);
+            const player = { username: user.username, id: user.id, cards, score: 0, real: user.real, finishedTurn: false };
             this.players.push(player);
             socket.emitPlayers(this.roomId, this.getPlayers());
         }
@@ -144,6 +149,9 @@ class GameLogic {
             this.currentPlayer = this.players[this.roundNum % this.players.length];
             socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer, storytellerDuration);
             this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), storytellerDuration);
+            if (!this.currentPlayer.real) {
+                this.AIsPlayCardAndWord();
+            }
         } else {
             this.setStatus(statusTypes.GAME_OVER);
             const winner = this.players.reduce((prev, current) => (prev.score > current.score) ? prev : current);
@@ -154,6 +162,14 @@ class GameLogic {
                 socket.emitWinner(this.roomId, { username: winner.username });
             }
         }
+    }
+
+    /*AIs play card and word*/
+    AIsPlayCardAndWord() {
+        const cards = this.getUnplayedCardsByUsername(this.currentPlayer.username);
+        const cardId = AI.autoPickCard(cards);
+        const word = AI.autoWord();
+        this.playCardAndWord(this.currentPlayer.username, cardId, word);
     }
 
     calculateDrawers(topscore) {
@@ -202,8 +218,20 @@ class GameLogic {
             socket.emitWord(this.roomId, this.currentWord);
             this.markTurnAsFinished(username);
             socket.promptOtherPlayers(this.roomId, this.currentPlayer, promptDuration);
+            this.AIsPlayCard();
             this.playRandomCardsTimeout = setTimeout(this.playRandomCards.bind(this), promptDuration);
         }
+    }
+
+    /* AIs play a card */
+    AIsPlayCard() {
+        this.players.forEach(player => {
+            if (!player.real && !this.isCurrentPlayer(player.username)) {
+                const cards = this.getUnplayedCardsByUsername(player.username);
+                const cardId = AI.autoPickCard(cards);
+                this.playCard(player.username, cardId);
+            }
+        });
     }
 
     /* Mark the player's turn as finished and notify the other players */
@@ -215,7 +243,7 @@ class GameLogic {
     /* Random card pushed if player does not submit in time*/
     playRandomCards() {
         this.players.forEach(player => {
-            if(!this.hasPlayedCard(player.username)) {
+            if (!this.hasPlayedCard(player.username)) {
                 const cards = this.getCardsByUsername(player.username);
                 const randomCard = cards[Math.floor(Math.random()*cards.length)];
                 this.playCard(player.username, randomCard.cardId); 
@@ -263,8 +291,20 @@ class GameLogic {
         this.shufflePlayedCards();
         socket.emitPlayedCards(this.roomId, this.getPlayedCards());
         socket.promptPlayersVote(this.roomId, this.currentPlayer, voteDuration);
+        this.AIsVote();
         this.voteTimeout = setTimeout(this.emitVotes.bind(this), voteDuration);
     };
+
+    /* AI votes for a card */
+    AIsVote() {
+        this.players.forEach(player => {
+            if (!player.real && !this.isCurrentPlayer(player.username)) {
+                const cards = this.getPlayedCards();
+                const cardId = AI.autoPickCard(cards);
+                this.voteCard(player.username, cardId);
+            }
+        });
+    }
 
     /* Vote for a card */
     voteCard(username, cardId) {

@@ -9,8 +9,8 @@ const initialState = {
     myCardsReducer: {
         playedCardId: 2
     },
-    dashboardReducer: {
-        status: ""
+    playersReducer: {
+        newScores: []
     }
 };
 const middlewares = [];

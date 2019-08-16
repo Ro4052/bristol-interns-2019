@@ -1,8 +1,5 @@
 .ufo {
     font-size: 18vmin;
-    position: absolute;
-    bottom: 0em;
-    right: 0em;
     margin: 0.2em;
 }
 
@@ -15,10 +12,7 @@
     border-radius: 0.5em 0.5em 0em 0em / 0.6em 0.6em 0em 0em;
     box-sizing: content-box;
     border: 0.07em solid transparent;
-    position: absolute;
-    bottom: 0em;
     user-select: none;
-    right: 0;
 }
 
 .body {
@@ -36,7 +30,6 @@
     height: 100%;
     background-color: rgb(212, 1, 1);
     border-radius: inherit;
-    position: absolute;
     transform-origin: bottom center;
     animation: shake_head alternate infinite 200ms 40ms ease-in-out;
 }
@@ -305,19 +298,19 @@
 }
 @keyframes shake_head {
     from {
-        transform: rotate(-25deg);
+        transform: rotate(-15deg);
     }
     to {
-        transform: rotate(25deg);
+        transform: rotate(15deg);
     }
 }
 @keyframes victory {
-    0%   {transform: translate3d(-200%,20%,0) scale3d(1,1,1)}
-    20%  {transform: translate3d(-160%,-50%,0) scale3d(1,1,1);}
-    40% {transform: translate3d(-120%,-80%,0) scale3d(0.7,1.2,1);}
-    60%   {transform: translate3d(-80%,-80%,0) scale3d(0.7,1.2,1)}
-    80%  {transform: translate3d(-40%,-50%,0) scale3d(1.2,0.7,1);}
-    100% {transform: translate3d(0%,20%,0) scale3d(1.2,.7,1);}
+    0%   {transform: translate3d(0,20%,0) scale3d(1,1,1)}
+    20%  {transform: translate3d(0,-50%,0) scale3d(1,1,1);}
+    40% {transform: translate3d(0,-80%,0) scale3d(0.7,1.2,1);}
+    60%   {transform: translate3d(0,-80%,0) scale3d(0.7,1.2,1)}
+    80%  {transform: translate3d(0,-50%,0) scale3d(1.2,0.7,1);}
+    100% {transform: translate3d(0,20%,0) scale3d(1.2,.7,1);}
 }
 
 @keyframes rainbow{

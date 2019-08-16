@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styles from './Room.module.css';
-import { startGame, joinRoom, leaveRoom } from '../LobbyActions';
+import { startGame, joinRoom, leaveRoom, addAIPlayer } from '../LobbyActions';
 
 export class Room extends React.Component {
     render() {
@@ -20,6 +20,7 @@ export class Room extends React.Component {
                     <button className={styles.roomButton} onClick={() => this.props.leaveRoom(this.props.room.roomId)} data-cy="leave-room" type='button'>Leave room</button> :
                     <button className={styles.roomButton} onClick={() => this.props.joinRoom(this.props.room.roomId)} data-cy="join-room" type='button'>Join room</button>
                 )}
+                {!this.props.room.started && inRoom && <button className={styles.roomButton} data-cy="automated-player" onClick={() => this.props.addAIPlayer(this.props.room.roomId)} >Add AI player</button>}
             </div>
         );
     }
@@ -29,9 +30,10 @@ const mapStateToProps = state => ({
     username: state.authReducer.username
 });
 
-const mapDispatchToProps = dispatch => ({
-    joinRoom: roomId => dispatch(joinRoom(roomId)),
-    leaveRoom: roomId => dispatch(leaveRoom(roomId)),
+const mapDispatchToProps = (dispatch) => ({
+    joinRoom: (roomId) => dispatch(joinRoom(roomId)),
+    leaveRoom: (roomId) => dispatch(leaveRoom(roomId)),
+    addAIPlayer: (roomId) => dispatch(addAIPlayer(roomId)),
     startGame: () => dispatch(startGame())
 });
 

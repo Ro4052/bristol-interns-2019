@@ -2,17 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { voteForCard } from './PlayedCardsActions';
 import CardList from '../shared/CardList/CardList';
+import Card from '../shared/CardList/Card/Card';
+import styles from './PlayedCards.module.css';
 
 export class PlayedCards extends React.Component {
     
     constructor(props) {
         super(props);
-        this.getVotesForCard = this.getVotesForCard.bind(this);
         this.isEnabled = this.isEnabled.bind(this);
-    }
-
-    getVotesForCard(card) {
-        return this.props.votes.reduce((sum, vote) => sum + (vote.cardId === card.cardId), 0);
     }
 
     isEnabled(cardId) {
@@ -21,13 +18,25 @@ export class PlayedCards extends React.Component {
 
     render() {
         return (
-            <CardList cards={this.props.cards} handleClick={this.props.voteForCard} isEnabled={this.isEnabled} cy="played-cards" />
+            <div className={styles.playedCards}>
+                {this.props.myCard &&
+                <div data-cy="played-card" className={styles.myCard}>
+                    <Card card={this.props.myCard} />
+                    <h2 className={styles.text}>Your card</h2>
+                </div>}
+                <div className={styles.otherCards}>
+                    <div className={styles.inner}>
+                        <CardList cards={this.props.cards} handleClick={this.props.voteForCard} isEnabled={this.isEnabled} cy="played-cards" />
+                    </div>
+                </div>            
+            </div>
         );
     }
 }
 
 const mapStateToProps = state => ({
     cards: state.playedCardsReducer.cards,
+    myCard: state.playedCardsReducer.myCard,
     voteCard: state.playedCardsReducer.voteCard,
     playedCardId: state.myCardsReducer.playedCardId,
     votes: state.playedCardsReducer.votes

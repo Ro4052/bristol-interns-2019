@@ -4,11 +4,10 @@
     justify-content: center;
     align-items: center;
     background-color: #fac825;
-    padding: 1em;
+    padding: 1vmin 3vmin;
     border: 2px solid black;
     border-radius: 1em;
-    font-size: 5vmin;
-    margin-bottom: 15vmin;
+    font-size: 4vmin;
 }
 
 h2 {
