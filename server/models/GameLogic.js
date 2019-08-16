@@ -9,7 +9,9 @@ const voteDuration = process.env.NODE_ENV === 'testing' ? 5000 : 30000;
 const storytellerDuration = process.env.NODE_ENV === 'testing' ? 4000 : 60000;
 const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 3000 : 10000;
 const minPlayers = process.env.NODE_ENV === 'testing' ? 1 : 3;
+const maxPlayers = 6;
 exports.minPlayers = minPlayers;
+exports.maxPlayers = maxPlayers;
 
 class GameLogic {
     constructor(roomId, numRounds) {
@@ -65,7 +67,7 @@ class GameLogic {
     getUnplayedCardsByUsername(username) { return this.players.find(player => player.username === username).cards.filter(card => !card.played) };
 
     /* Return the list of players, hiding their assigned cards */
-    getPlayers() { return this.players.map(player => ({ username: player.username, id: player.id, score: player.score, finishedTurn: player.finishedTurn })) };
+    getPlayers() { return this.players.map(player => ({ username: player.username, id: player.id, score: player.score, finishedTurn: player.finishedTurn, real: player.real })) };
 
     getNumberOfAIPlayers() { return this.players.filter(player => !player.real).length };
     
@@ -98,6 +100,8 @@ class GameLogic {
             throw Error("Game has already started");
         } else if (this.players.some(player => player.username === user.username)) {
             throw Error("You have already joined this game");
+        } else if (this.players.length === maxPlayers) {
+            throw Error("The room has reached its capacity");
         } else {
             const cards = cardsManager.assign(this.players, 6);
             const player = { username: user.username, id: user.id, cards, score: 0, real: user.real, finishedTurn: false };
@@ -107,7 +111,7 @@ class GameLogic {
     }
 
     /* Remove player from current game */
-    quitGame(username) {    
+    quitGame(username) {
         if (this.status === statusTypes.NOT_STARTED && this.players.some(player => player.username === username)) {
             this.players = this.players.filter((otherPlayer) => otherPlayer.username !== username);
             socket.emitPlayers(this.roomId, this.getPlayers());

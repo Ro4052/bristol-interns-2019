@@ -29,7 +29,8 @@ exports.addPlayer = (room, user) => {
 
 exports.removePlayer = (room, username) => {
     room.gameState.quitGame(username);
-    if (!room.gameState.getPlayers().length) deleteById(room.roomId);
+    const playersInRoom = room.gameState.getPlayers();    
+    if (!playersInRoom.length || playersInRoom.every(player => !player.real)) deleteById(room.roomId);
 };
 
 exports.reset = () => {
