@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { sendWord } from './PlayWordActions';
 import styles from '../PlayWord/PlayWord.module.css';
-import Prompt from '../shared/Prompt/Prompt';
 
 export class PlayWord extends React.Component {
     constructor(props) {
@@ -26,7 +25,7 @@ export class PlayWord extends React.Component {
     render() {
         return (
             <div className={styles.sendWordBox}>
-                <Prompt cy="play-word" text="Type in the word that best describes the card you picked" />
+                <span data-cy="play-word">Type in the word that best describes the card you picked</span>
                 <form data-cy="play-word-form" onSubmit={this.playWord}>
                     <input className={styles.entryBox} onChange={this.handleChange} value={this.state.currentValue} placeholder="Type a word" data-cy='type-word' autoFocus />
                     <button data-cy="send-word" type='submit'>Send word</button>

@@ -32,6 +32,14 @@ export const connectSocket = () => {
         upgrade: false
     });
 
+    socket.on("game state", currentGameState => {
+        dispatch(setPlayedCards(currentGameState.playedCards));
+        dispatch(setPlayCard(currentGameState.playCard));
+        dispatch(setPlayWord(currentGameState.playWord));
+        dispatch(setVoteCard(currentGameState.voteCard));
+        dispatch(setCurrentPlayer(currentGameState.currentPlayer));
+    });
+
     socket.on("message sent", msg => {
         const { senderUsername, message } = msg;
         dispatch(addMessage(senderUsername, message));
@@ -78,15 +86,15 @@ export const connectSocket = () => {
         dispatch(setCurrentWord(msg));
     });
 
-    socket.on("play word and card", timeoutDuration => {
-        dispatch(setStorytellerTimer(timeoutDuration));
-        dispatch(setPlayWord(true));
-        dispatch(setPlayCard(true));
+    socket.on("play word and card", msg => {
+        dispatch(setStorytellerTimer(msg.timeoutDuration));
+        dispatch(setPlayWord(msg.playWordAndCard));
+        dispatch(setPlayCard(msg.playWordAndCard));
     });
 
-    socket.on("play card", timeoutDuration => {
-        dispatch(setPlayCard(true));
-        dispatch(setPlayCardTimer(timeoutDuration));
+    socket.on("play card", msg => {
+        dispatch(setPlayCard(msg.playCard));
+        dispatch(setPlayCardTimer(msg.timeoutDuration));
     });
 
     socket.on("played card", card => {
@@ -98,9 +106,9 @@ export const connectSocket = () => {
         dispatch(setPlayedCards(cards));
     });
 
-    socket.on("vote", timeoutDuration => {
-        dispatch(setVoteCard(true));
-        dispatch(setVoteCardTimer(timeoutDuration));
+    socket.on("vote", msg => {
+        dispatch(setVoteCard(msg.voteCard));
+        dispatch(setVoteCardTimer(msg.timeoutDuration));
     });
 
     socket.on("winner", msg => {

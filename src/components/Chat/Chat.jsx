@@ -20,7 +20,10 @@ export class Chat extends React.Component {
     }
       
     componentDidMount() {
-        this.updateWindowDimensions();
+        this.updateWindowDimensions();        
+        this.setState({
+            showChat: this.props.showOnDefault || window.innerWidth > 1500
+        });
         window.addEventListener('resize', this.updateWindowDimensions);
     }
       
@@ -73,7 +76,8 @@ export class Chat extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    messages: state.chatReducer.messages
+    messages: state.chatReducer.messages,
+    status: state.dashboardReducer.status
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -1,7 +1,7 @@
 const socketio = require('socket.io');
 const sharedsession = require("express-socket.io-session");
 const { statusTypes } = require('../models/statusTypes');
-const { minPlayers } = require('../models/GameLogic');
+const { minPlayers, maxPlayers } = require('../models/GameLogic');
 const Room = require("../models/room");
 
 let io;
@@ -12,8 +12,17 @@ exports.setupSocket = (server, session) => {
     io = socketio(server);
     io.use(sharedsession(session));
     io.on('connection', socket => {
-        if (socket.handshake.session.user) {
-            sockets = sockets.filter(otherSocket => otherSocket.handshake.session.user.username !== socket.handshake.session.user.username);
+        const { user, roomId } = socket.handshake.session;
+        if (user) {
+            if (roomId !== null) {
+                try {
+                    const gameState = Room.getById(roomId).gameState.getState(user.username);
+                    socket.emit('game state', gameState);
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+            sockets = sockets.filter(otherSocket => otherSocket.handshake.session.user.username !== user.username);
             sockets.push(socket);
             emitRooms();
             socket.on('send message', message => {
@@ -52,7 +61,8 @@ const emitRooms = () => {
         roomId: room.roomId,
         started: room.gameState.status !== statusTypes.NOT_STARTED,
         players: room.gameState.players,
-        minPlayers
+        minPlayers,
+        maxPlayers
     }));
     sockets.forEach(socket => socket.emit("rooms", rooms));
 }
@@ -96,9 +106,7 @@ exports.emitPlayers = (roomId, players) => sockets.forEach(socket => socket.hand
 exports.emitNewRound = (roomId, status, roundNum, currentPlayer, timeoutDuration) => sockets.forEach(socket => {
     if (socket.handshake.session.roomId === roomId) {
         socket.emit("new round", { status, roundNum, currentPlayer });
-        if (socket.handshake.session.user.username === currentPlayer.username) {
-            socket.emit("play word and card", timeoutDuration/1000);
-        }
+        socket.emit("play word and card", { playWordAndCard: socket.handshake.session.user.username === currentPlayer.username, timeoutDuration: timeoutDuration/1000 });
     }
 });
 
@@ -129,7 +137,7 @@ exports.emitDrawers = (roomId, players) => sockets.forEach(socket => socket.hand
 exports.emitEndGame = roomId => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("end"));
 
 // Prompt the players to pick a card
-exports.promptOtherPlayers = (roomId, currentPlayer, timeoutDuration) => sockets.forEach(socket => socket.handshake.session.user.username !== currentPlayer.username && socket.handshake.session.roomId === roomId && socket.emit("play card", timeoutDuration/1000));
+exports.promptOtherPlayers = (roomId, currentPlayer, timeoutDuration) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("play card", { playCard: socket.handshake.session.user.username !== currentPlayer.username, timeoutDuration: timeoutDuration/1000 }));
 
 // Ask the other players to vote on the cards
-exports.promptPlayersVote = (roomId, currentPlayer, timeoutDuration) => sockets.forEach(socket => socket.handshake.session.user.username !== currentPlayer.username && socket.handshake.session.roomId === roomId && socket.emit("vote", timeoutDuration/1000));
+exports.promptPlayersVote = (roomId, currentPlayer, timeoutDuration) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("vote", { voteCard: socket.handshake.session.user.username !== currentPlayer.username, timeoutDuration: timeoutDuration/1000 }));

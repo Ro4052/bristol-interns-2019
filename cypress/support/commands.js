@@ -76,36 +76,17 @@ Cypress.Commands.add('sendMessage', () => {
     cy.get('[data-cy="send-message"]').click();
 });
 
-Cypress.Commands.add('hideChat', () => {
-    cy.get('[data-cy="chat-arrow"]').click();
-    cy.get('[data-cy="chat-room"]').then($chat => {
-        const classList = Array.from($chat[0].classList);
-        expect(classList.some(cls => cls.includes('hidden'))).to.equal(true);
-    });
-});
-
 Cypress.Commands.add('startGame', () => {
     cy.route({
         method: "GET",
         url: "/api/start",
     }).as('start');
-    cy.route({
-        method: "GET",
-        url: "/api/game-state",
-    }).as('getState');
     cy.get('[data-cy="start-game"]').click();
     cy.wait('@start');
-    cy.wait('@getState');
-    cy.hideChat();
 });
 
 Cypress.Commands.add('refreshPage', () => {
-    cy.route({
-        method: "GET",
-        url: "/api/game-state",
-    }).as('getState');
     cy.visit('/dashboard');
-    cy.wait('@getState');
 });
 
 Cypress.Commands.add('playCardWord', () => {

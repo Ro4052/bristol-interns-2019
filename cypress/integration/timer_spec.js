@@ -18,18 +18,14 @@ describe('Timer', () => {
 
             describe('on refresh', () => {
                 it("doesn't restart the timer", () => {
-                    cy.get('[data-cy="storyteller-timer"]').should('contain', 7);
-                    cy.get('[data-cy="storyteller-timer"]').should('contain', 6);
+                    cy.get('[data-cy="storyteller-timer"]').should('contain', 4);
+                    cy.get('[data-cy="storyteller-timer"]').should('contain', 3);
                     cy.refreshPage();
-                    cy.get('[data-cy="storyteller-timer"]', { timeout: 0 }).should('not.contain', 7);
+                    cy.get('[data-cy="storyteller-timer"]', { timeout: 0 }).should('not.contain', 4);
                 });
             });
 
             describe('on timeout', () => {
-                it('should hide the timer', () => {
-                    cy.get('[data-cy="storyteller-timer"]', { timeout: promptDuration + 2000 }).should('not.exist');
-                });
-
                 it('should move onto the next round', () => {
                     cy.get('[data-cy="round-number"]', { timeout: 20000 }).should('contain', 2);
                 });

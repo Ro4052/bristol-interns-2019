@@ -1,7 +1,6 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { PlayerInteractions } from './PlayerInteractions';
-import Prompt from '../shared/Prompt/Prompt';
 import { statusTypes } from '../../services/statusTypes';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
@@ -20,14 +19,14 @@ const store = mockStore(state);
 describe('on play card flag', () => {
     it('displays the play card prompt', () => {
         const wrapper = shallow(<PlayerInteractions playCard={true} />);
-        expect(wrapper.find(Prompt).prop('cy')).toEqual('play-card');
+        expect(wrapper.find({ 'data-cy': 'play-card' }));
     });
 });
 
 describe('on vote card flag', () => {
     it('displays the vote card prompt', () => {
         const wrapper = shallow(<PlayerInteractions voteCard={true} />);
-        expect(wrapper.find(Prompt).prop('cy')).toEqual('vote-card');
+        expect(wrapper.find({ 'data-cy': 'vote-card' }));
     });
 });
 
@@ -40,7 +39,7 @@ describe('on waiting for storyteller', () => {
 
 describe('on word having been submitted', () => {
     it('displays the word', () => {
-        const wrapper = shallow(<PlayerInteractions currentWord="dog" />)
+        const wrapper = shallow(<PlayerInteractions currentPlayer={{}} playCard={true} currentWord="dog" />)
         expect(wrapper.exists({ 'data-cy': 'current-word' })).toEqual(true);
     });
 });
