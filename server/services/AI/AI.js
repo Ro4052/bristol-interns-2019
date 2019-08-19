@@ -17,18 +17,17 @@ async function autoWordGenerator() {
     // Performs label detection on the image file
     var cardId;
     for (cardId=1; cardId < 248; cardId++) {
-        const [result] = await client.labelDetection('./src/images/cards/card (' + cardId + ').jpg');
+        const [result] = await client.labelDetection(`./src/images/cards/card (${cardId}).jpg`);
         const labels = result.labelAnnotations;
         const descriptions = labels.map(label => label.description);
         const data = JSON.stringify({cardId, descriptions});
         fs.appendFileSync('card-labels.json', data + ", " + "\n");
     }
-}
-  
+}  
 exports.autoWordGenerator = autoWordGenerator
 
 // Pick random word from each list of labels for a card //
-const autoWord = (cardId) => {
+exports.autoWord = (cardId) => {
     let content;
     return new Promise((resolve, reject) => {
         fs.readFile('./card-labels.json', 'utf8', (err, data) => {
@@ -44,5 +43,3 @@ const autoWord = (cardId) => {
         });
     });
 }
-
-exports.autoWord = autoWord
