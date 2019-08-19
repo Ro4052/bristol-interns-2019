@@ -111,9 +111,9 @@ class GameLogic {
     }
 
     /* Remove player from current game */
-    quitGame(username) {        
+    quitGame(username) {
         if (this.status === statusTypes.NOT_STARTED && this.players.some(player => player.username === username)) {
-            this.players = this.players.filter((otherPlayer) => otherPlayer.username !== username);         
+            this.players = this.players.filter((otherPlayer) => otherPlayer.username !== username);
             socket.emitPlayers(this.roomId, this.getPlayers());
         } else {
             throw Error("Cannot log out of a running game.");
