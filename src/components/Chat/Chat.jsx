@@ -1,5 +1,5 @@
 import React from 'react';
-import { sendChat } from './ChatActions';
+import { sendChat, viewMessages } from './ChatActions';
 import { connect } from 'react-redux';
 import styles from './Chat.module.css';
 import classNames from 'classnames/bind';
@@ -21,9 +21,7 @@ export class Chat extends React.Component {
       
     componentDidMount() {
         this.updateWindowDimensions();        
-        this.setState({
-            showChat: this.props.showOnDefault || window.innerWidth > 1500
-        });
+        this.setState({ showChat: this.props.showOnDefault || window.innerWidth > 1500 });
         window.addEventListener('resize', this.updateWindowDimensions);
     }
       
@@ -32,9 +30,7 @@ export class Chat extends React.Component {
     }
       
     updateWindowDimensions() {
-        this.setState({
-            showChat: window.innerWidth > 950 && this.state.showChat
-        });
+        this.setState({ showChat: window.innerWidth > 950 && this.state.showChat });
     }
 
     handleChange(event) {
@@ -48,18 +44,21 @@ export class Chat extends React.Component {
     }
 
     showChat() {
-        this.setState({
-            showChat: !this.state.showChat
-        });
+        this.setState({ showChat: !this.state.showChat });
+        this.props.viewMessages();
     }
 
     render() {
-        const messageList = this.props.messages.map(message => (
-            <h2 data-cy='messages' className={styles.chat}>{message.username} : {message.text}</h2>
+        const messageList = this.props.messages.map((message, index) => (
+            <h2 data-cy='messages' className={styles.chat} key={index}>{message.username} : {message.text}</h2>
         ));
         return (
             <div className={styles.chatArea}>
-                <div className={cx({ showChatArrow: !this.state.showChat, hideChatArrow: this.state.showChat })} data-cy='chat-arrow' onClick={this.showChat}/>
+                <div className={styles.chatArrowArea}>
+                    <div className={cx({ showChatArrow: !this.state.showChat, hideChatArrow: this.state.showChat })} data-cy='chat-arrow' onClick={this.showChat}/>
+                    <span onClick={this.showChat}>{this.state.showChat ? "Hide chat" : "Show Chat"}</span>
+                    {this.props.newMessages.length !== 0 && !this.state.showChat && <div className={styles.newMessage} data-cy='new-message'>+{this.props.newMessages.length}</div>}
+                </div>
                 <div className={cx(styles.chatRoom, { shown: this.state.showChat, hidden: !this.state.showChat })} data-cy='chat-room'>
                     <h1 className={styles.chatHeader}>Chat</h1>
                     <div className={styles.chatBox}>
@@ -77,11 +76,13 @@ export class Chat extends React.Component {
 
 const mapStateToProps = state => ({
     messages: state.chatReducer.messages,
+    newMessages: state.chatReducer.newMessages,
     status: state.dashboardReducer.status
 });
 
 const mapDispatchToProps = dispatch => ({
-    sendChat: message => dispatch(sendChat(message))
+    sendChat: message => dispatch(sendChat(message)),
+    viewMessages: () => dispatch(viewMessages())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Chat);
