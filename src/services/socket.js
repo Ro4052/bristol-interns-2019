@@ -64,7 +64,7 @@ export const connectSocket = () => {
         dispatch(setPlayCardTimer(0));
         dispatch(setVoteCardTimer(0));
         dispatch(setStatus(msg.status));
-        dispatch(setRoundNumber(msg.roundNum));
+        dispatch(setRoundNumber(msg.roundNum, msg.rounds));
         dispatch(setCurrentPlayer(msg.currentPlayer));
         dispatch(setCurrentWord(''));
         dispatch(setPlayedCards([]));
@@ -124,7 +124,7 @@ export const connectSocket = () => {
 
     socket.on("end", () => {
         dispatch(setStatus('NOT_STARTED'));
-        dispatch(setRoundNumber(0));
+        dispatch(setRoundNumber(0, 0));
         dispatch(setCurrentPlayer(null));
         dispatch(setCurrentWord(''));
         dispatch(setPlayedCards([]));

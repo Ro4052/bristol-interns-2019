@@ -2,15 +2,15 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { Room } from './Room';
 
-const emptyRoom = { roomId: 0, players: [], minPlayers: 0, started: false };
+const emptyRoom = { roomId: 0, title: "Flattie", players: [], minPlayers: 0, started: false };
 const notEnoughPlayers = { roomId: 0, players: [{ username: "player1" }], minPlayers: 2, started: false };
 const readyToStart = { roomId: 0, players: [{ username: "player1" }, { username: "player2" }], minPlayers: 2, started: false };
 const alreadyStarted = { roomId: 0, players: [{ username: "player1" }, { username: "player2" }], minPlayers: 2, started: true };
 
 describe('on render', () => {
-    it('displays the room id', () => {
+    it('displays the room title', () => {
         const wrapper = shallow(<Room room={emptyRoom} />);
-        expect(wrapper.find({ 'data-cy': 'room-title' }).text()).toEqual('Room: 0');
+        expect(wrapper.find({ 'data-cy': 'room-title' }).text()).toEqual('Room: Flattie');
     });
 });
 

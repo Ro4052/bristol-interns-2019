@@ -61,7 +61,7 @@ router.post('/addAIPlayer', (req, res) => {
     try {
         const { roomId } = req.body;
         const numAutos = Room.getById(roomId).gameState.getNumberOfAIPlayers();
-        const user = { username: "Computer " + numAutos, id: 0, real: false};
+        const user = { username: "CPU " + numAutos, id: 0, real: false};
         const room = Room.getById(roomId);
         Room.addPlayer(room, user);
         socket.emitRooms();
@@ -94,7 +94,7 @@ router.post('/leave', auth, (req, res) => {
         const room = Room.getById(roomId);
         if (room) {
             Room.removePlayer(room, user.username);
-            socket.leaveRoom(user);
+            socket.leaveRoom(user.username);
         }
         socket.emitRooms();
         req.session.roomId = null;
