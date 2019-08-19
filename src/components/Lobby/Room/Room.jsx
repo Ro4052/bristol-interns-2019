@@ -15,7 +15,7 @@ export class Room extends React.Component {
                     {this.props.room.players.map((player, key) => (
                         <li className={styles.playerInRoom} key={key}>
                             <span className={styles.roomPlayer}data-cy='player-username'>{player.username}</span>
-                            {player.username.includes("CPU") && <button className={styles.removeAIButton} onClick={() => this.props.removeAIPlayer(this.props.room.roomId, player.username)} data-cy='remove-ai'>-</button>}
+                            {!player.real && <button className={styles.removeAIButton} onClick={() => this.props.removeAIPlayer(this.props.room.roomId, player.username)} data-cy='remove-ai'>-</button>}
                         </li>
                     ))}
                 </ul>
