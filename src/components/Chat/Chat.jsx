@@ -51,10 +51,10 @@ export class Chat extends React.Component {
     render() {
         const messageList = this.props.messages.map((message, index) => (
             <h2 data-cy='messages' className={styles.chat} key={index}>{message.username} : {message.text}</h2>
-        ));        
+        ));
         return (
             <div className={styles.chatArea}>
-                <div className={styles.chatArrowArea} data-cy='show-chat'>
+                <div className={styles.chatArrowArea}>
                     <div className={cx({ showChatArrow: !this.state.showChat, hideChatArrow: this.state.showChat })} data-cy='chat-arrow' onClick={this.showChat}/>
                     <span onClick={this.showChat}>{this.state.showChat ? "Hide chat" : "Show Chat"}</span>
                     {this.props.newMessages.length !== 0 && !this.state.showChat && <div className={styles.newMessage} data-cy='new-message'>+{this.props.newMessages.length}</div>}
