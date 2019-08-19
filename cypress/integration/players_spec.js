@@ -32,11 +32,7 @@ describe('Players', () => {
             cy.login('player1');
             cy.createRoom(3);
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
-            .then(() => cy.get('[data-cy="room-title"]'))
-            .then(($title) => {
-                const id = $title.text().split(" ")[1].charAt(0);
-                return cy.request(`http://localhost:12346/joinRoom?roomId=${id}&url=${encodeURIComponent(Cypress.config().baseUrl)}`);
-            })
+            .then(() => cy.request(`http://localhost:12346/joinRoom?roomId=0&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
             .then(() => {
                 cy.get('[data-cy="player-username"]').first().should('have.text', 'player1');
                 cy.get('[data-cy="player-username"]').last().should('have.text', 'halfling');
@@ -46,12 +42,17 @@ describe('Players', () => {
 
     describe('on completing a round', () => {
         beforeEach(() => {
-            cy.login('player1');
+            cy.login('player12');
             cy.createRoom(3);
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => cy.request(`http://localhost:12346/joinRoom?roomId=0&url=${encodeURIComponent(Cypress.config().baseUrl)}`));
-            cy.get('[data-cy="player-username"]').first().should('have.text', 'player1');
-            cy.get('[data-cy="player-username"]').last().should('have.text', 'halfling');
+            cy.get('[data-cy="player-username"]').then($wrapper => {
+                const usernames = $wrapper.text();
+                const usernamesList = [usernames.substring(0, 8), usernames.substring(8)];
+                expect(usernamesList.some(user => user.includes('player12'))).to.equal(true);
+                expect(usernamesList.some(user => user.includes('halfling'))).to.equal(true);
+            });
+            
             cy.startGame();
             cy.get('[data-cy="start-game"]').should('not.exist');
             cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
