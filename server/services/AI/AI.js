@@ -20,7 +20,7 @@ async function autoWordGenerator() {
         const [result] = await client.labelDetection('./src/images/cards/card (' + cardId + ').jpg');
         const labels = result.labelAnnotations;
         const descriptions = labels.map(label => label.description);
-        let data = JSON.stringify({cardId, descriptions});
+        const data = JSON.stringify({cardId, descriptions});
         fs.appendFileSync('card-labels.json', data + ", " + "\n");
     }
 }
@@ -36,9 +36,9 @@ const autoWord = (cardId) => {
                 reject(err);
             }
             content = data.split("\n")[cardId - 1];
-            start = content.indexOf('["');
-            end = content.indexOf('"]');
-            content= content.slice(start + 2, end).split('","');
+            const start = content.indexOf('["');
+            const end = content.indexOf('"]');
+            content = content.slice(start + 2, end).split('","');
             const word = content[Math.floor(Math.random()*content.length)];
             resolve(word);
         });
