@@ -1,5 +1,5 @@
 import React from 'react';
-import { sendChat } from './ChatActions';
+import { sendChat } from '../ChatActions';
 import { connect } from 'react-redux';
 
 export class ChatInput extends React.Component {

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styles from './Chat.module.css';
 import classNames from 'classnames/bind';
-import ChatInput from './ChatInput';
+import ChatInput from './ChatInput/ChatInput';
 import Message from './Message';
 
 const cx = classNames.bind(styles);
@@ -14,6 +14,7 @@ export class Chat extends React.Component {
         super();
         this.state = { showChat: true };
         this.showChat = this.showChat.bind(this);
+        this.scrollToBottom = this.scrollToBottom.bind(this);
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     }
 
@@ -40,7 +41,7 @@ export class Chat extends React.Component {
         });
     }
 
-    scrollToBottom = () => {
+    scrollToBottom() {
         this.messagesEndRef.current.scrollIntoView({ behaviour: 'smooth' });
     }
 
