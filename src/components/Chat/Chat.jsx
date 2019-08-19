@@ -54,23 +54,29 @@ export class Chat extends React.Component {
     }
 
     render() {
-        const messageList = this.props.messages.map(message => (
-            <h2 data-cy='messages' className={styles.chat}>{message.username} : {message.text}</h2>
-        ));
         return (
-            <div className={styles.chatArea}>
+            <>
                 <div className={cx({ showChatArrow: !this.state.showChat, hideChatArrow: this.state.showChat })} data-cy='chat-arrow' onClick={this.showChat}/>
-                <div className={cx(styles.chatRoom, { shown: this.state.showChat, hidden: !this.state.showChat })} data-cy='chat-room'>
-                    <h1 className={styles.chatHeader}>Chat</h1>
-                    <div className={styles.chatBox}>
-                        {messageList}
+                <div className={cx(styles.chat, { shown: this.state.showChat, hidden: !this.state.showChat })} data-cy='chat-room'>
+                    <h1>Chat</h1>
+                    <div className={styles.messagesContainer}>
+                        <div className={styles.scrollbarPadding}>
+                            <div className={cx(styles.messages, 'arrowScroll')}>
+                                {this.props.messages.map((message, key) => (
+                                    <div key={key} className={styles.message}>
+                                        <div className={styles.text}>{message.text}</div>
+                                        <div className={styles.sender}>{message.username}</div>
+                                    </div>  
+                                ))}
+                            </div>
+                        </div>
                     </div>
-                    <form data-cy="message-form" onSubmit={this.sendMessage} className={styles.chatBottom}>
+                    <form data-cy="message-form" onSubmit={this.sendMessage} className={styles.messageForm}>
                         <input className={styles.chatInput} data-cy='type-message' onChange={this.handleChange} value={this.state.currentValue} placeholder="Type a message" autoFocus />
                         <button data-cy="send-message" type='submit'>Send</button>
                     </form>
                 </div>
-            </div>
+            </>
         );
     }
 }
