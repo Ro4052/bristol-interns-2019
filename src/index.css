@@ -94,22 +94,22 @@ button:focus {
 
 /*  SCROLLBARS */
 
-.arrowScroll::-webkit-scrollbar {
+.arrowScrollbar::-webkit-scrollbar {
     height: 2vh;
 }
 
-.arrowScroll::-webkit-scrollbar-button:single-button {
+.arrowScrollbar::-webkit-scrollbar-button:single-button {
     display: block;
     border-style: solid;
     width: 2vh;
 }
 
-.arrowScroll::-webkit-scrollbar-button:single-button:vertical:increment {
+.arrowScrollbar::-webkit-scrollbar-button:single-button:vertical:increment {
     border-width: 2vh 1vh 0 1vh;
     border-color: rgba(0, 0, 0, 1) transparent transparent;
 }
 
-.arrowScroll::-webkit-scrollbar-button:single-button:vertical:decrement {
+.arrowScrollbar::-webkit-scrollbar-button:single-button:vertical:decrement {
     border-width: 0 1vh 2vh 1vh;
     border-color: transparent transparent rgba(0, 0, 0, 1) transparent;
 }

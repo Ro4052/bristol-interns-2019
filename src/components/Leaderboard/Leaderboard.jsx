@@ -23,7 +23,7 @@ export class Leaderboard extends React.Component {
                     <button onClick={this.goToLobby} data-cy="back" type='button'>Back</button>
                 </div>
                 <div className={styles.scrollbarPadding}>
-                    <div className={cx(styles.leaderboard, 'arrowScroll')}>
+                    <div className={cx(styles.leaderboard, 'arrowScrollbar')}>
                         <h2 className={styles.leaderboardHeader}>Leaderboard</h2>
                         <table>
                             <tbody>
