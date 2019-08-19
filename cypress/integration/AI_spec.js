@@ -7,7 +7,12 @@ describe("when click add auto button", () => {
 
     it("adds automated player to room ", () => {
         cy.get('[data-cy="room-players"]').children().should('have.length', 2);
-        cy.get('[data-cy="player-username"]').contains('Computer 0');
+        cy.get('[data-cy="player-username"]').contains('CPU 0');
+    });
+
+    it("can remove an automated player from the room ", () => {
+        cy.get('[data-cy="remove-ai"]').click();
+        cy.get('[data-cy="room-players"]').children().should('have.length', 1);
     });
     
     describe("when the automated player is the storyteller", () => {

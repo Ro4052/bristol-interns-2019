@@ -1,7 +1,7 @@
 const socketio = require('socket.io');
 const sharedsession = require("express-socket.io-session");
 const { statusTypes } = require('../models/statusTypes');
-const { minPlayers } = require('../models/GameLogic');
+const { minPlayers, maxPlayers } = require('../models/GameLogic');
 const Room = require("../models/room");
 
 let io;
@@ -59,9 +59,11 @@ const emitMessage = (socket, message) => {
 const emitRooms = () => {
     const rooms = Room.getAll().map(room => ({
         roomId: room.roomId,
+        title: room.title,
         started: room.gameState.status !== statusTypes.NOT_STARTED,
         players: room.gameState.players,
-        minPlayers
+        minPlayers,
+        maxPlayers
     }));
     sockets.forEach(socket => socket.emit("rooms", rooms));
 }
@@ -102,9 +104,9 @@ exports.closeRoom = roomId => {
 exports.emitPlayers = (roomId, players) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("players", { players }));
 
 // Let the players know about the next round and prompt the current player
-exports.emitNewRound = (roomId, status, roundNum, currentPlayer, timeoutDuration) => sockets.forEach(socket => {
+exports.emitNewRound = (roomId, status, roundNum, rounds, currentPlayer, timeoutDuration) => sockets.forEach(socket => {
     if (socket.handshake.session.roomId === roomId) {
-        socket.emit("new round", { status, roundNum, currentPlayer });
+        socket.emit("new round", { status, roundNum, rounds, currentPlayer });
         socket.emit("play word and card", { playWordAndCard: socket.handshake.session.user.username === currentPlayer.username, timeoutDuration: timeoutDuration/1000 });
     }
 });

@@ -1,4 +1,5 @@
 const { GameLogic } = require('../models/GameLogic');
+const dogBreeds = require('dog-breeds');
 
 /** @type {{ roomId: number, gameState: GameLogic }[]} */
 let rooms = [];
@@ -14,7 +15,7 @@ exports.create = numRounds => {
     const roomId = latestRoomId;
     latestRoomId++;
     const gameState = new GameLogic(roomId, numRounds);
-    rooms.push({ roomId, gameState });
+    rooms.push({ roomId, title: dogBreeds.random().name, gameState });
     return roomId;
 };
 
@@ -29,7 +30,8 @@ exports.addPlayer = (room, user) => {
 
 exports.removePlayer = (room, username) => {
     room.gameState.quitGame(username);
-    if (!room.gameState.getPlayers().length) deleteById(room.roomId);
+    const playersInRoom = room.gameState.getPlayers();    
+    if (!playersInRoom.length || playersInRoom.every(player => !player.real)) deleteById(room.roomId);
 };
 
 exports.reset = () => {

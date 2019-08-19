@@ -12,7 +12,7 @@ const dashboardReducer = (state = initialState, action) => {
         case types.SET_STATUS:
             return {...state, status: action.status };
         case types.SET_ROUND_NUMBER:
-            return {...state, roundNum: action.roundNum };
+            return {...state, roundNum: action.roundNum, rounds: action.rounds };
         case types.SET_CURRENT_WORD:
             return {...state, currentWord: action.currentWord };
         default:

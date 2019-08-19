@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { viewMessages } from './ChatActions';
 import styles from './Chat.module.css';
 import classNames from 'classnames/bind';
 import ChatInput from './ChatInput/ChatInput';
@@ -13,7 +14,7 @@ export class Chat extends React.Component {
     constructor() {
         super();
         this.state = { showChat: true };
-        this.showChat = this.showChat.bind(this);
+        this.toggleChat = this.toggleChat.bind(this);
         this.scrollToBottom = this.scrollToBottom.bind(this);
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     }
@@ -21,9 +22,7 @@ export class Chat extends React.Component {
     componentDidMount() {
         this.scrollToBottom();
         this.updateWindowDimensions();        
-        this.setState({
-            showChat: this.props.showOnDefault || window.innerWidth > 1500
-        });
+        this.setState({ showChat: this.props.showOnDefault || window.innerWidth > 1500 });
         window.addEventListener('resize', this.updateWindowDimensions);
     }
 
@@ -36,25 +35,26 @@ export class Chat extends React.Component {
     }
 
     updateWindowDimensions() {
-        this.setState({
-            showChat: window.innerWidth > 950 && this.state.showChat
-        });
+        this.setState({ showChat: window.innerWidth > 950 && this.state.showChat });
     }
 
     scrollToBottom() {
         this.messagesEndRef.current.scrollIntoView({ behaviour: 'smooth' });
     }
 
-    showChat() {
-        this.setState({
-            showChat: !this.state.showChat
-        });
+    toggleChat() {
+        this.setState({ showChat: !this.state.showChat });
+        this.props.viewMessages();
     }
 
     render() {
         return (
             <>
-                <div className={cx({ showChatArrow: !this.state.showChat, hideChatArrow: this.state.showChat })} data-cy='chat-arrow' onClick={this.showChat}/>
+                <div className={styles.chatArrowArea}>
+                    <div className={cx({ showChatArrow: !this.state.showChat, hideChatArrow: this.state.showChat })} data-cy='chat-arrow' onClick={this.toggleChat}/>
+                    <span onClick={this.showChat}>{this.state.showChat ? "Hide chat" : "Show Chat"}</span>
+                    {this.props.newMessages.length !== 0 && !this.state.showChat && <div className={styles.newMessage} data-cy='new-message'>+{this.props.newMessages.length}</div>}
+                </div>
                 <div className={cx(styles.chat, { shown: this.state.showChat, hidden: !this.state.showChat })} data-cy='chat-room'>
                     <h1>Chat</h1>
                     <div className={styles.messagesContainer}>
@@ -73,7 +73,12 @@ export class Chat extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    messages: state.chatReducer.messages
+    messages: state.chatReducer.messages,
+    newMessages: state.chatReducer.newMessages
 });
 
-export default connect(mapStateToProps)(Chat);
+const mapDispatchToProps = dispatch => ({
+    viewMessages: () => dispatch(viewMessages())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Chat);

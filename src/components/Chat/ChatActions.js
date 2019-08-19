@@ -5,6 +5,10 @@ export const resetChat = () => ({
     type: types.RESET_CHAT
 });
 
+export const viewMessages = () => ({
+    type: types.VIEW_MESSAGES
+});
+
 export const sendChatFailure = error => ({
     type: types.SEND_CHAT_FAILURE,
     error
