@@ -171,10 +171,8 @@ class GameLogic {
     /*AIs play card and word*/
     AIsPlayCardAndWord() {
         const cards = this.getUnplayedCardsByUsername(this.currentPlayer.username);
-        const cardId = AI.autoPickCard(cards);
-        console.log(cards, cardId)
+        const cardId = AI.pickRandomCard(cards);
         AI.autoWord(cardId).then((word) => {
-            console.log(word, "in GameLogic")
             this.playCardAndWord(this.currentPlayer.username, cardId, word);
         }).catch( error => {
             console.error(error);
@@ -237,7 +235,7 @@ class GameLogic {
         this.players.forEach(player => {
             if (!player.real && !this.isCurrentPlayer(player.username)) {
                 const cards = this.getUnplayedCardsByUsername(player.username);
-                const cardId = AI.autoPickCard(cards);
+                const cardId = AI.pickRandomCard(cards);
                 this.playCard(player.username, cardId);
             }
         });
@@ -253,9 +251,9 @@ class GameLogic {
     playRandomCards() {
         this.players.forEach(player => {
             if (!this.hasPlayedCard(player.username)) {
-                const cards = this.getCardsByUsername(player.username);
-                const randomCard = cards[Math.floor(Math.random()*cards.length)];
-                this.playCard(player.username, randomCard.cardId); 
+                const cards = this.getUnplayedCardsByUsername(player.username);
+                const cardId = AI.pickRandomCard(cards);
+                this.playCard(player.username, cardId); 
             }
         });
     }
@@ -309,7 +307,7 @@ class GameLogic {
         this.players.forEach(player => {
             if (!player.real && !this.isCurrentPlayer(player.username)) {
                 const cards = this.getPlayedCards();
-                const cardId = AI.autoPickCard(cards);
+                const cardId = AI.pickRandomCard(cards);
                 this.voteCard(player.username, cardId);
             }
         });

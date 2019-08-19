@@ -1,13 +1,9 @@
 const fs = require('fs');
 
 /* Random card picked*/
-exports.autoPickCard = cards => {
+exports.pickRandomCard = cards => {
     const randomCard = cards[Math.floor(Math.random()*cards.length)];
     return randomCard.cardId;
-}
-
-exports.autoWordHello = () => {
-    return "hello";
 }
 
 // Generate list of labels for each picture //
@@ -23,13 +19,9 @@ async function autoWordGenerator() {
     for (cardId=1; cardId < 248; cardId++) {
         const [result] = await client.labelDetection('./src/images/cards/card (' + cardId + ').jpg');
         const labels = result.labelAnnotations;
-        let descriptions = [];
-        labels.forEach(label => descriptions.push(label.description));
-        let data = JSON.stringify({cardId, descriptions})
-        fs.appendFileSync('card-labels.json', data + ", " + "\n")
-
-        // const randomWord = descriptions[Math.floor(Math.random()*labels.length)];
-        // return randomWord;
+        const descriptions = labels.map(label => label.description);
+        let data = JSON.stringify({cardId, descriptions});
+        fs.appendFileSync('card-labels.json', data + ", " + "\n");
     }
 }
   
@@ -37,19 +29,17 @@ exports.autoWordGenerator = autoWordGenerator
 
 // Pick random word from each list of labels for a card //
 const autoWord = (cardId) => {
-    var content;
+    let content;
     return new Promise((resolve, reject) => {
         fs.readFile('./card-labels.json', 'utf8', (err, data) => {
             if (err) {
                 reject(err);
             }
-            content = data.split("\n")[cardId-1];
+            content = data.split("\n")[cardId - 1];
             start = content.indexOf('["');
             end = content.indexOf('"]');
-            content= content.slice(start+2, end).split('","');
-            console.log(content)
+            content= content.slice(start + 2, end).split('","');
             const word = content[Math.floor(Math.random()*content.length)];
-            console.log(word)
             resolve(word);
         });
     });
