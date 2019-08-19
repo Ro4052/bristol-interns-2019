@@ -17,7 +17,7 @@ describe('Lobby', () => {
         describe('on clicking create room again', () => {
             it("doesn't create a new room", () => {
                 cy.createRoom(3);
-                cy.get('[data-cy="room"]').contains('Room: 0');
+                cy.get('[data-cy="room"]').should('have.length', 1);
             });
         });
 
@@ -82,7 +82,7 @@ describe('Lobby', () => {
 
                 it('creates the room', () => {
                     cy.get('[data-cy="room"]').should('have.length', 2);
-                    cy.get('[data-cy="room-title"]').contains('Room: 1');
+                    cy.get('[data-cy="room-title"]').contains('Room: ');
                 });
 
                 it('switches your room', () => {
@@ -99,7 +99,7 @@ describe('Lobby', () => {
 
                     it('deletes your room', () => {
                         cy.get('[data-cy="room"]').should('have.length', 1);
-                        cy.get('[data-cy="room"]').contains('Room: 0');
+                        cy.get('[data-cy="room"]').contains('Room: ');
                     });
                 });
             });

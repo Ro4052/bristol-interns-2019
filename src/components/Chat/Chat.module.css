@@ -65,7 +65,6 @@
 }
 
 .chat {
-    font-family: var(--secondary-font);
     font-size: 0.7em;
     line-height: 90%;
     text-align: left;

@@ -23,7 +23,6 @@
 .loginInput {
     width: 80%;
     min-width: 200px;
-    font-family: var(--secondary-font);
     padding: 0.4em 1em;
     border: 2.5px solid black;
     border-radius: 15px;
@@ -49,7 +48,6 @@
 .errorText {
     color: red;
     text-align: center;
-    font-family: var(--secondary-font);
     height: 5%;
     font-size: 2vh;
 }

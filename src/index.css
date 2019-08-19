@@ -1,22 +1,8 @@
 @font-face {
-  font-family: 'NotoSerif';
-  font-style: normal;
-  font-weight: normal;
-  src: local('NotoSerif'), url('./fonts/NotoSerif-Regular.ttf') format('truetype');
-}
-
-@font-face {
   font-family: 'Teko';
   font-style: normal;
   font-weight: normal;
   src: local('Teko'), url('./fonts/Teko-Regular.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'FutureTimeSplitters';
-  font-style: normal;
-  font-weight: normal;
-  src: local('FutureTimeSplitters'), url('./fonts/Future_TimeSplitters.otf') format('opentype');
 }
 
 * {
@@ -42,7 +28,6 @@ body {
   --golden: rgba(73, 57, 4, 0.8);
   --lighter-black: rgba(0, 0, 0, 0.8);
   --main-font: 'Teko';
-  --secondary-font: 'NotoSerif';
 }
 
 #root {
@@ -77,7 +62,6 @@ select {
     background: #fff;
     border: 2px solid black;
     border-radius: 6px;
-    font-family: var(--secondary-font);
 }
 
 button {

@@ -111,9 +111,9 @@ class GameLogic {
     }
 
     /* Remove player from current game */
-    quitGame(username) {
+    quitGame(username) {        
         if (this.status === statusTypes.NOT_STARTED && this.players.some(player => player.username === username)) {
-            this.players = this.players.filter((otherPlayer) => otherPlayer.username !== username);
+            this.players = this.players.filter((otherPlayer) => otherPlayer.username !== username);         
             socket.emitPlayers(this.roomId, this.getPlayers());
         } else {
             throw Error("Cannot log out of a running game.");
@@ -151,7 +151,7 @@ class GameLogic {
             this.setStatus(statusTypes.WAITING_FOR_CURRENT_PLAYER);
             this.roundNum++;
             this.currentPlayer = this.players[this.roundNum % this.players.length];
-            socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer, storytellerDuration);
+            socket.emitNewRound(this.roomId, this.status, this.roundNum, this.rounds, this.currentPlayer, storytellerDuration);
             this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), storytellerDuration);
             if (!this.currentPlayer.real) {
                 this.AIsPlayCardAndWord();
