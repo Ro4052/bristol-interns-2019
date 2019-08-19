@@ -34,7 +34,7 @@ describe('Players', () => {
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => cy.get('[data-cy="room-title"]'))
             .then(($title) => {
-                const id = $title.text().split(" ")[1];
+                const id = $title.text().split(" ")[1].charAt(0);
                 return cy.request(`http://localhost:12346/joinRoom?roomId=${id}&url=${encodeURIComponent(Cypress.config().baseUrl)}`);
             })
             .then(() => {
