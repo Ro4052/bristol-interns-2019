@@ -11,6 +11,10 @@ describe('on initial render', () => {
         const wrapper = shallow(<Chat messages={[]} />);
         expect(wrapper.exists({ 'data-cy': 'send-message' }));
     });
+    it('displays the new message icon if there are some', () => {
+        const wrapper = shallow(<Chat newMessages={["Hello"]} />);
+        expect(wrapper.exists({ 'data-cy': 'new-message' }));
+    });
 });
 
 describe('on player types in the box', () => {

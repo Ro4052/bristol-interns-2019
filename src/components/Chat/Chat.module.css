@@ -18,11 +18,35 @@
     letter-spacing: 0.2em;
 }
 
-.showChatArrow {
-    width: 20px;
-    height: 20px;
+.chatArrowArea {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.chatArrowArea > span {
+    font-size: 3vmin;
+    margin-left: 10px;
     cursor: pointer;
-    margin: 0 10px 10px 10px;
+}
+
+.newMessage {
+    display: flex;
+    margin-left: 10px;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: red;
+}
+
+.showChatArrow {
+    width: 15px;
+    height: 15px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    cursor: pointer;
     border: solid black;
     border-width: 0 3px 3px 0;
     padding: 3px;
@@ -31,10 +55,11 @@
 }
 
 .hideChatArrow {
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
+    margin-bottom: 5px;
+    margin-left: 10px;
     cursor: pointer;
-    margin: 0 10px 10px 10px;
     border: solid black;
     border-width: 0 3px 3px 0;
     padding: 3px;
