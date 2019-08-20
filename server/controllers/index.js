@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === 'testing') {
 router.get("/oauth", (req, res) => {
     githubAuthoriser.authorise(req, (githubUser, token) => {
         if (githubUser) {
-            const username = githubUser.login;          
+            const username = githubUser.login;
             db.createGithubUser(username)
             .then(user => {
                 const real = true;
