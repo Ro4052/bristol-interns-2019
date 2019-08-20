@@ -50,8 +50,8 @@ export class Chat extends React.Component {
     render() {
         return (
             <>
-                <div className={styles.chatArrowArea}>
-                    <div className={cx({ showChatArrow: !this.state.showChat, hideChatArrow: this.state.showChat })} data-cy='chat-arrow' onClick={this.toggleChat}/>
+                <div className={styles.chatArrowArea} onClick={this.toggleChat}>
+                    <div className={cx({ showChatArrow: !this.state.showChat, hideChatArrow: this.state.showChat })} data-cy='chat-arrow'/>
                     <span onClick={this.showChat}>{this.state.showChat ? "Hide chat" : "Show Chat"}</span>
                     {this.props.newMessages.length !== 0 && !this.state.showChat && <div className={styles.newMessage} data-cy='new-message'>+{this.props.newMessages.length}</div>}
                 </div>
