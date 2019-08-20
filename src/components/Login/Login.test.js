@@ -30,16 +30,17 @@ describe('on type in input', () => {
     it('updates the state', () => {
         const wrapper = shallow(<Login authenticateUser={jest.fn()}/>);
         wrapper.find({ 'data-cy': 'username' }).simulate('change', { preventDefault: () => {}, target: { value: 'username' } });
-        expect(wrapper.state().value).toEqual('username');
+        expect(wrapper.state().username).toEqual('username');
     });
 });
 
 describe('on submit', () => {
     it('calls the logIn function', () => {
         const logIn = jest.fn();
+        const signUp = jest.fn();
         const wrapper = mount(
             <Provider store={store}>
-                <Login authenticateUser={jest.fn()} logIn={logIn} />
+                <Login authenticateUser={jest.fn()} logIn={logIn} signUp={signUp} />
             </Provider>
         );
         wrapper.find({ 'data-cy': 'username' }).simulate('change', { preventDefault: () => {}, target: { value: 'username' } });
