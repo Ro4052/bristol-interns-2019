@@ -32,21 +32,21 @@ module.exports.validatePassword = (username, password) => {
                         resolve(user);
                     } else {
                         reject({
-                            code: 404,
+                            code: 401,
                             message: "Password is incorrect"
                         });
                     }
                 });
             } else {
                 reject({
-                    code: 404,
+                    code: 400,
                     message: "User with this username does not exist"
                 });
             }
         })
         .catch(err => {
             reject({
-                code: 404,
+                code: 400,
                 message: err.message
             });
         });
@@ -58,16 +58,14 @@ module.exports.createUser = (username, password) => {
         bcrypt.hash(password, 10, (err, hash) => {
             if (err) {
                 reject({
-                    code: 404,
+                    code: 400,
                     message: err.message
                 });
             }
             User.findOrCreate({
-                where: {
-                    username: username
-                },
+                where: { username },
                 defaults: { // set the default properties if it doesn't exist
-                    username: username.trim(),
+                    username,
                     password: hash,
                     score: 0
                 }
@@ -75,7 +73,7 @@ module.exports.createUser = (username, password) => {
             .then(([user, created]) => {                
                 if (!created) {
                     reject({
-                        code: 404,
+                        code: 400,
                         message: "User with this username already exists"
                     });
                 } else {
@@ -95,9 +93,7 @@ module.exports.createUser = (username, password) => {
 module.exports.createGithubUser = username => {
     return new Promise((resolve, reject) => {
         User.findOrCreate({
-            where: {
-                username: username
-            },
+            where: { username },
             defaults: { // set the default properties if it doesn't exist
                 username: username.trim(),
                 password: "",
@@ -133,9 +129,7 @@ module.exports.updateScore = (id, score) => {
             player.update({
                 score: Sequelize.literal(`score + ${score}`)
             }, {
-                where: {
-                    id: id
-                }
+                where: { id }
             })
             .then(() => resolve())
             .catch(err => {

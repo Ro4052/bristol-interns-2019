@@ -33,11 +33,11 @@ router.get("/oauth", (req, res) => {
                 res.header("Location", redirectURL);
                 res.sendStatus(302);
             }).catch(err => {
-                console.log(err);
-                res.status(400).json({ message: err.message });
+                console.error(err);
+                res.status(err.code).json({ message: err.message });
             });
         } else {
-            res.sendStatus(400);
+            res.sendStatus(404);
         }
     });
 });
@@ -70,8 +70,8 @@ router.post('/auth/signup', (req, res) => {
         currentUsers.push({ username });
         res.sendStatus(200);
     }).catch(err => {
-        console.log(err);
-        res.status(400).json({ message: err.message });
+        console.error(err);
+        res.status(err.code).json({ message: err.message });
     });
 });
 
@@ -87,8 +87,8 @@ router.post('/auth/login', (req, res) => {
         currentUsers.push({ username });
         res.sendStatus(200);
     }).catch(err => {
-        console.log(err);
-        res.status(400).json({ message: err.message });
+        console.error(err);
+        res.status(err.code).json({ message: err.message });
     });
 });
 
@@ -106,7 +106,7 @@ router.post('/auth/logout', auth, (req, res) => {
         currentUsers = currentUsers.filter(otherUser => otherUser.username !== user.username);
         res.sendStatus(200);
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(400).json({ message: err.message });
     }
 });
@@ -129,8 +129,8 @@ router.get('/api/all-players', (req, res) => {
     db.getUsers()
     .then(users => res.status(200).json(users))
     .catch(err => {
-        console.log(err);
-        res.status(400).json({ message: err.message });
+        console.error(err);
+        res.status(err.code).json({ message: err.message });
     });
 });
 
@@ -142,7 +142,7 @@ router.get('/api/start', auth, (req, res) => {
         emitRooms();
         res.sendStatus(200);
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(400).json({ message: err.message });
     }
 });
@@ -154,7 +154,7 @@ router.get('/api/nextRound', auth, (req, res) => {
         Room.getById(roomId).gameState.nextRound();
         res.sendStatus(200);
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(400).json({ message: err.message });
     }
 });
@@ -173,12 +173,12 @@ router.get('/api/end', auth, (req, res) => {
                 res.sendStatus(200);
             })
             .catch(err => {
-                console.log(err);
-                res.status(400).json({ message: err.message });
+                console.error(err);
+                res.status(err.code).json({ message: err.message });
             });
         });
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(400).json({ message: err.message });
     }
 });
@@ -191,7 +191,7 @@ router.post('/api/play-card-word', auth, (req, res) => {
         Room.getById(roomId).gameState.playCardAndWord(user.username, cardId, word); 
         res.sendStatus(200);
     } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
-        console.log(err);
+        console.error(err);
         res.status(400).json({ message: err.message });
     }
 });
@@ -216,7 +216,7 @@ router.post('/api/vote-card', auth, (req, res) => {
         Room.getById(roomId).gameState.voteCard(user.username, cardId)
         res.sendStatus(200);
     } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate, or current player attempts to vote */
-        console.log(err);
+        console.error(err);
         res.status(400).json({ message: err.message });
     }
 });

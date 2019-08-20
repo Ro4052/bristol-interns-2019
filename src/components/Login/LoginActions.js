@@ -108,8 +108,6 @@ export const signUp = (username, password) => dispatch => {
         if (!allowed.test(password)) throw Error("Password can be comprised of numbers and latin letters only");
         axiosInstance.post('/auth/signup', { username, password })
         .then(res => {
-            console.log(res.data);
-            
             if (res.status === 200) {
                 connectSocket()
                 .then(() => dispatch(authSuccess(username)));
