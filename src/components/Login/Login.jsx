@@ -6,7 +6,6 @@ import Timothy from '../Timothy/Timothy';
 import Logo from '../Logo/Logo';
 import { authenticateUser, logIn, getURI } from './LoginActions';
 import classNames from 'classnames/bind';
-import axios from 'axios';
 
 const cx = classNames.bind(styles);
 
