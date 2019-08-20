@@ -4,8 +4,9 @@ import { Redirect } from 'react-router-dom';
 import styles from './Login.module.css';
 import Timothy from '../Timothy/Timothy';
 import Logo from '../Logo/Logo';
-import { authenticateUser, logIn } from './LoginActions';
+import { authenticateUser, logIn, getURI } from './LoginActions';
 import classNames from 'classnames/bind';
+import axios from 'axios';
 
 const cx = classNames.bind(styles);
 
@@ -21,6 +22,7 @@ export class Login extends React.Component {
 
     componentDidMount() {
         this.props.authenticateUser();
+        this.props.getURI();
     }
 
     handleChange(event) {
@@ -43,6 +45,7 @@ export class Login extends React.Component {
                         {this.props.error && <h3 data-cy="login-error" className={styles.errorText}>{this.props.error}</h3>}
                         <button data-cy="login" type='submit'>Login</button>
                     </form>
+                    <a href={this.props.uri}>Log in with github</a>
                     <Timothy />
                 </div>
             : <Redirect to='/lobby' />
@@ -52,12 +55,14 @@ export class Login extends React.Component {
 
 const mapStateToProps = state => ({
     username: state.authReducer.username,
+    uri: state.authReducer.uri,
     error: state.authReducer.error
 });
 
 const mapDispatchToProps = dispatch => ({
     logIn: username => dispatch(logIn(username)),
-    authenticateUser: () => dispatch(authenticateUser())
+    authenticateUser: () => dispatch(authenticateUser()),
+    getURI: () => dispatch(getURI())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

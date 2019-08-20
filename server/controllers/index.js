@@ -7,11 +7,44 @@ const { emitRooms, disconnectSocket, closeRoom, disconnectAllSockets } = require
 let currentUsers = [];
 let db;
 
+const oauthClientId = process.env.CLIENT_ID;
+const oauthSecret = process.env.CLIENT_SECRET;
+const redirectURL = process.env.NODE_ENV === 'development' ? "http://localhost:3000/lobby" : "/lobby";
+const oAuthGithub = require('./oauth-github');
+const githubAuthoriser = oAuthGithub(oauthClientId, oauthSecret);
+
 if (process.env.NODE_ENV === 'testing') {
     db = require('../queries/testdb');
 } else {
     db = require('../queries/db');
 }
+
+router.get("/oauth", (req, res) => {
+    githubAuthoriser.authorise(req, (githubUser, token) => {
+        if (githubUser) {
+            const username = githubUser.login;
+            db.createUser(username)
+            .then(users => {
+                const real = true;
+                const id = users[0].dataValues.id;
+                req.session.user = { username, id, real };
+                req.session.roomId = null;
+                currentUsers.push({ username });
+                res.header("Location", redirectURL);
+                res.sendStatus(302);
+            }).catch(err => {
+                console.log(err);
+                res.status(400).json({ message: err.message });
+            });
+        } else {
+            res.sendStatus(400);
+        }
+    });
+});
+
+router.get("/api/oauth/uri", (req, res) => {
+    res.status(200).json({ uri: githubAuthoriser.oAuthUri});
+});
 
 router.use('/api/room', require('./rooms'));
 
