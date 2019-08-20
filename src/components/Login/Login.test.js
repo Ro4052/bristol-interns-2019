@@ -45,7 +45,7 @@ describe('on submit', () => {
         );
         wrapper.find({ 'data-cy': 'username' }).simulate('change', { preventDefault: () => {}, target: { value: 'username' } });
         wrapper.find({ 'data-cy': 'login-form' }).simulate('submit');
-        expect(logIn).toHaveBeenCalled();
-        logIn.mockRestore();
+        expect(signUp).toHaveBeenCalled();
+        signUp.mockRestore();
     });
 });
