@@ -23,6 +23,16 @@ export const authFailure = error => ({
     error
 });
 
+export const getURISuccess = uri => ({
+    type: types.GET_URI_SUCCESS,
+    uri
+});
+
+export const getURIFailure = error => ({
+    type: types.GET_URI_FAILURE,
+    error
+});
+
 export const logOutFailure = error => ({
     type: types.LOG_OUT_FAILURE,
     error
@@ -37,6 +47,7 @@ export const authenticateUser = () => dispatch => {
                 dispatch(authSuccess(res.data.cookie));
             });
         } else {
+            dispatch(getURI());
             throw Error(res.data.message);
         }
     })
@@ -44,6 +55,20 @@ export const authenticateUser = () => dispatch => {
         dispatch(resetStore());
         history.push('/');
     });
+}
+
+export const getURI = () => dispatch => {
+    axiosInstance.get('/api/oauth/uri')
+    .then(res => {
+        if (res.status === 200) {
+            dispatch(getURISuccess(res.data.uri));
+        } else {
+            dispatch(getURIFailure(res.data.message));
+        }
+    })
+    .catch(err => {
+        dispatch(getURIFailure(err.message));
+    })
 }
 
 export const logIn = username => dispatch => {

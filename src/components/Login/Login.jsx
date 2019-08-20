@@ -43,6 +43,7 @@ export class Login extends React.Component {
                         {this.props.error && <h3 data-cy="login-error" className={styles.errorText}>{this.props.error}</h3>}
                         <button data-cy="login" type='submit'>Login</button>
                     </form>
+                    <a href={this.props.uri}>Log in with github</a>
                     <Timothy />
                 </div>
             : <Redirect to='/lobby' />
@@ -52,6 +53,7 @@ export class Login extends React.Component {
 
 const mapStateToProps = state => ({
     username: state.authReducer.username,
+    uri: state.authReducer.uri,
     error: state.authReducer.error
 });
 
