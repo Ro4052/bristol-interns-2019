@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const Promise = require('promise');
+const bcrypt = require('bcrypt');
 const UserModel = require("./user");
 const db_url = process.env.DATABASE_URL || `postgres://${process.env.DB_USER}:${process.env.DB_PASS}@localhost:5432/${process.env.DB_NAME}`;
 
@@ -17,7 +18,81 @@ sequelize.sync({ alter: true }).then(() => {
     console.log("Database connected.");
 });
 
-module.exports.createUser = username => {
+module.exports.validatePassword = (username, password) => {
+    return new Promise((resolve, reject) => {
+        User.findOne({
+            where: {
+                username: username
+            }
+        })
+        .then(user => {
+            if (user) {
+                bcrypt.compare(password, user.dataValues.password, (err, res) => {                    
+                    if (res) {
+                        resolve(user);
+                    } else {
+                        reject({
+                            code: 404,
+                            message: "Password is incorrect"
+                        });
+                    }
+                });
+            } else {
+                reject({
+                    code: 404,
+                    message: "User with this username does not exist"
+                });
+            }
+        })
+        .catch(err => {
+            reject({
+                code: 404,
+                message: err.message
+            });
+        });
+    });
+}
+
+module.exports.createUser = (username, password) => {
+    return new Promise((resolve, reject) => {
+        bcrypt.hash(password, 10, (err, hash) => {
+            if (err) {
+                reject({
+                    code: 404,
+                    message: err.message
+                });
+            }
+            User.findOrCreate({
+                where: {
+                    username: username
+                },
+                defaults: { // set the default properties if it doesn't exist
+                    username: username.trim(),
+                    password: hash,
+                    score: 0
+                }
+            })
+            .then(([user, created]) => {                
+                if (!created) {
+                    reject({
+                        code: 404,
+                        message: "User with this username already exists"
+                    });
+                } else {
+                    resolve(user);
+                }
+            })
+            .catch(err => {
+                reject({
+                    code: 404,
+                    message: err.message
+                });
+            });
+        });
+    });
+}
+
+module.exports.createGithubUser = username => {
     return new Promise((resolve, reject) => {
         User.findOrCreate({
             where: {
@@ -25,15 +100,16 @@ module.exports.createUser = username => {
             },
             defaults: { // set the default properties if it doesn't exist
                 username: username.trim(),
+                password: "",
                 score: 0
             }
         })
-        .then(users => resolve(users))
+        .then(([user, created]) => resolve(user))
         .catch(err => {
             reject({
                 code: 404,
-                msg: err.message
-            })
+                message: err.message
+            });
         });
     });
 }
@@ -45,7 +121,7 @@ module.exports.getUsers = () => {
         .catch(err => {
             reject({
                 code: 404,
-                msg: err.message
+                message: err.message
             });
         });
     });
@@ -65,7 +141,7 @@ module.exports.updateScore = (id, score) => {
             .catch(err => {
                 reject({
                     code: 404,
-                    msg: err.message
+                    message: err.message
                 });
             });
         });

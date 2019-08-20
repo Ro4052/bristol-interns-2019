@@ -71,15 +71,45 @@ export const getURI = () => dispatch => {
     })
 }
 
-export const logIn = username => dispatch => {
+export const logIn = (username, password) => dispatch => {
     try {
         if (username.length < 3) throw Error("Username must be at least 3 characters");
         if (username.length > 15) throw Error("Username must be no longer than 15 characters");
+        if (password.length < 3) throw Error("Password must be at least 3 characters");
+        if (password.length > 15) throw Error("Password must be no longer than 15 characters");
         // eslint-disable-next-line
         const allowed = /^[A-Za-z0-9]*$/;
         if (!allowed.test(username)) throw Error("Username can be comprised of numbers and latin letters only");
-        axiosInstance.post('/auth/login', { username })
+        if (!allowed.test(password)) throw Error("Password can be comprised of numbers and latin letters only");
+        axiosInstance.post('/auth/login', { username, password })
         .then(res => {
+            if (res.status === 200) {
+                connectSocket()
+                .then(() => dispatch(authSuccess(username)));
+            } else {
+                throw Error(res.data.message);
+            }
+        })
+        .catch(err => dispatch(authFailure(err.message)));
+    } catch (err) {
+        dispatch(authFailure(err.message));
+    }
+};
+
+export const signUp = (username, password) => dispatch => {
+    try {
+        if (username.length < 3) throw Error("Username must be at least 3 characters");
+        if (username.length > 15) throw Error("Username must be no longer than 15 characters");
+        if (password.length < 3) throw Error("Password must be at least 3 characters");
+        if (password.length > 15) throw Error("Password must be no longer than 15 characters");
+        // eslint-disable-next-line
+        const allowed = /^[A-Za-z0-9]*$/;
+        if (!allowed.test(username)) throw Error("Username can be comprised of numbers and latin letters only");
+        if (!allowed.test(password)) throw Error("Password can be comprised of numbers and latin letters only");
+        axiosInstance.post('/auth/signup', { username, password })
+        .then(res => {
+            console.log(res.data);
+            
             if (res.status === 200) {
                 connectSocket()
                 .then(() => dispatch(authSuccess(username)));

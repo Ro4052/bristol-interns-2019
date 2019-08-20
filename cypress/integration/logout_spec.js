@@ -1,7 +1,7 @@
 const url = Cypress.config().baseUrl;
 
 describe('Logout', () => {
-    beforeEach(() => cy.login('player1'));
+    beforeEach(() => cy.login('player1', 'password'));
 
     describe('on click logout button', () => {
         beforeEach(() => cy.logout());

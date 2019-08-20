@@ -5,7 +5,7 @@ let score;
 describe('Leaderboard', () => {
     describe('on logging in for the first time', () => {
         beforeEach(() => {
-            cy.login('unicorn')
+            cy.login('unicorn', 'password')
             .then(() => cy.goToLeaderboard());
         });
 
@@ -20,7 +20,7 @@ describe('Leaderboard', () => {
 
     describe('on playing a whole game', () => {
         beforeEach(() => {
-            cy.login('unicorn')
+            cy.login('unicorn', 'password')
             .then(() => cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`))
             .then(() => cy.request(`http://localhost:12346/createRoom?rounds=1&url=${encodeURIComponent(url)}`))
             .then(() => cy.joinRoom())

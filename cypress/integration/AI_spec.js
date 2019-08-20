@@ -1,6 +1,6 @@
 describe("when click add auto button", () => {
     beforeEach(() => {
-        cy.login('unicorn');
+        cy.login('unicorn', 'password');
         cy.createRoom(3);
         cy.get('[data-cy="automated-player"]').click();
     });

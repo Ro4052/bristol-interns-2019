@@ -5,7 +5,7 @@ describe('Timer', () => {
     describe('Storyteller Timer', () => {
         describe('when the game starts', () => {
             beforeEach(() => {
-                cy.login('unicorn')
+                cy.login('unicorn', 'password')
                 .then(() => cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`))
                 .then(() => cy.request(`http://localhost:12346/createRoom?rounds=3&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
                 .then(() => cy.joinRoom())
@@ -46,7 +46,7 @@ describe('Timer', () => {
     describe('Play Card Timer', () => {
         describe('after storyteller plays', () => {
             beforeEach(() => {
-                cy.login('unicorn')
+                cy.login('unicorn', 'password')
                 .then(() => cy.createRoom(3))
                 .then(() => cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`))
                 .then(() => cy.request(`http://localhost:12346/joinRoom?roomId=0&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
@@ -69,7 +69,7 @@ describe('Timer', () => {
     describe('Vote Card Timer', () => {
         describe('after everyone has played', () => {
             beforeEach(() => {
-                cy.login('unicorn')
+                cy.login('unicorn', 'password')
                 .then(() => cy.createRoom(3))
                 .then(() => cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`))
                 .then(() => cy.request(`http://localhost:12346/joinRoom?roomId=0&url=${encodeURIComponent(Cypress.config().baseUrl)}`))

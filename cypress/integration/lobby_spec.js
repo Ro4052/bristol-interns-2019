@@ -3,7 +3,7 @@ const url = Cypress.config().baseUrl;
 describe('Lobby', () => {
     describe('on clicking create room', () => {
         beforeEach(() => {
-            cy.login('unicorn');
+            cy.login('unicorn', 'password');
             cy.createRoom(3);
         });
 
@@ -58,7 +58,7 @@ describe('Lobby', () => {
         beforeEach(() => {
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
             .then(() => cy.request(`http://localhost:12346/createRoom?rounds=3&url=${encodeURIComponent(url)}`))
-            .then(() => cy.login('unicorn'));
+            .then(() => cy.login('unicorn', 'password'));
         });
 
         it('displays the existing room', () => {

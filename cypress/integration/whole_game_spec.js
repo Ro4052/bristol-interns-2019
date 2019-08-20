@@ -3,7 +3,7 @@ const url = Cypress.config().baseUrl;
 describe('Whole game', () => {
     describe('when there is a draw', () => {
         beforeEach(() => {
-            cy.login('unicorn')
+            cy.login('unicorn', 'password')
             .then(() => cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`))
             .then(() => cy.request(`http://localhost:12346/createRoom?rounds=1&url=${encodeURIComponent(url)}`))
             .then(() => cy.joinRoom())
@@ -18,7 +18,7 @@ describe('Whole game', () => {
 
     describe('when there is a winner', () => {
         beforeEach(() => {
-            cy.login('unicorn')
+            cy.login('unicorn', 'password')
             .then(() => cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`))
             .then(() => cy.request(`http://localhost:12346/createRoom?rounds=1&url=${encodeURIComponent(url)}`))
             .then(() => cy.joinRoom())
@@ -35,7 +35,7 @@ describe('Whole game', () => {
 
     describe('on gameover and click back to lobby', () => {
         beforeEach(() => {
-            cy.login('unicorn')
+            cy.login('unicorn', 'password')
             .then(() => cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`))
             .then(() => cy.request(`http://localhost:12346/createRoom?rounds=0&url=${encodeURIComponent(url)}`))
             .then(() => cy.joinRoom())

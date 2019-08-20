@@ -32,8 +32,9 @@ app.get('/connect', (req, res) => {
         withCredentials: true
     });
     
-    axiosInstance.post('auth/login', { 
-        username: "halfling" 
+    axiosInstance.post('auth/signup', { 
+        username: "halfling",
+        password: "hello"
     })
     .then((response) => {
         if (response.status === 200) {

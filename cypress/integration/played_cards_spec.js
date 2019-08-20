@@ -3,7 +3,7 @@ describe('Played cards', () => {
 
     describe("when the storyteller has played", () => {
         beforeEach(() => {
-            cy.login('unicorn');
+            cy.login('unicorn', 'password');
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`)
             .then(() => cy.createRoom(3))
             .then(() => cy.request(`http://localhost:12346/joinRoom?roomId=0&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
