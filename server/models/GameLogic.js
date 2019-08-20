@@ -180,13 +180,7 @@ class GameLogic {
     }
 
     calculateDrawers(topscore) {
-        return this.players.reduce((accumulator, current) => {
-            if (current.score === topscore) {
-                return [...accumulator, current];
-            }
-            return accumulator;
-        },
-        []);
+        return this.players.reduce((accumulator, current) => current.score === topscore ? [...accumulator, current] : accumulator, []);
     };
 
     /* Clean up stored data */
