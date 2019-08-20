@@ -1,23 +1,3 @@
-.chatArea {
-    height: 65%;
-}
-
-.chatRoom {
-    position: absolute;
-    height: 55%;
-    z-index: 100;
-    display: flex;
-    flex-grow: 1;
-    justify-content: center;
-    flex-direction: column;
-    align-items: stretch;
-    background-color: white;
-    border: 2px solid black;
-    border-radius: 1em;
-    margin: 0em 0.5em 0.5em 0.5em;
-    letter-spacing: 0.2em;
-}
-
 .chatArrowArea {
     display: flex;
     flex-direction: row;
@@ -67,6 +47,17 @@
     -webkit-transform: rotate(135deg);
 }
 
+.chat {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 1em;
+    margin: 1em;
+    flex-grow: 1;
+}
+
 .shown {
     display: flex;
 }
@@ -75,49 +66,42 @@
     display: none;
 }
 
-.chatBox {
-    font-size: 1em;
-    display: flex;
+.messagesContainer {
+    margin: 0.5em;
     flex-grow: 1;
-    min-height: 10vh;
-    flex-direction: column;
     background-color: white;
     border: 2px solid black;
-    border-radius: 1em;
-    margin: 0.5em;
-    letter-spacing: 0.2em;
+    border-radius: 0.5em;
+    padding: 0.2em;
+}
+
+.scrollbarPadding {
+    position: relative;
+    height: 100%;
+}
+
+.messages {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     overflow-y: auto;
-}
-
-.chat {
-    font-size: 0.7em;
-    line-height: 90%;
     text-align: left;
-    margin: 1em;
 }
 
-.chatTop {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+.message {
+    word-wrap: break-word;
+    margin: 0.5em;
 }
 
-.chatBottom {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+.messageUsername {
+    padding: 0 0.5em;
 }
 
-.chatInput {
-    margin: 2vmin;
-    padding: 2vmin;
-    width: 100%;
-}
-
-.chatHeader {
-    margin-top: 0.4em;
-    font-size: 5vmin;
-    text-align: center;
+.messageText {
+    border: 2px solid black;
+    padding: 0.5em;
+    background-color: orange;
+    border-radius: 1em;
 }
