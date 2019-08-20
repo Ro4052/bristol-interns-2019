@@ -12,13 +12,14 @@ const state = {
     authReducer: {}
 };
 const store = mockStore(state);
+const authenticateUser = jest.fn();
+const getURI = jest.fn();
 
 describe('on render', () => {
     it('calls authenticateUser', () => {
-        const authenticateUser = jest.fn();
         mount(
             <Provider store={store}>
-                <Login authenticateUser={authenticateUser} />
+                <Login authenticateUser={authenticateUser} getURI={getURI} />
             </Provider>
         );
         expect(authenticateUser).toHaveBeenCalled();
@@ -28,7 +29,7 @@ describe('on render', () => {
 
 describe('on type in input', () => {
     it('updates the state', () => {
-        const wrapper = shallow(<Login authenticateUser={jest.fn()}/>);
+        const wrapper = shallow(<Login authenticateUser={authenticateUser} getURI={getURI} />);
         wrapper.find({ 'data-cy': 'username' }).simulate('change', { preventDefault: () => {}, target: { value: 'username' } });
         expect(wrapper.state().value).toEqual('username');
     });
@@ -39,7 +40,7 @@ describe('on submit', () => {
         const logIn = jest.fn();
         const wrapper = mount(
             <Provider store={store}>
-                <Login authenticateUser={jest.fn()} logIn={logIn} />
+                <Login authenticateUser={authenticateUser} getURI={getURI} logIn={logIn} />
             </Provider>
         );
         wrapper.find({ 'data-cy': 'username' }).simulate('change', { preventDefault: () => {}, target: { value: 'username' } });
