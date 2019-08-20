@@ -47,6 +47,7 @@ export const authenticateUser = () => dispatch => {
                 dispatch(authSuccess(res.data.cookie));
             });
         } else {
+            dispatch(getURI());
             throw Error(res.data.message);
         }
     })

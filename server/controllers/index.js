@@ -9,7 +9,7 @@ let db;
 
 const oauthClientId = process.env.CLIENT_ID;
 const oauthSecret = process.env.CLIENT_SECRET;
-const redirectURL = process.env.NODE_ENV === 'development' ? "http://localhost:3000/lobby" : "/lobby";
+const redirectURL = process.env.NODE_ENV === 'production' ? "/lobby" : "http://localhost:3000/lobby";
 const oAuthGithub = require('./oauth-github');
 const githubAuthoriser = oAuthGithub(oauthClientId, oauthSecret);
 

@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 import styles from './Login.module.css';
 import Timothy from '../Timothy/Timothy';
 import Logo from '../Logo/Logo';
-import { authenticateUser, logIn, getURI } from './LoginActions';
+import { authenticateUser, logIn } from './LoginActions';
 import classNames from 'classnames/bind';
 
 const cx = classNames.bind(styles);
@@ -21,7 +21,6 @@ export class Login extends React.Component {
 
     componentDidMount() {
         this.props.authenticateUser();
-        this.props.getURI();
     }
 
     handleChange(event) {
@@ -60,8 +59,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     logIn: username => dispatch(logIn(username)),
-    authenticateUser: () => dispatch(authenticateUser()),
-    getURI: () => dispatch(getURI())
+    authenticateUser: () => dispatch(authenticateUser())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
