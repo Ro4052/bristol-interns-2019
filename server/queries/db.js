@@ -71,14 +71,13 @@ module.exports.createUser = (username, password) => {
                 }
             })
             .then(([user, created]) => {                
-                if (!created) {
-                    reject({
-                        code: 400,
-                        message: "User with this username already exists"
-                    });
-                } else {
+                if (created) {
                     resolve(user);
                 }
+                reject({
+                    code: 400,
+                    message: "User with this username already exists"
+                });
             })
             .catch(err => {
                 reject({
