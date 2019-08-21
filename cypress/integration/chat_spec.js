@@ -9,7 +9,7 @@ describe('Chat', () => {
 
         it('displays the message', () => {     
             cy.get('[data-cy="message-text"]').should('have.text', 'message');
-            cy.get('[data-cy="message-username"]').should('have.text', 'Bob');
+            cy.get('[data-cy="message-username"]').should('have.text', 'Bob:');
         });
 
         it('clears the input', () => {
@@ -27,7 +27,7 @@ describe('Chat', () => {
 
         it("others see the message", () => {
             cy.get('[data-cy="message-text"]').should('have.text', 'message');
-            cy.get('[data-cy="message-username"]').should('have.text', 'halfling');
+            cy.get('[data-cy="message-username"]').should('have.text', 'halfling:');
         });
     });
 
