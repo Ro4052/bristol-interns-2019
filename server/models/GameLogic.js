@@ -333,7 +333,7 @@ class GameLogic {
     }
 
     /* Emit the votes to the players */
-    emitVotes(word) {
+    emitVotes() {
         this.newCard();
         this.setStatus(statusTypes.DISPLAY_ALL_VOTES);
         socket.emitPlayedCards(this.roomId, this.getPlayedCards());
