@@ -47,7 +47,7 @@ exports.autoWord = (cardId) => {
     let content;
     return new Promise((resolve, reject) => {
         db.getLabels(cardId).then(card => {
-            const labels = card.dataValues.labels
+            const labels = card.dataValues.labels;
             const word = labels[Math.floor(Math.random()*labels.length)];
             resolve(word);
         });
