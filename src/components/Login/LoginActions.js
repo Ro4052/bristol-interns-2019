@@ -85,7 +85,7 @@ export const logIn = (username, password) => dispatch => {
                 connectSocket()
                 .then(() => dispatch(authSuccess(username)));
             } else {
-                dispatch(authFailure(err.message));
+                dispatch(authFailure(res.data.message));
             }
         })
         .catch(err => dispatch(authFailure(err.message)));
