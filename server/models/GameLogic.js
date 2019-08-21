@@ -333,11 +333,12 @@ class GameLogic {
     }
 
     /* Emit the votes to the players */
-    emitVotes() {
+    emitVotes(word) {
         this.newCard();
         this.setStatus(statusTypes.DISPLAY_ALL_VOTES);
         socket.emitPlayedCards(this.roomId, this.getPlayedCards());
         this.calcScores();
+        this.intelligentAPI(this.currentWord);
         this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), nextRoundDuration);
     };
 
@@ -356,6 +357,15 @@ class GameLogic {
             });
         }
         socket.emitPlayers(this.roomId, this.getPlayers());
+    }
+
+    intelligentAPI(word) {
+        this.playedCards.forEach(card => {
+            const cardScore = this.votes.filter(vote => card.cardId === vote.cardId).length
+            if (cardScore >= 1) {
+                AI.newWords(card.cardId, word)
+            }
+        });
     }
 
     /* Clear entire game state */
