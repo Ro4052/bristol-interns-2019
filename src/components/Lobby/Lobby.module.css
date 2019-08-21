@@ -1,12 +1,12 @@
 .main {
     display: inline-block;
-    height: 100%;
     width: 100%;
     align-items: stretch;
+    background-color: var(--dark-orange);
 }
 
 .header {
-    height: 15%;
+    height: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -30,14 +30,12 @@
 }
 
 .roomArea {
-    flex-grow: 1;
+    width: 100%;
     display: flex;
-    flex-grow: 1;
     justify-content: flex-start;
     flex-direction: row;
     flex-flow: row wrap;
     align-items: flex-start;
-    overflow: auto;
 }
 
 @media only screen and (max-width: 1500px) {

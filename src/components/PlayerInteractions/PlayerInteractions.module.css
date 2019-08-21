@@ -8,13 +8,10 @@
     padding: 0.5em 1em;
     border: 3px solid black;
     margin: 2vmin;
+    z-index: 20;
 }
 
 .text {
     margin: 1em;
-    font-size: 3vmin;
-}
-
-.word {
-    font-size: 4vmin;
+    font-size: 1.2em;
 }
