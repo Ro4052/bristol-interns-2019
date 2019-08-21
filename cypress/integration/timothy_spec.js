@@ -25,7 +25,7 @@ describe('Timothy', () => {
 
     describe('on enter an invalid word', () => {
         beforeEach(() => {
-            cy.login('unicorn');
+            cy.signup('unicorn', 'password');
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
             .then(() => cy.request(`http://localhost:12346/createRoom?rounds=3&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
             .then(() => cy.joinRoom())
@@ -51,7 +51,7 @@ describe('Timothy', () => {
 
     describe('on win', () => {
         beforeEach(() => {
-            cy.login('unicorn');
+            cy.signup('unicorn', 'password');
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
             .then(() => cy.request(`http://localhost:12346/createRoom?rounds=3&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
             .then(() => cy.joinRoom())
