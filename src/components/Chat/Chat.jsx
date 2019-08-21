@@ -22,7 +22,7 @@ export class Chat extends React.Component {
     componentDidMount() {
         this.scrollToBottom();
         this.updateWindowDimensions();        
-        this.setState({ showChat: this.props.showOnDefault || window.innerWidth > 1500 });
+        this.setState({ showChat: window.innerWidth > 1500 });
         window.addEventListener('resize', this.updateWindowDimensions);
     }
 
@@ -55,7 +55,7 @@ export class Chat extends React.Component {
                     <span onClick={this.showChat}>{this.state.showChat ? "Hide chat" : "Show Chat"}</span>
                     {this.props.newMessages.length !== 0 && !this.state.showChat && <div className={styles.newMessage} data-cy='new-message'>+{this.props.newMessages.length}</div>}
                 </div>
-                <div className={cx(styles.chat, { gameChat: !this.props.showOnDefault, shown: this.state.showChat, hidden: !this.state.showChat })} data-cy='chat-room'>
+                <div className={cx(styles.chat, { gameChat: !this.props.showOnDefault, lobbyChat: this.props.showOnDefault, shown: this.state.showChat, hidden: !this.state.showChat })} data-cy='chat-room'>
                     <h1>Chat</h1>
                     <div className={styles.messagesContainer}>
                         <div className={styles.scrollbarPadding}>

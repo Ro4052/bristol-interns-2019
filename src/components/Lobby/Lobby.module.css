@@ -9,7 +9,7 @@
     height: 15%;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     flex-direction: row-reverse;
 }
 
@@ -43,5 +43,16 @@
 @media only screen and (max-width: 1500px) {
     .roomArea {
         justify-content: center;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    .container {
+        flex-direction: column;
+    }
+    .leftSide {
+        max-width: none;
+        width: 100%;
+        align-items: center;
     }
 }
