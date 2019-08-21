@@ -24,15 +24,15 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
-Cypress.Commands.add('login', (username, password) => {
+Cypress.Commands.add('signup', (username, password) => {
     cy.route({
         method: 'POST',
         url: '/auth/signup'
-    }).as('login');
+    }).as('signup');
     cy.get('[data-cy="username"]').type(username)
     cy.get('[data-cy="password"]').type(password)
     .then(() => cy.get('[data-cy="login"]').click());
-    cy.wait('@login');
+    cy.wait('@signup');
 });
 
 Cypress.Commands.add('logout', () => {

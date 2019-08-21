@@ -2,7 +2,7 @@ const url = Cypress.config().baseUrl;
 
 describe('Refresh page', () => {
     beforeEach(() => {
-        cy.login('unicorn', 'password');
+        cy.signup('unicorn', 'password');
         cy.createRoom(3);
         cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
         .then(() => cy.request(`http://localhost:12346/joinRoom?roomId=0&url=${encodeURIComponent(Cypress.config().baseUrl)}`))

@@ -1,7 +1,7 @@
 const url = Cypress.config().baseUrl;
 
 describe('Waiting', () => {
-    beforeEach(() => cy.login('unicorn', 'password'));
+    beforeEach(() => cy.signup('unicorn', 'password'));
 
     describe('when storyteller is playing card and word', () => {
         beforeEach(() => {

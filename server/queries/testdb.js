@@ -24,7 +24,7 @@ module.exports.createUser = (username, password) => {
             resolve(data);
         } else {
             reject({
-                code: 404,
+                code: 400,
                 message: "User with this username already exists"
             });
         }

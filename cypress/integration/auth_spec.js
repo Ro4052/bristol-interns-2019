@@ -8,7 +8,7 @@ describe('Auth', () => {
 
     describe('if already logged in', () => {
         it('sends you to lobby if you try to return to login', () => {
-            cy.login('unicorn', 'password');
+            cy.signup('unicorn', 'password');
             cy.visit('/');
             cy.url().should('include', '/lobby');
         });

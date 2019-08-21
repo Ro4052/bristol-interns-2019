@@ -1,7 +1,7 @@
 const url = Cypress.config().baseUrl;
 
 describe('Play card', () => {
-    beforeEach(() => cy.login('unicorn', 'password'));
+    beforeEach(() => cy.signup('unicorn', 'password'));
 
     describe('when first player has played card and word', () => {
         beforeEach(() => {

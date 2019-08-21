@@ -3,7 +3,7 @@ const url = Cypress.config().baseUrl;
 describe('Play word and card', () => {
     describe('on start game', () => {
         beforeEach(() => {
-            cy.login('unicorn', 'password');
+            cy.signup('unicorn', 'password');
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
             .then(() => cy.request(`http://localhost:12346/createRoom?rounds=3&url=${encodeURIComponent(Cypress.config().baseUrl)}`))
             .then(() => {

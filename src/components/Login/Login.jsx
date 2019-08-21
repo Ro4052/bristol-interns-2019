@@ -37,9 +37,7 @@ export class Login extends React.Component {
     }
 
     sendLoginOrSignUp(event) {
-        event.preventDefault();
-        console.log(this.state.username, this.state.password);
-           
+        event.preventDefault();           
         (this.state.signUp) ? this.props.signUp(this.state.username, this.state.password) : this.props.logIn(this.state.username, this.state.password);
     }
 

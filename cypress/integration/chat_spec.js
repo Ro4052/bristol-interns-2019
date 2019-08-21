@@ -3,7 +3,7 @@ const url = Cypress.config().baseUrl;
 describe('Chat', () => {
     describe('on send a message in the main lobby', () => {
         beforeEach(() => {
-            cy.login('Bob', 'password');
+            cy.signup('Bob', 'password');
             cy.sendMessage();   
         });
 
@@ -20,7 +20,7 @@ describe('Chat', () => {
     describe('on someone else sends a message in the lobby when chat is shown', () => {
         beforeEach(() => {
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
-            .then(() => cy.login('Bob', 'password'))
+            .then(() => cy.signup('Bob', 'password'))
             .then(() => cy.createRoom(3))
             .then(() => cy.request(`http://localhost:12346/send-message?url=${encodeURIComponent(url)}`));
         });
@@ -34,7 +34,7 @@ describe('Chat', () => {
     describe('on someone else sends a message in the lobby when chat is hidden', () => {
         beforeEach(() => {
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
-            .then(() => cy.login('Bob', 'password'))
+            .then(() => cy.signup('Bob', 'password'))
             .then(() => cy.createRoom(3))
             .then(() => cy.get('[data-cy="chat-arrow"]').click())
             .then(() => cy.request(`http://localhost:12346/send-message?url=${encodeURIComponent(url)}`));
@@ -47,7 +47,7 @@ describe('Chat', () => {
 
     describe('on someone else sends a message in a room', () => {
         beforeEach(() => {
-            cy.login('Bob', 'password')
+            cy.signup('Bob', 'password')
             .then(() => cy.url().should('contain', '/lobby'))
             .then(() => cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`))
             .then(() => cy.request(`http://localhost:12346/createRoom?url=${encodeURIComponent(url)}`))
