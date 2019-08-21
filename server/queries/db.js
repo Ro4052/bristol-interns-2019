@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const Promise = require('promise');
 const bcrypt = require('bcrypt');
 const UserModel = require("./user");
-const CardLabelsModel = require("./cardLabels")
+const CardLabelsModel = require("./cardLabels");
 const db_url = process.env.DATABASE_URL || `postgres://${process.env.DB_USER}:${process.env.DB_PASS}@localhost:5432/${process.env.DB_NAME}`;
 
 const sequelize = new Sequelize(db_url, {

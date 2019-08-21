@@ -33,7 +33,7 @@ async function autoWordGenerator() {
 }  
 exports.autoWordGenerator = autoWordGenerator
 
-exports.newWords = (cardId, word) => {
+exports.addLabel = (cardId, word) => {
     let content;
     return new Promise((resolve, reject) => {
         db.getLabels(cardId).then(card => {
