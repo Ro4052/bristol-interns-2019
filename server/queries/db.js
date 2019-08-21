@@ -21,9 +21,7 @@ sequelize.sync({ alter: true }).then(() => {
 module.exports.validatePassword = (username, password) => {
     return new Promise((resolve, reject) => {
         User.findOne({
-            where: {
-                username: username
-            }
+            where: { username }
         })
         .then(user => {
             if (user) {
