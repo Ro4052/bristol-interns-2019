@@ -5,12 +5,14 @@
     align-items: center;
     background-color: #fac825;
     padding: 1vmin 3vmin;
+    margin: 1vmin;
     border: 2px solid black;
     border-radius: 1em;
     font-size: 4vmin;
 }
 
-h2 {
+.gameOverBox > h2 {
+    font-size: 4vmin;
     text-align: center;
     letter-spacing: 0.1em;
 }

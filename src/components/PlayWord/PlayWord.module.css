@@ -13,11 +13,10 @@
     font-family: var(--primary-font);
     background-color: #fac825;
     border-radius: 15px;
-    padding: 0.5em 1em;
-    margin: 1em;
+    padding: 0.5vmin 1vmin;
+    margin: 1vmin;
     border: 3px solid black;
-    margin-top: 1em;
-    font-size: 1.6em;
+    font-size: 3vmin;
 }
 
 .sendWordBox > input {
@@ -27,9 +26,14 @@
 }
 
 .entryBox {
+    font-size: 3vmin;
     background-color: var(--orange);
     border-radius: 15px;
     padding: 0.5em 1em;
     margin: 1em;
     border: 3px solid black;
+}
+
+.enterWordButton {
+    font-size: 3vmin;
 }

@@ -9,6 +9,7 @@
     height: 15%;
     display: flex;
     justify-content: center;
+    align-items: flex-start;
     flex-direction: row-reverse;
 }
 
@@ -37,4 +38,10 @@
     flex-flow: row wrap;
     align-items: flex-start;
     overflow: auto;
+}
+
+@media only screen and (max-width: 1500px) {
+    .roomArea {
+        justify-content: center;
+    }
 }

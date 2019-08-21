@@ -48,14 +48,31 @@
 }
 
 .chat {
+    width: 100%;
     display: flex;
     flex-direction: column;
     text-align: center;
     background-color: white;
     border: 2px solid black;
     border-radius: 1em;
-    margin: 1em;
+    margin: 1vmin;
     flex-grow: 1;
+}
+
+.chat > h1 {
+    margin: 1vmin;
+}
+
+@media only screen and (max-width: 750px) {
+    .gameChat {
+        width: 80%;
+        height: 80%;
+        position: absolute;
+        z-index: 100;
+        top: 10%;
+        left: 15%;
+        padding: 4vmin;
+    }
 }
 
 .shown {
@@ -75,6 +92,16 @@
     padding: 0.2em;
 }
 
+.chatInput {
+    width: 80%;
+    font-size: 3vmin;
+}
+
+.chatButton {
+    font-size: 3vmin;
+    margin-top: 0;
+}
+
 .scrollbarPadding {
     position: relative;
     height: 100%;
@@ -92,16 +119,22 @@
 
 .message {
     word-wrap: break-word;
-    margin: 0.5em;
+    margin: 0.5vmin;
+    display: flex;
+    align-items: center;
 }
 
 .messageUsername {
-    padding: 0 0.5em;
+    padding-right: 1vmin;
+    font-size: 1.5vmin;
+    min-width: 20%;
 }
 
 .messageText {
+    min-width: 80%;
+    font-size: 2vmin;
     border: 2px solid black;
-    padding: 0.5em;
+    padding: 0.5vmin 2vmin;
     background-color: orange;
     border-radius: 1em;
 }

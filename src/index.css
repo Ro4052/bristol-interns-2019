@@ -45,7 +45,7 @@ ul {
 
 input, button, select {
     outline: none;
-    font-size: 1.5em;
+    font-size: 3vmin;
     color: var(--lighter-black);
     margin: 0.5em;
     border: 2px solid var(--lighter-black);
@@ -72,8 +72,7 @@ button {
     box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.5);
 }
 
-button:hover,
-button:focus {
+button:hover {
     background-color: var(--light-orange);
 }
 
