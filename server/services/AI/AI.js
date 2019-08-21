@@ -1,5 +1,12 @@
 const fs = require('fs');
 
+let db;
+if (process.env.NODE_ENV === 'testing') {
+    db = require('../../queries/testdb');
+} else {
+    db = require('../../queries/db');
+}
+
 /* Random card picked*/
 exports.pickRandomCard = cards => {
     const randomCard = cards[Math.floor(Math.random()*cards.length)];
@@ -26,19 +33,22 @@ async function autoWordGenerator() {
 }  
 exports.autoWordGenerator = autoWordGenerator
 
+exports.newWords = (cardId, word) => {
+    let content;
+    return new Promise((resolve, reject) => {
+        db.getLabels(cardId).then(card => {
+            const labels = card.dataValues.labels;
+        });
+    });
+}
+
 // Pick random word from each list of labels for a card //
 exports.autoWord = (cardId) => {
     let content;
     return new Promise((resolve, reject) => {
-        fs.readFile('./card-labels.json', 'utf8', (err, data) => {
-            if (err) {
-                reject(err);
-            }
-            content = data.split("\n")[cardId - 1];
-            const start = content.indexOf('["');
-            const end = content.indexOf('"]');
-            content = content.slice(start + 2, end).split('","');
-            const word = content[Math.floor(Math.random()*content.length)];
+        db.getLabels(cardId).then(card => {
+            const labels = card.dataValues.labels;
+            const word = labels[Math.floor(Math.random()*labels.length)];
             resolve(word);
         });
     });

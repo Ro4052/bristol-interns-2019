@@ -43,3 +43,14 @@ module.exports.updateScore = (id, score) => {
         resolve();
     });
 }
+
+module.exports.getLabels = () => {
+    return new Promise(resolve => {
+        const data = {
+            dataValues: {
+                labels: ["hello"]
+            }
+        }
+        resolve(data);
+    });
+}

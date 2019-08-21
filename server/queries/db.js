@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 const Promise = require('promise');
 const bcrypt = require('bcrypt');
 const UserModel = require("./user");
+const CardLabelsModel = require("./cardLabels")
 const db_url = process.env.DATABASE_URL || `postgres://${process.env.DB_USER}:${process.env.DB_PASS}@localhost:5432/${process.env.DB_NAME}`;
 
 const sequelize = new Sequelize(db_url, {
@@ -13,6 +14,7 @@ const sequelize = new Sequelize(db_url, {
 });
 
 const User = UserModel(sequelize, Sequelize);
+const CardLabels = CardLabelsModel(sequelize, Sequelize);
 
 sequelize.sync({ alter: true }).then(() => {
     console.log("Database connected.");
@@ -134,6 +136,21 @@ module.exports.updateScore = (id, score) => {
                     code: 404,
                     message: err.message
                 });
+            });
+        });
+    });
+}
+
+module.exports.getLabels = cardId => {
+    return new Promise((resolve, reject) => {
+        CardLabels.findOne({
+            where: { cardId }
+        })
+        .then(card => resolve(card))
+        .catch(err => {
+            reject({
+                code: 400,
+                message: err.message
             });
         });
     });
