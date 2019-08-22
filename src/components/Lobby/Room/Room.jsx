@@ -22,11 +22,9 @@ export class Room extends React.Component {
                 {waitingVisible && <span className = {styles.waiting} data-cy="players-needed">Waiting for {this.props.room.minPlayers - this.props.room.players.length} more players</span>}
                 <div className={styles.roomButtons}>
                     {startGameVisible && <button className={styles.roomButton} onClick={this.props.startGame} data-cy="start-game" type='button'>Start game</button>}
-                    {!this.props.room.started && this.props.room.players.length !== this.props.room.maxPlayers && (inRoom ?
-                        <button className={styles.roomButton} onClick={() => this.props.leaveRoom(this.props.room.roomId)} data-cy="leave-room" type='button'>Leave room</button> :
-                        <button className={styles.roomButton} onClick={() => this.props.joinRoom(this.props.room.roomId)} data-cy="join-room" type='button'>Join room</button>
-                    )}
-                    {!this.props.room.started && inRoom && <button className={styles.roomButton} data-cy="automated-player" onClick={() => this.props.addAIPlayer(this.props.room.roomId)} >Add AI player</button>}
+                    {!this.props.room.started && inRoom && <button className={styles.roomButton} onClick={() => this.props.leaveRoom(this.props.room.roomId)} data-cy="leave-room" type='button'>Leave room</button>}
+                    {!this.props.room.started && this.props.room.players.length !== this.props.room.maxPlayers && !inRoom && <button className={styles.roomButton} onClick={() => this.props.joinRoom(this.props.room.roomId)} data-cy="join-room" type='button'>Join room</button>}
+                    {!this.props.room.started && this.props.room.players.length !== this.props.room.maxPlayers && inRoom && <button className={styles.roomButton} data-cy="automated-player" onClick={() => this.props.addAIPlayer(this.props.room.roomId)} >Add AI player</button>}
                 </div>
             </div>
         );
