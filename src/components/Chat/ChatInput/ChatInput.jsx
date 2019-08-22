@@ -1,7 +1,6 @@
 import React from 'react';
 import { sendChat } from '../ChatActions';
 import { connect } from 'react-redux';
-import styles from '../Chat.module.css';
 
 export class ChatInput extends React.Component {
     constructor() {
@@ -23,9 +22,9 @@ export class ChatInput extends React.Component {
 
     render() {
         return (
-            <form className={styles.chatMessageForm} data-cy="message-form" onSubmit={this.sendMessage}>
-                <input className={styles.chatInput} data-cy='type-message' onChange={this.handleChange} value={this.state.currentValue} placeholder="Type a message" autoFocus />
-                <button className={styles.chatButton} data-cy="send-message" type='submit'>Send</button>
+            <form data-cy="message-form" onSubmit={this.sendMessage}>
+                <input data-cy='type-message' onChange={this.handleChange} value={this.state.currentValue} placeholder="Type a message" autoFocus />
+                <button data-cy="send-message" type='submit'>Send</button>
             </form>
         );
     }

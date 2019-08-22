@@ -22,7 +22,7 @@ export class Chat extends React.Component {
     componentDidMount() {
         this.scrollToBottom();
         this.updateWindowDimensions();        
-        this.setState({ showChat: window.innerWidth > 1500 });
+        this.setState({ showChat: this.props.showOnDefault || window.innerWidth > 1500 });
         window.addEventListener('resize', this.updateWindowDimensions);
     }
 
@@ -52,10 +52,10 @@ export class Chat extends React.Component {
             <>
                 <div className={styles.chatArrowArea} onClick={this.toggleChat}>
                     <div className={cx({ showChatArrow: !this.state.showChat, hideChatArrow: this.state.showChat })} data-cy='chat-arrow'/>
-                    <span onClick={this.showChat} data-cy='show-chat'>{this.state.showChat ? "Hide chat" : "Show Chat"}</span>
+                    <span onClick={this.showChat}>{this.state.showChat ? "Hide chat" : "Show Chat"}</span>
                     {this.props.newMessages.length !== 0 && !this.state.showChat && <div className={styles.newMessage} data-cy='new-message'>+{this.props.newMessages.length}</div>}
                 </div>
-                <div className={cx(styles.chat, { gameChat: !this.props.showOnDefault, lobbyChat: this.props.showOnDefault, shown: this.state.showChat, hidden: !this.state.showChat })} data-cy='chat-room'>
+                <div className={cx(styles.chat, { shown: this.state.showChat, hidden: !this.state.showChat })} data-cy='chat-room'>
                     <h1>Chat</h1>
                     <div className={styles.messagesContainer}>
                         <div className={styles.scrollbarPadding}>

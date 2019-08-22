@@ -23,22 +23,16 @@
 }
 
 .gameInfo {
-    width: 50%;
-    font-size: 3vmin;
-    margin: 1vmin;
+    font-size: 1.2em;
+    margin: 1em;
     background-color: white;
     border: 3px solid black;
     border-radius: 20px;
     padding: 0 1em 1em 1em;
 }
 
-.gameInfo > h2 {
-    font-size: 4vh;
-    text-align: center;
-}
-
 .side {
-    width: 30%;
+    width: 20%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -49,45 +43,42 @@
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
 }
 
-.interactions {
-    height: 60%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
-}
-
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 750px) {
     .side {
         width: 100%;
+        height: 20%;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         justify-content: center;
         align-items: center;
     }
     .middle {
         width: 100%;
-        height: 50%;
+        height: 60%;
     }
     .main {
         height: 80%;
         flex-direction: column;
     }
-    .interactions {
-        height: 40%;
-    }
+}
+
+.interactions {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 .centerBox {
-    width: 100%;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    height: 50%;
 }
 
 .circle1,
@@ -99,8 +90,8 @@
 }
 
 .circle1 {
-    padding: 2vmin 2.5vmin;
-    margin: 1vmin;
+    padding: 20px 25px;
+    margin: 10px;
     margin-bottom: 30px;
 }
   
@@ -110,13 +101,13 @@
 }
   
 .circle2 {
-    padding: 1.5vmin 2vmin;
-    margin: 1vmin;
+    padding: 10px 15px;
+    margin: 10px;
     margin-bottom: 50px;
 }
 
 .circle3 {
-    padding: 1vmin 1.5vmin;
-    margin: 1vmin;
+    padding: 5px 10px;
+    margin: 10px;
     margin-bottom: 70px;
 }

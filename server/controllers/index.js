@@ -25,17 +25,13 @@ router.get("/oauth", (req, res) => {
             const username = githubUser.login;
             db.createGithubUser(username)
             .then(user => {
-                if (currentUsers.some(user => user.username === username)) {
-                    res.status(400).json({ message: "You are already logged in this account from another computer." });
-                } else {
-                    const real = true;
-                    const id = user.dataValues.id;
-                    req.session.user = { username, id, real };
-                    req.session.roomId = null;
-                    currentUsers.push({ username });
-                    res.header("Location", redirectURL);
-                    res.sendStatus(302);
-                }
+                const real = true;
+                const id = user.dataValues.id;
+                req.session.user = { username, id, real };
+                req.session.roomId = null;
+                currentUsers.push({ username });
+                res.header("Location", redirectURL);
+                res.sendStatus(302);
             }).catch(err => {
                 console.error(err);
                 res.status(err.code).json({ message: err.message });
@@ -84,16 +80,12 @@ router.post('/auth/login', (req, res) => {
     const { username, password } = req.body;    
     db.validatePassword(username, password)
     .then(user => {
-        if (currentUsers.some(user => user.username === username)) {
-            res.status(400).json({ message: "You are already logged in this account from another computer." });
-        } else {
-            const real = true;
-            const id = user.dataValues.id;
-            req.session.user = { username, id, real };
-            req.session.roomId = null;
-            currentUsers.push({ username });
-            res.sendStatus(200);
-        }
+        const real = true;
+        const id = user.dataValues.id;
+        req.session.user = { username, id, real };
+        req.session.roomId = null;
+        currentUsers.push({ username });
+        res.sendStatus(200);
     }).catch(err => {
         console.error(err);
         res.status(err.code).json({ message: err.message });

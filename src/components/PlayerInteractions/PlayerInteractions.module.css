@@ -1,17 +1,19 @@
 .playerInteractions {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     text-align: center;
     background-color: #fac825;
     border-radius: 15px;
     padding: 0.5em 1em;
     border: 3px solid black;
-    margin: 2vmin;
-    z-index: 20;
 }
 
 .text {
-    margin: 0.2em;
-    font-size: 3vh;
+    margin: 1em;
+    font-size: 1.6em;
+}
+
+.word {
+    font-size: 1.5em;
 }
