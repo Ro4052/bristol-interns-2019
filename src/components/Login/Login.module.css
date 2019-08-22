@@ -30,8 +30,16 @@
     outline: none;
     background-color: var(--yellow);
     color: black;
-    font-size: 2.5vmin;
+    font-size: 3vh;
     margin: 0.5em;
+}
+
+.logInButton {
+    font-size: 2em;
+}
+
+.toggleButton {
+    font-size: 1.5em;
 }
 
 .inputError {

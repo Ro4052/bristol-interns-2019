@@ -16,7 +16,7 @@ export class Login extends React.Component {
         this.state = {
             username: "",
             password: "",
-            signUp: true
+            signUp: false
         };
         this.sendLoginOrSignUp = this.sendLoginOrSignUp.bind(this);
         this.handleChangeUsername = this.handleChangeUsername.bind(this);
@@ -53,11 +53,11 @@ export class Login extends React.Component {
                     <form className={styles.loginForm} onSubmit={this.sendLoginOrSignUp} data-cy='login-form' >
                         <h2 className={styles.formHeader}>{this.state.signUp ? "Enter a username and password to sign up for the game" : "Log in with your username and password to enter the game"}</h2>
                         <input type='text' data-cy='username' className={cx(styles.loginInput, { inputError: this.props.error })} username={this.state.username} placeholder="Enter username" onChange={this.handleChangeUsername} autoFocus />
-                        <input type='password' data-cy='password' className={cx(styles.loginInput, { inputError: this.props.error })} password={this.state.password} placeholder="Enter password" onChange={this.handleChangePassword} autoFocus />
+                        <input type='password' data-cy='password' className={cx(styles.loginInput, { inputError: this.props.error })} password={this.state.password} placeholder="Enter password" onChange={this.handleChangePassword} />
                         {this.props.error && <h3 data-cy="login-error" className={styles.errorText}>{this.props.error}</h3>}
-                        <button data-cy="login" type='submit'>{this.state.signUp ? "Sign up" : "Log in"}</button>
+                        <button className={styles.logInButton} data-cy="login" type='submit'>{this.state.signUp ? "Sign up" : "Log in"}</button>
                     </form>
-                    <button onClick={this.toggleSignUp}>{this.state.signUp ? "Already a member? Log in." : "Don't have an account? Sign up"}</button> or
+                    <button className={styles.toggleButton} data-cy="toggle-signup" onClick={this.toggleSignUp}>{this.state.signUp ? "Already a member? Log in." : "Don't have an account? Sign up"}</button> or
                     <a className={styles.githubLogin} href={this.props.uri}>Log in with GitHub <img src={github} className={styles.githubLogo} alt='github-logo' /></a>
                     <Timothy />
                 </div>
