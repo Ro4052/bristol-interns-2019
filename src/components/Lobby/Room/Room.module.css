@@ -1,5 +1,6 @@
 .room {
-    min-height: 65%;
+    width: 40vh;
+    height: 40vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -9,14 +10,7 @@
     background-color: white;
     border: 3px solid black;
     border-radius: 20px;
-    font-size: 1.2em;
-}
-
-@media only screen and (max-width: 1500px) {
-    .room {
-        width: 80%;
-        min-height: auto;
-    }
+    font-size: 1.5em;
 }
 
 .roomHeader {
@@ -30,7 +24,7 @@
 }
 
 .roomButton {
-    font-size: 1em;
+    font-size: 3vh;
 }
 
 .roomButtons {
@@ -48,8 +42,29 @@
     text-align: center;
 }
 
+.roomPlayers {
+    display: flex;
+    width: 80%;
+    height: 50%;
+    flex-direction: column;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
 .playerInRoom {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
+}
+
+@media only screen and (max-width: 1500px) {
+    .room {
+        width: 40vh;
+        min-height: auto;
+    }
+    .roomHeader {
+        margin: 0;
+        font-size: 1.2em;
+    }
 }

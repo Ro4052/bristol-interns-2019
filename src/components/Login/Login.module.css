@@ -34,6 +34,14 @@
     margin: 0.5em;
 }
 
+.logInButton {
+    font-size: 2em;
+}
+
+.toggleButton {
+    font-size: 1.5em;
+}
+
 .inputError {
     border: 2px solid red;
     margin: 0.3em;

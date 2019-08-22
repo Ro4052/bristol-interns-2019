@@ -99,7 +99,7 @@
 }
 
 .circle1 {
-    padding: 2vh 2.5vh;
+    padding: 2vmin 2.5vmin;
     margin: 1vmin;
     margin-bottom: 30px;
 }
@@ -110,13 +110,13 @@
 }
   
 .circle2 {
-    padding: 1.5vh 2vh;
+    padding: 1.5vmin 2vmin;
     margin: 1vmin;
     margin-bottom: 50px;
 }
 
 .circle3 {
-    padding: 1vh 1.5vh;
+    padding: 1vmin 1.5vmin;
     margin: 1vmin;
     margin-bottom: 70px;
 }

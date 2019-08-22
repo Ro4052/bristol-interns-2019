@@ -55,9 +55,9 @@ export class Login extends React.Component {
                         <input type='text' data-cy='username' className={cx(styles.loginInput, { inputError: this.props.error })} username={this.state.username} placeholder="Enter username" onChange={this.handleChangeUsername} autoFocus />
                         <input type='password' data-cy='password' className={cx(styles.loginInput, { inputError: this.props.error })} password={this.state.password} placeholder="Enter password" onChange={this.handleChangePassword} />
                         {this.props.error && <h3 data-cy="login-error" className={styles.errorText}>{this.props.error}</h3>}
-                        <button data-cy="login" type='submit'>{this.state.signUp ? "Sign up" : "Log in"}</button>
+                        <button className={styles.logInButton} data-cy="login" type='submit'>{this.state.signUp ? "Sign up" : "Log in"}</button>
                     </form>
-                    <button data-cy="toggle-signup" onClick={this.toggleSignUp}>{this.state.signUp ? "Already a member? Log in." : "Don't have an account? Sign up"}</button> or
+                    <button className={styles.toggleButton} data-cy="toggle-signup" onClick={this.toggleSignUp}>{this.state.signUp ? "Already a member? Log in." : "Don't have an account? Sign up"}</button> or
                     <a className={styles.githubLogin} href={this.props.uri}>Log in with GitHub <img src={github} className={styles.githubLogo} alt='github-logo' /></a>
                     <Timothy />
                 </div>

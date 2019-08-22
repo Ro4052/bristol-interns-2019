@@ -1,6 +1,6 @@
 .invalidWord {
     color: red;
-    font-size: 2em;
+    font-size: 4vmin;
 }
 
 .sendWordBox {
@@ -16,24 +16,23 @@
     padding: 3vmin 1vmin;
     margin: 1vmin;
     border: 3px solid black;
-    font-size: 3vmin;
+}
+
+.sendWordBox > span {
+    font-size: 4vmin;
 }
 
 .sendWordBox > input {
     width: 80%;
-    font-size: 1.2em;
+    font-size: 4vmin;
     font-family: var(--primary-font)
 }
 
 .entryBox {
-    font-size: 3vmin;
     background-color: var(--orange);
+    font-size: 1.2em;
     border-radius: 15px;
     padding: 0.5em 1em;
     margin: 1em;
     border: 3px solid black;
-}
-
-.enterWordButton {
-    font-size: 3vmin;
 }

@@ -48,7 +48,7 @@ ul {
 
 input, button, select {
     outline: none;
-    font-size: 1em;
+    font-size: 1.5em;
     color: var(--lighter-black);
     margin: 1vmin;
     border: 2px solid var(--lighter-black);
