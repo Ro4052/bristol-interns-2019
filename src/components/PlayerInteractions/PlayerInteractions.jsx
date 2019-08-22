@@ -12,11 +12,6 @@ export class PlayerInteractions extends React.Component {
     render() {
         return (
             <div className={cx(styles.playerInteractions, {votePrompt: this.props.voteCard})}>
-                <div>
-                    {(this.props.status === statusTypes.WAITING_FOR_CURRENT_PLAYER && this.props.storytellerDuration > 0) && <Timer cy="storyteller-timer" setDuration={this.props.setStorytellerTimer} duration={this.props.storytellerDuration} />}
-                    {(this.props.status === statusTypes.WAITING_FOR_OTHER_PLAYERS && this.props.playCardDuration > 0) && <Timer cy="card-timer" setDuration={this.props.setPlayCardTimer} duration={this.props.playCardDuration} />}
-                    {(this.props.status === statusTypes.WAITING_FOR_VOTES && this.props.voteCardDuration > 0) && <Timer cy="vote-timer" setDuration={this.props.setVoteCardTimer} duration={this.props.voteCardDuration} />}
-                </div>
                 <div className={styles.text}>
                     {this.props.currentWord && (
                         this.props.username === this.props.currentPlayer.username ?
@@ -31,6 +26,11 @@ export class PlayerInteractions extends React.Component {
                     {this.props.status === statusTypes.WAITING_FOR_VOTES && this.props.voteCardDuration > 0 && !this.props.voteCard && <span data-cy='wait-for-votes' className={styles.justWait}>Waiting for the other players to vote...</span>}
                     {this.props.status === statusTypes.DISPLAY_ALL_VOTES && <button onClick={this.props.requestNextRound} data-cy='next-round'>Next round</button>}
                     {this.props.error && <span data-cy='error'>Error: {this.props.error}</span>}
+                </div>
+                <div>
+                    {(this.props.status === statusTypes.WAITING_FOR_CURRENT_PLAYER && this.props.storytellerDuration > 0) && <Timer cy="storyteller-timer" setDuration={this.props.setStorytellerTimer} duration={this.props.storytellerDuration} />}
+                    {(this.props.status === statusTypes.WAITING_FOR_OTHER_PLAYERS && this.props.playCardDuration > 0) && <Timer cy="card-timer" setDuration={this.props.setPlayCardTimer} duration={this.props.playCardDuration} />}
+                    {(this.props.status === statusTypes.WAITING_FOR_VOTES && this.props.voteCardDuration > 0) && <Timer cy="vote-timer" setDuration={this.props.setVoteCardTimer} duration={this.props.voteCardDuration} />}
                 </div>
             </div>
         );
