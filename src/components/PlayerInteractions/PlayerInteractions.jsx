@@ -21,7 +21,7 @@ export class PlayerInteractions extends React.Component {
                     {this.props.status === statusTypes.WAITING_FOR_CURRENT_PLAYER && !this.props.playCard && !this.props.voteCard && <span data-cy='wait-for-storyteller' className={styles.justWait}>Waiting for the storyteller...</span>}
                     {this.props.playCard && !this.props.playedCardId && this.props.currentWord && <span data-cy="play-card">Pick a card from your hand that this word describes.</span>}
                     {this.props.playCard && !this.props.playedCardId && !this.props.currentWord && <span data-cy="play-card">You are the storyteller! Pick a card from your hand.</span>}
-                    {this.props.voteCard && <span data-cy="vote-card">Vote on which card you think belonged to the storyteller.</span>}
+                    {this.props.voteCard && <span data-cy="vote-card">Vote on which card you think is the storyteller's one.</span>}
                     {this.props.status === statusTypes.WAITING_FOR_OTHER_PLAYERS && this.props.playCardDuration > 0 && !this.props.playCard && <span data-cy='wait-for-cards' className={styles.justWait}>Waiting for other players to pick cards...</span>}
                     {this.props.status === statusTypes.WAITING_FOR_VOTES && this.props.voteCardDuration > 0 && !this.props.voteCard && <span data-cy='wait-for-votes' className={styles.justWait}>Waiting for the other players to vote...</span>}
                     {this.props.status === statusTypes.DISPLAY_ALL_VOTES && <button onClick={this.props.requestNextRound} data-cy='next-round'>Next round</button>}

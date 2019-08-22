@@ -2,9 +2,8 @@ const router = require('express').Router();
 const path = require('path');
 const auth = require('../middlewares/auth');
 const Room = require('../models/room');
-const { emitRooms, disconnectSocket, closeRoom, disconnectAllSockets } = require('../services/socket');
+const { emitRooms, disconnectSocket, closeRoom, disconnectAllSockets, getAllSockets } = require('../services/socket');
 
-let currentUsers = [];
 let db;
 
 const oauthClientId = process.env.CLIENT_ID;
@@ -25,14 +24,13 @@ router.get("/oauth", (req, res) => {
             const username = githubUser.login;
             db.createGithubUser(username)
             .then(user => {
-                if (currentUsers.some(user => user.username === username)) {
+                if (getAllSockets().some(socket => socket.handshake.session.user.username === username)) {
                     res.status(400).json({ message: "You are already logged in this account from another computer." });
                 } else {
                     const real = true;
                     const id = user.dataValues.id;
                     req.session.user = { username, id, real };
                     req.session.roomId = null;
-                    currentUsers.push({ username });
                     res.header("Location", redirectURL);
                     res.sendStatus(302);
                 }
@@ -71,7 +69,6 @@ router.post('/auth/signup', (req, res) => {
         const id = user.dataValues.id;
         req.session.user = { username, id, real };
         req.session.roomId = null;
-        currentUsers.push({ username });
         res.sendStatus(200);
     }).catch(err => {
         console.error(err);
@@ -84,14 +81,13 @@ router.post('/auth/login', (req, res) => {
     const { username, password } = req.body;    
     db.validatePassword(username, password)
     .then(user => {
-        if (currentUsers.some(user => user.username === username)) {
+        if (getAllSockets().some(socket => socket.handshake.session.user.username === username)) {
             res.status(400).json({ message: "You are already logged in this account from another computer." });
         } else {
             const real = true;
             const id = user.dataValues.id;
             req.session.user = { username, id, real };
             req.session.roomId = null;
-            currentUsers.push({ username });
             res.sendStatus(200);
         }
     }).catch(err => {
@@ -111,7 +107,6 @@ router.post('/auth/logout', auth, (req, res) => {
         }
         disconnectSocket(user.username);
         req.session.destroy();
-        currentUsers = currentUsers.filter(otherUser => otherUser.username !== user.username);
         res.sendStatus(200);
     } catch (err) {
         console.error(err);
@@ -233,7 +228,6 @@ router.post('/api/vote-card', auth, (req, res) => {
 if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {
         db.reset();
-        currentUsers = [];
         disconnectAllSockets();
         Room.reset();
         req.session.destroy();
