@@ -100,3 +100,9 @@ button:hover {
     border-width: 0 1vh 2vh 1vh;
     border-color: transparent transparent rgba(0, 0, 0, 1) transparent;
 }
+
+@media screen and (max-height: 900px) {
+    :root {
+        z-index: -1;
+    }
+}
