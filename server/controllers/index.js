@@ -81,9 +81,6 @@ router.post('/auth/login', (req, res) => {
     const { username, password } = req.body;    
     db.validatePassword(username, password)
     .then(user => {
-        getAllSockets().forEach(socket => {
-            console.log(socket.handshake.session.user);
-        })
         if (getAllSockets().some(socket => socket.handshake.session.user.username === username)) {
             res.status(400).json({ message: "You are already logged in this account from another computer." });
         } else {
