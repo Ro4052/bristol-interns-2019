@@ -79,11 +79,8 @@
     }
     .lobbyChat {
         width: 80%;
-        height: 60%;
-        position: absolute;
+        height: 60vh;
         z-index: 100;
-        top: 43%;
-        left: 10%;
         padding: 4vmin;
     }
 }
@@ -137,13 +134,11 @@
 
 .messageUsername {
     padding-right: 1vmin;
-    font-size: 3vmin;
     min-width: 20%;
 }
 
 .messageText {
     min-width: 80%;
-    font-size: 4vmin;
     border: 2px solid black;
     padding: 0.5vmin 2vmin;
     background-color: orange;
