@@ -50,7 +50,7 @@
 }
 
 .chat {
-    height: 62vh;
+    height: 60vh;
     display: flex;
     flex-direction: column;
     text-align: center;

@@ -47,6 +47,7 @@
     width: 80%;
     height: 50%;
     flex-direction: column;
+    align-content: center;
     justify-content: center;
     flex-wrap: wrap;
 }
@@ -61,7 +62,6 @@
 @media only screen and (max-width: 1500px) {
     .room {
         height: 300px;
-        width: auto;
         min-height: auto;
     }
     .roomHeader {
