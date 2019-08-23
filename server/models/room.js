@@ -1,8 +1,6 @@
 const { GameLogic } = require('../models/GameLogic');
 const roomNames = require('../../roomnames');
 
-console.log(roomNames);
-
 /** @type {{ roomId: number, gameState: GameLogic }[]} */
 let rooms = [];
 let latestRoomId = 0;
