@@ -1,5 +1,7 @@
 const { GameLogic } = require('../models/GameLogic');
-const dogBreeds = require('dog-breeds');
+const roomNames = require('../../roomnames');
+
+console.log(roomNames);
 
 /** @type {{ roomId: number, gameState: GameLogic }[]} */
 let rooms = [];
@@ -15,7 +17,7 @@ exports.create = numRounds => {
     const roomId = latestRoomId;
     latestRoomId++;
     const gameState = new GameLogic(roomId, numRounds);
-    rooms.push({ roomId, title: dogBreeds.random().name, gameState });
+    rooms.push({ roomId, title: roomNames[Math.floor(Math.random() * 78)], gameState });
     return roomId;
 };
 
