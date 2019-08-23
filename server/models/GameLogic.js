@@ -332,19 +332,21 @@ class GameLogic {
     calcScores () {
         const correctCard = this.state.playedCards.find(card => card.userId === this.state.currentPlayer.userId);
         const correctVotes = this.state.votes.filter(vote => vote.cardId === correctCard.cardId);
-        if ((correctVotes.length % this.state.votes.length) === 0) {
+        if (!(correctVotes.length % this.state.votes.length)) {
             this.state.players.forEach(player => {
-                if (player !== this.state.currentPlayer) player.score += 2
+                if (player.userId !== this.state.currentPlayer.userId) player.score += 2
             });
         } else {
             this.state.currentPlayer.score += 3;
             correctVotes.forEach(vote => this.state.players.find(player => player.username === vote.username).score += 3);
-            this.state.votes.filter(vote => vote.cardId !== correctCard.cardId).forEach(vote => {
+            this.state.votes
+            .filter(vote => vote.cardId !== correctCard.cardId)
+            .forEach(vote => {
                 const votedCard = this.state.playedCards.find(card => card.cardId === vote.cardId);
                 this.state.players.find(player => player.username === votedCard.username).score += 1;
             });
         }
-        this.update({ players: this.state.players });
+        this.update();
     }
 
     updateLabels(word) {
