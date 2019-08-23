@@ -20,7 +20,7 @@ export class Chat extends React.Component {
 
     componentDidMount() {
         this.scrollToBottom();
-        this.setState({ showChat: window.innerWidth > 1500 });
+        this.setState({ showChat: window.innerWidth > 1000 });
         window.addEventListener('resize', this.updateWindowDimensions);
     }
 

@@ -50,8 +50,7 @@
 }
 
 .chat {
-    width: 80%;
-    height: 450px;
+    height: 62vh;
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -69,6 +68,9 @@
 }
 
 @media only screen and (max-width: 1000px) {
+    .chat {
+        height: 450px;
+    }
     .gameChat {
         width: 80%;
         min-height: 400px;
