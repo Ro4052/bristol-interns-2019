@@ -27,8 +27,7 @@ class GameLogic {
             playedCards: [],
             /** @type {{ username: string, cardId: number }[]} */
             votes: [],
-            winner: null,
-            drawers: []
+            winners: []
         };
         this.roomId = roomId;
         this.rounds = numRounds;
@@ -41,11 +40,12 @@ class GameLogic {
     /* Update the game state */
     update(data = {}) {
         this.state = { ...this.state, ...data };
-        this.notifyObserver(this.state);
         socket.emitStatus(this.roomId, this.state.status);
         socket.emitPlayers(this.roomId, this.getPlayers());
         socket.emitPlayedCards(this.roomId, this.getPlayedCards());
         socket.emitWord(this.roomId, this.state.currentWord);
+        socket.emitWinners(this.roomId, this.state.winners);
+        this.notifyObserver(this.state);
     }
 
     /* Get current state of the game */
@@ -158,14 +158,11 @@ class GameLogic {
                 this.AIsPlayCardAndWord();
             }
         } else {
-            const winner = this.state.players.reduce((prev, current) => (prev.score > current.score) ? prev : current);
-            const drawers = this.calculateDrawers(winner.score);
-            if (drawers.length > 1) {
-                socket.emitDrawers(this.roomId, drawers);
-            } else {
-                socket.emitWinner(this.roomId, { username: winner.username });
-            }
-            this.update({ status: statusTypes.GAME_OVER });
+            const topScore = this.state.players.reduce((score, player) => player.score > score ? player.score : score, 0);
+            this.update({
+                status: statusTypes.GAME_OVER,
+                winners: this.state.players.filter(player => player.score === topScore).map(winner => ({ username: winner.username }))
+            });
         }
     }
 

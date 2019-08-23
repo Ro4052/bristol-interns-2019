@@ -6,14 +6,9 @@ import { setCurrentPlayer } from '../Players/PlayersActions';
 import { setCurrentWord, setStatus, setRoundNumber } from '../Dashboard/DashboardActions';
 import { resetChat } from '../Chat/ChatActions';
 
-export const setWinner = winner => ({
-    type: types.SET_WINNER,
-    winner
-});
-
-export const setDrawers = drawers => ({
-    type: types.SET_DRAWERS,
-    drawers
+export const setWinners = winners => ({
+    type: types.SET_WINNERS,
+    winners
 });
 
 export const backToLobby = () => dispatch => {
@@ -23,8 +18,7 @@ export const backToLobby = () => dispatch => {
     dispatch(setCurrentWord(''));
     dispatch(setVotedCard(0));
     dispatch(resetWord());
-    dispatch(setWinner(null));
-    dispatch(setDrawers([]));
+    dispatch(setWinners([]));
     dispatch(resetChat());
     history.push('/lobby');
 };

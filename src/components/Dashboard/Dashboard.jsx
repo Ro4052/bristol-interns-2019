@@ -18,8 +18,8 @@ export class Dashboard extends React.Component {
     }
 
     render() {
-        const showPlayerInteractions = (!this.props.playWord || this.props.word || !this.props.playedCardId) && !(this.props.winner || this.props.drawers.length > 1);
-        const showPlayWord = this.props.playWord && !this.props.word && this.props.playedCardId && !(this.props.winner || this.props.drawers.length > 1);
+        const showPlayerInteractions = (!this.props.playWord || this.props.word || !this.props.playedCardId) && !(this.props.winners.length);
+        const showPlayWord = this.props.playWord && !this.props.word && this.props.playedCardId && !(this.props.winners.length);
         return (
             <div className={styles.dashboard}>
                 <div className={styles.main}>
@@ -34,7 +34,7 @@ export class Dashboard extends React.Component {
                         <div className={styles.interactions}>
                             {showPlayerInteractions && <PlayerInteractions />}
                             {showPlayWord && <PlayWord />}
-                            {(this.props.winner || this.props.drawers.length > 1) && <GameOver />}
+                            {(this.props.winners.length) && <GameOver />}
                             <div className={styles.circle1}/>
                             <div className={styles.circle2}/>
                             <div className={styles.circle3}/>
@@ -59,8 +59,7 @@ const mapStateToProps = state => ({
     playWord: state.playWordReducer.playWord,
     voteCard: state.playedCardsReducer.voteCard,
     playedCardId: state.myCardsReducer.playedCardId,
-    winner: state.gameOverReducer.winner,
-    drawers: state.gameOverReducer.drawers,
+    winners: state.gameOverReducer.winners,
     word: state.playWordReducer.word,
     playedCards: state.playedCardsReducer.cards
 });
