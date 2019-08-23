@@ -148,13 +148,8 @@ Cypress.Commands.add('nextRound', () => {
     cy.wait('@nextRound');
 });
 
-Cypress.Commands.add('newGame', () => {
-    cy.route({
-        method: 'GET',
-        url: '/api/end'
-    }).as('endGame');
-    cy.get('[data-cy="new-game"]').click();
-    cy.wait('@endGame');
+Cypress.Commands.add('backToLobby', () => {
+    cy.get('[data-cy="back-to-lobby"]').click();
 });
 
 Cypress.Commands.add('goToLeaderboard', () => {

@@ -14,7 +14,7 @@ export class GameOver extends React.Component {
                     ? <h2 data-cy='winner'>You win</h2>
                     : <h2>You lose<br/> Winner is <span data-cy='winner'>{this.props.winners[0].username}</span></h2>
                 }
-                <button onClick={this.props.backToLobby} data-cy="new-game" type='button'>Back to Lobby</button>
+                <button onClick={this.props.backToLobby} data-cy="back-to-lobby" type='button'>Back to Lobby</button>
             </div>
         );
     }

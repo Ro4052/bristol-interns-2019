@@ -18,7 +18,7 @@ describe('Leaderboard', () => {
         });
     });
 
-    describe('on playing a whole game', () => {
+    describe.only('on playing a whole game', () => {
         beforeEach(() => {
             cy.login('unicorn')
             .then(() => cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`))
@@ -27,7 +27,7 @@ describe('Leaderboard', () => {
             .then(() => cy.startGame())
             .then(() => cy.playCardWord())
             .then(() => cy.get('[data-cy="game-over"]', { timeout: 20000 }))
-            .then(() => cy.newGame());
+            .then(() => cy.backToLobby());
         });
 
         it('updates the score of the player after a win', () => {

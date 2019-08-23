@@ -41,7 +41,7 @@ describe('Whole game', () => {
             .then(() => cy.joinRoom())
             .then(() => cy.startGame())
             .then(() => cy.get('[data-cy="game-over"]', { timeout: 20000 }))
-            .then(() => cy.newGame());
+            .then(() => cy.backToLobby());
         });
 
         it('redirects back to the lobby', () => {

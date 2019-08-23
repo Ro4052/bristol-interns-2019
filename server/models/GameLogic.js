@@ -116,16 +116,14 @@ class GameLogic {
         } else {
             const cards = cardsManager.assign(this.state.players, 6);
             const player = { username: user.username, id: user.id, cards, score: 0, real: user.real, finishedTurn: false };
-            const players = [...this.state.players, player];
-            this.update({ players });
+            this.update({ players: [...this.state.players, player] });
         }
     }
 
     /* Remove player from current game */
     quitGame(username) {
         if (this.state.status === statusTypes.NOT_STARTED && this.state.players.some(player => player.username === username)) {
-            const players = this.state.players.filter((otherPlayer) => otherPlayer.username !== username);
-            this.update({ players });
+            this.update({ players: this.state.players.filter((otherPlayer) => otherPlayer.username !== username) });
         } else {
             throw Error("Cannot log out of a running game.");
         }
@@ -334,7 +332,9 @@ class GameLogic {
         const correctCard = this.state.playedCards.find(card => card.userId === this.state.currentPlayer.userId);
         const correctVotes = this.state.votes.filter(vote => vote.cardId === correctCard.cardId);
         if ((correctVotes.length % this.state.votes.length) === 0) {
-            this.state.players.forEach(player => {if (player !== this.state.currentPlayer) player.score += 2});
+            this.state.players.forEach(player => {
+                if (player !== this.state.currentPlayer) player.score += 2
+            });
         } else {
             this.state.currentPlayer.score += 3;
             correctVotes.forEach(vote => this.state.players.find(player => player.username === vote.username).score += 3);
@@ -343,7 +343,7 @@ class GameLogic {
                 this.state.players.find(player => player.username === votedCard.username).score += 1;
             });
         }
-        this.update();
+        this.update({ players: this.state.players });
     }
 
     /* Clear entire game state */

@@ -7,6 +7,14 @@ const socket = require('../services/socket');
 let rooms = [];
 let latestRoomId = 0;
 
+let db;
+
+if (process.env.NODE_ENV === 'testing') {
+    db = require('../queries/testdb');
+} else {
+    db = require('../queries/db');
+}
+
 exports.getAll = () => rooms;
 
 exports.getById = roomId => rooms.find(room => room.roomId === roomId);
@@ -15,7 +23,12 @@ exports.isStarted = room => room.gameState.isStarted();
 
 const update = roomId => state => {
     const { status } = state;
+    const { gameState } = this.getById(roomId);
     if (status === statusTypes.GAME_OVER) {
+        gameState.getPlayers().forEach(player => {
+            db.updateScore(player.id, player.score)
+            .catch(err => console.error(err));
+        });
         socket.emitEndGame(roomId);
         socket.closeRoom(roomId);
         this.deleteById(roomId);
