@@ -59,7 +59,7 @@ describe('Players', () => {
             .then(() => cy.get('[data-cy="round-number"]', { timeout: 20000 }).should('contain', '2'));
         });
 
-        it('updates the scores', () => {
+        it.only('updates the scores', () => {
             cy.get('[data-cy="player-score"]').first().should('have.text', '0');
             cy.get('[data-cy="player-score"]').last().should('have.text', '3');
         });
