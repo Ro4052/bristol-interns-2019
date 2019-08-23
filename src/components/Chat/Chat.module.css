@@ -63,7 +63,7 @@
 }
 
 .chat > h1 {
-    font-size: 5vh;
+    font-size: 2.5em;
     margin: 1vmin;
 }
 
@@ -79,7 +79,6 @@
     }
     .lobbyChat {
         width: 80%;
-        height: 60vh;
         z-index: 100;
         padding: 4vmin;
     }
@@ -134,7 +133,6 @@
 
 .messageUsername {
     padding-right: 1vmin;
-    min-width: 20%;
 }
 
 .messageText {

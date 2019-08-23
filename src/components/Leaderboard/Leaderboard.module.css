@@ -15,8 +15,10 @@
 
 .leaderboard {
     height: 60vh;
+    width: 70vmin;
     display: flex;
     flex-direction: column;
+    align-items: center;
     padding: 10vmin 20vmin;
     font-size: 2em;
     overflow-y: auto;
