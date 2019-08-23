@@ -16,12 +16,10 @@ export class Chat extends React.Component {
         this.state = { showChat: true };
         this.toggleChat = this.toggleChat.bind(this);
         this.scrollToBottom = this.scrollToBottom.bind(this);
-        this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     }
 
     componentDidMount() {
         this.scrollToBottom();
-        this.updateWindowDimensions();        
         this.setState({ showChat: window.innerWidth > 1500 });
         window.addEventListener('resize', this.updateWindowDimensions);
     }
@@ -32,10 +30,6 @@ export class Chat extends React.Component {
 
     componentDidUpdate() {
         this.scrollToBottom();
-    }
-
-    updateWindowDimensions() {
-        this.setState({ showChat: window.innerWidth > 950 && this.state.showChat });
     }
 
     scrollToBottom() {
