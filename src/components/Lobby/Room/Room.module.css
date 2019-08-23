@@ -60,7 +60,8 @@
 
 @media only screen and (max-width: 1500px) {
     .room {
-        width: 40vh;
+        height: 300px;
+        width: auto;
         min-height: auto;
     }
     .roomHeader {
