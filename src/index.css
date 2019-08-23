@@ -20,6 +20,7 @@ body {
 :root {
   height: 100%;
   width: 100%;
+  position: relative;
   --blue: #43BCCD;
   --purple: #662E9B;
   --red: #EA3546;
@@ -99,10 +100,4 @@ button:hover {
 .arrowScrollbar::-webkit-scrollbar-button:single-button:vertical:decrement {
     border-width: 0 1vh 2vh 1vh;
     border-color: transparent transparent rgba(0, 0, 0, 1) transparent;
-}
-
-@media screen and (max-height: 900px) {
-    :root {
-        z-index: -1;
-    }
 }
