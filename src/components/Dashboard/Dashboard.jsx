@@ -25,7 +25,7 @@ export class Dashboard extends React.Component {
                 <div className={styles.main}>
                     <div className={styles.side}>
                         <div className={styles.gameInfo}>
-                            {this.props.status !== statusTypes.NOT_STARTED && <h2>Round: <span id="round-number" data-cy="round-number">{this.props.roundNum}</span></h2>}
+                            {this.props.status !== statusTypes.NOT_STARTED && <h2>Round: <span id="round-number" data-cy="round-number">{this.props.roundNum}/{this.props.rounds}</span></h2>}
                             <Players />
                         </div>
                         <Chat showOnDefault={false} />
@@ -54,6 +54,7 @@ export class Dashboard extends React.Component {
 const mapStateToProps = state => ({
     status: state.dashboardReducer.status,
     roundNum: state.dashboardReducer.roundNum,
+    rounds: state.dashboardReducer.rounds,
     playCard: state.myCardsReducer.playCard,
     playWord: state.playWordReducer.playWord,
     voteCard: state.playedCardsReducer.voteCard,

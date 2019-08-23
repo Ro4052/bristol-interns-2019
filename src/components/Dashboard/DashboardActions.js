@@ -5,9 +5,10 @@ export const setStatus = status => ({
     status
 });
 
-export const setRoundNumber = roundNum => ({
+export const setRoundNumber = (roundNum, rounds) => ({
     type: types.SET_ROUND_NUMBER,
-    roundNum
+    roundNum,
+    rounds
 });
 
 export const setCurrentWord = currentWord => ({

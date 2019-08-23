@@ -1,6 +1,6 @@
 describe('Vote for a card', () => {
     beforeEach(() => {
-        cy.login('unicorn')
+        cy.signup('unicorn', 'password')
         .then(() => cy.createRoom(3))
         .then(() => cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(Cypress.config().baseUrl)}`))
         .then(() => cy.get('[data-cy="room-title"]'))

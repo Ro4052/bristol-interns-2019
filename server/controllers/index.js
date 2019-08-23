@@ -2,16 +2,51 @@ const router = require('express').Router();
 const path = require('path');
 const auth = require('../middlewares/auth');
 const Room = require('../models/room');
-const { emitRooms, disconnectSocket, closeRoom, disconnectAllSockets } = require('../services/socket');
+const { emitRooms, disconnectSocket, closeRoom, disconnectAllSockets, getAllSockets } = require('../services/socket');
 
-let currentUsers = [];
 let db;
+
+const oauthClientId = process.env.CLIENT_ID;
+const oauthSecret = process.env.CLIENT_SECRET;
+const redirectURL = process.env.NODE_ENV === 'production' ? "/lobby" : "http://localhost:3000/lobby";
+const oAuthGithub = require('./oauth-github');
+const githubAuthoriser = oAuthGithub(oauthClientId, oauthSecret);
 
 if (process.env.NODE_ENV === 'testing') {
     db = require('../queries/testdb');
 } else {
     db = require('../queries/db');
 }
+
+router.get("/oauth", (req, res) => {
+    githubAuthoriser.authorise(req, (githubUser, token) => {
+        if (githubUser) {
+            const username = githubUser.login;
+            db.createGithubUser(username)
+            .then(user => {
+                if (getAllSockets().some(socket => socket.handshake.session.user.username === username)) {
+                    res.status(400).json({ message: "You are already logged in this account from another computer." });
+                } else {
+                    const real = true;
+                    const id = user.dataValues.id;
+                    req.session.user = { username, id, real };
+                    req.session.roomId = null;
+                    res.header("Location", redirectURL);
+                    res.sendStatus(302);
+                }
+            }).catch(err => {
+                console.error(err);
+                res.status(err.code).json({ message: err.message });
+            });
+        } else {
+            res.sendStatus(404);
+        }
+    });
+});
+
+router.get("/api/oauth/uri", (req, res) => {
+    res.status(200).json({ uri: githubAuthoriser.oAuthUri});
+});
 
 router.use('/api/room', require('./rooms'));
 
@@ -26,24 +61,39 @@ router.get('/auth', (req, res) => {
 });
 
 /* Log in the user */
+router.post('/auth/signup', (req, res) => {
+    const { username, password } = req.body;    
+    db.createUser(username, password)
+    .then(user => {
+        const real = true;
+        const id = user.dataValues.id;
+        req.session.user = { username, id, real };
+        req.session.roomId = null;
+        res.sendStatus(200);
+    }).catch(err => {
+        console.error(err);
+        res.status(err.code).json({ message: err.message });
+    });
+});
+
+/* Log in the user */
 router.post('/auth/login', (req, res) => {
-    const { username } = req.body;    
-    if (currentUsers.some(user => user.username === username)) {
-        res.status(400).json({ message: "A user with this username is currently in the game" });
-    } else {
-        db.createUser(username)
-        .then(users => {
+    const { username, password } = req.body;    
+    db.validatePassword(username, password)
+    .then(user => {
+        if (getAllSockets().some(socket => socket.handshake.session.user.username === username)) {
+            res.status(400).json({ message: "You are already logged in this account from another computer." });
+        } else {
             const real = true;
-            const id = users[0].dataValues.id;
+            const id = user.dataValues.id;
             req.session.user = { username, id, real };
             req.session.roomId = null;
-            currentUsers.push({ username });
             res.sendStatus(200);
-        }).catch(err => {
-            console.log(err);
-            res.status(400).json({ message: err.message });
-        });
-    }
+        }
+    }).catch(err => {
+        console.error(err);
+        res.status(err.code).json({ message: err.message });
+    });
 });
 
 /* Log out the user */
@@ -57,10 +107,9 @@ router.post('/auth/logout', auth, (req, res) => {
         }
         disconnectSocket(user.username);
         req.session.destroy();
-        currentUsers = currentUsers.filter(otherUser => otherUser.username !== user.username);
         res.sendStatus(200);
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(400).json({ message: err.message });
     }
 });
@@ -83,8 +132,8 @@ router.get('/api/all-players', (req, res) => {
     db.getUsers()
     .then(users => res.status(200).json(users))
     .catch(err => {
-        console.log(err);
-        res.status(400).json({ message: err.message });
+        console.error(err);
+        res.status(err.code).json({ message: err.message });
     });
 });
 
@@ -96,7 +145,7 @@ router.get('/api/start', auth, (req, res) => {
         emitRooms();
         res.sendStatus(200);
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(400).json({ message: err.message });
     }
 });
@@ -108,7 +157,7 @@ router.get('/api/nextRound', auth, (req, res) => {
         Room.getById(roomId).gameState.nextRound();
         res.sendStatus(200);
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(400).json({ message: err.message });
     }
 });
@@ -127,12 +176,12 @@ router.get('/api/end', auth, (req, res) => {
                 res.sendStatus(200);
             })
             .catch(err => {
-                console.log(err);
-                res.status(400).json({ message: err.message });
+                console.error(err);
+                res.status(err.code).json({ message: err.message });
             });
         });
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(400).json({ message: err.message });
     }
 });
@@ -145,7 +194,7 @@ router.post('/api/play-card-word', auth, (req, res) => {
         Room.getById(roomId).gameState.playCardAndWord(user.username, cardId, word); 
         res.sendStatus(200);
     } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate */
-        console.log(err);
+        console.error(err);
         res.status(400).json({ message: err.message });
     }
 });
@@ -170,7 +219,7 @@ router.post('/api/vote-card', auth, (req, res) => {
         Room.getById(roomId).gameState.voteCard(user.username, cardId)
         res.sendStatus(200);
     } catch (err) { /* Player attempts to vote for a card again or game status is not appropriate, or current player attempts to vote */
-        console.log(err);
+        console.error(err);
         res.status(400).json({ message: err.message });
     }
 });
@@ -179,7 +228,6 @@ router.post('/api/vote-card', auth, (req, res) => {
 if (process.env.NODE_ENV === 'testing') {
     router.post('/api/reset-server', (req, res) => {
         db.reset();
-        currentUsers = [];
         disconnectAllSockets();
         Room.reset();
         req.session.destroy();

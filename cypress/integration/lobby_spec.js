@@ -3,7 +3,7 @@ const url = Cypress.config().baseUrl;
 describe('Lobby', () => {
     describe('on clicking create room', () => {
         beforeEach(() => {
-            cy.login('unicorn');
+            cy.signup('unicorn', 'password');
             cy.createRoom(3);
         });
 
@@ -17,7 +17,7 @@ describe('Lobby', () => {
         describe('on clicking create room again', () => {
             it("doesn't create a new room", () => {
                 cy.createRoom(3);
-                cy.get('[data-cy="room"]').contains('Room: 0');
+                cy.get('[data-cy="room"]').should('have.length', 1);
             });
         });
 
@@ -58,7 +58,7 @@ describe('Lobby', () => {
         beforeEach(() => {
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
             .then(() => cy.request(`http://localhost:12346/createRoom?rounds=3&url=${encodeURIComponent(url)}`))
-            .then(() => cy.login('unicorn'));
+            .then(() => cy.signup('unicorn', 'password'));
         });
 
         it('displays the existing room', () => {
@@ -82,7 +82,6 @@ describe('Lobby', () => {
 
                 it('creates the room', () => {
                     cy.get('[data-cy="room"]').should('have.length', 2);
-                    cy.get('[data-cy="room-title"]').contains('Room: 1');
                 });
 
                 it('switches your room', () => {
@@ -99,7 +98,6 @@ describe('Lobby', () => {
 
                     it('deletes your room', () => {
                         cy.get('[data-cy="room"]').should('have.length', 1);
-                        cy.get('[data-cy="room"]').contains('Room: 0');
                     });
                 });
             });

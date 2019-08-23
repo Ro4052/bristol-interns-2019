@@ -1,0 +1,2 @@
+Black listed words so far:
+art, painting, artwork, drawing, illustration, stock photography, visual arts, picture, textile, mythology 

@@ -1,6 +1,5 @@
 .createRoom {
-    height: 25%;
-    font-size: 2vmin;
+    height: 200px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -9,24 +8,31 @@
     border: 2px solid black;
     border-radius: 1em;
     margin: 0 1em 1em 1em;
-    letter-spacing: 0.2em;
-    padding: 1em;
+    padding: 3vmin;
 }
 
 .createRoomHeader {
-    font-size: 4vmin;
-}
-
-.createRoomButton {
-    font-size: 3vmin;
+    font-size: 2em;
+    margin: 2vmin;
 }
 
 .createRoomForm {
-    height: 50%;
+    width: 100%;
     display: flex;
+    justify-content: center;
     align-items: center;
 }
 
 .selectRounds {
-    font-size: 2vmin;
+    font-size: 2em;
+}
+
+.createRoomButton {
+    font-size: 2em;
+}
+
+@media only screen and (max-width: 1000px) {
+    .createRoom {
+        width: 80%;
+    }
 }

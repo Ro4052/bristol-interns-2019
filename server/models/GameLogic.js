@@ -1,7 +1,7 @@
 const cardsManager = require('../services/cardsManager');
 const socket = require('../services/socket');
 const { statusTypes } = require('./statusTypes');
-const AI = require('../services/AI');
+const AI = require('../services/AI/AI');
 
 // Set durations
 const promptDuration = process.env.NODE_ENV === 'testing' ? 4000 : 30000;
@@ -151,7 +151,7 @@ class GameLogic {
             this.setStatus(statusTypes.WAITING_FOR_CURRENT_PLAYER);
             this.roundNum++;
             this.currentPlayer = this.players[this.roundNum % this.players.length];
-            socket.emitNewRound(this.roomId, this.status, this.roundNum, this.currentPlayer, storytellerDuration);
+            socket.emitNewRound(this.roomId, this.status, this.roundNum, this.rounds, this.currentPlayer, storytellerDuration);
             this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), storytellerDuration);
             if (!this.currentPlayer.real) {
                 this.AIsPlayCardAndWord();
@@ -171,9 +171,12 @@ class GameLogic {
     /*AIs play card and word*/
     AIsPlayCardAndWord() {
         const cards = this.getUnplayedCardsByUsername(this.currentPlayer.username);
-        const cardId = AI.autoPickCard(cards);
-        const word = AI.autoWord();
-        this.playCardAndWord(this.currentPlayer.username, cardId, word);
+        const cardId = AI.pickRandomCard(cards);
+        AI.autoWord(cardId).then((word) => {
+            this.playCardAndWord(this.currentPlayer.username, cardId, word);
+        }).catch( error => {
+            console.error(error);
+        });
     }
 
     calculateDrawers(topscore) {
@@ -209,8 +212,8 @@ class GameLogic {
             throw Error("You cannot play a word and a card when it is not your turn.");
         } else if (word.trim().length <= 0) {
             throw Error("Word cannot be empty.");
-        } else if (word.trim().length > 15) {
-            throw Error("Word cannot be longer than 15 characters.");
+        } else if (word.trim().length > 25) {
+            throw Error("Word cannot be longer than 25 characters.");
         } else {
             clearTimeout(this.nextRoundTimeout);
             this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
@@ -232,7 +235,7 @@ class GameLogic {
         this.players.forEach(player => {
             if (!player.real && !this.isCurrentPlayer(player.username)) {
                 const cards = this.getUnplayedCardsByUsername(player.username);
-                const cardId = AI.autoPickCard(cards);
+                const cardId = AI.pickRandomCard(cards);
                 this.playCard(player.username, cardId);
             }
         });
@@ -248,9 +251,9 @@ class GameLogic {
     playRandomCards() {
         this.players.forEach(player => {
             if (!this.hasPlayedCard(player.username)) {
-                const cards = this.getCardsByUsername(player.username);
-                const randomCard = cards[Math.floor(Math.random()*cards.length)];
-                this.playCard(player.username, randomCard.cardId); 
+                const cards = this.getUnplayedCardsByUsername(player.username);
+                const cardId = AI.pickRandomCard(cards);
+                this.playCard(player.username, cardId); 
             }
         });
     }
@@ -304,7 +307,7 @@ class GameLogic {
         this.players.forEach(player => {
             if (!player.real && !this.isCurrentPlayer(player.username)) {
                 const cards = this.getPlayedCards();
-                const cardId = AI.autoPickCard(cards);
+                const cardId = AI.pickRandomCard(cards);
                 this.voteCard(player.username, cardId);
             }
         });
@@ -335,6 +338,7 @@ class GameLogic {
         this.setStatus(statusTypes.DISPLAY_ALL_VOTES);
         socket.emitPlayedCards(this.roomId, this.getPlayedCards());
         this.calcScores();
+        this.updateLabels(this.currentWord);
         this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), nextRoundDuration);
     };
 
@@ -353,6 +357,15 @@ class GameLogic {
             });
         }
         socket.emitPlayers(this.roomId, this.getPlayers());
+    }
+
+    updateLabels(word) {
+        this.playedCards.forEach(card => {
+            const cardScore = this.votes.filter(vote => card.cardId === vote.cardId && this.players.find(player => player.username === vote.username).real).length;
+            if (cardScore >= 2) {
+                AI.addLabel(card.cardId, word);
+            }
+        });
     }
 
     /* Clear entire game state */

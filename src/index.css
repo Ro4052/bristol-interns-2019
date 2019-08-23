@@ -1,22 +1,8 @@
 @font-face {
-  font-family: 'NotoSerif';
-  font-style: normal;
-  font-weight: normal;
-  src: local('NotoSerif'), url('./fonts/NotoSerif-Regular.ttf') format('truetype');
-}
-
-@font-face {
   font-family: 'Teko';
   font-style: normal;
   font-weight: normal;
   src: local('Teko'), url('./fonts/Teko-Regular.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'FutureTimeSplitters';
-  font-style: normal;
-  font-weight: normal;
-  src: local('FutureTimeSplitters'), url('./fonts/Future_TimeSplitters.otf') format('opentype');
 }
 
 * {
@@ -25,6 +11,7 @@
 
 body {
   height: 100%;
+  width: 100%;
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -32,6 +19,8 @@ body {
 
 :root {
   height: 100%;
+  width: 100%;
+  position: relative;
   --blue: #43BCCD;
   --purple: #662E9B;
   --red: #EA3546;
@@ -42,18 +31,14 @@ body {
   --golden: rgba(73, 57, 4, 0.8);
   --lighter-black: rgba(0, 0, 0, 0.8);
   --main-font: 'Teko';
-  --secondary-font: 'NotoSerif';
 }
 
 #root {
   height: 100%;
+  width: 100%;
   font-family: var(--main-font);
   background-color: var(--dark-orange);
   background-size: cover;
-}
-
-::placeholder {
-    color: var(--golden);
 }
 
 ul {
@@ -62,40 +47,57 @@ ul {
     padding: 0;
 }
 
-input {
-    padding: 1em;
-    background-color: var(--yellow);
-    border: 3px solid black;
-    border-radius: 15px;
+input, button, select {
     outline: none;
+    font-size: 1.5em;
+    color: var(--lighter-black);
+    margin: 1vmin;
+    border: 2px solid var(--lighter-black);
+    border-radius: 0.6em;
+    font-family: var(--main-font);
+    padding: 0.2em 0.5em;
+}
+
+input {
+    background-color: var(--yellow);
+}
+
+input::placeholder {
+    color: var(--golden);
 }
 
 select {
-    font-size: 1.5em;
-    padding: 0.2em;
-    margin: 1em;
     background: #fff;
-    border: 2px solid black;
-    border-radius: 6px;
-    font-family: var(--secondary-font);
 }
 
 button {
     background-color: var(--dark-orange);
-    border: 2px solid var(--lighter-black);
-    border-radius: 20px;
-    color: var(--lighter-black);
-    font-family: var(--main-font);
     cursor: pointer;
-    letter-spacing: 0.15em;
-    font-size: 3vmin;
-    outline: none;
-    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.5);
-    padding: 0.2em 0.5em;
-    margin: 0.5em;
+    box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.5);
 }
 
-button:hover,
-button:focus {
+button:hover {
     background-color: var(--light-orange);
+}
+
+/*  SCROLLBARS */
+
+.arrowScrollbar::-webkit-scrollbar {
+    height: 2vh;
+}
+
+.arrowScrollbar::-webkit-scrollbar-button:single-button {
+    display: block;
+    border-style: solid;
+    width: 2vh;
+}
+
+.arrowScrollbar::-webkit-scrollbar-button:single-button:vertical:increment {
+    border-width: 2vh 1vh 0 1vh;
+    border-color: rgba(0, 0, 0, 1) transparent transparent;
+}
+
+.arrowScrollbar::-webkit-scrollbar-button:single-button:vertical:decrement {
+    border-width: 0 1vh 2vh 1vh;
+    border-color: transparent transparent rgba(0, 0, 0, 1) transparent;
 }

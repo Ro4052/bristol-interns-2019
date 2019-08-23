@@ -5,18 +5,24 @@
     justify-content: center;
     align-items: center;
 }
-    
+
+.scrollbarPadding {
+    background-color: white;
+    border: 5px solid black;
+    border-radius: 20px;
+    padding: 1em;
+}
+
 .leaderboard {
     height: 60vh;
+    width: 70vmin;
     display: flex;
     flex-direction: column;
+    align-items: center;
     padding: 10vmin 20vmin;
-    background-color: white;
     font-size: 2em;
     overflow-y: auto;
     list-style: none;
-    border: 5px solid black;
-    border-radius: 20px;
 }
 
 .leaderboardHeader {
