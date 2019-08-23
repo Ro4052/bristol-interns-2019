@@ -20,6 +20,7 @@
     flex-grow: 1;
     display: flex;
     flex-direction: row;
+    background-color: var(--dark-orange);
 }
 
 .gameInfo {
@@ -33,7 +34,7 @@
 }
 
 .gameInfo > h2 {
-    font-size: 4vh;
+    font-size: 1.5em;
     text-align: center;
 }
 
@@ -60,7 +61,7 @@
     justify-content: flex-end;
 }
 
-@media only screen and (max-width: 1000px) {
+@media screen and (max-width: 1000px) {
     .side {
         width: 100%;
         display: flex;
@@ -74,11 +75,23 @@
         align-items: center;
     }
     .main {
-        height: 80%;
         flex-direction: column;
     }
     .interactions {
         height: 40%;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .main {
+        height: 600px;
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-height: 500px) {
+    .dashboard {
+        height: auto;
     }
 }
 
