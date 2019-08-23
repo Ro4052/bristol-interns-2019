@@ -1,5 +1,7 @@
 const { GameLogic } = require('../models/GameLogic');
+const { statusTypes } = require('./statusTypes');
 const dogBreeds = require('dog-breeds');
+const socket = require('../services/socket');
 
 /** @type {{ roomId: number, gameState: GameLogic }[]} */
 let rooms = [];
@@ -9,12 +11,21 @@ exports.getAll = () => rooms;
 
 exports.getById = roomId => rooms.find(room => room.roomId === roomId);
 
-exports.isStarted = room => room.gameState.status !== 'NOT_STARTED';
+exports.isStarted = room => room.gameState.isStarted();
+
+const update = roomId => state => {
+    const { status } = state;
+    if (status === statusTypes.GAME_OVER) {
+        socket.emitEndGame(roomId);
+        socket.closeRoom(roomId);
+        this.deleteById(roomId);
+    }
+}
 
 exports.create = numRounds => {
     const roomId = latestRoomId;
     latestRoomId++;
-    const gameState = new GameLogic(roomId, numRounds);
+    const gameState = new GameLogic(update(roomId), roomId, numRounds);
     rooms.push({ roomId, title: dogBreeds.random().name, gameState });
     return roomId;
 };

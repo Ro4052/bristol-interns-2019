@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styles from './GameOver.module.css';
-import { endGame } from './GameOverActions';
+import { backToLobby } from './GameOverActions';
 
 export class GameOver extends React.Component {
     render() {
@@ -14,7 +14,7 @@ export class GameOver extends React.Component {
                     ? <h2 data-cy='winner'>You win</h2>
                     : <h2>You lose<br/> Winner is <span data-cy='winner'>{this.props.winner.username}</span></h2>
                 }
-                <button onClick={this.props.endGame} data-cy="new-game" type='button'>Back to Lobby</button>
+                <button onClick={this.props.backToLobby} data-cy="new-game" type='button'>Back to Lobby</button>
             </div>
         );
     }
@@ -27,7 +27,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    endGame: () => dispatch(endGame())
+    backToLobby: () => dispatch(backToLobby())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameOver);

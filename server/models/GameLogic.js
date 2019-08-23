@@ -14,107 +14,118 @@ exports.minPlayers = minPlayers;
 exports.maxPlayers = maxPlayers;
 
 class GameLogic {
-    constructor(roomId, numRounds) {
+    constructor(notifyObserver, roomId, numRounds) {
+        this.notifyObserver = notifyObserver;
+        this.state = {
+            status: statusTypes.NOT_STARTED,
+            roundNum: 0,
+            currentPlayer: null,
+            currentWord: '',
+            /** @type {{ username: string, id: number, cards: {{ cardId: number, played: bool }[]}, score: number, real: bool }[]} */
+            players: [],
+            /** @type {{ username: string, cardId: number }[]} */
+            playedCards: [],
+            /** @type {{ username: string, cardId: number }[]} */
+            votes: [],
+            winner: null,
+            drawers: []
+        };
         this.roomId = roomId;
         this.rounds = numRounds;
-        this.status = statusTypes.NOT_STARTED;
-        this.roundNum = 0;
-        this.currentPlayer = null;
-        this.currentWord = '';
-        /** @type {{ username: string, id: number, cards: {{ cardId: number, played: bool }[]}, score: number, real: bool }[]} */
-        this.players = [];
-        /** @type {{ username: string, cardId: number }[]} */
-        this.playedCards = [];
-        /** @type {{ username: string, cardId: number }[]} */
-        this.votes = [];
-
-        // Initialise timers
         this.playRandomCardsTimeout = null;
         this.displayCardsTimeout = null;
         this.voteTimeout = null;
         this.nextRoundTimeout = null;
     }
 
-    /* Set the status of the game */
-    setStatus(status) {
-        this.status = status;
-        socket.emitStatus(this.roomId, this.status);
-    };
+    /* Update the game state */
+    update(data = {}) {
+        this.state = { ...this.state, ...data };
+        this.notifyObserver(this.state);
+        socket.emitStatus(this.roomId, this.state.status);
+        socket.emitPlayers(this.roomId, this.getPlayers());
+        socket.emitPlayedCards(this.roomId, this.getPlayedCards());
+        socket.emitWord(this.roomId, this.state.currentWord);
+    }
 
     /* Get current state of the game */
     getState(username) {
-        if (this.status === statusTypes.GAME_OVER) {
+        if (this.state.status === statusTypes.GAME_OVER) {
             throw Error('This game has ended');
-        } else if (this.status === statusTypes.NOT_STARTED) {
+        } else if (this.state.status === statusTypes.NOT_STARTED) {
             throw Error('This game has not started');
         } else return {
             playedCards: this.getPlayedCards(),
-            playCard: (!this.hasPlayedCard(username) && this.currentPlayer.username === username && this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER)
-                    || (!this.hasPlayedCard(username) && this.status === statusTypes.WAITING_FOR_OTHER_PLAYERS),
-            playWord: this.currentPlayer.username === username && !this.currentWord && this.status === statusTypes.WAITING_FOR_CURRENT_PLAYER,
-            voteCard: !this.hasVoted(username) && this.currentPlayer.username !== username && this.status === statusTypes.WAITING_FOR_VOTES,
-            currentPlayer: { username: this.currentPlayer.username }
+            playCard: (!this.hasPlayedCard(username) && this.state.currentPlayer.username === username && this.state.status === statusTypes.WAITING_FOR_CURRENT_PLAYER)
+                    || (!this.hasPlayedCard(username) && this.state.status === statusTypes.WAITING_FOR_OTHER_PLAYERS),
+            playWord: this.state.currentPlayer.username === username && !this.state.currentWord && this.state.status === statusTypes.WAITING_FOR_CURRENT_PLAYER,
+            voteCard: !this.hasVoted(username) && this.state.currentPlayer.username !== username && this.state.status === statusTypes.WAITING_FOR_VOTES,
+            currentPlayer: { username: this.state.currentPlayer.username }
         }
     }
 
+    isStarted() { return this.state.status !== statusTypes.NOT_STARTED };
+
+    hasMinPlayers() { return this.state.players.length < minPlayers };
+
     /* Returns true if this is the current player */
-    isCurrentPlayer(username) { return this.currentPlayer.username === username };
+    isCurrentPlayer(username) { return this.state.currentPlayer.username === username };
 
     /* Get the list of cards for a specific player */
-    getCardsByUsername(username) { return this.players.find(player => player.username === username).cards };
+    getCardsByUsername(username) { return this.state.players.find(player => player.username === username).cards };
 
     /* Get the list of unplayed cards for a specific player */
-    getUnplayedCardsByUsername(username) { return this.players.find(player => player.username === username).cards.filter(card => !card.played) };
+    getUnplayedCardsByUsername(username) { return this.state.players.find(player => player.username === username).cards.filter(card => !card.played) };
 
     /* Return the list of players, hiding their assigned cards */
-    getPlayers() { return this.players.map(player => ({ username: player.username, id: player.id, score: player.score, finishedTurn: player.finishedTurn, real: player.real })) };
+    getPlayers() { return this.state.players.map(player => ({ username: player.username, id: player.id, score: player.score, finishedTurn: player.finishedTurn, real: player.real })) };
 
-    getNumberOfAIPlayers() { return this.players.filter(player => !player.real).length };
+    getNumberOfAIPlayers() { return this.state.players.filter(player => !player.real).length };
     
     /* Return the list of cards played this round, hiding who played them */
     getPlayedCards() {
-        if (this.status === statusTypes.WAITING_FOR_VOTES) {
-            return this.playedCards.map(card => ({ cardId: card.cardId }));
-        } else if (this.status === statusTypes.DISPLAY_ALL_VOTES) {
-            return this.playedCards.map(card => ({...card, votes: this.votes.filter(vote => vote.cardId === card.cardId)}));
+        if (this.state.status === statusTypes.WAITING_FOR_VOTES) {
+            return this.state.playedCards.map(card => ({ cardId: card.cardId }));
+        } else if (this.state.status === statusTypes.DISPLAY_ALL_VOTES) {
+            return this.state.playedCards.map(card => ({...card, votes: this.state.votes.filter(vote => vote.cardId === card.cardId)}));
         } else {
-            return this.playedCards.map(() => ({}));
+            return this.state.playedCards.map(() => ({}));
         }
     };
 
     /* Return true if the player has already played this round */
-    hasPlayedCard(username) { return this.playedCards.some(card => card.username === username) };
+    hasPlayedCard(username) { return this.state.playedCards.some(card => card.username === username) };
 
     /* Return true if the player has already voted this round */
-    hasVoted(username) { return this.votes.some(vote => vote.username === username) };
+    hasVoted(username) { return this.state.votes.some(vote => vote.username === username) };
 
     /* Returns true if all players have played a card this round */
-    allPlayersPlayedCard () { return this.players.every(player => this.hasPlayedCard(player.username)) };
+    allPlayersPlayedCard() { return this.state.players.every(player => this.hasPlayedCard(player.username)) };
 
     /* Returns true if all players (apart from the current player) have voted this round */
-    allPlayersVoted() { return this.players.every(player => player.username === this.currentPlayer.username || this.hasVoted(player.username)) };
+    allPlayersVoted() { return this.state.players.every(player => player.username === this.state.currentPlayer.username || this.hasVoted(player.username)) };
 
     /* Add the player to the game if possible */
     joinGame(user) {
-        if (this.status !== statusTypes.NOT_STARTED) {
+        if (this.state.status !== statusTypes.NOT_STARTED) {
             throw Error("Game has already started");
-        } else if (this.players.some(player => player.username === user.username)) {
+        } else if (this.state.players.some(player => player.username === user.username)) {
             throw Error("You have already joined this game");
-        } else if (this.players.length === maxPlayers) {
+        } else if (this.state.players.length === maxPlayers) {
             throw Error("The room has reached its capacity");
         } else {
-            const cards = cardsManager.assign(this.players, 6);
+            const cards = cardsManager.assign(this.state.players, 6);
             const player = { username: user.username, id: user.id, cards, score: 0, real: user.real, finishedTurn: false };
-            this.players.push(player);
-            socket.emitPlayers(this.roomId, this.getPlayers());
+            const players = [...this.state.players, player];
+            this.update({ players });
         }
     }
 
     /* Remove player from current game */
     quitGame(username) {
-        if (this.status === statusTypes.NOT_STARTED && this.players.some(player => player.username === username)) {
-            this.players = this.players.filter((otherPlayer) => otherPlayer.username !== username);
-            socket.emitPlayers(this.roomId, this.getPlayers());
+        if (this.state.status === statusTypes.NOT_STARTED && this.state.players.some(player => player.username === username)) {
+            const players = this.state.players.filter((otherPlayer) => otherPlayer.username !== username);
+            this.update({ players });
         } else {
             throw Error("Cannot log out of a running game.");
         }
@@ -122,9 +133,9 @@ class GameLogic {
 
     /* Start the game with the players that have joined */
     startGame() {
-        if (this.status !== statusTypes.NOT_STARTED) {
+        if (this.isStarted()) {
             throw Error("Game has already started");
-        } else if (this.players.length < minPlayers) {
+        } else if (this.hasMinPlayers()) {
             throw Error("Insufficient number of players");
         } else {
             socket.emitStartGame(this.roomId);
@@ -132,77 +143,67 @@ class GameLogic {
         }
     }
 
-    /* End the game */
-    endGame() {
-        if (this.status === statusTypes.GAME_OVER) {
-            socket.emitEndGame(this.roomId);
-            this.clearGameState();
-        } else {
-            throw Error("Cannot end game. Game is currently running");
-        } 
-    }
-
     /* Move on to the next round, called when all players have finished their turn */
     nextRound() {
         clearTimeout(this.nextRoundTimeout);
-        if (this.roundNum < this.rounds) {
+        if (this.state.roundNum < this.rounds) {
             this.clearRoundData();
             this.clearFinishedTurn();
-            this.setStatus(statusTypes.WAITING_FOR_CURRENT_PLAYER);
-            this.roundNum++;
-            this.currentPlayer = this.players[this.roundNum % this.players.length];
-            socket.emitNewRound(this.roomId, this.status, this.roundNum, this.rounds, this.currentPlayer, storytellerDuration);
+            this.update({ status: statusTypes.WAITING_FOR_CURRENT_PLAYER });
+            this.state.roundNum++;
+            this.state.currentPlayer = this.state.players[this.state.roundNum % this.state.players.length];
+            socket.emitNewRound(this.roomId, this.state.status, this.state.roundNum, this.rounds, this.state.currentPlayer, storytellerDuration);
             this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), storytellerDuration);
-            if (!this.currentPlayer.real) {
+            if (!this.state.currentPlayer.real) {
                 this.AIsPlayCardAndWord();
             }
         } else {
-            this.setStatus(statusTypes.GAME_OVER);
-            const winner = this.players.reduce((prev, current) => (prev.score > current.score) ? prev : current);
+            const winner = this.state.players.reduce((prev, current) => (prev.score > current.score) ? prev : current);
             const drawers = this.calculateDrawers(winner.score);
             if (drawers.length > 1) {
                 socket.emitDrawers(this.roomId, drawers);
             } else {
                 socket.emitWinner(this.roomId, { username: winner.username });
             }
+            this.update({ status: statusTypes.GAME_OVER });
         }
     }
 
     /*AIs play card and word*/
     AIsPlayCardAndWord() {
-        const cards = this.getUnplayedCardsByUsername(this.currentPlayer.username);
+        const cards = this.getUnplayedCardsByUsername(this.state.currentPlayer.username);
         const cardId = AI.pickRandomCard(cards);
         AI.autoWord(cardId).then((word) => {
-            this.playCardAndWord(this.currentPlayer.username, cardId, word);
+            this.playCardAndWord(this.state.currentPlayer.username, cardId, word);
         }).catch( error => {
             console.error(error);
         });
     }
 
     calculateDrawers(topscore) {
-        return this.players.reduce((accumulator, current) => current.score === topscore ? [...accumulator, current] : accumulator, []);
+        return this.state.players.reduce((accumulator, current) => current.score === topscore ? [...accumulator, current] : accumulator, []);
     };
 
     /* Clean up stored data */
     clearRoundData() {
-        this.currentWord = '';
-        this.playedCards = [];
-        this.votes = [];
+        this.state.currentWord = '';
+        this.state.playedCards = [];
+        this.state.votes = [];
     }
 
     /* Clears the bool for finished turn */
     clearFinishedTurn() {
-        this.players.forEach(player => player.finishedTurn = false);
-        socket.emitPlayers(this.roomId, this.getPlayers());
+        const players = this.state.players.map(player => ({ ...player, finishedTurn: false }));
+        this.update({ players });
     }
 
     /* The storyteller plays a card and a word */
     playCardAndWord(username, cardId, word) {
-        if (this.status !== statusTypes.WAITING_FOR_CURRENT_PLAYER) {
+        if (this.state.status !== statusTypes.WAITING_FOR_CURRENT_PLAYER) {
             throw Error("Now is not the right time to play a card and a word");
         } else if (this.hasPlayedCard(username)) {
             throw Error("You cannot play more than one card and one word");
-        } else if (username !== this.currentPlayer.username) {
+        } else if (username !== this.state.currentPlayer.username) {
             throw Error("You cannot play a word and a card when it is not your turn.");
         } else if (word.trim().length <= 0) {
             throw Error("Word cannot be empty.");
@@ -212,13 +213,13 @@ class GameLogic {
             clearTimeout(this.nextRoundTimeout);
             this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
             const card = { username, cardId };
-            this.playedCards.push(card);
-            socket.emitPlayedCards(this.roomId, this.getPlayedCards());
-            this.setStatus(statusTypes.WAITING_FOR_OTHER_PLAYERS);
-            this.currentWord = word;
-            socket.emitWord(this.roomId, this.currentWord);
+            this.update({
+                status: statusTypes.WAITING_FOR_OTHER_PLAYERS,
+                playedCards: [...this.state.playedCards, card],
+                currentWord: word
+            });
             this.markTurnAsFinished(username);
-            socket.promptOtherPlayers(this.roomId, this.currentPlayer, promptDuration);
+            socket.promptOtherPlayers(this.roomId, this.state.currentPlayer, promptDuration);
             this.AIsPlayCard();
             this.playRandomCardsTimeout = setTimeout(this.playRandomCards.bind(this), promptDuration);
         }
@@ -226,7 +227,7 @@ class GameLogic {
 
     /* AIs play a card */
     AIsPlayCard() {
-        this.players.forEach(player => {
+        this.state.players.forEach(player => {
             if (!player.real && !this.isCurrentPlayer(player.username)) {
                 const cards = this.getUnplayedCardsByUsername(player.username);
                 const cardId = AI.pickRandomCard(cards);
@@ -237,13 +238,13 @@ class GameLogic {
 
     /* Mark the player's turn as finished and notify the other players */
     markTurnAsFinished(username) {
-        this.players.find(player => player.username === username).finishedTurn = true;
-        socket.emitPlayers(this.roomId, this.getPlayers());
+        this.state.players.find(player => player.username === username).finishedTurn = true;
+        this.update();
     }
 
     /* Random card pushed if player does not submit in time*/
     playRandomCards() {
-        this.players.forEach(player => {
+        this.state.players.forEach(player => {
             if (!this.hasPlayedCard(player.username)) {
                 const cards = this.getUnplayedCardsByUsername(player.username);
                 const cardId = AI.pickRandomCard(cards);
@@ -254,22 +255,23 @@ class GameLogic {
 
     /* Draws a new card for the player's hand */
     newCard() {
-        this.players.forEach(player => {
-            const newCard = cardsManager.assign(this.players, 1);
+        this.state.players.forEach(player => {
+            const newCard = cardsManager.assign(this.state.players, 1);
             player.cards.push(newCard[0]);
         });
     }
 
     /* Adds player's card to list of played cards */
     playCard(username, cardId) {
-        if (this.status !== statusTypes.WAITING_FOR_OTHER_PLAYERS) {
+        if (this.state.status !== statusTypes.WAITING_FOR_OTHER_PLAYERS) {
             throw Error("Now is not the right time to play a card");
         } else if (this.hasPlayedCard(username)) {
             throw Error("You cannot play more than one card");
         } else {
             const card = { username, cardId };
-            this.playedCards.push(card);
-            socket.emitPlayedCards(this.roomId, this.getPlayedCards());
+            this.update({
+                playedCards: [...this.state.playedCards, card]
+            });
             socket.emitPlayedCard(username, card);
             this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
             this.markTurnAsFinished(username);
@@ -281,24 +283,20 @@ class GameLogic {
         }
     }
 
-    /* Shuffle the cards */
-    shufflePlayedCards() {
-        this.playedCards = cardsManager.shuffle(this.playedCards);
-    }
-
     /* Emit the played cards for voting */
     emitPlayedCards() {
-        this.setStatus(statusTypes.WAITING_FOR_VOTES);
-        this.shufflePlayedCards();
-        socket.emitPlayedCards(this.roomId, this.getPlayedCards());
-        socket.promptPlayersVote(this.roomId, this.currentPlayer, voteDuration);
+        this.update({
+            status: statusTypes.WAITING_FOR_VOTES,
+            playedCards: cardsManager.shuffle(this.state.playedCards)
+        });
+        socket.promptPlayersVote(this.roomId, this.state.currentPlayer, voteDuration);
         this.AIsVote();
         this.voteTimeout = setTimeout(this.emitVotes.bind(this), voteDuration);
     };
 
     /* AI votes for a card */
     AIsVote() {
-        this.players.forEach(player => {
+        this.state.players.forEach(player => {
             if (!player.real && !this.isCurrentPlayer(player.username)) {
                 const cards = this.getPlayedCards();
                 const cardId = AI.pickRandomCard(cards);
@@ -309,15 +307,15 @@ class GameLogic {
 
     /* Vote for a card */
     voteCard(username, cardId) {
-        if (this.status !== statusTypes.WAITING_FOR_VOTES) {
+        if (this.state.status !== statusTypes.WAITING_FOR_VOTES) {
             throw Error("Now is not the right time to vote");
         } else if (this.hasVoted(username)) {
             throw Error("You cannot vote for a card more than once");
-        } else if (username === this.currentPlayer.username) {
+        } else if (username === this.state.currentPlayer.username) {
             throw Error("You cannot vote for a card when it is your turn.");
         } else {
             const vote = { username, cardId };
-            this.votes.push(vote);
+            this.state.votes.push(vote);
             this.markTurnAsFinished(username);
             if (this.allPlayersVoted()) {
                 clearTimeout(this.voteTimeout);
@@ -329,37 +327,36 @@ class GameLogic {
     /* Emit the votes to the players */
     emitVotes() {
         this.newCard();
-        this.setStatus(statusTypes.DISPLAY_ALL_VOTES);
-        socket.emitPlayedCards(this.roomId, this.getPlayedCards());
+        this.update({ status: statusTypes.DISPLAY_ALL_VOTES });
         this.calcScores();
         this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), nextRoundDuration);
     };
 
     /* Calculate the scores for this round */
     calcScores () {
-        const correctCard = this.playedCards.find(card => card.userId === this.currentPlayer.userId);
-        const correctVotes = this.votes.filter(vote => vote.cardId === correctCard.cardId);
-        if ((correctVotes.length % this.votes.length) === 0) {
-            this.players.forEach(player => {if (player !== this.currentPlayer) player.score += 2});
+        const correctCard = this.state.playedCards.find(card => card.userId === this.state.currentPlayer.userId);
+        const correctVotes = this.state.votes.filter(vote => vote.cardId === correctCard.cardId);
+        if ((correctVotes.length % this.state.votes.length) === 0) {
+            this.state.players.forEach(player => {if (player !== this.state.currentPlayer) player.score += 2});
         } else {
-            this.currentPlayer.score += 3;
-            correctVotes.forEach(vote => this.players.find(player => player.username === vote.username).score += 3);
-            this.votes.filter(vote => vote.cardId !== correctCard.cardId).forEach(vote => {
-                const votedCard = this.playedCards.find(card => card.cardId === vote.cardId);
-                this.players.find(player => player.username === votedCard.username).score += 1;
+            this.state.currentPlayer.score += 3;
+            correctVotes.forEach(vote => this.state.players.find(player => player.username === vote.username).score += 3);
+            this.state.votes.filter(vote => vote.cardId !== correctCard.cardId).forEach(vote => {
+                const votedCard = this.state.playedCards.find(card => card.cardId === vote.cardId);
+                this.state.players.find(player => player.username === votedCard.username).score += 1;
             });
         }
-        socket.emitPlayers(this.roomId, this.getPlayers());
+        this.update();
     }
 
     /* Clear entire game state */
     clearGameState() {
         this.clearAllTimeouts();
         this.clearRoundData();
-        this.status = statusTypes.NOT_STARTED;
-        this.currentPlayer = null;
-        this.roundNum = 0;
-        this.players = [];
+        this.state.status = statusTypes.NOT_STARTED;
+        this.state.currentPlayer = null;
+        this.state.roundNum = 0;
+        this.state.players = [];
     }
 
     /* Clear timeouts */

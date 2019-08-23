@@ -123,17 +123,7 @@ export const connectSocket = () => {
     });
 
     socket.on("end", () => {
-        dispatch(setStatus('NOT_STARTED'));
-        dispatch(setRoundNumber(0, 0));
-        dispatch(setCurrentPlayer(null));
-        dispatch(setCurrentWord(''));
         dispatch(setPlayedCards([]));
-        dispatch(setVotedCard(0));
-        dispatch(resetWord());
-        dispatch(setWinner(null));
-        dispatch(setDrawers([]));
-        dispatch(resetChat());
-        history.push('/lobby');
     });
 
     return new Promise((resolve, reject) => {

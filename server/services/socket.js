@@ -1,6 +1,5 @@
 const socketio = require('socket.io');
 const sharedsession = require("express-socket.io-session");
-const { statusTypes } = require('../models/statusTypes');
 const { minPlayers, maxPlayers } = require('../models/GameLogic');
 const Room = require("../models/room");
 
@@ -60,8 +59,8 @@ const emitRooms = () => {
     const rooms = Room.getAll().map(room => ({
         roomId: room.roomId,
         title: room.title,
-        started: room.gameState.status !== statusTypes.NOT_STARTED,
-        players: room.gameState.players,
+        started: room.gameState.isStarted(),
+        players: room.gameState.getPlayers(),
         minPlayers,
         maxPlayers
     }));
