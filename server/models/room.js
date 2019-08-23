@@ -23,15 +23,18 @@ exports.isStarted = room => room.gameState.isStarted();
 
 const update = roomId => state => {
     const { status } = state;
-    const { gameState } = this.getById(roomId);
-    if (status === statusTypes.GAME_OVER) {
-        gameState.getPlayers().forEach(player => {
-            db.updateScore(player.id, player.score)
-            .catch(err => console.error(err));
-        });
-        socket.emitEndGame(roomId);
-        socket.closeRoom(roomId);
-        this.deleteById(roomId);
+    const room = this.getById(roomId);
+    if (room) {
+        const { gameState } = room;
+        if (status === statusTypes.GAME_OVER) {
+            gameState.getPlayers().forEach(player => {
+                db.updateScore(player.id, player.score)
+                .catch(err => console.error(err));
+            });
+            socket.emitEndGame(roomId);
+            socket.closeRoom(roomId);
+            this.deleteById(roomId);
+        }
     }
 }
 

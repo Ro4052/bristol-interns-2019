@@ -73,6 +73,15 @@ Cypress.Commands.add('leaveRoom', () => {
     cy.wait('@leaveRoom');
 });
 
+Cypress.Commands.add('addAIPlayer', () => {
+    cy.route({
+        method: 'POST',
+        url: '/api/room/addAIPlayer'
+    }).as('addAIPlayer');
+    cy.get('[data-cy="automated-player"]').click();
+    cy.wait('@addAIPlayer');
+});
+
 Cypress.Commands.add('sendMessage', () => {
     cy.get('[data-cy="type-message"]').type('message');
     cy.get('[data-cy="send-message"]').click();
