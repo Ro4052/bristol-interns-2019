@@ -10,18 +10,24 @@ module.exports.reset = () => {
         resolve();
     });
 }
-module.exports.createUser = username => {
-    return new Promise(resolve => {        
+
+module.exports.createUser = (username, password) => {
+    return new Promise((resolve, reject) => {        
         let user = users.find(user => user.username === username);
         if (!user) {
             user = { username, id: nextId, score: 0 };
             nextId++;
             users.push(user);
+            const data = {
+                dataValues: user
+            }
+            resolve(data);
+        } else {
+            reject({
+                code: 400,
+                message: "User with this username already exists"
+            });
         }
-        const data = {
-            dataValues: user
-        }
-        resolve([data]);
     });
 }
 
@@ -35,5 +41,16 @@ module.exports.updateScore = (id, score) => {
     return new Promise(resolve => {
         users.find(user => user.id === id).score += score;
         resolve();
+    });
+}
+
+module.exports.getLabels = () => {
+    return new Promise(resolve => {
+        const data = {
+            dataValues: {
+                labels: ["hello"]
+            }
+        }
+        resolve(data);
     });
 }

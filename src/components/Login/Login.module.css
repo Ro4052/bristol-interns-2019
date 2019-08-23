@@ -1,4 +1,5 @@
 .loginPage {
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -21,7 +22,7 @@
 }
 
 .loginInput {
-    width: 80%;
+    width: 60%;
     min-width: 200px;
     padding: 0.4em 1em;
     border: 2.5px solid black;
@@ -29,16 +30,25 @@
     outline: none;
     background-color: var(--yellow);
     color: black;
-    font-size: 3vmin;
+    font-size: 3vh;
     margin: 0.5em;
+}
+
+.logInButton {
+    font-size: 2em;
+}
+
+.toggleButton {
+    font-size: 1.5em;
 }
 
 .inputError {
     border: 2px solid red;
+    margin: 0.3em;
 }
 
 .formHeader {
-    font-size: 3vh;
+    font-size: 2.8vh;
     text-align: center;
     color: rgb(0, 0, 0);
     font-family: var(--main-font);
@@ -50,4 +60,15 @@
     text-align: center;
     height: 5%;
     font-size: 2vh;
+}
+
+.githubLogin {
+    display: flex;
+    align-items: center;
+}
+
+.githubLogo {
+    width: 50px;
+    height: 50px;
+    margin-left: 10px;
 }

@@ -30,8 +30,8 @@ exports.setupSocket = (server, session) => {
         } else {
             socket.disconnect();
         }
-        socket.on('disconnect', disconnected => {
-            sockets = sockets.filter(socket => socket !== disconnected);
+        socket.on('disconnect', () => {
+            sockets = sockets.filter(other => other !== socket);
         });
     });
 }
@@ -67,6 +67,9 @@ const emitRooms = () => {
     sockets.forEach(socket => socket.emit("rooms", rooms));
 }
 exports.emitRooms = emitRooms;
+
+// Get all sockets currently connected
+exports.getAllSockets = () => sockets;
 
 // Disconnect a single socket
 exports.disconnectSocket = username => {

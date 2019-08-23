@@ -1,11 +1,13 @@
 .chatArrowArea {
+    width: 100%;
+    height: 30px;
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
 .chatArrowArea > span {
-    font-size: 3vmin;
+    font-size: 1.5em;
     margin-left: 10px;
     cursor: pointer;
 }
@@ -48,14 +50,42 @@
 }
 
 .chat {
+    height: 60vh;
     display: flex;
     flex-direction: column;
     text-align: center;
     background-color: white;
     border: 2px solid black;
     border-radius: 1em;
-    margin: 1em;
+    margin: 1vmin;
+    padding: 0 2vmin;
     flex-grow: 1;
+}
+
+.chat > h1 {
+    font-size: 2.5em;
+    margin: 1vmin;
+}
+
+@media only screen and (max-width: 1000px) {
+    .chat {
+        height: 450px;
+    }
+    .gameChat {
+        width: 80%;
+        min-height: 400px;
+        height: 62vh;
+        position: absolute;
+        z-index: 100;
+        top: 30%;
+        left: 10%;
+        padding: 4vmin;
+    }
+    .lobbyChat {
+        width: 80%;
+        z-index: 100;
+        padding: 4vmin;
+    }
 }
 
 .shown {
@@ -75,6 +105,14 @@
     padding: 0.2em;
 }
 
+.chatInput {
+    width: 80%;
+}
+
+.chatButton {
+    margin-top: 0;
+}
+
 .scrollbarPadding {
     position: relative;
     height: 100%;
@@ -92,16 +130,23 @@
 
 .message {
     word-wrap: break-word;
-    margin: 0.5em;
+    margin: 0.5vmin;
+    display: flex;
+    align-items: center;
 }
 
 .messageUsername {
-    padding: 0 0.5em;
+    padding-right: 1vmin;
 }
 
 .messageText {
+    min-width: 80%;
     border: 2px solid black;
-    padding: 0.5em;
+    padding: 0.5vmin 2vmin;
     background-color: orange;
     border-radius: 1em;
+}
+
+.chatMessageForm {
+    display: flex;
 }

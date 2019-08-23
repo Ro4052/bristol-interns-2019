@@ -324,6 +324,7 @@ class GameLogic {
         this.newCard();
         this.update({ status: statusTypes.DISPLAY_ALL_VOTES });
         this.calcScores();
+        this.updateLabels(this.currentWord);
         this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), nextRoundDuration);
     };
 
@@ -344,6 +345,15 @@ class GameLogic {
             });
         }
         this.update({ players: this.state.players });
+    }
+
+    updateLabels(word) {
+        this.playedCards.forEach(card => {
+            const cardScore = this.votes.filter(vote => card.cardId === vote.cardId && this.players.find(player => player.username === vote.username).real).length;
+            if (cardScore >= 2) {
+                AI.addLabel(card.cardId, word);
+            }
+        });
     }
 
     /* Clear entire game state */

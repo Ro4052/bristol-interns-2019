@@ -24,14 +24,16 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
-Cypress.Commands.add('login', username => {
+Cypress.Commands.add('signup', (username, password) => {
     cy.route({
         method: 'POST',
-        url: '/auth/login'
-    }).as('login');
-    cy.get('[data-cy="username"]').type(username)
+        url: '/auth/signup'
+    }).as('signup');
+    cy.get('[data-cy="toggle-signup"]').click();
+    cy.get('[data-cy="username"]').type(username);
+    cy.get('[data-cy="password"]').type(password)
     .then(() => cy.get('[data-cy="login"]').click());
-    cy.wait('@login');
+    cy.wait('@signup');
 });
 
 Cypress.Commands.add('logout', () => {
@@ -87,6 +89,10 @@ Cypress.Commands.add('startGame', () => {
 
 Cypress.Commands.add('refreshPage', () => {
     cy.visit('/dashboard');
+});
+
+Cypress.Commands.add('showChat', () => {
+    cy.get('[data-cy="show-chat"]').click();
 });
 
 Cypress.Commands.add('playCardWord', () => {
