@@ -34,7 +34,7 @@ export class Dashboard extends React.Component {
                         <div className={styles.interactions}>
                             {showPlayerInteractions && <PlayerInteractions />}
                             {showPlayWord && <PlayWord />}
-                            {(this.props.winners.length) && <GameOver />}
+                            {(this.props.winners.length > 0) && <GameOver />}
                             <div className={styles.circle1}/>
                             <div className={styles.circle2}/>
                             <div className={styles.circle3}/>
