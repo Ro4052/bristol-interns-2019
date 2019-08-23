@@ -361,7 +361,7 @@ class GameLogic {
 
     updateLabels(word) {
         this.playedCards.forEach(card => {
-            const cardScore = this.votes.filter(vote => card.cardId === vote.cardId).length;
+            const cardScore = this.votes.filter(vote => card.cardId === vote.cardId && !vote.username.includes("CPU")).length;
             if (cardScore >= 1) {
                 AI.addLabel(card.cardId, word);
             }

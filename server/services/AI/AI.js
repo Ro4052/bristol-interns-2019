@@ -33,14 +33,6 @@ async function autoWordGenerator() {
 }  
 exports.autoWordGenerator = autoWordGenerator
 
-exports.addLabel = (cardId, word) => {
-    let content;
-    return new Promise((resolve, reject) => {
-        db.getLabels(cardId).then(card => {
-            const labels = card.dataValues.labels;
-        });
-    });
-}
 
 // Pick random word from each list of labels for a card //
 exports.autoWord = (cardId) => {
@@ -51,5 +43,13 @@ exports.autoWord = (cardId) => {
             const word = labels[Math.floor(Math.random()*labels.length)];
             resolve(word);
         });
+    });
+}
+
+exports.addLabel = (cardId, word) => {
+    return new Promise((resolve, reject) => {
+        db.addLabel(cardId, word);
+        resolve();
+
     });
 }

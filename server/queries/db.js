@@ -53,6 +53,29 @@ module.exports.validatePassword = (username, password) => {
     });
 }
 
+module.exports.addLabel = (cardId, word) => {
+    return new Promise((resolve, reject) => {
+        CardLabels.findOne({
+            where: { cardId }
+        }).then(card => {
+            const labels = card.dataValues.labels;
+            if (!labels.includes(word)) {
+                labels.push(word);
+                card.update({
+                labels: labels
+                })
+                .then(() => resolve())
+                .catch(err => {
+                    reject({
+                        code: 404,
+                        message: err.message
+                    });
+               });
+            }
+        });
+    });
+}
+
 module.exports.createUser = (username, password) => {
     return new Promise((resolve, reject) => {
         bcrypt.hash(password, 10, (err, hash) => {
