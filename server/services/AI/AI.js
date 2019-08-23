@@ -48,8 +48,7 @@ exports.autoWord = (cardId) => {
 
 exports.addLabel = (cardId, word) => {
     return new Promise((resolve, reject) => {
-        db.addLabel(cardId, word);
-        resolve();
-
+        db.addLabel(cardId, word)
+        .then(() => resolve());
     });
 }

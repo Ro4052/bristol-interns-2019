@@ -60,9 +60,10 @@ module.exports.addLabel = (cardId, word) => {
         }).then(card => {
             const labels = card.dataValues.labels;
             if (!labels.includes(word)) {
+                console.log("label not yet in list")
                 labels.push(word);
                 card.update({
-                labels: labels
+                    labels: labels
                 })
                 .then(() => resolve())
                 .catch(err => {
@@ -71,6 +72,8 @@ module.exports.addLabel = (cardId, word) => {
                         message: err.message
                     });
                });
+            } else {
+                console.log("label already in list")
             }
         });
     });
