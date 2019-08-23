@@ -13,6 +13,10 @@
     flex-direction: row-reverse;
 }
 
+.header > div > button {
+    font-size: 3.5vh;
+}
+
 .container {
     height: 85%;
     display: flex;
