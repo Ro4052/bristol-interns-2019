@@ -330,11 +330,11 @@ class GameLogic {
 
     /* Calculate the scores for this round */
     calcScores () {
-        const correctCard = this.state.playedCards.find(card => card.userId === this.state.currentPlayer.userId);
+        const correctCard = this.state.playedCards.find(card => card.username === this.state.currentPlayer.username);
         const correctVotes = this.state.votes.filter(vote => vote.cardId === correctCard.cardId);
         if (!(correctVotes.length % this.state.votes.length)) {
             this.state.players.forEach(player => {
-                if (player.userId !== this.state.currentPlayer.userId) player.score += 2
+                if (player.username !== this.state.currentPlayer.username) player.score += 2
             });
         } else {
             this.state.currentPlayer.score += 3;
