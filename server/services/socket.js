@@ -1,6 +1,5 @@
 const socketio = require('socket.io');
 const sharedsession = require("express-socket.io-session");
-const { statusTypes } = require('../models/statusTypes');
 const { minPlayers, maxPlayers } = require('../models/GameLogic');
 const Room = require("../models/room");
 
@@ -60,8 +59,8 @@ const emitRooms = () => {
     const rooms = Room.getAll().map(room => ({
         roomId: room.roomId,
         title: room.title,
-        started: room.gameState.status !== statusTypes.NOT_STARTED,
-        players: room.gameState.players,
+        started: room.gameState.isStarted(),
+        players: room.gameState.getPlayers(),
         minPlayers,
         maxPlayers
     }));
@@ -131,11 +130,8 @@ exports.emitPlayedCard = (username, card) => {
 // When everyone has played their cards, send them all to the players
 exports.emitPlayedCards = (roomId, cards) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("played cards", cards));
 
-// When game is over, emit the winner to everyone
-exports.emitWinner = (roomId, player) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("winner", player));
-
-//When game is over, emit the drawers to everyone
-exports.emitDrawers = (roomId, players) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("drawers", players));
+// When game is over, emit the winners to everyone
+exports.emitWinners = (roomId, winners) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("winners", winners));
 
 // When game is over, tell the users
 exports.emitEndGame = roomId => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("end"));

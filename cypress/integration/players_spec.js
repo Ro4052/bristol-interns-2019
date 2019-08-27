@@ -60,8 +60,8 @@ describe('Players', () => {
         });
 
         it('updates the scores', () => {
-            cy.get('[data-cy="player-score"]').first().should('have.text', '0');
-            cy.get('[data-cy="player-score"]').last().should('have.text', '3');
+            cy.get('[data-cy="player-score"]').first().should('have.text', '2');
+            cy.get('[data-cy="player-score"]').last().should('have.text', '0');
         });
     });
 });

@@ -1,20 +1,47 @@
 const { GameLogic } = require('../models/GameLogic');
+const { statusTypes } = require('./statusTypes');
+const socket = require('../services/socket');
 const roomNames = require('../../roomnames');
 
 /** @type {{ roomId: number, gameState: GameLogic }[]} */
 let rooms = [];
 let latestRoomId = 0;
 
+let db;
+
+if (process.env.NODE_ENV === 'testing') {
+    db = require('../queries/testdb');
+} else {
+    db = require('../queries/db');
+}
+
 exports.getAll = () => rooms;
 
 exports.getById = roomId => rooms.find(room => room.roomId === roomId);
 
-exports.isStarted = room => room.gameState.status !== 'NOT_STARTED';
+exports.isStarted = room => room.gameState.isStarted();
+
+const update = roomId => state => {
+    const { status } = state;
+    const room = this.getById(roomId);
+    if (room) {
+        const { gameState } = room;
+        if (status === statusTypes.GAME_OVER) {
+            gameState.getPlayers().forEach(player => {
+                db.updateScore(player.id, player.score)
+                .catch(err => console.error(err));
+            });
+            socket.emitEndGame(roomId);
+            socket.closeRoom(roomId);
+            this.deleteById(roomId);
+        }
+    }
+}
 
 exports.create = numRounds => {
     const roomId = latestRoomId;
     latestRoomId++;
-    const gameState = new GameLogic(roomId, numRounds);
+    const gameState = new GameLogic(update(roomId), roomId, numRounds);
     rooms.push({ roomId, title: roomNames[Math.floor(Math.random() * 78)], gameState });
     return roomId;
 };
