@@ -118,8 +118,8 @@ export const connectSocket = () => {
     socket.on("end", () => {
         dispatch(setPlayedCards([])); 
         dispatch(setPlayCard(false));
-            dispatch(setVoteCard(false));
-            dispatch(setPlayWord(false));
+        dispatch(setVoteCard(false));
+        dispatch(setPlayWord(false));
     });
 
     return new Promise((resolve, reject) => {
