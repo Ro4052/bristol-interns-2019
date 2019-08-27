@@ -7,6 +7,8 @@ export class MyCards extends React.Component {
 
     componentDidMount() {
         this.props.fetchCards();
+        console.log(this.props.cards);
+        
     }
 
     render() {

@@ -4,6 +4,8 @@ import Card from './Card/Card';
 
 export class CardList extends React.Component {
     render() {
+        console.log(this.props.cards);
+        
         return (
             <div className={styles.fade}>
                 <div className={styles.cardList} data-cy={this.props.cy}>

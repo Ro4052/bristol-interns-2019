@@ -49,6 +49,7 @@ router.get("/api/oauth/uri", (req, res) => {
 });
 
 router.use('/api/room', require('./rooms'));
+router.use('/api/images', require('./images'));
 
 /* Check if player is logged in */
 router.get('/auth', (req, res) => {

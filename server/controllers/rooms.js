@@ -9,7 +9,7 @@ const Room = require('../models/room');
 /* Create and join room */
 router.post('/create', auth, (req, res) => {
     const { user, roomId } = req.session;
-    const { numRounds } = req.body;
+    const { numRounds, gameMode } = req.body;    
     try {
         const room = Room.getById(roomId);
         if (room) {
@@ -19,13 +19,19 @@ router.post('/create', auth, (req, res) => {
                 Room.removePlayer(room, user.username);
             }
         }
-        const newRoomId = Room.create(numRounds);
-        const newRoom = Room.getById(newRoomId);
-        Room.addPlayer(newRoom, user);
-        socket.joinRoom(newRoomId, user.username);
-        socket.emitRooms();
-        req.session.roomId = newRoomId;
-        res.sendStatus(200);
+        Room.create(numRounds, gameMode)
+        .then(newRoomId => {
+            const newRoom = Room.getById(newRoomId);
+            Room.addPlayer(newRoom, user);
+            socket.joinRoom(newRoomId, user.username);
+            socket.emitRooms();
+            req.session.roomId = newRoomId;                    
+            res.sendStatus(200);
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(400).json({ message: err.message });
+        });
     } catch (err) {
         console.log(err);
         res.status(400).json({ message: err.message });

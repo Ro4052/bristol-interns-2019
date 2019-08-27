@@ -6,7 +6,7 @@ const AI = require('../services/AI/AI');
 // Set durations
 const promptDuration = process.env.NODE_ENV === 'testing' ? 4000 : 30000;
 const voteDuration = process.env.NODE_ENV === 'testing' ? 5000 : 30000;
-const storytellerDuration = process.env.NODE_ENV === 'testing' ? 4000 : 60000;
+const storytellerDuration = process.env.NODE_ENV === 'testing' ? 4000 : 2000;
 const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 3000 : 10000;
 const minPlayers = process.env.NODE_ENV === 'testing' ? 1 : 3;
 const maxPlayers = 6;
@@ -14,9 +14,10 @@ exports.minPlayers = minPlayers;
 exports.maxPlayers = maxPlayers;
 
 class GameLogic {
-    constructor(roomId, numRounds) {
+    constructor(roomId, numRounds, allCardsNumber) {
         this.roomId = roomId;
         this.rounds = numRounds;
+        this.allCardsNumber = allCardsNumber;
         this.status = statusTypes.NOT_STARTED;
         this.roundNum = 0;
         this.currentPlayer = null;
@@ -102,8 +103,8 @@ class GameLogic {
             throw Error("You have already joined this game");
         } else if (this.players.length === maxPlayers) {
             throw Error("The room has reached its capacity");
-        } else {
-            const cards = cardsManager.assign(this.players, 6);
+        } else {            
+            const cards = cardsManager.assign(this.players, 6, this.allCardsNumber)
             const player = { username: user.username, id: user.id, cards, score: 0, real: user.real, finishedTurn: false };
             this.players.push(player);
             socket.emitPlayers(this.roomId, this.getPlayers());
@@ -261,7 +262,7 @@ class GameLogic {
     /* Draws a new card for the player's hand */
     newCard() {
         this.players.forEach(player => {
-            const newCard = cardsManager.assign(this.players, 1);
+            const newCard = cardsManager.assign(this.players, 1, this.allCardsNumber);
             player.cards.push(newCard[0]);
         });
     }

@@ -1,5 +1,6 @@
 const { GameLogic } = require('../models/GameLogic');
 const roomNames = require('../../roomnames');
+const fs = require('fs');
 
 /** @type {{ roomId: number, gameState: GameLogic }[]} */
 let rooms = [];
@@ -11,12 +12,24 @@ exports.getById = roomId => rooms.find(room => room.roomId === roomId);
 
 exports.isStarted = room => room.gameState.status !== 'NOT_STARTED';
 
-exports.create = numRounds => {
-    const roomId = latestRoomId;
-    latestRoomId++;
-    const gameState = new GameLogic(roomId, numRounds);
-    rooms.push({ roomId, title: roomNames[Math.floor(Math.random() * 78)], gameState });
-    return roomId;
+exports.create = (numRounds, gameMode) => {
+    return new Promise((resolve, reject) => {
+        const roomId = latestRoomId;
+        latestRoomId++;
+        const dir = `./src/images/${gameMode === 'telltales' ? 'cards/' : 'uploads/'}`;
+        fs.readdir(dir, (err, files) => {
+            if (err) {
+                reject(err);
+            }
+            if (files.length >= 50) {
+                const gameState = new GameLogic(roomId, numRounds, files.length);
+                rooms.push({ roomId, title: roomNames[Math.floor(Math.random() * 78)], gameState });         
+                resolve(roomId);
+            } else {
+                reject({ message: "Not enough cards in the server. Upload more." });
+            }
+        });
+    });
 };
 
 const deleteById = roomId => {

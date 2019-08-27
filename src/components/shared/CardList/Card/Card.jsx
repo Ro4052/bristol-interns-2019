@@ -25,8 +25,10 @@ export class Card extends React.Component {
         return (card.votes.length > 0) ? card.votes.map((vote, index) => <li key={index}>{vote.username}</li>) : <li>none :(</li>;
     }
 
-    render() {
-        const src = this.props.card.cardId ? require(`../../../../images/cards/card (${this.props.card.cardId}).jpg`) : require('../../../../images/cardBack.jpg');
+    render() {        
+        let src;
+        if (this.props.gameMode === 'telltales') src = this.props.card.cardId ? require(`../../../../images/cards/card (${this.props.card.cardId}).jpg`) : require('../../../../images/cardBack.jpg')
+        else if (this.props.gameMode === 'custom') src = require(`../../../../images/uploads/card (${this.props.card.cardId}).png`);        
         const alt = this.props.card.cardId ? `card-${this.props.card.cardId}` : 'card-hidden';
         return (
             <div data-cy='card-wrapper' className={cx(styles.cardWrapper, { enabled: this.props.enabled }, { selected: this.props.enabled && this.props.playedCardId === this.props.card.cardId })}>
@@ -54,7 +56,8 @@ export class Card extends React.Component {
 const mapStateToProps = state => ({
     playedCardId: state.myCardsReducer.playedCardId,
     newScores: state.playersReducer.newScores,
-    currentPlayer: state.playersReducer.currentPlayer
+    currentPlayer: state.playersReducer.currentPlayer,
+    gameMode: state.createRoomReducer.gameMode
 });
 
 export default connect(mapStateToProps)(Card);

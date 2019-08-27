@@ -1,10 +1,11 @@
-exports.assign = (users, numberOfCards) => {
+exports.assign = (users, numberOfCards, max) => {
     const allCards = getAllCurrentCards(users);
     let cardsSet = [];
 
+    const min = 1;
+    console.log("Cards", max);
+    
     for (let j = 0; j < numberOfCards; j++) {
-        const min = 1;
-        const max = 247;
         let random = Math.floor(Math.random() * (max - min) + min);
         
         let availableGlobally = allCards.some(card => card.cardId !== random);

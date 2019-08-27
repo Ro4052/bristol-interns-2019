@@ -16,7 +16,8 @@ export class Login extends React.Component {
         this.state = {
             username: "",
             password: "",
-            signUp: false
+            signUp: false,
+            file: null
         };
         this.sendLoginOrSignUp = this.sendLoginOrSignUp.bind(this);
         this.handleChangeUsername = this.handleChangeUsername.bind(this);
