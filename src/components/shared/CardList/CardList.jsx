@@ -3,7 +3,7 @@ import styles from './CardList.module.css';
 import Card from './Card/Card';
 
 export class CardList extends React.Component {
-    render() {        
+    render() {
         return (
             <div className={styles.fade}>
                 <div className={styles.cardList} data-cy={this.props.cy}>

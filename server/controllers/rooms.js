@@ -9,7 +9,7 @@ const Room = require('../models/room');
 /* Create and join room */
 router.post('/create', auth, (req, res) => {
     const { user, roomId } = req.session;
-    const { numRounds, gameMode } = req.body;    
+    const { numRounds, gameMode } = req.body;
     try {
         const room = Room.getById(roomId);
         if (room) {

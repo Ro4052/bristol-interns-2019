@@ -22,7 +22,7 @@ export const createRoomFailure = error => ({
     error
 });
 
-export const createRoom = (numRounds, gameMode) => dispatch => {    
+export const createRoom = (numRounds, gameMode) => dispatch => {
     axiosInstance.post('/api/room/create', { numRounds, gameMode })
     .then(res => {
         if (res.status === 200) {

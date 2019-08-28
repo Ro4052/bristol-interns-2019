@@ -6,7 +6,7 @@ export const initialState = {
     error: null
 }
 
-const createRoomReducer = (state = initialState, action) => {    
+const createRoomReducer = (state = initialState, action) => {
     switch (action.type) {
         case types.SET_ROUND_COUNT:
             return { ...state, numRounds: action.numRounds, error: null };

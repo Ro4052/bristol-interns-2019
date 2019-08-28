@@ -129,9 +129,7 @@ router.get('/api/cards', auth, (req, res) => {
                 })
                 .catch(err => res.status(err.code).json({ message: err.message }));
             });
-        }
-        console.log(cards);
-        
+        }        
         res.status(200).json(cards);
     }
     else {

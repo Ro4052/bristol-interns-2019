@@ -89,7 +89,7 @@ module.exports.addCard = (url) => {
             reject({
                 code: 409,
                 message: "Card already exists in the database"
-            })
+            });
         });
     });
 }
@@ -104,7 +104,7 @@ module.exports.getAllCards = () => {
             reject({
                 code: 404,
                 message: "No cards are found in the database."
-            })
+            });
         });
     });
 }
@@ -120,7 +120,7 @@ module.exports.getCard = (id) => {
             reject({
                 code: 404,
                 message: "Card with this id is not found in the database."
-            })
+            });
         });
     });
 }

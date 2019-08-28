@@ -10,7 +10,7 @@ export class CreateRoom extends React.Component {
     }
 
     createRoom(e) {
-        e.preventDefault();        
+        e.preventDefault();
         this.props.createRoom(this.props.numRounds, this.props.gameMode);
     }
 

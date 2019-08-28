@@ -25,10 +25,8 @@ export class Card extends React.Component {
         return (card.votes.length > 0) ? card.votes.map((vote, index) => <li key={index}>{vote.username}</li>) : <li>none :(</li>;
     }
 
-    render() {        
-        let src;
-        console.log(this.props.card);
-        
+    render() {
+        let src;        
         if (this.props.gameMode === 'telltales') src = this.props.card.cardId ? require(`../../../../images/cards/card (${this.props.card.cardId}).jpg`) : require('../../../../images/cardBack.jpg')
         else if (this.props.gameMode === 'custom') src=this.props.card.url;        
         const alt = this.props.card.cardId ? `card-${this.props.card.cardId}` : 'card-hidden';

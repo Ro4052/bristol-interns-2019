@@ -1,6 +1,5 @@
 const { GameLogic } = require('../models/GameLogic');
 const roomNames = require('../../roomnames');
-const fs = require('fs');
 
 /** @type {{ roomId: number, gameState: GameLogic }[]} */
 let rooms = [];
@@ -24,22 +23,31 @@ exports.create = (numRounds, gameMode) => {
     return new Promise((resolve, reject) => {
         const roomId = latestRoomId;
         latestRoomId++;
-        db.getAllCards()
-        .then(cards => {            
-            if (cards.length >= 50) {
-                const gameState = new GameLogic(roomId, numRounds, gameMode, cards.length);
-                rooms.push({ roomId, title: roomNames[Math.floor(Math.random() * 78)], gameState });         
-                resolve(roomId);
-            } else {
-                reject({ message: "Not enough cards in the server. Upload more." });
-            }
-        })
-        .catch(err => {
-            reject({
-                code: err.code,
-                message: err.message
+        if (gameMode === 'custom') {
+            db.getAllCards()
+            .then(cards => {            
+                if (cards.length >= 50) {
+                    const gameState = new GameLogic(roomId, numRounds, gameMode, cards.length);
+                    rooms.push({ roomId, title: roomNames[Math.floor(Math.random() * 78)], gameState });         
+                    resolve(roomId);
+                } else {
+                    reject({
+                        code: 400,
+                        message: "Not enough cards in the server. Upload more."
+                    });
+                }
             })
-        })
+            .catch(err => {
+                reject({
+                    code: err.code,
+                    message: err.message
+                });
+            });
+        } else {
+            const gameState = new GameLogic(roomId, numRounds, gameMode, 247 /*cards length*/);
+            rooms.push({ roomId, title: roomNames[Math.floor(Math.random() * 78)], gameState });         
+            resolve(roomId);
+        }
     });
 };
 
