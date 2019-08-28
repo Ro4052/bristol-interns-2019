@@ -44,7 +44,7 @@ export class Upload extends React.Component {
                         <div className={styles.fileSelect}>
                             <div className={styles.fileSelectButton} id="fileName">Choose File</div>
                             <div className={styles.fileSelectName} id="noFile">{this.state.file ? this.state.file.name : "No file chosen..."}</div> 
-                            <input type="file" name="chooseFile" id="chooseFile" onChange={this.onChange} />
+                            <input data-cy='upload-input' type="file" name="chooseFile" id="chooseFile" onChange={this.onChange} />
                         </div>
                     </div>
                     <button data-cy='upload-button' type="submit">Upload</button>

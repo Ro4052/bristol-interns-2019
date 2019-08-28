@@ -28,9 +28,9 @@ router.post('/create', auth, (req, res) => {
             req.session.roomId = newRoomId;                    
             res.sendStatus(200);
         })
-        .catch(err => {
-            console.error(err)
-            res.status(500).json({ message: err.message });
+        .catch(err => {            
+            console.error(err);
+            res.status(400).json({ message: err.message });
         });
     } catch (err) {
         console.error(err);

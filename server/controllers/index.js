@@ -30,7 +30,7 @@ router.get("/oauth", (req, res) => {
                 }
             }).catch(err => {
                 console.error(err);
-                res.status(err.code).json({ message: err.message });
+                res.status(500).json({ message: err.message });
             });
         } else {
             res.sendStatus(404);
@@ -67,7 +67,7 @@ router.post('/auth/signup', (req, res) => {
         res.sendStatus(200);
     }).catch(err => {
         console.error(err);
-        res.status(err.code).json({ message: err.message });
+        res.status(500).json({ message: err.message });
     });
 });
 
@@ -87,7 +87,7 @@ router.post('/auth/login', (req, res) => {
         }
     }).catch(err => {
         console.error(err);
-        res.status(err.code).json({ message: err.message });
+        res.status(401).json({ message: err.message });
     });
 });
 
@@ -137,7 +137,7 @@ router.get('/api/all-players', (req, res) => {
     .then(users => res.status(200).json(users))
     .catch(err => {
         console.error(err);
-        res.status(err.code).json({ message: err.message });
+        res.status(404).json({ message: err.message });
     });
 });
 

@@ -23,211 +23,133 @@ sequelize.sync({ alter: true }).then(() => {
 });
 
 module.exports.validatePassword = (username, password) => {
-    return new Promise((resolve, reject) => {
-        User.findOne({
-            where: { username }
-        })
-        .then(user => {
-            if (user) {
-                bcrypt.compare(password, user.dataValues.password, (err, res) => {                    
-                    if (res) {
-                        resolve(user);
-                    } else {
-                        reject({
-                            code: 401,
-                            message: "Password is incorrect"
-                        });
-                    }
-                });
-            } else {
-                reject({
-                    code: 400,
-                    message: "User with this username does not exist"
-                });
-            }
-        })
-        .catch(err => {
-            reject({
-                code: 400,
-                message: err.message
+    User.findOne({
+        where: { username }
+    })
+    .then(user => {
+        if (user) {
+            bcrypt.compare(password, user.dataValues.password, (err, res) => {                    
+                if (res) {
+                    return user;
+                } else {
+                    throw new Error("Password is incorrect");
+                }
             });
-        });
-    });
+        } else {
+            throw new Error("User with this username does not exist");
+        }
+    })
+    .catch(err => { throw new Error(err.message) });
 }
 
 module.exports.addLabel = (cardId, word) => {
-    return new Promise((resolve, reject) => {
-        CardLabels.findOne({
-            where: { cardId }
-        }).then(card => {
-            const labels = card.dataValues.labels;
-            if (!labels.includes(word)) {
-                labels.push(word);
-                card.update({
-                    labels: labels
-                })
-                .then(() => resolve())
-                .catch(err => {
-                    reject({
-                        code: 404,
-                        message: err.message
-                    });
-               });
-            }
-        });
-    });
-}
-
-module.exports.addCard = (etag, url) => {
-    return new Promise((resolve, reject) => {
-        CardImages.findOrCreate({
-            where: { etag },
-            defaults: { // set the default properties if it doesn't exist
-                etag,
-                url
-            }
-        }).then(([card, created]) => {
-            if (created) {
-                resolve(card);
-            }
-            reject({
-                code: 409,
-                message: "Card already exists in the database"
-            });
-        });
-    });
-}
-
-module.exports.getAllCards = () => {
-    return new Promise((resolve, reject) => {
-        CardImages.findAll()
-        .then(cards => {
-            if (cards) {
-                resolve(cards);
-            }
-            reject({
-                code: 404,
-                message: "No cards are found in the database."
-            });
-        });
-    });
-}
-
-module.exports.getCard = (id) => {
-    return new Promise((resolve, reject) => {
-        CardImages.findOne({
-            where: { id }
-        }).then(card => {
-            if (card) {
-                resolve(card);
-            }
-            reject({
-                code: 404,
-                message: "Card with this id is not found in the database."
-            });
-        });
-    });
-}
-
-module.exports.createUser = (username, password) => {
-    return new Promise((resolve, reject) => {
-        bcrypt.hash(password, 10, (err, hash) => {
-            if (err) {
-                reject({
-                    code: 400,
-                    message: err.message
-                });
-            }
-            User.findOrCreate({
-                where: { username },
-                defaults: { // set the default properties if it doesn't exist
-                    username,
-                    password: hash,
-                    score: 0
-                }
+    CardLabels.findOne({
+        where: { cardId }
+    }).then(card => {
+        const labels = card.dataValues.labels;
+        if (!labels.includes(word)) {
+            labels.push(word);
+            card.update({
+                labels: labels
             })
-            .then(([user, created]) => {                
-                if (created) {
-                    resolve(user);
-                }
-                reject({
-                    code: 400,
-                    message: "User with this username already exists"
-                });
-            })
-            .catch(err => {
-                reject({
-                    code: 404,
-                    message: err.message
-                });
-            });
-        });
+            .then(() => {})
+            .catch(err => { throw new Error(err.message) });
+        }
     });
 }
 
-module.exports.createGithubUser = username => {
-    return new Promise((resolve, reject) => {
+module.exports.addCard = (etag, url) => 
+    CardImages.findOrCreate({
+        where: { etag },
+        defaults: { // set the default properties if it doesn't exist
+            etag,
+            url
+        }
+    }).then(([card, created]) => {
+        if (created) {
+            return card;
+        }
+        throw new Error("Card already exists in the database");
+    })
+
+module.exports.getAllCards = () => 
+    CardImages.findAll()
+    .then(cards => {
+        if (cards) {
+            return cards;
+        }
+        throw new Error("No cards are found in the database.");
+    });
+
+module.exports.getCard = (id) => 
+    CardImages.findOne({
+        where: { id }
+    }).then(card => {
+        if (card) {
+            return card ;
+        }
+        throw new Error("Card with this id is not found in the database.");
+    });
+
+
+module.exports.createUser = (username, password) => 
+    bcrypt.hash(password, 10, (err, hash) => {
+        if (err) {
+            throw new Error(err.message);
+        }
         User.findOrCreate({
             where: { username },
             defaults: { // set the default properties if it doesn't exist
-                username: username.trim(),
-                password: "",
+                username,
+                password: hash,
                 score: 0
             }
         })
-        .then(([user, created]) => resolve(user))
-        .catch(err => {
-            reject({
-                code: 404,
-                message: err.message
-            });
-        });
-    });
-}
-
-module.exports.getUsers = () => {
-    return new Promise((resolve, reject) => {
-        User.findAll()
-        .then(users => resolve(users))
-        .catch(err => {
-            reject({
-                code: 404,
-                message: err.message
-            });
-        });
-    });
-}
-
-module.exports.updateScore = (id, score) => {
-    return new Promise((resolve, reject) => {
-        User.findByPk(id).then(player => {
-            player.update({
-                score: Sequelize.literal(`score + ${score}`)
-            }, {
-                where: { id }
-            })
-            .then(() => resolve())
-            .catch(err => {
-                reject({
-                    code: 404,
-                    message: err.message
-                });
-            });
-        });
-    });
-}
-
-module.exports.getLabels = cardId => {
-    return new Promise((resolve, reject) => {
-        CardLabels.findOne({
-            where: { cardId }
+        .then(([user, created]) => {                
+            if (created) {
+                return user;
+            }
+            throw new Error("User with this username already exists");
         })
-        .then(card => resolve(card))
-        .catch(err => {
-            reject({
-                code: 400,
-                message: err.message
-            });
-        });
+        .catch(err => { throw new Error(err.message) });
     });
-}
+
+
+module.exports.createGithubUser = username => 
+    User.findOrCreate({
+        where: { username },
+        defaults: { // set the default properties if it doesn't exist
+            username: username.trim(),
+            password: "",
+            score: 0
+        }
+    })
+    .then(([user, created]) => user)
+    .catch(err => { throw new Error(err.message) });
+
+
+module.exports.getUsers = () => 
+    User.findAll()
+    .then(users => users)
+    .catch(err => { throw new Error(err.message) });
+
+
+module.exports.updateScore = (id, score) => 
+    User.findByPk(id).then(player => {
+        player.update({
+            score: Sequelize.literal(`score + ${score}`)
+        }, {
+            where: { id }
+        })
+        .then(() => {})
+        .catch(err => { throw new Error(err.message) });
+    });
+
+
+module.exports.getLabels = cardId => 
+    CardLabels.findOne({
+        where: { cardId }
+    })
+    .then(card => card)
+    .catch(err => { throw new Error(err.message) });
+
