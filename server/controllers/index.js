@@ -10,7 +10,7 @@ const redirectURL = process.env.NODE_ENV === 'production' ? "/lobby" : "http://l
 const oAuthGithub = require('./oauth-github');
 const githubAuthoriser = oAuthGithub(oauthClientId, oauthSecret);
 
-const db = (process.env.NODE_ENV === 'testing') ? require('../queries/testdb') : require('../queries/db');
+const db = require(`../queries/${process.env.NODE_ENV === 'testing' ? 'testdb' : 'db'}`);
 
 router.get("/oauth", (req, res) => {
     githubAuthoriser.authorise(req, (githubUser, token) => {

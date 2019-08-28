@@ -41,7 +41,7 @@ exports.create = (numRounds, gameMode) => {
             .then(cards => {                         
                 if (cards.length >= 50) {
                     const gameState = new GameLogic(update(roomId), roomId, numRounds, gameMode, cards.length);
-                    rooms.push({ roomId, title: roomNames[Math.floor(Math.random() * 78)], gameState });         
+                    rooms.push({ roomId, title: roomNames[Math.floor(Math.random() * roomNames.length)], gameState });         
                     resolve(roomId);
                 } else {
                     reject({

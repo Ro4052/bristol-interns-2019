@@ -14,7 +14,7 @@ export const uploadImage = formData => dispatch => {
         if (res.status === 200) {
             dispatch(uploadImageSuccess("File was uploaded successfully!"));
         } else {
-            dispatch(uploadImageFailure(res.data.message));
+            throw new Error(res.data.message);
         }
     }).catch((error) => {
         dispatch(uploadImageFailure(error.message));
