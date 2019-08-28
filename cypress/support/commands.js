@@ -73,6 +73,15 @@ Cypress.Commands.add('leaveRoom', () => {
     cy.wait('@leaveRoom');
 });
 
+Cypress.Commands.add('addAIPlayer', () => {
+    cy.route({
+        method: 'POST',
+        url: '/api/room/addAIPlayer'
+    }).as('addAIPlayer');
+    cy.get('[data-cy="automated-player"]').click();
+    cy.wait('@addAIPlayer');
+});
+
 Cypress.Commands.add('sendMessage', () => {
     cy.get('[data-cy="type-message"]').type('message');
     cy.get('[data-cy="send-message"]').click();
@@ -154,13 +163,8 @@ Cypress.Commands.add('nextRound', () => {
     cy.wait('@nextRound');
 });
 
-Cypress.Commands.add('newGame', () => {
-    cy.route({
-        method: 'GET',
-        url: '/api/end'
-    }).as('endGame');
-    cy.get('[data-cy="new-game"]').click();
-    cy.wait('@endGame');
+Cypress.Commands.add('backToLobby', () => {
+    cy.get('[data-cy="back-to-lobby"]').click();
 });
 
 Cypress.Commands.add('goToLeaderboard', () => {

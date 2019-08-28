@@ -11,12 +11,9 @@ describe('Played cards', () => {
             .then(() => cy.request(`http://localhost:12346/playCardWord?url=${encodeURIComponent(Cypress.config().baseUrl)}`));
         });
 
-        it('a hidden card is displayed after first player plays', () => {
-            cy.get('[data-cy="played-cards"] [data-cy="card-wrapper"]', { timeout: 5000 }).its('length').should('eq', 1);
-        });
-
         it('all the played cards are displayed', () => {
             cy.playCard();
+            cy.get('[data-cy="vote-timer"]').should('exist');
             cy.get('[data-cy="played-card"]');
             cy.get('[data-cy="played-cards"] [data-cy="card-wrapper"]').its('length').should('eq', numberOfPlayers - 1);
         });

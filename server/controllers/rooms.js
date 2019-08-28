@@ -13,7 +13,7 @@ router.post('/create', auth, (req, res) => {
     try {
         const room = Room.getById(roomId);
         if (room) {
-            if (room.gameState.players.length === 1) {
+            if (room.gameState.getPlayers().length === 1) {
                 throw Error("Cannot leave current room");
             } else {
                 Room.removePlayer(room, user.username);

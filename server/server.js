@@ -31,18 +31,6 @@ module.exports.server = (port) => {
     server.listen(port, () => console.log(`Server running on port: ${port}`));
 }
 
-module.exports.stop = () => {
-    server.close(function() {
-        process.exit(0);
-    });
-}
-
-module.exports.fail = () => {
-    server.close(function() {
-        process.exit(1);
-    });
-}
-
 process.on('SIGTERM', function () {
     server.close(function () {
       process.exit(0);

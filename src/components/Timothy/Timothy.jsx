@@ -6,7 +6,7 @@ import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 
 export function Timothy(props) {
-    const winner = (props.winner && props.winner.username === props.username) ||(props.drawers && props.drawers.some(drawer => drawer.username === props.username));
+    const winner = (props.winners.length > 0 && props.winners.some(winner => winner.username === props.username));
     let bodyClass = styles.body;
     if (props.error) bodyClass = styles.disappointedBody;
     if (winner) bodyClass = styles.victoryBody;
@@ -23,7 +23,7 @@ export function Timothy(props) {
                         <div className={styles.eyes}>
                             <div className={styles.eye}>
                                 <div data-cy='timothy-meaneye' className={cx({ meaneye: props.error && !winner })}></div>
-                                {props.winner && <div data-cy='timothy-tear' className={cx({tear: !winner})}/>}
+                                {props.winners.length > 0 && <div data-cy='timothy-tear' className={cx({tear: !winner})}/>}
                             </div>
                         </div>
                     </div>
@@ -34,7 +34,7 @@ export function Timothy(props) {
 }
 
 const mapStateToProps = (state) => ({
-    winner: state.gameOverReducer.winner,
+    winners: state.gameOverReducer.winners,
     username: state.authReducer.username,
     error: state.playWordReducer.error,
     drawers: state.gameOverReducer.drawers

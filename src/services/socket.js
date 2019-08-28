@@ -5,7 +5,7 @@ import { setPlayedCards, setVoteCard, setVotedCard } from '../components/PlayedC
 import { setPlayCard, resetPlayedCardId, selectCardSuccess, fetchCards } from '../components/MyCards/MyCardsActions';
 import { setPlayWord, resetWord } from '../components/PlayWord/PlayWordActions';
 import { setPlayers, setCurrentPlayer, setScoresForRound } from '../components/Players/PlayersActions';
-import { setWinner, setDrawers } from '../components/GameOver/GameOverActions';
+import { setWinners } from '../components/GameOver/GameOverActions';
 import { setCurrentWord, setStatus, setRoundNumber } from '../components/Dashboard/DashboardActions';
 import { removeCard } from '../components/MyCards/MyCardsActions';
 import { setRooms } from '../components/Lobby/LobbyActions';
@@ -111,29 +111,15 @@ export const connectSocket = () => {
         dispatch(setVoteCardTimer(msg.timeoutDuration));
     });
 
-    socket.on("winner", msg => {
-        dispatch(setWinner(msg));
-        dispatch(setPlayCard(false));
-        dispatch(setVoteCard(false));
-        dispatch(setPlayWord(false));
-    });
-    
-    socket.on("drawers", (msg) => {
-        dispatch(setDrawers(msg));
+    socket.on('winners', winners => {
+        dispatch(setWinners(winners));
     });
 
     socket.on("end", () => {
-        dispatch(setStatus('NOT_STARTED'));
-        dispatch(setRoundNumber(0, 0));
-        dispatch(setCurrentPlayer(null));
-        dispatch(setCurrentWord(''));
-        dispatch(setPlayedCards([]));
-        dispatch(setVotedCard(0));
-        dispatch(resetWord());
-        dispatch(setWinner(null));
-        dispatch(setDrawers([]));
-        dispatch(resetChat());
-        history.push('/lobby');
+        dispatch(setPlayedCards([])); 
+        dispatch(setPlayCard(false));
+        dispatch(setVoteCard(false));
+        dispatch(setPlayWord(false));
     });
 
     return new Promise((resolve, reject) => {

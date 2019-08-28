@@ -2,7 +2,7 @@ const router = require('express').Router();
 const path = require('path');
 const auth = require('../middlewares/auth');
 const Room = require('../models/room');
-const { emitRooms, disconnectSocket, closeRoom, disconnectAllSockets, getAllSockets } = require('../services/socket');
+const { emitRooms, disconnectSocket, disconnectAllSockets, getAllSockets } = require('../services/socket');
 
 let db;
 
@@ -166,30 +166,6 @@ router.get('/api/nextRound', auth, (req, res) => {
         const roomId = req.session.roomId;
         Room.getById(roomId).gameState.nextRound();
         res.sendStatus(200);
-    } catch (err) {
-        console.error(err);
-        res.status(400).json({ message: err.message });
-    }
-});
-
-/* End the game */
-router.get('/api/end', auth, (req, res) => {
-    const { roomId } = req.session;
-    try {
-        const gameState = Room.getById(roomId).gameState;        
-        gameState.getPlayers().forEach(player => {
-            db.updateScore(player.id, player.score)
-            .then(() => {
-                gameState.endGame();
-                Room.deleteById(roomId);
-                closeRoom(roomId);
-                res.sendStatus(200);
-            })
-            .catch(err => {
-                console.error(err);
-                res.status(err.code).json({ message: err.message });
-            });
-        });
     } catch (err) {
         console.error(err);
         res.status(400).json({ message: err.message });

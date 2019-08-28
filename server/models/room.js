@@ -1,4 +1,6 @@
 const { GameLogic } = require('../models/GameLogic');
+const { statusTypes } = require('./statusTypes');
+const socket = require('../services/socket');
 const roomNames = require('../../roomnames');
 
 /** @type {{ roomId: number, gameState: GameLogic }[]} */
@@ -17,7 +19,24 @@ exports.getAll = () => rooms;
 
 exports.getById = roomId => rooms.find(room => room.roomId === roomId);
 
-exports.isStarted = room => room.gameState.status !== 'NOT_STARTED';
+exports.isStarted = room => room.gameState.isStarted();
+
+const update = roomId => state => {
+    const { status } = state;
+    const room = this.getById(roomId);
+    if (room) {
+        const { gameState } = room;
+        if (status === statusTypes.GAME_OVER) {
+            gameState.getPlayers().forEach(player => {
+                db.updateScore(player.id, player.score)
+                .catch(err => console.error(err));
+            });
+            socket.emitEndGame(roomId);
+            socket.closeRoom(roomId);
+            this.deleteById(roomId);
+        }
+    }
+}
 
 exports.create = (numRounds, gameMode) => {
     return new Promise((resolve, reject) => {
@@ -25,9 +44,9 @@ exports.create = (numRounds, gameMode) => {
         latestRoomId++;
         if (gameMode === 'custom') {
             db.getAllCards()
-            .then(cards => {            
+            .then(cards => {                         
                 if (cards.length >= 50) {
-                    const gameState = new GameLogic(roomId, numRounds, gameMode, cards.length);
+                    const gameState = new GameLogic(update(roomId), roomId, numRounds, gameMode, cards.length);
                     rooms.push({ roomId, title: roomNames[Math.floor(Math.random() * 78)], gameState });         
                     resolve(roomId);
                 } else {
@@ -44,7 +63,7 @@ exports.create = (numRounds, gameMode) => {
                 });
             });
         } else {
-            const gameState = new GameLogic(roomId, numRounds, gameMode, 247 /*cards length*/);
+            const gameState = new GameLogic(update(roomId), roomId, numRounds, gameMode, 247 /*cards length*/);
             rooms.push({ roomId, title: roomNames[Math.floor(Math.random() * 78)], gameState });         
             resolve(roomId);
         }

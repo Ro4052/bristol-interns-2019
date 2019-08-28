@@ -4,6 +4,6 @@ import { Timothy } from './Timothy';
 
 describe('on render', () => {
     it('renders correctly', () => {
-        shallow(<Timothy />);
+        shallow(<Timothy winners={[]} />);
     });
 });
