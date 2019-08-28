@@ -59,7 +59,7 @@ exports.create = (numRounds, gameMode) => {
         } else {
             const cardsLength = 247;
             const gameState = new GameLogic(update(roomId), roomId, numRounds, gameMode, cardsLength);
-            rooms.push({ roomId, title: roomNames[Math.floor(Math.random() * 78)], gameState });         
+            rooms.push({ roomId, title: roomNames[Math.floor(Math.random() * roomNames.length)], gameState });         
             resolve(roomId);
         }
     });
