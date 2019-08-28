@@ -25,8 +25,8 @@ export class CreateRoom extends React.Component {
                         {options.map((option, key) => <option key={key} value={option}>{option} rounds</option>)}
                     </select>
                     <select className={styles.selectRounds} data-cy="mode-options" onChange={event => this.props.setGameMode(event.target.value)}>
-                        <option value={"telltales"}>TellTales Images</option>
-                        <option value={"custom"}>Custom Images</option>
+                        <option value="telltales">TellTales Images</option>
+                        <option value="custom">Custom Images</option>
                     </select>
                     <button className={styles.createRoomButton} data-cy="create-room" type='submit'>Create</button>
                 </form>

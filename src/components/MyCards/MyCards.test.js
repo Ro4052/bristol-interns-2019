@@ -13,7 +13,7 @@ const initialState = {
         newScores: []
     },
     createRoomReducer: {
-        gameMode: "telltales"
+        gameMode: "original"
     }
 };
 const middlewares = [];

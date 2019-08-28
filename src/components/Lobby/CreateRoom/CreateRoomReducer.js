@@ -2,7 +2,7 @@ import { types } from './CreateRoomActionTypes';
 
 export const initialState = {
     numRounds: 3,
-    gameMode: "telltales",
+    gameMode: "original",
     error: null
 }
 
