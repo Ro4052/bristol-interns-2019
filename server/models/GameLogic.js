@@ -14,13 +14,13 @@ exports.minPlayers = minPlayers;
 exports.maxPlayers = maxPlayers;
 
 class GameLogic {
-    constructor(notifyObserver, roomId, numRounds, gameMode, allCardsNumber) {
+    constructor(notifyObserver, roomId, numRounds, mode, allCardsNumber) {
         this.notifyObserver = notifyObserver;
         this.state = {
             status: statusTypes.NOT_STARTED,
             roundNum: 0,
-            mode: gameMode,
-            allCardsNumber: allCardsNumber,
+            mode,
+            allCardsNumber,
             currentPlayer: null,
             currentWord: '',
             /** @type {{ username: string, id: number, cards: {{ cardId: number, played: bool }[]}, score: number, real: bool }[]} */
@@ -88,7 +88,7 @@ class GameLogic {
     /* Return the list of cards played this round, hiding who played them */
     getPlayedCards() {
         if (this.state.status === statusTypes.WAITING_FOR_VOTES) {
-            return this.state.playedCards.map(card => ({ cardId: card.cardId, url: card.url }));
+            return this.state.playedCards.map(({ cardId, url }) => ({ cardId, url }));
         } else if (this.state.status === statusTypes.DISPLAY_ALL_VOTES) {
             return this.state.playedCards.map(card => ({...card, votes: this.state.votes.filter(vote => vote.cardId === card.cardId)}));
         } else {

@@ -26,9 +26,10 @@ export class Card extends React.Component {
     }
 
     render() {
-        const src = (this.props.gameMode === 'original') 
-                    ? (this.props.card.cardId ? require(`../../../../images/cards/card (${this.props.card.cardId}).jpg`) : require('../../../../images/cardBack.jpg'))
-                    : this.props.card.url;      
+        const src = {
+            telltales: this.props.card.cardId ? require(`../../../../images/cards/card (${this.props.card.cardId}).jpg`) : require('../../../../images/cardBack.jpg'),
+            custom: src=this.props.card.url
+        }[this.props.gameMode];
         const alt = this.props.card.cardId ? `card-${this.props.card.cardId}` : 'card-hidden';
         return (
             <div data-cy='card-wrapper' className={cx(styles.cardWrapper, { enabled: this.props.enabled }, { selected: this.props.enabled && this.props.playedCardId === this.props.card.cardId })}>

@@ -115,16 +115,16 @@ router.get('/api/cards', auth, (req, res) => {
     const gameState = Room.getById(roomId).gameState;
     const cards = gameState.getUnplayedCardsByUsername(user.username);
     if (cards) {
-        if (gameState.mode === 'custom') {
-            cards.forEach(card => {
-                db.getCard(card.cardId)
-                .then(other => {
-                    card.url = other.dataValues.url;
-                })
-                .catch(err => res.status(err.code).json({ message: err.message }));
-            });
-        }        
-        res.status(200).json(cards);
+        (gameState.mode === 'custom'
+        ? Promise.all(cards.map(card =>
+            db.getCard(card.cardId)
+            .then(other => ({
+                ...card,
+                url: other.dataValues.url
+            }))))
+        : Promise.resolve(cards))
+        .then(cards => res.status(200).json(cards))
+        .catch(err => res.status(500).json({ message: err.message }));
     }
     else {
         res.status(404).json({ message: "Cannot find cards: user does not exist." });
