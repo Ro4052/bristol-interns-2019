@@ -5,12 +5,12 @@ import Room from './Room/Room';
 import Logo from '../Logo/Logo';
 import Logout from '../Logout/Logout';
 import CreateRoom from './CreateRoom/CreateRoom';
+import Upload  from '../Upload/Upload';
 import LeaderboardButton from '../Leaderboard/LeaderboardButton/LeaderboardButton';
 import { authenticateUser } from '../Login/LoginActions';
 import history from '../../services/history';
 import Chat from '../Chat/Chat';
 import { statusTypes } from '../../services/statusTypes';
-import { Upload } from '../Upload/Upload';
 
 export class Lobby extends React.Component {
     componentDidMount() {

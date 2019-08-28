@@ -78,10 +78,14 @@ module.exports.addLabel = (cardId, word) => {
     });
 }
 
-module.exports.addCard = (url) => {
+module.exports.addCard = (etag, url) => {
     return new Promise((resolve, reject) => {
         CardImages.findOrCreate({
-            where: { url }
+            where: { etag },
+            defaults: { // set the default properties if it doesn't exist
+                etag,
+                url
+            }
         }).then(([card, created]) => {
             if (created) {
                 resolve(card);

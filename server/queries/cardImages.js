@@ -8,6 +8,10 @@ module.exports = function(sequelize, DataTypes) {
         url: {
             type: DataTypes.STRING,
             notEmpty: true
+        },
+        etag: {
+            type: DataTypes.STRING,
+            notEmpty: true
         }
     });
  

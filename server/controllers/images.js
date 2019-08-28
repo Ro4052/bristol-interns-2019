@@ -43,9 +43,9 @@ router.post("/upload", auth, (req, res) => {
             console.log(err);
             return res.status(401).json({err});
         }
-        db.addCard(req.file.location)
-        .then(() => {
-            return res.status(200).json({ 'imageUrl': req.file.location });
+        db.addCard(req.file.etag, req.file.location)
+        .then((card) => {
+            return res.status(200).json({ 'imageUrl': card.url });
         })
         .catch(err => {
             res.status(err.code).json({ message: err.message });

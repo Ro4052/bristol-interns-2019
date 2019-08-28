@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
+import { uploadImage, uploadImageFailure } from './UploadActions';
+import styles from './Upload.module.css';
 
 export class Upload extends React.Component {
     constructor(props) {
@@ -8,27 +9,18 @@ export class Upload extends React.Component {
         this.state = {
             file: null
         };
-        this.onFormSubmit = this.onFormSubmit.bind(this);
+        this.sendImageUpload = this.sendImageUpload.bind(this);
         this.onChange = this.onChange.bind(this);
     }
 
-    onFormSubmit(e){
+    sendImageUpload(e){
         e.preventDefault();        
         if (this.state.file && this.state.file.type === 'image/jpeg') {
             const formData = new FormData();
             formData.append('image', this.state.file);
-            const config = {
-                headers: {
-                    'content-type': 'multipart/form-data'
-                }
-            };
-            axios.post("/api/images/upload",formData,config)
-            .then((response) => {
-                alert("The file is successfully uploaded");
-            }).catch((error) => {
-            });
+            this.props.uploadImage(formData);
         } else {
-            window.alert("Only jpeg images are allowed.");
+            this.props.uploadImageFailure("Only jpeg images are allowed.");
             this.setState({ file: null })
         }
     }
@@ -37,23 +29,26 @@ export class Upload extends React.Component {
         this.setState({ file: e.target.files[0] });
     }
 
-    render() {
+    render() {        
         return (
-            <form onSubmit={this.onFormSubmit}>
-                <input type="file" name="image" onChange={this.onChange} />
-                <button type="submit">Upload</button>
-            </form>
+            <div className={styles.uploadSection}>
+                {this.props.message && <span className={styles.uploadMessage}>{this.props.message}</span>}
+                <form className={styles.uploadForm} onSubmit={this.sendImageUpload}>
+                    <input type="file" name="image" onChange={this.onChange} />
+                    <button type="submit">Upload</button>
+                </form>
+            </div>
         )
     }
 }
 
 const mapStateToProps = state => ({
-    username: state.authReducer.username,
-    uri: state.authReducer.uri,
-    error: state.authReducer.error
+    message: state.uploadReducer.message
 });
 
 const mapDispatchToProps = dispatch => ({
+    uploadImage: (formData) => dispatch(uploadImage(formData)),
+    uploadImageFailure: (error) => dispatch(uploadImageFailure(error)) 
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Upload);

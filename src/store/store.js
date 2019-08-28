@@ -16,6 +16,7 @@ import timerReducer from '../components/Timer/TimerReducer';
 import createRoomReducer from '../components/Lobby/CreateRoom/CreateRoomReducer';
 import chatReducer from '../components/Chat/ChatReducer';
 import leaderboardReducer from '../components/Leaderboard/LeaderboardReducer';
+import uploadReducer from '../components/Upload/UploadReducer';
 
 // Combine all reducers
 const allReducers = combineReducers({
@@ -30,7 +31,8 @@ const allReducers = combineReducers({
     timerReducer,
     chatReducer,
     createRoomReducer,
-    leaderboardReducer
+    leaderboardReducer,
+    uploadReducer
 });
 
 // Wrap in reset functionality

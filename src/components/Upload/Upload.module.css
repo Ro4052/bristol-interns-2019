@@ -1,0 +1,16 @@
+.uploadSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 12vh;
+}
+
+.uploadForm {
+    display: flex;
+}
+
+.uploadMessage {
+    color: white;
+    background-color: var(--red);
+    padding: 0.2em 0.5em;
+}

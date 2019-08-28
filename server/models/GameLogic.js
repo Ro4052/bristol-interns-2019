@@ -74,9 +74,9 @@ class GameLogic {
     getNumberOfAIPlayers() { return this.players.filter(player => !player.real).length };
     
     /* Return the list of cards played this round, hiding who played them */
-    getPlayedCards() {
+    getPlayedCards() {        
         if (this.status === statusTypes.WAITING_FOR_VOTES) {
-            return this.playedCards.map(card => ({ cardId: card.cardId }));
+            return this.playedCards.map(card => ({ cardId: card.cardId, url: card.url }));
         } else if (this.status === statusTypes.DISPLAY_ALL_VOTES) {
             return this.playedCards.map(card => ({...card, votes: this.votes.filter(vote => vote.cardId === card.cardId)}));
         } else {
@@ -218,8 +218,10 @@ class GameLogic {
             throw Error("Word cannot be longer than 25 characters.");
         } else {
             clearTimeout(this.nextRoundTimeout);
-            this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
-            const card = { username, cardId };
+            const playedCard = this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId);
+            playedCard.played = true;
+            console.log(playedCard);
+            const card = { username, cardId, url: playedCard.url };
             this.playedCards.push(card);
             socket.emitPlayedCards(this.roomId, this.getPlayedCards());
             this.setStatus(statusTypes.WAITING_FOR_OTHER_PLAYERS);
@@ -275,7 +277,8 @@ class GameLogic {
         } else if (this.hasPlayedCard(username)) {
             throw Error("You cannot play more than one card");
         } else {
-            const card = { username, cardId };
+            const url = this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).url;
+            const card = { username, cardId, url };
             this.playedCards.push(card);
             socket.emitPlayedCards(this.roomId, this.getPlayedCards());
             socket.emitPlayedCard(username, card);
