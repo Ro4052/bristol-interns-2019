@@ -11,6 +11,9 @@ const initialState = {
     },
     playersReducer: {
         newScores: []
+    },
+    createRoomReducer: {
+        gameMode: "telltales"
     }
 };
 const middlewares = [];

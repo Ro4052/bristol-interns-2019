@@ -14,8 +14,11 @@ export class Upload extends React.Component {
     }
 
     sendImageUpload(e){
-        e.preventDefault();        
-        if (this.state.file && this.state.file.type === 'image/jpeg') {
+        e.preventDefault();
+        if (!this.state.file) {
+            this.props.uploadImageFailure("You need to select an image first.");
+            this.setState({ file: null })
+        } else if (this.state.file && this.state.file.type === 'image/jpeg') {
             const formData = new FormData();
             formData.append('image', this.state.file);
             this.props.uploadImage(formData);
@@ -33,9 +36,9 @@ export class Upload extends React.Component {
         return (
             <div className={styles.uploadSection}>
                 {this.props.message && <span className={styles.uploadMessage}>{this.props.message}</span>}
-                <form className={styles.uploadForm} onSubmit={this.sendImageUpload}>
-                    <input type="file" name="image" onChange={this.onChange} />
-                    <button type="submit">Upload</button>
+                <form className={styles.uploadForm} data-cy='upload-form' onSubmit={this.sendImageUpload}>
+                    <input data-cy='upload-input' type="file" name="image" onChange={this.onChange} />
+                    <button data-cy='upload-button' type="submit">Upload</button>
                 </form>
             </div>
         )

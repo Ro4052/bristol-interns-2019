@@ -16,7 +16,7 @@ const room = {
     ]
 };
 
-const emptyState = { authReducer: { username: 'unicorn' }, lobbyReducer: { rooms: [] }, dashboardReducer: { status: '' }, createRoomReducer: {}, chatReducer: {messages: [], newMessages: []} };
+const emptyState = { authReducer: { username: 'unicorn' }, lobbyReducer: { rooms: [] }, dashboardReducer: { status: '' }, createRoomReducer: {}, chatReducer: { messages: [], newMessages: [] }, uploadReducer: { message: "" } };
 const emptyStore = mockStore(emptyState);
 
 describe('on render', () => {
