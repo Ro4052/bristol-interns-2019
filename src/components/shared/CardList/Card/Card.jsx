@@ -27,7 +27,7 @@ export class Card extends React.Component {
 
     render() {
         const src = {
-            telltales: this.props.card.cardId ? require(`../../../../images/cards/card (${this.props.card.cardId}).jpg`) : require('../../../../images/cardBack.jpg'),
+            original: this.props.card.cardId ? require(`../../../../images/cards/card (${this.props.card.cardId}).jpg`) : require('../../../../images/cardBack.jpg'),
             custom: this.props.card.url
         }[this.props.gameMode];
         const alt = this.props.card.cardId ? `card-${this.props.card.cardId}` : 'card-hidden';
