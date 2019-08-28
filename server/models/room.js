@@ -46,7 +46,7 @@ exports.create = (numRounds, gameMode) => {
                 } else {
                     reject({
                         code: 400,
-                        message: "Not enough cards in the server. Upload more."
+                        message: `Not enough cards in the server (currently ${cards.length}). Upload more.`
                     });
                 }
             })
