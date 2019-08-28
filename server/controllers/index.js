@@ -67,7 +67,7 @@ router.post('/auth/signup', (req, res) => {
         res.sendStatus(200);
     }).catch(err => {
         console.error(err);
-        res.status(500).json({ message: err.message });
+        res.status(err.code).json({ message: err.message });
     });
 });
 
