@@ -3,6 +3,7 @@ const Promise = require('promise');
 const bcrypt = require('bcrypt');
 const UserModel = require("./user");
 const CardLabelsModel = require("./cardLabels");
+const CardImagesModel = require("./cardImages");
 const db_url = process.env.DATABASE_URL || `postgres://${process.env.DB_USER}:${process.env.DB_PASS}@localhost:5432/${process.env.DB_NAME}`;
 
 const sequelize = new Sequelize(db_url, {
@@ -15,6 +16,7 @@ const sequelize = new Sequelize(db_url, {
 
 const User = UserModel(sequelize, Sequelize);
 const CardLabels = CardLabelsModel(sequelize, Sequelize);
+const CardImages = CardImagesModel(sequelize, Sequelize);
 
 sequelize.sync({ alter: true }).then(() => {
     console.log("Database connected.");
@@ -72,6 +74,53 @@ module.exports.addLabel = (cardId, word) => {
                     });
                });
             }
+        });
+    });
+}
+
+module.exports.addCard = (url) => {
+    return new Promise((resolve, reject) => {
+        CardImages.findOrCreate({
+            where: { url }
+        }).then(([card, created]) => {
+            if (created) {
+                resolve(card);
+            }
+            reject({
+                code: 409,
+                message: "Card already exists in the database"
+            })
+        });
+    });
+}
+
+module.exports.getAllCards = () => {
+    return new Promise((resolve, reject) => {
+        CardImages.findAll()
+        .then(cards => {
+            if (cards) {
+                resolve(cards);
+            }
+            reject({
+                code: 404,
+                message: "No cards are found in the database."
+            })
+        });
+    });
+}
+
+module.exports.getCard = (id) => {
+    return new Promise((resolve, reject) => {
+        CardImages.findOne({
+            where: { id }
+        }).then(card => {
+            if (card) {
+                resolve(card);
+            }
+            reject({
+                code: 404,
+                message: "Card with this id is not found in the database."
+            })
         });
     });
 }

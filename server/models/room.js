@@ -6,6 +6,14 @@ const fs = require('fs');
 let rooms = [];
 let latestRoomId = 0;
 
+let db;
+
+if (process.env.NODE_ENV === 'testing') {
+    db = require('../queries/testdb');
+} else {
+    db = require('../queries/db');
+}
+
 exports.getAll = () => rooms;
 
 exports.getById = roomId => rooms.find(room => room.roomId === roomId);
@@ -16,19 +24,22 @@ exports.create = (numRounds, gameMode) => {
     return new Promise((resolve, reject) => {
         const roomId = latestRoomId;
         latestRoomId++;
-        const dir = `./src/images/${gameMode === 'telltales' ? 'cards/' : 'uploads/'}`;
-        fs.readdir(dir, (err, files) => {
-            if (err) {
-                reject(err);
-            }
-            if (files.length >= 50) {
-                const gameState = new GameLogic(roomId, numRounds, files.length);
+        db.getAllCards()
+        .then(cards => {            
+            if (cards.length >= 50) {
+                const gameState = new GameLogic(roomId, numRounds, gameMode, cards.length);
                 rooms.push({ roomId, title: roomNames[Math.floor(Math.random() * 78)], gameState });         
                 resolve(roomId);
             } else {
                 reject({ message: "Not enough cards in the server. Upload more." });
             }
-        });
+        })
+        .catch(err => {
+            reject({
+                code: err.code,
+                message: err.message
+            })
+        })
     });
 };
 

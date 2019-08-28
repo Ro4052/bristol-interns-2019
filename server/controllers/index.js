@@ -121,6 +121,17 @@ router.get('/api/cards', auth, (req, res) => {
     const gameState = Room.getById(roomId).gameState;
     const cards = gameState.getUnplayedCardsByUsername(user.username);
     if (cards) {
+        if (gameState.mode === 'custom') {
+            cards.forEach(card => {
+                db.getCard(card.cardId)
+                .then(other => {
+                    card.url = other.dataValues.url;
+                })
+                .catch(err => res.status(err.code).json({ message: err.message }));
+            });
+        }
+        console.log(cards);
+        
         res.status(200).json(cards);
     }
     else {

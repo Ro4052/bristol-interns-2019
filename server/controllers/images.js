@@ -1,30 +1,55 @@
 const express = require('express');
+const aws = require('aws-sdk');
 const multer = require('multer');
-const path = require('path');
+const multerS3 = require('multer-s3');
 const router = express.Router();
 const auth = require('../middlewares/auth');
-const fs = require('fs');
 
-const dir = './src/images/uploads/';
+let db;
 
-router.post("/upload", auth, (req, res) => {
-    fs.readdir(dir, (err, files) => {
-        const storage = multer.diskStorage({
-            destination: "./src/images/uploads/",
-            filename: (req, file, cb) => {
-               cb(null,`card (${files.length+1})` + path.extname(file.originalname));
-            }
-        });
-         
-        const upload = multer({
-            storage: storage,
-            limits:{fileSize: 1000000},
-        }).single("myImage");
-         
-        upload(req, res, err => {
-            if(!err)
-                return res.send(200).end();
-        });
+if (process.env.NODE_ENV === 'testing') {
+    db = require('../queries/testdb');
+} else {
+    db = require('../queries/db');
+}
+
+aws.config.update({
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    region: 'eu-west-2'
+});
+
+const s3 = new aws.S3();
+
+const upload = multer({
+    storage: multerS3({
+        s3: s3,
+        bucket: 'telltales',
+        acl: 'public-read',
+        metadata: (req, file, cb) => {
+            cb(null, { fieldName: 'TESTING_META_DATA!' });
+        },
+        key: (req, file, cb) => {
+            cb(null, Date.now().toString());
+        }
+    })
+});
+
+const singleUpload = upload.single('image');
+
+router.post("/upload", auth, (req, res) => {    
+    singleUpload(req, res, err => {
+        if(err) {
+            console.log(err);
+            return res.status(401).json({err});
+        }
+        db.addCard(req.file.location)
+        .then(() => {
+            return res.status(200).json({ 'imageUrl': req.file.location });
+        })
+        .catch(err => {
+            res.status(err.code).json({ message: err.message });
+        })
     });
 });
 

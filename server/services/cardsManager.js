@@ -3,7 +3,6 @@ exports.assign = (users, numberOfCards, max) => {
     let cardsSet = [];
 
     const min = 1;
-    console.log("Cards", max);
     
     for (let j = 0; j < numberOfCards; j++) {
         let random = Math.floor(Math.random() * (max - min) + min);

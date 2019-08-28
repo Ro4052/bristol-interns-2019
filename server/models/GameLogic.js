@@ -14,9 +14,10 @@ exports.minPlayers = minPlayers;
 exports.maxPlayers = maxPlayers;
 
 class GameLogic {
-    constructor(roomId, numRounds, allCardsNumber) {
+    constructor(roomId, numRounds, gameMode, allCardsNumber) {
         this.roomId = roomId;
         this.rounds = numRounds;
+        this.mode = gameMode;
         this.allCardsNumber = allCardsNumber;
         this.status = statusTypes.NOT_STARTED;
         this.roundNum = 0;

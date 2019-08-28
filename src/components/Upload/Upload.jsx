@@ -13,13 +13,10 @@ export class Upload extends React.Component {
     }
 
     onFormSubmit(e){
-        e.preventDefault();
-        console.log(this.state.file);
-        console.log(this.state.file.type);
-        
+        e.preventDefault();        
         if (this.state.file && this.state.file.type === 'image/jpeg') {
             const formData = new FormData();
-            formData.append('myImage', this.state.file);
+            formData.append('image', this.state.file);
             const config = {
                 headers: {
                     'content-type': 'multipart/form-data'
@@ -43,7 +40,7 @@ export class Upload extends React.Component {
     render() {
         return (
             <form onSubmit={this.onFormSubmit}>
-                <input type="file" name="myImage" onChange={this.onChange} />
+                <input type="file" name="image" onChange={this.onChange} />
                 <button type="submit">Upload</button>
             </form>
         )

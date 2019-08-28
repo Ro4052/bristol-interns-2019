@@ -6,9 +6,7 @@ import CardList from '../shared/CardList/CardList';
 export class MyCards extends React.Component {
 
     componentDidMount() {
-        this.props.fetchCards();
-        console.log(this.props.cards);
-        
+        this.props.fetchCards();        
     }
 
     render() {
