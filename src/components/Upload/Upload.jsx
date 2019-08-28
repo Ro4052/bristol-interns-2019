@@ -18,12 +18,12 @@ export class Upload extends React.Component {
         if (!this.state.file) {
             this.props.uploadImageFailure("You need to select an image first.");
             this.setState({ file: null })
-        } else if (this.state.file && this.state.file.type === 'image/jpeg') {
+        } else if (this.state.file && (this.state.file.type === 'image/jpeg' || this.state.file.type === 'image/png')) {
             const formData = new FormData();
             formData.append('image', this.state.file);
             this.props.uploadImage(formData);
         } else {
-            this.props.uploadImageFailure("Only jpeg images are allowed.");
+            this.props.uploadImageFailure("Only jpeg or png images are allowed.");
             this.setState({ file: null })
         }
     }

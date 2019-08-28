@@ -35,4 +35,15 @@ describe('on pressing the upload button', () => {
         expect(uploadImage).toHaveBeenCalled();
         uploadImage.mockRestore();
     });
+    it('fails to upload if an image of the wrong type was selected', () => {
+        const wrapper = mount(
+            <Provider store={emptyStore}>
+                <Upload uploadImage={uploadImage} uploadImageFailure={uploadImageFailure} />
+            </Provider>
+        );
+        wrapper.find({ 'data-cy': 'upload-input' }).simulate('change', { preventDefault: () => {}, target: { files: [{type: 'image/svg'}] } });
+        wrapper.find({ 'data-cy': 'upload-form' }).simulate('submit');
+        expect(uploadImageFailure).toHaveBeenCalled();
+        uploadImageFailure.mockRestore();
+    });
 });
