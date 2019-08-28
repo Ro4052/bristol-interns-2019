@@ -22,27 +22,23 @@ sequelize.sync({ alter: true }).then(() => {
     console.log("Database connected.");
 });
 
-module.exports.validatePassword = (username, password) => {
+module.exports.validatePassword = (username, password) => 
     User.findOne({
         where: { username }
     })
     .then(user => {
         if (user) {
-            bcrypt.compare(password, user.dataValues.password, (err, res) => {                    
-                if (res) {
-                    return user;
-                } else {
-                    throw new Error("Password is incorrect");
-                }
-            });
+            return bcrypt.compare(password, user.dataValues.password)
+            .then(() => user)
+            .catch(() => { throw new Error("Passwords are incorrect.") });
         } else {
             throw new Error("User with this username does not exist");
         }
     })
     .catch(err => { throw new Error(err.message) });
-}
 
-module.exports.addLabel = (cardId, word) => {
+
+module.exports.addLabel = (cardId, word) => 
     CardLabels.findOne({
         where: { cardId }
     }).then(card => {
@@ -56,7 +52,7 @@ module.exports.addLabel = (cardId, word) => {
             .catch(err => { throw new Error(err.message) });
         }
     });
-}
+
 
 module.exports.addCard = (etag, url) => 
     CardImages.findOrCreate({
@@ -92,11 +88,9 @@ module.exports.getCard = (id) =>
     });
 
 
-module.exports.createUser = (username, password) => 
-    bcrypt.hash(password, 10, (err, hash) => {
-        if (err) {
-            throw new Error(err.message);
-        }
+module.exports.createUser = (username, password) =>
+    bcrypt.hash(password, 10)
+    .then(hash => 
         User.findOrCreate({
             where: { username },
             defaults: { // set the default properties if it doesn't exist
@@ -111,8 +105,7 @@ module.exports.createUser = (username, password) =>
             }
             throw new Error("User with this username already exists");
         })
-        .catch(err => { throw new Error(err.message) });
-    });
+    )
 
 
 module.exports.createGithubUser = username => 
