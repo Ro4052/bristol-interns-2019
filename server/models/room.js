@@ -7,13 +7,7 @@ const roomNames = require('../../roomnames');
 let rooms = [];
 let latestRoomId = 0;
 
-let db;
-
-if (process.env.NODE_ENV === 'testing') {
-    db = require('../queries/testdb');
-} else {
-    db = require('../queries/db');
-}
+const db = (process.env.NODE_ENV === 'testing') ? require('../queries/testdb') : require('../queries/db');
 
 exports.getAll = () => rooms;
 

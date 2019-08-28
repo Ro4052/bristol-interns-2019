@@ -4,19 +4,13 @@ const auth = require('../middlewares/auth');
 const Room = require('../models/room');
 const { emitRooms, disconnectSocket, disconnectAllSockets, getAllSockets } = require('../services/socket');
 
-let db;
-
 const oauthClientId = process.env.CLIENT_ID;
 const oauthSecret = process.env.CLIENT_SECRET;
 const redirectURL = process.env.NODE_ENV === 'production' ? "/lobby" : "http://localhost:3000/lobby";
 const oAuthGithub = require('./oauth-github');
 const githubAuthoriser = oAuthGithub(oauthClientId, oauthSecret);
 
-if (process.env.NODE_ENV === 'testing') {
-    db = require('../queries/testdb');
-} else {
-    db = require('../queries/db');
-}
+const db = (process.env.NODE_ENV === 'testing') ? require('../queries/testdb') : require('../queries/db');
 
 router.get("/oauth", (req, res) => {
     githubAuthoriser.authorise(req, (githubUser, token) => {

@@ -5,13 +5,7 @@ const multerS3 = require('multer-s3');
 const router = express.Router();
 const auth = require('../middlewares/auth');
 
-let db;
-
-if (process.env.NODE_ENV === 'testing') {
-    db = require('../queries/testdb');
-} else {
-    db = require('../queries/db');
-}
+const db = require('../queries/db');
 
 aws.config.update({
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
