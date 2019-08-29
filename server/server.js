@@ -1,4 +1,5 @@
 const express = require('express');
+const multer = require('multer');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 const expressSession = require('express-session');
@@ -28,18 +29,6 @@ module.exports.server = (port) => {
     app.use(require('./controllers'));
 
     server.listen(port, () => console.log(`Server running on port: ${port}`));
-}
-
-module.exports.stop = () => {
-    server.close(function() {
-        process.exit(0);
-    });
-}
-
-module.exports.fail = () => {
-    server.close(function() {
-        process.exit(1);
-    });
 }
 
 process.on('SIGTERM', function () {

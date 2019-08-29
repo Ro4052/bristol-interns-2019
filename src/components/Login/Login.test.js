@@ -7,9 +7,9 @@ import configureStore from 'redux-mock-store';
 const middlewares = [];
 const mockStore = configureStore(middlewares);
 const state = {
-    gameOverReducer: {},
+    gameOverReducer: { winners: [] },
     playWordReducer: {},
-    authReducer: {}
+    authReducer: {},
 };
 const store = mockStore(state);
 

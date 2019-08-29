@@ -2,9 +2,7 @@ const router = require('express').Router();
 const path = require('path');
 const auth = require('../middlewares/auth');
 const Room = require('../models/room');
-const { emitRooms, disconnectSocket, closeRoom, disconnectAllSockets, getAllSockets } = require('../services/socket');
-
-let db;
+const { emitRooms, disconnectSocket, disconnectAllSockets, getAllSockets } = require('../services/socket');
 
 const oauthClientId = process.env.CLIENT_ID;
 const oauthSecret = process.env.CLIENT_SECRET;
@@ -12,11 +10,7 @@ const redirectURL = process.env.NODE_ENV === 'production' ? "/lobby" : "http://l
 const oAuthGithub = require('./oauth-github');
 const githubAuthoriser = oAuthGithub(oauthClientId, oauthSecret);
 
-if (process.env.NODE_ENV === 'testing') {
-    db = require('../queries/testdb');
-} else {
-    db = require('../queries/db');
-}
+const db = require(`../queries/${process.env.NODE_ENV === 'testing' ? 'testdb' : 'db'}`);
 
 router.get("/oauth", (req, res) => {
     githubAuthoriser.authorise(req, (githubUser, token) => {
@@ -36,7 +30,7 @@ router.get("/oauth", (req, res) => {
                 }
             }).catch(err => {
                 console.error(err);
-                res.status(err.code).json({ message: err.message });
+                res.status(500).json({ message: err.message });
             });
         } else {
             res.sendStatus(404);
@@ -49,6 +43,7 @@ router.get("/api/oauth/uri", (req, res) => {
 });
 
 router.use('/api/room', require('./rooms'));
+router.use('/api/images', require('./images'));
 
 /* Check if player is logged in */
 router.get('/auth', (req, res) => {
@@ -72,7 +67,7 @@ router.post('/auth/signup', (req, res) => {
         res.sendStatus(200);
     }).catch(err => {
         console.error(err);
-        res.status(err.code).json({ message: err.message });
+        res.status(409).json({ message: err.message });
     });
 });
 
@@ -92,7 +87,7 @@ router.post('/auth/login', (req, res) => {
         }
     }).catch(err => {
         console.error(err);
-        res.status(err.code).json({ message: err.message });
+        res.status(401).json({ message: err.message });
     });
 });
 
@@ -120,7 +115,16 @@ router.get('/api/cards', auth, (req, res) => {
     const gameState = Room.getById(roomId).gameState;
     const cards = gameState.getUnplayedCardsByUsername(user.username);
     if (cards) {
-        res.status(200).json(cards);
+        (gameState.mode === 'custom'
+        ? Promise.all(cards.map(card =>
+            db.getCard(card.cardId)
+            .then(other => ({
+                ...card,
+                url: other.dataValues.url
+            }))))
+        : Promise.resolve(cards))
+        .then(cards => res.status(200).json(cards))
+        .catch(err => res.status(500).json({ message: err.message }));
     }
     else {
         res.status(404).json({ message: "Cannot find cards: user does not exist." });
@@ -133,7 +137,7 @@ router.get('/api/all-players', (req, res) => {
     .then(users => res.status(200).json(users))
     .catch(err => {
         console.error(err);
-        res.status(err.code).json({ message: err.message });
+        res.status(404).json({ message: err.message });
     });
 });
 
@@ -156,30 +160,6 @@ router.get('/api/nextRound', auth, (req, res) => {
         const roomId = req.session.roomId;
         Room.getById(roomId).gameState.nextRound();
         res.sendStatus(200);
-    } catch (err) {
-        console.error(err);
-        res.status(400).json({ message: err.message });
-    }
-});
-
-/* End the game */
-router.get('/api/end', auth, (req, res) => {
-    const { roomId } = req.session;
-    try {
-        const gameState = Room.getById(roomId).gameState;        
-        gameState.getPlayers().forEach(player => {
-            db.updateScore(player.id, player.score)
-            .then(() => {
-                gameState.endGame();
-                Room.deleteById(roomId);
-                closeRoom(roomId);
-                res.sendStatus(200);
-            })
-            .catch(err => {
-                console.error(err);
-                res.status(err.code).json({ message: err.message });
-            });
-        });
     } catch (err) {
         console.error(err);
         res.status(400).json({ message: err.message });
