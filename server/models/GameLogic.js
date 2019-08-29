@@ -8,7 +8,7 @@ const db = (process.env.NODE_ENV === 'testing') ? require('../queries/testdb') :
 // Set durations
 const promptDuration = process.env.NODE_ENV === 'testing' ? 4000 : 30000;
 const voteDuration = process.env.NODE_ENV === 'testing' ? 5000 : 30000;
-const storytellerDuration = process.env.NODE_ENV === 'testing' ? 4000 : 60000;
+const storytellerDuration = process.env.NODE_ENV === 'testing' ? 4000 : 2000;
 const nextRoundDuration = process.env.NODE_ENV === 'testing' ? 3000 : 10000;
 const minPlayers = process.env.NODE_ENV === 'testing' ? 1 : 3;
 const maxPlayers = 6;
@@ -377,7 +377,7 @@ class GameLogic {
         this.update();
     }
 
-    updateLabels(word) {        
+    updateLabels(word) {
         this.state.playedCards.forEach(card => {
             const cardScore = this.state.votes.filter(vote => card.cardId === vote.cardId && this.state.players.find(player => player.username === vote.username).real).length;
             if (cardScore >= 2) {

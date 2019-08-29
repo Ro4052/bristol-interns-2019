@@ -64,7 +64,7 @@ export const connectSocket = () => {
         dispatch(setStorytellerTimer(0));
         dispatch(setPlayCardTimer(0));
         dispatch(setVoteCardTimer(0));
-        dispatch(setGameMode(msg.mode));
+        dispatch(setGameMode(msg.mode || "original"));
         dispatch(setStatus(msg.status));
         dispatch(setRoundNumber(msg.roundNum, msg.rounds));
         dispatch(setCurrentPlayer(msg.currentPlayer));
