@@ -8,6 +8,11 @@ export const setRoundCount = numRounds => ({
     numRounds
 });
 
+export const setGameMode = gameMode => ({
+    type: types.SET_GAME_MODE,
+    gameMode
+});
+
 export const createRoomSuccess = error => ({
     type: types.CREATE_ROOM_SUCCESS
 });
@@ -17,14 +22,20 @@ export const createRoomFailure = error => ({
     error
 });
 
-export const createRoom = numRounds => dispatch => {
-    axiosInstance.post('/api/room/create', { numRounds })
+export const createRoom = (numRounds, gameMode) => dispatch => {
+    axiosInstance.post('/api/room/create', { numRounds, gameMode })
     .then(res => {
         if (res.status === 200) {
             dispatch(createRoomSuccess());
         } else {
-            throw Error(res.data.message);
+            console.log(res);
+            
+            throw new Error(res.data.message);
         }
     })
-    .catch(err => dispatch(createRoomFailure(err.message)));
+    .catch(err => {
+        console.log(err);
+        
+        dispatch(createRoomFailure(err.message))
+    });
 };
