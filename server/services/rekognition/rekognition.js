@@ -15,12 +15,16 @@ function assignLabels(imageData) {
             }
         }
     };
-    rekognition.detectLabels(params, function (err, data) {
-        if (err) {
-            console.log(err, err.stack);
-        } else {
-            const labels = data.Labels.map(label => label.Name)
-            console.log(labels);
-        }    
+    return new Promise((resolve, reject) => {
+        rekognition.detectLabels(params, function (err, data) {
+            if (err) {
+                console.log(err, err.stack);
+                resolve(err);
+            } else {
+                const labels = data.Labels.map(label => label.Name)
+                console.log(labels);
+                resolve(labels);
+            }    
+        });
     });
 }
