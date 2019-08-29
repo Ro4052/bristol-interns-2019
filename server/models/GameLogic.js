@@ -3,6 +3,8 @@ const socket = require('../services/socket');
 const { statusTypes } = require('./statusTypes');
 const AI = require('../services/AI/AI');
 
+const db = (process.env.NODE_ENV === 'testing') ? require('../queries/testdb') : require('../queries/db');
+
 // Set durations
 const promptDuration = process.env.NODE_ENV === 'testing' ? 4000 : 30000;
 const voteDuration = process.env.NODE_ENV === 'testing' ? 5000 : 30000;
@@ -117,8 +119,19 @@ class GameLogic {
         } else if (this.state.players.length === maxPlayers) {
             throw Error("The room has reached its capacity");
         } else {
-            const cards = cardsManager.assign(this.state.players, 6, this.state.allCardsNumber)
-            const player = { username: user.username, id: user.id, cards, score: 0, real: user.real, finishedTurn: false };
+            const cards = cardsManager.assign(this.state.players, 6, this.state.allCardsNumber);
+            let cardsWithUrls = [];
+            if (this.state.mode === 'custom') {
+                cards.forEach(card => {
+                    db.getCard(card.cardId)
+                    .then(newCard => {
+                        const cardWithUrl = {...newCard.dataValues, cardId: newCard.dataValues.id};
+                        cardsWithUrls.push(cardWithUrl)
+                    })
+                    .catch(err => { throw new Error(err.message) });
+                });
+            }            
+            const player = { username: user.username, id: user.id, cards: (this.state.mode === 'custom') ? cardsWithUrls : cards, score: 0, real: user.real, finishedTurn: false };
             this.update({ players: [...this.state.players, player] });
         }
     }
@@ -153,7 +166,7 @@ class GameLogic {
             this.update({ status: statusTypes.WAITING_FOR_CURRENT_PLAYER });
             this.state.roundNum++;
             this.state.currentPlayer = this.state.players[this.state.roundNum % this.state.players.length];
-            socket.emitNewRound(this.roomId, this.state.status, this.state.roundNum, this.rounds, this.state.currentPlayer, storytellerDuration);
+            socket.emitNewRound(this.roomId, this.state.mode, this.state.status, this.state.roundNum, this.rounds, this.state.currentPlayer, storytellerDuration);
             this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), storytellerDuration);
             if (!this.state.currentPlayer.real) {
                 this.AIsPlayCardAndWord();
@@ -171,7 +184,7 @@ class GameLogic {
     AIsPlayCardAndWord() {
         const cards = this.getUnplayedCardsByUsername(this.state.currentPlayer.username);
         const cardId = AI.pickRandomCard(cards);
-        AI.autoWord(cardId).then((word) => {
+        AI.autoWord(cardId, this.state.mode).then((word) => {
             this.playCardAndWord(this.state.currentPlayer.username, cardId, word);
         }).catch( error => {
             console.error(error);
@@ -256,7 +269,15 @@ class GameLogic {
     newCard() {
         this.state.players.forEach(player => {
             const newCard = cardsManager.assign(this.state.players, 1, this.state.allCardsNumber);
-            player.cards.push(newCard[0]);
+            if (this.state.mode === 'custom') {
+                db.getCard(newCard[0].cardId)
+                .then(cardWithUrl => {
+                    player.cards.push({...newCard[0], url: cardWithUrl.dataValues.url});
+                })
+                .catch(err => { throw new Error(err.message) });
+            } else {
+                player.cards.push(newCard[0]);
+            }
         });
     }
 
@@ -328,8 +349,10 @@ class GameLogic {
     emitVotes() {
         this.newCard();
         this.update({ status: statusTypes.DISPLAY_ALL_VOTES });
-        this.calcScores();
-        this.updateLabels(this.currentWord);
+        this.calcScores();        
+        if (this.state.mode === 'original') {
+            this.updateLabels(this.currentWord);
+        }
         this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), nextRoundDuration);
     };
 
@@ -354,7 +377,7 @@ class GameLogic {
         this.update();
     }
 
-    updateLabels(word) {
+    updateLabels(word) {        
         this.state.playedCards.forEach(card => {
             const cardScore = this.state.votes.filter(vote => card.cardId === vote.cardId && this.state.players.find(player => player.username === vote.username).real).length;
             if (cardScore >= 2) {
