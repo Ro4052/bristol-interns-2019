@@ -35,14 +35,18 @@ exports.autoWordGenerator = autoWordGenerator
 
 
 // Pick random word from each list of labels for a card //
-exports.autoWord = (cardId) => {
+exports.autoWord = (cardId, mode) => {
     let content;
     return new Promise((resolve, reject) => {
-        db.getLabels(cardId).then(card => {
-            const labels = card.dataValues.labels;
-            const word = labels[Math.floor(Math.random()*labels.length)];
-            resolve(word);
-        });
+        if (mode === 'original') {
+            db.getLabels(cardId).then(card => {
+                const labels = card.dataValues.labels;
+                const word = labels[Math.floor(Math.random()*labels.length)];
+                resolve(word);
+            });
+        } else {
+            resolve("Word");
+        }
     });
 }
 

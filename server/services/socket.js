@@ -106,9 +106,9 @@ exports.closeRoom = roomId => {
 exports.emitPlayers = (roomId, players) => sockets.forEach(socket => socket.handshake.session.roomId === roomId && socket.emit("players", { players }));
 
 // Let the players know about the next round and prompt the current player
-exports.emitNewRound = (roomId, status, roundNum, rounds, currentPlayer, timeoutDuration) => sockets.forEach(socket => {
+exports.emitNewRound = (roomId, mode, status, roundNum, rounds, currentPlayer, timeoutDuration) => sockets.forEach(socket => {
     if (socket.handshake.session.roomId === roomId) {
-        socket.emit("new round", { status, roundNum, rounds, currentPlayer });
+        socket.emit("new round", { status, roundNum, rounds, currentPlayer, mode });
         socket.emit("play word and card", { playWordAndCard: socket.handshake.session.user.username === currentPlayer.username, timeoutDuration: timeoutDuration/1000 });
     }
 });
