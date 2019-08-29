@@ -26,7 +26,10 @@ export class Card extends React.Component {
     }
 
     render() {
-        const src = this.props.card.cardId ? require(`../../../../images/cards/card (${this.props.card.cardId}).jpg`) : require('../../../../images/cardBack.jpg');
+        const src = {
+            original: this.props.card.cardId ? require(`../../../../images/cards/card (${this.props.card.cardId}).jpg`) : require('../../../../images/cardBack.jpg'),
+            custom: this.props.card.url
+        }[this.props.gameMode];
         const alt = this.props.card.cardId ? `card-${this.props.card.cardId}` : 'card-hidden';
         return (
             <div data-cy='card-wrapper' className={cx(styles.cardWrapper, { enabled: this.props.enabled }, { selected: this.props.enabled && this.props.playedCardId === this.props.card.cardId })}>
@@ -54,7 +57,8 @@ export class Card extends React.Component {
 const mapStateToProps = state => ({
     playedCardId: state.myCardsReducer.playedCardId,
     newScores: state.playersReducer.newScores,
-    currentPlayer: state.playersReducer.currentPlayer
+    currentPlayer: state.playersReducer.currentPlayer,
+    gameMode: state.createRoomReducer.gameMode
 });
 
 export default connect(mapStateToProps)(Card);

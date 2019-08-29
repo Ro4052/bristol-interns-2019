@@ -9,7 +9,7 @@ const Room = require('../models/room');
 /* Create and join room */
 router.post('/create', auth, (req, res) => {
     const { user, roomId } = req.session;
-    const { numRounds } = req.body;
+    const { numRounds, gameMode } = req.body;
     try {
         const room = Room.getById(roomId);
         if (room) {
@@ -19,16 +19,22 @@ router.post('/create', auth, (req, res) => {
                 Room.removePlayer(room, user.username);
             }
         }
-        const newRoomId = Room.create(numRounds);
-        const newRoom = Room.getById(newRoomId);
-        Room.addPlayer(newRoom, user);
-        socket.joinRoom(newRoomId, user.username);
-        socket.emitRooms();
-        req.session.roomId = newRoomId;
-        res.sendStatus(200);
+        Room.create(numRounds, gameMode)
+        .then(newRoomId => {
+            const newRoom = Room.getById(newRoomId);
+            Room.addPlayer(newRoom, user);
+            socket.joinRoom(newRoomId, user.username);
+            socket.emitRooms();
+            req.session.roomId = newRoomId;                    
+            res.sendStatus(200);
+        })
+        .catch(err => {            
+            console.error(err);
+            res.status(400).json({ message: err.message });
+        });
     } catch (err) {
-        console.log(err);
-        res.status(400).json({ message: err.message });
+        console.error(err);
+        res.status(500).json({ message: err.message });
     }
 });
 
@@ -51,7 +57,7 @@ router.post('/join', auth, (req, res) => {
         socket.emitRooms();
         res.sendStatus(200);
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(400).json({ message: err.message })
     }
 });
@@ -68,7 +74,7 @@ router.post('/addAIPlayer', (req, res) => {
         req.session.roomId = roomId;
         res.sendStatus(200);
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(400).json({ message: err.message })
     }
 });
@@ -82,7 +88,7 @@ router.post('/removeAIPlayer', (req, res) => {
         socket.emitRooms();
         res.sendStatus(200);
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(400).json({ message: err.message })
     }
 });
@@ -100,7 +106,7 @@ router.post('/leave', auth, (req, res) => {
         req.session.roomId = null;
         res.sendStatus(200);
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(400).json({ message: err.message })
     }
 });

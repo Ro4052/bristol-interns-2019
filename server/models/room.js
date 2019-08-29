@@ -7,13 +7,7 @@ const roomNames = require('../../roomnames');
 let rooms = [];
 let latestRoomId = 0;
 
-let db;
-
-if (process.env.NODE_ENV === 'testing') {
-    db = require('../queries/testdb');
-} else {
-    db = require('../queries/db');
-}
+const db = (process.env.NODE_ENV === 'testing') ? require('../queries/testdb') : require('../queries/db');
 
 exports.getAll = () => rooms;
 
@@ -38,12 +32,37 @@ const update = roomId => state => {
     }
 }
 
-exports.create = numRounds => {
-    const roomId = latestRoomId;
-    latestRoomId++;
-    const gameState = new GameLogic(update(roomId), roomId, numRounds);
-    rooms.push({ roomId, title: roomNames[Math.floor(Math.random() * 78)], gameState });
-    return roomId;
+exports.create = (numRounds, gameMode) => {
+    return new Promise((resolve, reject) => {
+        const roomId = latestRoomId;
+        latestRoomId++;
+        if (gameMode === 'custom') {
+            db.getAllCards()
+            .then(cards => {                         
+                if (cards.length >= 50) {
+                    const gameState = new GameLogic(update(roomId), roomId, numRounds, gameMode, cards.length);
+                    rooms.push({ roomId, title: roomNames[Math.floor(Math.random() * roomNames.length)], gameState });         
+                    resolve(roomId);
+                } else {
+                    reject({
+                        code: 400,
+                        message: `Not enough cards in the server (currently ${cards.length}). Upload more.`
+                    });
+                }
+            })
+            .catch(err => {
+                reject({
+                    code: err.code,
+                    message: err.message
+                });
+            });
+        } else {
+            const cardsLength = 247;
+            const gameState = new GameLogic(update(roomId), roomId, numRounds, gameMode, cardsLength);
+            rooms.push({ roomId, title: roomNames[Math.floor(Math.random() * roomNames.length)], gameState });         
+            resolve(roomId);
+        }
+    });
 };
 
 const deleteById = roomId => {

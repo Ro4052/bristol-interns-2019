@@ -14,11 +14,13 @@ exports.minPlayers = minPlayers;
 exports.maxPlayers = maxPlayers;
 
 class GameLogic {
-    constructor(notifyObserver, roomId, numRounds) {
+    constructor(notifyObserver, roomId, numRounds, mode, allCardsNumber) {
         this.notifyObserver = notifyObserver;
         this.state = {
             status: statusTypes.NOT_STARTED,
             roundNum: 0,
+            mode,
+            allCardsNumber,
             currentPlayer: null,
             currentWord: '',
             /** @type {{ username: string, id: number, cards: {{ cardId: number, played: bool }[]}, score: number, real: bool }[]} */
@@ -31,6 +33,7 @@ class GameLogic {
         };
         this.roomId = roomId;
         this.rounds = numRounds;
+        // Initialise timers
         this.playRandomCardsTimeout = null;
         this.displayCardsTimeout = null;
         this.voteTimeout = null;
@@ -85,7 +88,7 @@ class GameLogic {
     /* Return the list of cards played this round, hiding who played them */
     getPlayedCards() {
         if (this.state.status === statusTypes.WAITING_FOR_VOTES) {
-            return this.state.playedCards.map(card => ({ cardId: card.cardId }));
+            return this.state.playedCards.map(({ cardId, url }) => ({ cardId, url }));
         } else if (this.state.status === statusTypes.DISPLAY_ALL_VOTES) {
             return this.state.playedCards.map(card => ({...card, votes: this.state.votes.filter(vote => vote.cardId === card.cardId)}));
         } else {
@@ -114,7 +117,7 @@ class GameLogic {
         } else if (this.state.players.length === maxPlayers) {
             throw Error("The room has reached its capacity");
         } else {
-            const cards = cardsManager.assign(this.state.players, 6);
+            const cards = cardsManager.assign(this.state.players, 6, this.state.allCardsNumber)
             const player = { username: user.username, id: user.id, cards, score: 0, real: user.real, finishedTurn: false };
             this.update({ players: [...this.state.players, player] });
         }
@@ -206,8 +209,9 @@ class GameLogic {
             throw Error("Word cannot be longer than 25 characters.");
         } else {
             clearTimeout(this.nextRoundTimeout);
-            this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).played = true;
-            const card = { username, cardId };
+            const playedCard = this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId);
+            playedCard.played = true;
+            const card = { username, cardId, url: playedCard.url };
             this.update({
                 status: statusTypes.WAITING_FOR_OTHER_PLAYERS,
                 playedCards: [...this.state.playedCards, card],
@@ -251,7 +255,7 @@ class GameLogic {
     /* Draws a new card for the player's hand */
     newCard() {
         this.state.players.forEach(player => {
-            const newCard = cardsManager.assign(this.state.players, 1);
+            const newCard = cardsManager.assign(this.state.players, 1, this.state.allCardsNumber);
             player.cards.push(newCard[0]);
         });
     }
@@ -263,7 +267,8 @@ class GameLogic {
         } else if (this.hasPlayedCard(username)) {
             throw Error("You cannot play more than one card");
         } else {
-            const card = { username, cardId };
+            const url = this.getCardsByUsername(username).find(playedCard => playedCard.cardId === cardId).url;
+            const card = { username, cardId, url };
             this.update({
                 playedCards: [...this.state.playedCards, card]
             });
