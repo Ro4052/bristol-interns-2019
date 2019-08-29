@@ -120,7 +120,7 @@ class GameLogic {
             throw Error("The room has reached its capacity");
         } else {
             const cards = cardsManager.assign(this.state.players, 6, this.state.allCardsNumber);
-            let cardsWithUrls = [];
+            const cardsWithUrls = [];
             if (this.state.mode === 'custom') {
                 cards.forEach(card => {
                     db.getCard(card.cardId)
