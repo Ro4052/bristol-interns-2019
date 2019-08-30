@@ -37,7 +37,6 @@ module.exports.validatePassword = (username, password) =>
     })
     .catch(err => { throw new Error(err.message) });
 
-
 module.exports.addLabelCustomMode = (cardId, word) => {
     return CardImages.findOne({
         where: { id: cardId }
