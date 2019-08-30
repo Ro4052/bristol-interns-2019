@@ -31,26 +31,17 @@ module.exports.createUser = (username, password) => {
     });
 }
 
-module.exports.getUsers = () => {
-    return new Promise(resolve => {
-        resolve(users);
-    });
+module.exports.getUsers = () =>
+    Promise.resolve(users);
+
+module.exports.updateScore = (id, score) => {
+    users.find(user => user.id === id).score += score;
+    return Promise.resolve();
 }
 
-module.exports.updateScore = (id, score) => {    
-    return new Promise(resolve => {
-        users.find(user => user.id === id).score += score;
-        resolve();
-    });
-}
-
-module.exports.getLabels = () => {
-    return new Promise(resolve => {
-        const data = {
-            dataValues: {
-                labels: ["hello"]
-            }
+module.exports.getLabelsTellTales = () =>
+    Promise.resolve({
+        dataValues: {
+            labels: ["hello"]
         }
-        resolve(data);
     });
-}
