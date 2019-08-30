@@ -38,21 +38,33 @@ module.exports.validatePassword = (username, password) =>
     .catch(err => { throw new Error(err.message) });
 
 
-module.exports.addLabel = (cardId, word) => 
-    CardLabels.findOne({
+module.exports.addLabelCustomMode = (cardId, word) => {
+    return CardImages.findOne({
+        where: { id: cardId }
+    }).then(card => {
+        const labels = card.dataValues.labels;
+        if (!labels.includes(word)) {
+            labels.push(word);
+            card.update({
+                labels
+            });
+        }
+    });
+};
+
+module.exports.addLabelTellTalesMode = (cardId, word) => {
+    return CardLabels.findOne({
         where: { cardId }
     }).then(card => {
         const labels = card.dataValues.labels;
         if (!labels.includes(word)) {
             labels.push(word);
             card.update({
-                labels: labels
-            })
-            .then(() => {})
-            .catch(err => { throw new Error(err.message) });
+                labels
+            });
         }
-    });
-
+    }); 
+}
 
 module.exports.addCard = (etag, url) => 
     CardImages.findOrCreate({
@@ -139,10 +151,12 @@ module.exports.updateScore = (id, score) =>
     });
 
 
-module.exports.getLabels = cardId => 
+module.exports.getLabelsCustomMode = cardId =>
+    CardImages.findOne({
+        where: { id: cardId }
+    });
+
+module.exports.getLabelsTellTales = cardId => 
     CardLabels.findOne({
         where: { cardId }
-    })
-    .then(card => card)
-    .catch(err => { throw new Error(err.message) });
-
+    });

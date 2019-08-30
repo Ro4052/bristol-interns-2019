@@ -35,24 +35,25 @@ exports.autoWordGenerator = autoWordGenerator
 
 
 // Pick random word from each list of labels for a card //
-exports.autoWord = (cardId, mode) => {
-    let content;
-    return new Promise((resolve, reject) => {
-        if (mode === 'original') {
-            db.getLabels(cardId).then(card => {
-                const labels = card.dataValues.labels;
-                const word = labels[Math.floor(Math.random()*labels.length)];
-                resolve(word);
-            });
-        } else {
-            resolve("Word");
+exports.autoWord = (cardId, gameMode) => {
+    let promise;
+    if (gameMode === 'original') {
+        promise = db.getLabelsTellTales(cardId)
+    } else {
+        promise = db.getLabelsCustomMode(cardId)
+    }
+    return promise.then(card => {
+        const labels = card.dataValues.labels;
+        if (labels.length) {
+            return labels[Math.floor(Math.random()*labels.length)];
         }
+        return "wordy"
     });
 }
 
-exports.addLabel = (cardId, word) => {
-    return new Promise((resolve, reject) => {
-        db.addLabel(cardId, word)
-        .then(() => resolve());
-    });
+exports.addLabel = (cardId, word, gameMode) => {
+    if (gameMode === "custom") {
+        return db.addLabelCustomMode(cardId, word);
+    }
+    return db.addLabelTellTalesMode(cardId, word);
 }

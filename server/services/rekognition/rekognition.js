@@ -1,13 +1,13 @@
 const AWS = require('aws-sdk');
-var creds = new AWS.Credentials(process.env.AWS_ACCESS_KEY, process.env.AWS_SECRET_KEY); 
-var myConfig = new AWS.Config({
+const creds = new AWS.Credentials(process.env.AWS_ACCESS_KEY, process.env.AWS_SECRET_KEY); 
+const myConfig = new AWS.Config({
     credentials: creds, region: "eu-west-1"
 });
-var rekognition = new AWS.Rekognition(myConfig);
+const rekognition = new AWS.Rekognition(myConfig);
 
 function assignLabels(imageData) {
     AWS.region = "eu-west-1";
-    var params = {
+    const params = {
         Image: {
             S3Object:{
                 Bucket: 'bristol-interns-project',
@@ -22,7 +22,6 @@ function assignLabels(imageData) {
                 resolve(err);
             } else {
                 const labels = data.Labels.map(label => label.Name)
-                console.log(labels);
                 resolve(labels);
             }    
         });
