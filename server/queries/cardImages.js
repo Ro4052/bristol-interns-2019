@@ -12,6 +12,10 @@ module.exports = function(sequelize, DataTypes) {
         etag: {
             type: DataTypes.STRING,
             notEmpty: true
+        },
+        labels: {
+            type: DataTypes.JSONB,
+            notEmpty: true
         }
     });
  

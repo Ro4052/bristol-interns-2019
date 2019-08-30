@@ -350,9 +350,7 @@ class GameLogic {
         this.newCard();
         this.update({ status: statusTypes.DISPLAY_ALL_VOTES });
         this.calcScores();        
-        if (this.state.mode === 'original') {
-            this.updateLabels(this.currentWord);
-        }
+        this.updateLabels(this.state.currentWord);
         this.nextRoundTimeout = setTimeout(this.nextRound.bind(this), nextRoundDuration);
     };
 
@@ -381,7 +379,7 @@ class GameLogic {
         this.state.playedCards.forEach(card => {
             const cardScore = this.state.votes.filter(vote => card.cardId === vote.cardId && this.state.players.find(player => player.username === vote.username).real).length;
             if (cardScore >= 2) {
-                AI.addLabel(card.cardId, word);
+                AI.addLabel(card.cardId, word, this.state.mode);
             }
         });
     }
