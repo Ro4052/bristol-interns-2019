@@ -12,8 +12,8 @@ export class Room extends React.Component {
         return (
             <div className={styles.room} data-cy="room">
                 <h2 className={styles.title} data-cy="room-title">{`Room: ${this.props.room.title}`}</h2>
-                <table className={styles.players} data-cy='room-players'>
-                    <tbody>
+                <table className={styles.players}>
+                    <tbody data-cy='room-players'>
                         {this.props.room.players.map((player, key) => (
                             <tr className={styles.player} key={key}>
                                 <td className={styles.username} data-cy='player-username'>{player.username}</td>
