@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { uploadImage, uploadImageFailure } from './UploadActions';
 import styles from './Upload.module.css';
 import classNames from 'classnames/bind';
-import history from '../../services/history';
 
 const cx = classNames.bind(styles);
 
@@ -15,10 +14,6 @@ export class Upload extends React.Component {
         };
         this.sendImageUpload = this.sendImageUpload.bind(this);
         this.onChange = this.onChange.bind(this);
-    }
-
-    goToLobby() {
-        history.push('/lobby');
     }
 
     sendImageUpload(e){
@@ -44,7 +39,7 @@ export class Upload extends React.Component {
         return (
             <div className={styles.uploadPage}>
                 <div>
-                    <button onClick={this.goToLobby} data-cy="back" type='button'>Back</button>
+                    <button onClick={() => this.props.history.push('/lobby')} data-cy="back" type='button'>Back</button>
                 </div>
                 <div className={styles.uploadSection}>
                     {this.props.message && <span className={styles.uploadMessage}>{this.props.message}</span>}

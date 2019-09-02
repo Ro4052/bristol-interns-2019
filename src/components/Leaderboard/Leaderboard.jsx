@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styles from './Leaderboard.module.css';
-import history from '../../services/history';
 import { getPlayers } from './LeaderboardActions';
 import classNames from 'classnames/bind';
 
@@ -12,15 +11,11 @@ export class Leaderboard extends React.Component {
         this.props.getPlayers();
     }
 
-    goToLobby() {
-        history.push('/lobby');
-    }
-
     render() {
         return (
             <div className={styles.leaderboardPage}>
                 <div className={styles.backButton}>
-                    <button onClick={this.goToLobby} data-cy="back" type='button'>Back</button>
+                    <button onClick={() => this.props.history.push('/lobby')} data-cy="back" type='button'>Back</button>
                 </div>
                 <div className={styles.scrollbarPadding}>
                     <div className={cx(styles.leaderboard, 'arrowScrollbar')}>

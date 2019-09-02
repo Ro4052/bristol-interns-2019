@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styles from './Lobby.module.css';
 import { statusTypes } from '../../services/statusTypes';
-import history from '../../services/history';
 import { authenticateUser } from '../Login/LoginActions';
 import { viewMessages } from '../Chat/ChatActions';
 import Chat from '../Chat/Chat';
@@ -25,7 +24,7 @@ export class Lobby extends React.Component {
     componentDidMount() {
         this.props.authenticateUser();
         if (this.props.status !== statusTypes.NOT_STARTED) {
-            history.push('/dashboard');
+            this.props.history.push('/dashboard');
         }
     }
 
