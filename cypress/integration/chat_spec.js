@@ -4,7 +4,6 @@ describe('Chat', () => {
     describe('on send a message in the main lobby', () => {
         beforeEach(() => {
             cy.signup('Bob', 'password');
-            cy.toggleChat();
             cy.sendMessage(); 
         });
 
@@ -22,7 +21,6 @@ describe('Chat', () => {
         beforeEach(() => {
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
             .then(() => cy.signup('Bob', 'password'))
-            .then(() => cy.toggleChat())
             .then(() => cy.createRoom(3))
             .then(() => cy.request(`http://localhost:12346/send-message?url=${encodeURIComponent(url)}`));
         });
@@ -36,7 +34,6 @@ describe('Chat', () => {
     describe('on someone else sends a message in a room', () => {
         beforeEach(() => {
             cy.signup('Bob', 'password')
-            .then(() => cy.toggleChat())
             .then(() => cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`))
             .then(() => cy.request(`http://localhost:12346/createRoom?url=${encodeURIComponent(url)}`))
             .then(() => cy.request(`http://localhost:12346/startGame?url=${encodeURIComponent(url)}`))
