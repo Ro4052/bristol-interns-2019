@@ -5,12 +5,12 @@ import Logout from '../../Logout/Logout';
 import LeaderboardButton from '../../Leaderboard/LeaderboardButton/LeaderboardButton';
 import UploadButton from '../../Upload/UploadButton/UploadButton';
 
-export function Header() {
+export function Header(props) {
     return (
         <div className={styles.header}>
             <div className={styles.buttons}>
-                <LeaderboardButton />
-                <UploadButton />
+                <LeaderboardButton history={props.history} />
+                <UploadButton history={props.history} />
             </div>
             <Logo />
             <Logout />

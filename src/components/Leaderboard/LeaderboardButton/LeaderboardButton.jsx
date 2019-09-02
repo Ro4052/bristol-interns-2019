@@ -1,5 +1,4 @@
 import React from 'react';
-import { withRouter } from "react-router";
 
 export class LeaderboardButton extends React.Component {
     render() {
@@ -11,4 +10,4 @@ export class LeaderboardButton extends React.Component {
     }
 }
 
-export default withRouter(LeaderboardButton);
+export default LeaderboardButton;

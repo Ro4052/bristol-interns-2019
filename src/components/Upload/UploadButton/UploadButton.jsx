@@ -1,5 +1,4 @@
 import React from 'react';
-import { withRouter } from "react-router";
 
 export class UploadButton extends React.Component {
     goToUpload() {
@@ -15,4 +14,4 @@ export class UploadButton extends React.Component {
     }
 }
 
-export default withRouter(UploadButton);
+export default UploadButton;

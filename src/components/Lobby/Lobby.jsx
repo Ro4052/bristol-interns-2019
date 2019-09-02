@@ -36,7 +36,7 @@ export class Lobby extends React.Component {
     render() {
         return (
             <div className={styles.container}>
-                <Header />
+                <Header history={this.props.history} />
                 <div>
                     <button className={styles.chatButton} type='button' onClick={this.toggleChat} data-cy='toggle-chat'>
                         {this.state.chatVisible ? "Hide chat" : "Show chat"}
