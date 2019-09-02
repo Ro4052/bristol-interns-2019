@@ -1,5 +1,5 @@
 .logo {
-    width: 85%;
+    flex-grow: 1;
     text-align: center;
     display: flex;
     align-items: center;
@@ -9,7 +9,7 @@
 .letter {
     display: inline-block;
     font-weight: 800;
-    font-size: 6vh;
+    font-size: 4em;
     position: relative;
     color: rgb(0, 0, 0, 0.8);
     transform-style: preserve-3d;
