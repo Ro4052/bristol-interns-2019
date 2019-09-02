@@ -24,7 +24,7 @@ describe('on render', () => {
         jest.spyOn(Chat.prototype, 'scrollToBottom').mockImplementation(jest.fn());
         const wrapper = mount(
             <Provider store={emptyStore}>
-                <Lobby authenticateUser={jest.fn()} rooms={[]} createRoom={jest.fn()}  />
+                <Lobby authenticateUser={jest.fn()} rooms={[]} newMessages={[]} createRoom={jest.fn()}  />
             </Provider>
         );
         expect(wrapper.exists({ 'data-cy': 'num-rounds-options' })).toEqual(true);
@@ -34,7 +34,7 @@ describe('on render', () => {
         jest.spyOn(Chat.prototype, 'scrollToBottom').mockImplementation(jest.fn());
         const wrapper = mount(
             <Provider store={emptyStore}>
-                <Lobby authenticateUser={jest.fn()} rooms={[]} />
+                <Lobby authenticateUser={jest.fn()} rooms={[]} newMessages={[]} />
             </Provider>
         );
         expect(wrapper.exists({ 'data-cy': 'current-rooms' })).toEqual(true);
@@ -46,7 +46,7 @@ describe('if given an empty list rooms', () => {
         jest.spyOn(Chat.prototype, 'scrollToBottom').mockImplementation(jest.fn());
         const wrapper = mount(
             <Provider store={emptyStore}>
-                <Lobby authenticateUser={jest.fn()} rooms={[]} />
+                <Lobby authenticateUser={jest.fn()} rooms={[]} newMessages={[]} />
             </Provider>
         );
         expect(wrapper.find({ 'data-cy': 'room' }).length).toEqual(0);
@@ -58,7 +58,7 @@ describe('if given a list of rooms', () => {
         jest.spyOn(Chat.prototype, 'scrollToBottom').mockImplementation(jest.fn());
         const wrapper = mount(
             <Provider store={emptyStore}>
-                <Lobby authenticateUser={jest.fn()} rooms={[room]} />
+                <Lobby authenticateUser={jest.fn()} rooms={[room]} newMessages={[]} />
             </Provider>
         );
         expect(wrapper.find({ 'data-cy': 'room' }).length).toEqual(1);
