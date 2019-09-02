@@ -39,7 +39,7 @@ export class Lobby extends React.Component {
             <div className={styles.container}>
                 <Header />
                 <div>
-                    <button className={styles.chatButton} type='button' onClick={this.toggleChat}>
+                    <button className={styles.chatButton} type='button' onClick={this.toggleChat} data-cy='toggle-chat'>
                         {this.state.chatVisible ? "Hide chat" : "Show chat"}
                         {!this.state.chatVisible && this.props.newMessages.length !== 0 && !this.state.showChat && <div className={styles.newMessage} data-cy='new-message'>+{this.props.newMessages.length}</div>}
                     </button>

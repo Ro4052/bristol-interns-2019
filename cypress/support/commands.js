@@ -100,8 +100,12 @@ Cypress.Commands.add('refreshPage', () => {
     cy.visit('/dashboard');
 });
 
-Cypress.Commands.add('showChat', () => {
-    cy.get('[data-cy="show-chat"]').click();
+Cypress.Commands.add('toggleChat', () => {
+    cy.get('body').then($body => {
+        if ($body.find('[data-cy="toggle-chat"]').length) {
+            cy.get('[data-cy="toggle-chat"]').click();
+        }
+    });
 });
 
 Cypress.Commands.add('playCardWord', () => {
