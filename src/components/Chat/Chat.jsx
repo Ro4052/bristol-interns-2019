@@ -44,9 +44,11 @@ export class Chat extends React.Component {
     render() {
         return (
             <>
-                <div className={styles.chatArrowArea} onClick={this.toggleChat}>
-                    <div className={cx({ showChatArrow: !this.state.showChat, hideChatArrow: this.state.showChat })} data-cy='chat-arrow'/>
-                    <span onClick={this.showChat} data-cy='show-chat'>{this.state.showChat ? "" : "Chat"}</span>
+                <div className={styles.chatArrowArea}>
+                    <div className={styles.clickable} onClick={this.toggleChat}>
+                        <div className={cx({ showChatArrow: !this.state.showChat, hideChatArrow: this.state.showChat })} data-cy='chat-arrow'/>
+                        {!this.state.showChat && <span data-cy='show-chat'>Chat</span>}
+                    </div>
                     {this.props.newMessages.length !== 0 && !this.state.showChat && <div className={styles.newMessage} data-cy='new-message'>+{this.props.newMessages.length}</div>}
                 </div>
                 <div className={cx(styles.chat, { gameChat: !this.props.showOnDefault, lobbyChat: this.props.showOnDefault, shown: this.state.showChat, hidden: !this.state.showChat })} data-cy='chat-room'>
