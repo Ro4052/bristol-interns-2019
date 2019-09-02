@@ -102,4 +102,10 @@
 
 .chatMessageForm {
     display: flex;
+    flex-direction: row;
+}
+
+.chatInput {
+    flex-grow: 1;
+    min-width: 0;
 }

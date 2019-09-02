@@ -25,7 +25,7 @@ export class ChatInput extends React.Component {
         return (
             <form className={styles.chatMessageForm} data-cy="message-form" onSubmit={this.sendMessage}>
                 <input className={styles.chatInput} data-cy='type-message' onChange={this.handleChange} value={this.state.currentValue} placeholder="Type a message" autoFocus />
-                <button className={styles.chatButton} data-cy="send-message" type='submit'>Send</button>
+                <button data-cy="send-message" type='submit'>Send</button>
             </form>
         );
     }

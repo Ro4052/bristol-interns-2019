@@ -33,7 +33,7 @@ export class Lobby extends React.Component {
                     <div className={styles.right}>
                         <div className={cx(styles.rightInner, "arrowScrollbar")}>
                             <CreateRoom />
-                            {this.props.rooms.map(room => (<Room room={room} key={room.roomId} />))}
+                            {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}
                         </div>
                     </div>
                 </div>
