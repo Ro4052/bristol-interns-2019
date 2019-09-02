@@ -18,8 +18,7 @@ export class CreateRoom extends React.Component {
         const options = [3, 4, 5, 6];
         return (
             <div className={styles.createRoom}>  
-                <h1 className={styles.createRoomHeader}>Create room</h1>
-                <span>{this.props.error}</span>
+                <h2 className={styles.createRoomHeader}>Create room</h2>
                 <form className={styles.createRoomForm} data-cy="create-room-form" onSubmit={this.createRoom}>
                     <select className={styles.selectRounds} data-cy="num-rounds-options" onChange={event => this.props.setRoundCount(event.target.value)}>
                         {options.map((option, key) => <option key={key} value={option}>{option} rounds</option>)}
@@ -28,6 +27,7 @@ export class CreateRoom extends React.Component {
                         <option value="original">TellTales Images</option>
                         <option value="custom">Custom Images</option>
                     </select>
+                    <span>{this.props.error}</span>
                     <button className={styles.createRoomButton} data-cy="create-room" type='submit'>Create</button>
                 </form>
             </div>

@@ -1,41 +1,36 @@
 .room {
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 20px;
     display: flex;
     flex-direction: column;
-    padding: 0.5em;
+    justify-content: center;
+    align-items: center;
+    padding: 1em;
     margin: 1em;
-    background-color: white;
-    border: 3px solid black;
-    border-radius: 1em;
-    text-align: center;
-    font-size: 1.2em;
-}
-
-.title {
-    text-align: center;
-    margin: 0;
-}
-
-.players {
-    margin: 1em 0;
-    font-size: 1.2em;
 }
 
 .player {
     display: flex;
-    flex-direction: row;
+    justify-content: center;
     align-items: center;
 }
 
-.username {
-    flex-grow: 1;
+.removeAIButton {
+    font-size: 1em;
 }
 
-.remove {
-    font-size: 0.6em;
+.players {
+    font-size: 1.2em;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .roomButtons {
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
 }
