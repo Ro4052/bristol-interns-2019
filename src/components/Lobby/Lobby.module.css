@@ -5,18 +5,6 @@
     background-color: var(--dark-orange);
 }
 
-.header {
-    height: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row-reverse;
-}
-
-.header > div > button {
-    font-size: 3.5vh;
-}
-
 .container {
     height: 85%;
     display: flex;

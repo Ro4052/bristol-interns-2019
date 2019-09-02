@@ -2,15 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styles from './Lobby.module.css';
 import Room from './Room/Room';
-import Logo from '../Logo/Logo';
-import Logout from '../Logout/Logout';
 import CreateRoom from './CreateRoom/CreateRoom';
 import Upload  from '../Upload/Upload';
-import LeaderboardButton from '../Leaderboard/LeaderboardButton/LeaderboardButton';
 import { authenticateUser } from '../Login/LoginActions';
 import history from '../../services/history';
 import Chat from '../Chat/Chat';
 import { statusTypes } from '../../services/statusTypes';
+import Header from './Header/Header';
 
 export class Lobby extends React.Component {
     componentDidMount() {
@@ -23,11 +21,7 @@ export class Lobby extends React.Component {
     render() {
         return (
             <div className={styles.main}>
-                <div className={styles.header}>
-                    <Logout />
-                    <Logo />
-                    <LeaderboardButton />
-                </div>
+                <Header />
                 <div className={styles.container}>
                     <div className={styles.leftSide}>
                         <Upload />
