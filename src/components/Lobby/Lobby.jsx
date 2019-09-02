@@ -9,6 +9,9 @@ import Chat from '../Chat/Chat';
 import { statusTypes } from '../../services/statusTypes';
 import Header from './Header/Header';
 import Room from './Room/Room';
+import classNames from 'classnames/bind';
+
+const cx = classNames.bind(styles);
 
 export class Lobby extends React.Component {
     componentDidMount() {
@@ -28,8 +31,10 @@ export class Lobby extends React.Component {
                         <Chat showOnDefault={true} />
                     </div>
                     <div className={styles.right}>
-                        <CreateRoom />
-                        {this.props.rooms.map(room => (<Room room={room} key={room.roomId} />))}
+                        <div className={cx(styles.rightInner, "arrowScrollbar")}>
+                            <CreateRoom />
+                            {this.props.rooms.map(room => (<Room room={room} key={room.roomId} />))}
+                        </div>
                     </div>
                 </div>
             </div>
