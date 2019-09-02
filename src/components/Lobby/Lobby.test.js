@@ -29,16 +29,6 @@ describe('on render', () => {
         );
         expect(wrapper.exists({ 'data-cy': 'num-rounds-options' })).toEqual(true);
     });
-
-    it('renders the list of rooms', () => {
-        jest.spyOn(Chat.prototype, 'scrollToBottom').mockImplementation(jest.fn());
-        const wrapper = mount(
-            <Provider store={emptyStore}>
-                <Lobby authenticateUser={jest.fn()} rooms={[]} newMessages={[]} />
-            </Provider>
-        );
-        expect(wrapper.exists({ 'data-cy': 'current-rooms' })).toEqual(true);
-    });
 });
 
 describe('if given an empty list rooms', () => {
