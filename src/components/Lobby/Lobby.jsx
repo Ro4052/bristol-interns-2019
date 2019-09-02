@@ -26,7 +26,7 @@ export class Lobby extends React.Component {
                 <Header />
                 <div className={styles.lobby}>
                     <div className={styles.left}>
-                        <Chat showOnDefault={true} />
+                        <Chat />
                     </div>
                     <div className={styles.right}>
                         <div className={cx(styles.rightInner, "arrowScrollbar")}>

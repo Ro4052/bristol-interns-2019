@@ -38,14 +38,6 @@
 }
 
 @media only screen and (max-width: 1000px) {
-    .left {
-        width: 50%;
-    }
-
-    .right {
-        width: 50%;
-    }
-
     .rightInner {
         flex-flow: column nowrap;
         justify-content: flex-start;
@@ -53,8 +45,22 @@
     }
 }
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 1000px) and (min-width: 700px) {
     .left {
-        display: none;
+        width: 50%;
+    }
+
+    .right {
+        width: 50%;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    .lobby {
+        flex-direction: column;
+        align-items: stretch;
+        align-content: stretch;
+        justify-content: stretch;
+        justify-items: stretch;
     }
 }
