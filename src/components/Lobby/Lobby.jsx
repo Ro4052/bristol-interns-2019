@@ -4,6 +4,7 @@ import styles from './Lobby.module.css';
 import { statusTypes } from '../../services/statusTypes';
 import history from '../../services/history';
 import { authenticateUser } from '../Login/LoginActions';
+import { viewMessages } from '../Chat/ChatActions';
 import Chat from '../Chat/Chat';
 import CreateRoom from './CreateRoom/CreateRoom';
 import Header from './Header/Header';
@@ -30,14 +31,18 @@ export class Lobby extends React.Component {
 
     toggleChat() {
         this.setState({ chatVisible: !this.state.chatVisible });
+        this.props.viewMessages();
     }
 
     render() {
         return (
             <div className={styles.container}>
                 <Header />
-                <div className={styles.chatButton}>
-                    <button type='button' onClick={this.toggleChat}>{this.state.chatVisible ? "Hide chat" : "Show chat"}</button>
+                <div>
+                    <button className={styles.chatButton} type='button' onClick={this.toggleChat}>
+                        {this.state.chatVisible ? "Hide chat" : "Show chat"}
+                        {!this.state.chatVisible && this.props.newMessages.length !== 0 && !this.state.showChat && <div className={styles.newMessage} data-cy='new-message'>+{this.props.newMessages.length}</div>}
+                    </button>
                 </div>
                 <div className={styles.lobby}>
                     <div className={cx(styles.chatContainer, { chatOverlay: this.state.chatVisible })}>
@@ -57,11 +62,13 @@ export class Lobby extends React.Component {
 
 const mapStateToProps = state => ({
     rooms: state.lobbyReducer.rooms,
-    status: state.dashboardReducer.status
+    status: state.dashboardReducer.status,
+    newMessages: state.chatReducer.newMessages
 });
 
 const mapDispatchToProps = dispatch => ({
-    authenticateUser: () => dispatch(authenticateUser())
+    authenticateUser: () => dispatch(authenticateUser()),
+    viewMessages: () => dispatch(viewMessages())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Lobby);
