@@ -22,28 +22,26 @@ export class Dashboard extends React.Component {
         const showPlayWord = this.props.playWord && !this.props.word && this.props.playedCardId && !(this.props.winners.length);
         return (
             <div className={styles.dashboard}>
-                <div className={styles.main}>
-                    <div className={styles.side}>
-                        <div className={styles.gameInfo}>
-                            {this.props.status !== statusTypes.NOT_STARTED && <h2>Round: <span id="round-number" data-cy="round-number">{this.props.roundNum}/{this.props.rounds}</span></h2>}
-                            <Players />
-                        </div>
-                        <Chat showOnDefault={false} />
+                <div className={styles.left}>
+                    <div className={styles.gameInfo}>
+                        {this.props.status !== statusTypes.NOT_STARTED && <h2>Round: <span id="round-number" data-cy="round-number">{this.props.roundNum}/{this.props.rounds}</span></h2>}
+                        <Players />
                     </div>
-                    <div className={styles.middle}>
-                        <div className={styles.interactions}>
-                            {showPlayerInteractions && <PlayerInteractions />}
-                            {showPlayWord && <PlayWord />}
-                            {(this.props.winners.length > 0) && <GameOver />}
-                            <div className={styles.circle1}/>
-                            <div className={styles.circle2}/>
-                            <div className={styles.circle3}/>
-                            <Timothy />
-                        </div>
-                        <div className={styles.centerBox}>
-                        {this.props.status !== statusTypes.GAME_OVER && !this.props.playCard && this.props.playedCards.length > 0 && <PlayedCards />}
-                        {(this.props.playCard || showPlayWord) && <MyCards />}
-                        </div>
+                    <Chat showOnDefault={false} />
+                </div>
+                <div className={styles.right}>
+                    <div className={styles.interactions}>
+                        {showPlayerInteractions && <PlayerInteractions />}
+                        {showPlayWord && <PlayWord />}
+                        {(this.props.winners.length > 0) && <GameOver />}
+                        <div className={styles.circle1}/>
+                        <div className={styles.circle2}/>
+                        <div className={styles.circle3}/>
+                        <Timothy />
+                    </div>
+                    <div className={styles.centerBox}>
+                    {this.props.status !== statusTypes.GAME_OVER && !this.props.playCard && this.props.playedCards.length > 0 && <PlayedCards />}
+                    {(this.props.playCard || showPlayWord) && <MyCards />}
                     </div>
                 </div>
             </div>
