@@ -9,8 +9,10 @@ export class Header extends React.Component {
     render() {
         return (
             <div className={styles.header}>
-                <LeaderboardButton />
-                <UploadButton />
+                <div className={styles.buttons}>
+                    <LeaderboardButton />
+                    <UploadButton />
+                </div>
                 <Logo />
                 <Logout />
             </div>
