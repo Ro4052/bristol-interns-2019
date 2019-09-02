@@ -13,6 +13,14 @@ import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 
 export class Lobby extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            chatVisible: false
+        };
+        this.toggleChat = this.toggleChat.bind(this);
+    }
+
     componentDidMount() {
         this.props.authenticateUser();
         if (this.props.status !== statusTypes.NOT_STARTED) {
@@ -20,16 +28,23 @@ export class Lobby extends React.Component {
         }
     }
 
+    toggleChat() {
+        this.setState({ chatVisible: !this.state.chatVisible });
+    }
+
     render() {
         return (
             <div className={styles.container}>
                 <Header />
+                <div className={styles.chatButton}>
+                    <button type='button' onClick={this.toggleChat}>{this.state.chatVisible ? "Hide chat" : "Show chat"}</button>
+                </div>
                 <div className={styles.lobby}>
-                    <div className={styles.left}>
+                    <div className={cx(styles.chatContainer, { chatOverlay: this.state.chatVisible })}>
                         <Chat />
                     </div>
-                    <div className={styles.right}>
-                        <div className={cx(styles.rightInner, "arrowScrollbar")}>
+                    <div className={styles.roomsOuter}>
+                        <div className={cx(styles.roomsInner, "arrowScrollbar")}>
                             <CreateRoom />
                             {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}
                         </div>

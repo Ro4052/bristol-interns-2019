@@ -12,17 +12,17 @@
     padding: 1em;
 }
 
-.left {
+.chatContainer {
     display: flex;
     flex-direction: column;
 }
 
-.right {
+.roomsOuter {
     flex-grow: 1;
     position: relative;
 }
 
-.rightInner {
+.roomsInner {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -37,20 +37,24 @@
     overflow: auto;
 }
 
-@media only screen and (max-width: 1000px) {
-    .rightInner {
+.chatButton {
+    display: none;
+}
+
+@media only screen and (max-width: 1100px) {
+    .roomsInner {
         flex-flow: column nowrap;
         justify-content: flex-start;
         align-content: stretch;
     }
 }
 
-@media only screen and (max-width: 1000px) and (min-width: 700px) {
-    .left {
+@media only screen and (max-width: 1100px) and (min-width: 700px) {
+    .chatContainer {
         width: 50%;
     }
 
-    .right {
+    .roomsOuter {
         width: 50%;
     }
 }
@@ -62,5 +66,25 @@
         align-content: stretch;
         justify-content: stretch;
         justify-items: stretch;
+        position: relative;
+    }
+
+    .chatContainer {
+        display: none;
+    }
+
+    .chatOverlay {
+        display: flex;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 0.8em;
+        z-index: 100;
+    }
+
+    .chatButton {
+        display: block;
     }
 }
