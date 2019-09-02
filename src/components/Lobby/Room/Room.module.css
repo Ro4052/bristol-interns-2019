@@ -20,7 +20,7 @@
     font-size: 1em;
 }
 
-.roomPlayers {
+.players {
     font-size: 1.2em;
     display: flex;
     flex-grow: 1;
