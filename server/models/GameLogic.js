@@ -31,7 +31,8 @@ class GameLogic {
             playedCards: [],
             /** @type {{ username: string, cardId: number }[]} */
             votes: [],
-            winners: []
+            winners: [],
+            nextAutoId: 0
         };
         this.roomId = roomId;
         this.rounds = numRounds;
@@ -130,9 +131,10 @@ class GameLogic {
                     })
                     .catch(err => { throw new Error(err.message) });
                 });
-            }            
+            }
             const player = { username: user.username, id: user.id, cards: (this.state.mode === 'custom') ? cardsWithUrls : cards, score: 0, real: user.real, finishedTurn: false };
             this.update({ players: [...this.state.players, player] });
+            if (!player.real) this.state.nextAutoId++;
         }
     }
 

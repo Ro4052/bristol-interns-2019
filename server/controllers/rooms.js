@@ -66,8 +66,8 @@ router.post('/join', auth, (req, res) => {
 router.post('/addAIPlayer', (req, res) => {
     try {
         const { roomId } = req.body;
-        const numAutos = Room.getById(roomId).gameState.getNumberOfAIPlayers();
-        const user = { username: "CPU " + numAutos, id: 0, real: false};
+        const nextAutoId = Room.getById(roomId).gameState.state.nextAutoId;
+        const user = { username: `CPU ${nextAutoId}`, id: 0, real: false};
         const room = Room.getById(roomId);
         Room.addPlayer(room, user);
         socket.emitRooms();
@@ -75,7 +75,7 @@ router.post('/addAIPlayer', (req, res) => {
         res.sendStatus(200);
     } catch (err) {
         console.error(err);
-        res.status(400).json({ message: err.message })
+        res.status(400).json({ message: err.message });
     }
 });
 
