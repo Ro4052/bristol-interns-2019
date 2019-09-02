@@ -1,12 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styles from './Lobby.module.css';
-import CreateRoom from './CreateRoom/CreateRoom';
-import Upload  from '../Upload/Upload';
-import { authenticateUser } from '../Login/LoginActions';
-import history from '../../services/history';
-import Chat from '../Chat/Chat';
 import { statusTypes } from '../../services/statusTypes';
+import history from '../../services/history';
+import { authenticateUser } from '../Login/LoginActions';
+import Chat from '../Chat/Chat';
+import CreateRoom from './CreateRoom/CreateRoom';
 import Header from './Header/Header';
 import Room from './Room/Room';
 import classNames from 'classnames/bind';
@@ -27,7 +26,6 @@ export class Lobby extends React.Component {
                 <Header />
                 <div className={styles.lobby}>
                     <div className={styles.left}>
-                        <Upload />
                         <Chat showOnDefault={true} />
                     </div>
                     <div className={styles.right}>

@@ -52,3 +52,9 @@
         align-content: stretch;
     }
 }
+
+@media only screen and (max-width: 700px) {
+    .left {
+        display: none;
+    }
+}

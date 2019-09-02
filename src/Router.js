@@ -5,6 +5,7 @@ import Lobby from './components/Lobby/Lobby';
 import Login from './components/Login/Login';
 import Leaderboard from './components/Leaderboard/Leaderboard';
 import history from './services/history';
+import Upload from './components/Upload/Upload';
 
 export default class Routes extends React.Component {
     render() {
@@ -14,6 +15,7 @@ export default class Routes extends React.Component {
                 <Route path='/lobby' component={Lobby}/>
                 <Route path='/dashboard' component={Dashboard}/>
                 <Route path='/leaderboard' component={Leaderboard}/>
+                <Route path='/upload' component={Upload}/>
             </Router>
         );
     }
