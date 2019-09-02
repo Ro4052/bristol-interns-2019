@@ -1,71 +1,40 @@
 .room {
-    width: 40vh;
-    height: 45vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 3vmin 2vmin;
-    margin: 3vmin;
+    padding: 0.5em;
     background-color: white;
     border: 3px solid black;
-    border-radius: 20px;
-    font-size: 1.5em;
-}
-
-.roomHeader {
+    border-radius: 1em;
     text-align: center;
-    margin-top: 0;
+    font-size: 1.2em;
 }
 
-.waiting {
+.title {
     text-align: center;
-    margin-top: 2vmin;
+    margin: 0;
 }
 
-.roomButton {
-    font-size: 3vh;
+.players {
+    margin: 1em 0;
+    font-size: 1.2em;
+}
+
+.player {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.username {
+    flex-grow: 1;
+}
+
+.remove {
+    font-size: 0.6em;
 }
 
 .roomButtons {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-}
-
-.removeAIButton {
-    width: 4vmin;
-    height: 4vmin;
-    padding: 0;
-    font-size: 2.8vmin;
-    letter-spacing: 0;
-    text-align: center;
-}
-
-.roomPlayers {
-    display: flex;
-    width: 80%;
-    height: 50%;
-    flex-direction: column;
-    align-content: center;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.playerInRoom {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-}
-
-@media only screen and (max-width: 1500px) {
-    .room {
-        height: 300px;
-        min-height: auto;
-    }
-    .roomHeader {
-        margin: 0;
-        font-size: 1.2em;
-    }
 }

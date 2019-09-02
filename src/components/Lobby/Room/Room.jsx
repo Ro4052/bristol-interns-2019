@@ -6,26 +6,31 @@ import { startGame, joinRoom, leaveRoom, addAIPlayer, removeAIPlayer } from '../
 export class Room extends React.Component {
     render() {
         const inRoom = this.props.room.players.some(player => player.username === this.props.username);
-        const startGameVisible = !this.props.room.started && inRoom && !(this.props.room.minPlayers - this.props.room.players.length > 0);
-        const waitingVisible = !this.props.room.started && (this.props.room.minPlayers - this.props.room.players.length > 0);
+        const isStarted = this.props.room.started;
+        const hasMaxPlayers = this.props.room.players.length >= this.props.room.maxPlayers;
+        const hasMinPlayers = this.props.room.players.length >= this.props.room.minPlayers;
         return (
-            <div className={styles.room} key={this.props.room.roomId} data-cy="room">
-                <h2 className={styles.roomHeader} data-cy="room-title">{"Room: " + this.props.room.title}</h2>
-                <ul className={styles.roomPlayers} id="players" data-cy='room-players'>
-                    {this.props.room.players.map((player, key) => (
-                        <li className={styles.playerInRoom} key={key}>
-                            <span className={styles.roomPlayer}data-cy='player-username'>{player.username}</span>
-                            {!player.real && <button className={styles.removeAIButton} onClick={() => this.props.removeAIPlayer(this.props.room.roomId, player.username)} data-cy='remove-ai'>-</button>}
-                        </li>
-                    ))}
-                </ul>
-                {waitingVisible && <span className = {styles.waiting} data-cy="players-needed">Waiting for {this.props.room.minPlayers - this.props.room.players.length} more players</span>}
-                <div className={styles.roomButtons}>
-                    {startGameVisible && <button className={styles.roomButton} onClick={this.props.startGame} data-cy="start-game" type='button'>Start game</button>}
-                    {!this.props.room.started && inRoom && <button className={styles.roomButton} onClick={() => this.props.leaveRoom(this.props.room.roomId)} data-cy="leave-room" type='button'>Leave room</button>}
-                    {!this.props.room.started && this.props.room.players.length !== this.props.room.maxPlayers && !inRoom && <button className={styles.roomButton} onClick={() => this.props.joinRoom(this.props.room.roomId)} data-cy="join-room" type='button'>Join room</button>}
-                    {!this.props.room.started && this.props.room.players.length !== this.props.room.maxPlayers && inRoom && <button className={styles.roomButton} data-cy="automated-player" onClick={() => this.props.addAIPlayer(this.props.room.roomId)} >Add AI player</button>}
-                </div>
+            <div className={styles.room} data-cy="room">
+                <h2 className={styles.title} data-cy="room-title">{`Room: ${this.props.room.title}`}</h2>
+                <table className={styles.players} data-cy='room-players'>
+                    <tbody>
+                        {this.props.room.players.map((player, key) => (
+                            <tr className={styles.player} key={key}>
+                                <td className={styles.username} data-cy='player-username'>{player.username}</td>
+                                <td className={styles.remove}>{!player.real && inRoom && !isStarted && <button onClick={() => this.props.removeAIPlayer(this.props.room.roomId, player.username)} data-cy='remove-ai'>X</button>}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                {!isStarted && <>
+                    {!hasMinPlayers && <span className={styles.waiting} data-cy="players-needed">Waiting for {this.props.room.minPlayers - this.props.room.players.length} more players</span>}
+                    <div className={styles.roomButtons}>
+                        {inRoom && hasMinPlayers && <button className={styles.roomButton} onClick={this.props.startGame} data-cy="start-game" type='button'>Start game</button>}
+                        {inRoom && <button className={styles.roomButton} onClick={() => this.props.leaveRoom(this.props.room.roomId)} data-cy="leave-room" type='button'>Leave room</button>}
+                        {!hasMaxPlayers && !inRoom && <button className={styles.roomButton} onClick={() => this.props.joinRoom(this.props.room.roomId)} data-cy="join-room" type='button'>Join room</button>}
+                        {!hasMaxPlayers && inRoom && <button className={styles.roomButton} data-cy="automated-player" onClick={() => this.props.addAIPlayer(this.props.room.roomId)} >Add AI player</button>}
+                    </div>
+                </>}
             </div>
         );
     }
@@ -35,11 +40,11 @@ const mapStateToProps = state => ({
     username: state.authReducer.username
 });
 
-const mapDispatchToProps = (dispatch) => ({
-    joinRoom: (roomId) => dispatch(joinRoom(roomId)),
-    leaveRoom: (roomId) => dispatch(leaveRoom(roomId)),
+const mapDispatchToProps = dispatch => ({
+    joinRoom: roomId => dispatch(joinRoom(roomId)),
+    leaveRoom: roomId => dispatch(leaveRoom(roomId)),
     removeAIPlayer: (roomId, username) => dispatch(removeAIPlayer(roomId, username)),
-    addAIPlayer: (roomId) => dispatch(addAIPlayer(roomId)),
+    addAIPlayer: roomId => dispatch(addAIPlayer(roomId)),
     startGame: () => dispatch(startGame())
 });
 
