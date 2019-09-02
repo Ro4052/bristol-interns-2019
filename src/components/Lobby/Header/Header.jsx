@@ -5,19 +5,17 @@ import Logout from '../../Logout/Logout';
 import LeaderboardButton from '../../Leaderboard/LeaderboardButton/LeaderboardButton';
 import UploadButton from '../../Upload/UploadButton/UploadButton';
 
-export class Header extends React.Component {
-    render() {
-        return (
-            <div className={styles.header}>
-                <div className={styles.buttons}>
-                    <LeaderboardButton />
-                    <UploadButton />
-                </div>
-                <Logo />
-                <Logout />
+export function Header() {
+    return (
+        <div className={styles.header}>
+            <div className={styles.buttons}>
+                <LeaderboardButton />
+                <UploadButton />
             </div>
-        );
-    }
+            <Logo />
+            <Logout />
+        </div>
+    );
 }
 
 export default Header;
