@@ -13,10 +13,11 @@
 .player {
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .removeAIButton {
-    font-size: 0.8em;
+    font-size: 1em;
 }
 
 .roomPlayers {
