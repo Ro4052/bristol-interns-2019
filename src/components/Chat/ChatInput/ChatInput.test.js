@@ -1,25 +1,32 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
 import ChatInput from './ChatInput';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import * as actions from '../ChatActions';
 
-const middlewares = [];
+const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
-const emptyState = {};
-const emptyStore = mockStore(emptyState);
+const store = mockStore();
 
 describe('ChatInput', () => {
     let wrapper;
     const setState = jest.fn();
     jest.spyOn(React, 'useState').mockImplementation(init => [init, setState]);
+    const sendChatSpy = jest.spyOn(actions, 'sendChat');
 
     beforeEach(() => {
+        store.clearActions();
         wrapper = mount(
-            <Provider store={emptyStore}>
+            <Provider store={store}>
                 <ChatInput />
             </Provider>
         );
+    });
+
+    afterEach(() => {
+        jest.clearAllMocks();
     });
 
     describe('on initial render', () => {
@@ -34,25 +41,20 @@ describe('ChatInput', () => {
     
     describe('on player types in the box', () => {
         it('updates the state', () => {
-            // wrapper.find({ 'data-cy': 'type-message' }).simulate('change',  { preventDefault: () => {}, target: { value: 'test' } });
-            wrapper.find({ 'data-cy': 'type-message' }).props().onChange({ preventDefault: () => {}, target: { value: 'test' } });
-
-            // expect(wrapper.state().currentValue).toBe('test');
-            // expect(useStateSpy).toHaveBeenCalled();
-            // expect(wrapper.find({ 'data-cy': 'type-message' }).text()).toEqual('test');
+            wrapper.find({ 'data-cy': 'type-message' }).props().onChange({ preventDefault: jest.fn(), target: { value: 'test' } });
             expect(setState).toHaveBeenCalledWith('test');
         });
-        // useStateSpy.mockRestore();
     });
 
-    // describe('on click send button', () => {
-    //     it('calls sendMessage', () => {
-    //         // const spy = jest.spyOn(ChatInput.prototype, 'sendMessage');
-    //         const sendMessageSpy = wrapper.instance().sendMessage;
-    //         // wrapper.find({ 'data-cy': 'message-form' }).simulate('submit');
-    //         // expect(spy).toHaveBeenCalled();
-    //         // spy.mockRestore();
-    //     });
-    // });
-    
+    describe('on click send button', () => {
+        it('dispatches sendChat', () => {
+            wrapper.find({ 'data-cy': 'message-form' }).props().onSubmit({ preventDefault: jest.fn() });
+            expect(sendChatSpy).toHaveBeenCalled();
+        });
+
+        it('clears the input', () => {
+            wrapper.find({ 'data-cy': 'message-form' }).props().onSubmit({ preventDefault: jest.fn() });
+            expect(setState).toHaveBeenCalledWith('');
+        });
+    });
 });
