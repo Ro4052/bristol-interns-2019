@@ -1,38 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { sendChat } from '../ChatActions';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styles from '../Chat.module.css';
 
-export class ChatInput extends React.Component {
-    constructor() {
-        super();
-        this.state = { currentValue: '' };
-        this.handleChange = this.handleChange.bind(this);
-        this.sendMessage = this.sendMessage.bind(this);
-    }
+export function ChatInput() {
+    const dispatch = useDispatch();
+    const [currentValue, setCurrentValue] = useState('');
 
-    handleChange(e) {
-        this.setState({ currentValue: e.target.value });
-    }
-
-    sendMessage(e) {
+    const sendMessage = e => {
         e.preventDefault();
-        this.props.sendChat(this.state.currentValue);
-        this.setState({ currentValue: '' });
+        dispatch(sendChat(currentValue));
+        setCurrentValue('');
     }
 
-    render() {
-        return (
-            <form className={styles.chatMessageForm} data-cy="message-form" onSubmit={this.sendMessage}>
-                <input className={styles.chatInput} data-cy='type-message' onChange={this.handleChange} value={this.state.currentValue} placeholder="Type a message" autoFocus />
-                <button data-cy="send-message" type='submit'>Send</button>
-            </form>
-        );
-    }
+    return (
+        <form className={styles.chatMessageForm} data-cy="message-form" onSubmit={sendMessage}>
+            <input className={styles.chatInput} data-cy='type-message' onChange={e => setCurrentValue(e.target.value)} value={currentValue} placeholder="Type a message" autoFocus />
+            <button data-cy="send-message" type='submit'>Send</button>
+        </form>
+    );
 }
 
-const mapDispatchToProps = dispatch => ({
-    sendChat: message => dispatch(sendChat(message))
-});
-
-export default connect(null, mapDispatchToProps)(ChatInput);
+export default ChatInput;
