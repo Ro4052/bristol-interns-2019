@@ -4,8 +4,8 @@ import { useDispatch } from 'react-redux';
 import styles from '../Chat.module.css';
 
 export function ChatInput() {
-    const dispatch = useDispatch();
     const [currentValue, setCurrentValue] = React.useState('');
+    const dispatch = useDispatch();
 
     const sendMessage = e => {
         e.preventDefault();

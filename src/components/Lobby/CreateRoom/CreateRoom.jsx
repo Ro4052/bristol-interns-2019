@@ -4,15 +4,15 @@ import styles from './CreateRoom.module.css';
 import { setRoundCount, createRoom, setGameMode } from './CreateRoomActions';
 
 export function CreateRoom() {
-    const dispatch = useDispatch();
     const { numRounds, gameMode, error } = useSelector(state => state.createRoomReducer);
-    const options = [3, 4, 5, 6];
+    const dispatch = useDispatch();
 
     const submitCreateRoom = e => {
         e.preventDefault();
         dispatch(createRoom(numRounds, gameMode));
     }
 
+    const options = [3, 4, 5, 6];
     return (
         <div className={styles.createRoom}>  
             <h2 className={styles.createRoomHeader}>Create room</h2>
