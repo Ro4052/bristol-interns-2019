@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './CardList.module.css';
 import Card from './Card/Card';
 
-export function CardList(props) {
+function CardList(props) {
     const { cy, cards, handleClick, isEnabled } = props;
     return (
         <div className={styles.fade}>

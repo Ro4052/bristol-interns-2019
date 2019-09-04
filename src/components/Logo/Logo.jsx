@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Logo.module.css';
 
-export function Logo() {
+function Logo() {
     const letters = ["T", "e", "l", "l", "T", "a", "l", "e", "s"];
     return (
         <div className={styles.logo}>

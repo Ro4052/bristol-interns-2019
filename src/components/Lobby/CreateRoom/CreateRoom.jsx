@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import styles from './CreateRoom.module.css';
 import { setRoundCount, createRoom, setGameMode } from './CreateRoomActions';
 
-export function CreateRoom() {
+function CreateRoom() {
     const { numRounds, gameMode, error } = useSelector(state => state.createRoomReducer);
     const dispatch = useDispatch();
 
