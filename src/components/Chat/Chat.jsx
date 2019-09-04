@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import styles from './Chat.module.css';
 import classNames from 'classnames/bind';
 import ChatForm from './ChatForm/ChatForm';
-import Message from './Message/Message';
 
 const cx = classNames.bind(styles);
 
@@ -21,7 +20,12 @@ function Chat() {
             <div className={styles.messagesContainer}>
                 <div className={styles.scrollContainer}>
                     <div className={cx(styles.messages, 'arrowScrollbar')}>
-                        {messages.map((message, key) => <Message message={message} key={key} />)}
+                        {messages.map((message, key) => 
+                            <div key={key} className={styles.message}>
+                                <div data-cy='message-username' className={styles.messageUsername}>{message.username}:</div>
+                                <div data-cy='message-text' className={styles.messageText}>{message.text}</div>
+                            </div>
+                        )}
                         <div ref={messagesEndRef} />
                     </div>
                 </div>
