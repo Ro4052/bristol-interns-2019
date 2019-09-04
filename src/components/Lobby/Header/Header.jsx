@@ -4,8 +4,7 @@ import styles from './Header.module.css';
 import Logo from '../../Logo/Logo';
 import { logOut } from '../../Login/LoginActions';
 
-function Header(props) {
-    const { history } = props;
+function Header({ history }) {
     const dispatch = useDispatch();
     return (
         <div className={styles.header}>

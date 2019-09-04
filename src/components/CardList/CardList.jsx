@@ -2,8 +2,7 @@ import React from 'react';
 import styles from './CardList.module.css';
 import Card from './Card/Card';
 
-function CardList(props) {
-    const { cy, cards, handleClick, isEnabled } = props;
+function CardList({ cy, cards, handleClick, isEnabled }) {
     return (
         <div className={styles.fade}>
             <div className={styles.cardList} data-cy={cy}>

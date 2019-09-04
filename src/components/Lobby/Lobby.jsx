@@ -12,13 +12,12 @@ import classNames from 'classnames/bind';
 
 const cx = classNames.bind(styles);
 
-function Lobby(props) {
+function Lobby({ history }) {
     const [chatVisible, setChatVisible] = React.useState(false);
     const { rooms } = useSelector(state => state.lobbyReducer);
     const { status } = useSelector(state => state.dashboardReducer);
     const { newMessages } = useSelector(state => state.chatReducer);
     const dispatch = useDispatch();
-    const { history } = props;
 
     useEffect(() => {
         dispatch(authenticateUser());

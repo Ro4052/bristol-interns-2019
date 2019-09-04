@@ -4,7 +4,6 @@ import { fetchCards, selectCard } from './MyCardsActions';
 import CardList from '../CardList/CardList';
 
 export class MyCards extends React.Component {
-
     componentDidMount() {
         this.props.fetchCards();
     }
