@@ -1,47 +1,28 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { sendWord } from './PlayWordActions';
-import styles from '../PlayWord/PlayWord.module.css';
 
-export class PlayWord extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            currentValue: ''
-        }
-        this.handleChange = this.handleChange.bind(this);
-        this.playWord = this.playWord.bind(this);
-    }
+export function PlayWord() {
+    const [currentValue, setCurrentValue] = React.useState('');
+    const { error } = useSelector(state => state.playWordReducer);
+    const dispatch = useDispatch();
 
-    handleChange(e) {
-        this.setState({ currentValue: e.target.value });
-    }
-
-    playWord(e) {
+    const playWord = e => {
         e.preventDefault();
-        this.props.sendWord(this.state.currentValue);
+        dispatch(sendWord(currentValue));
+        setCurrentValue('');
     }
 
-    render() {
-        return (
-            <div className={styles.sendWordBox}>
-                <span data-cy="play-word">Type in the word that best describes the card you picked</span>
-                <form data-cy="play-word-form" onSubmit={this.playWord}>
-                    <input className={styles.entryBox} onChange={this.handleChange} value={this.state.currentValue} placeholder="Type a word" data-cy='type-word' autoFocus />
-                    <button className={styles.enterWordButton} data-cy="send-word" type='submit'>Send word</button>
-                </form>
-                <span className={styles.invalidWord} data-cy= 'send-error'>{this.props.error}</span>
-            </div>
-        );
-    }
+    return (
+        <>
+            <span data-cy="play-word">Type in the word that best describes the card you picked</span>
+            <form data-cy="play-word-form" onSubmit={playWord}>
+                <input onChange={e => setCurrentValue(e.target.value)} value={currentValue} placeholder="Type a word" data-cy='type-word' autoFocus />
+                <button data-cy="send-word" type='submit'>Send word</button>
+            </form>
+            {error && <span className='error-text' data-cy= 'send-error'>{error}</span>}
+        </>
+    );
 }
 
-const mapStateToProps = state => ({
-    error: state.playWordReducer.error
-});
-
-const mapDispatchToProps = dispatch => ({
-    sendWord: word => dispatch(sendWord(word))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(PlayWord);
+export default PlayWord;

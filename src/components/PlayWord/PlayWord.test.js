@@ -1,59 +1,83 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
-import { PlayWord } from './PlayWord';
+import { mount } from 'enzyme';
+import PlayWord from './PlayWord';
+import { Provider } from 'react-redux';
+import configureStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import * as actions from './PlayWordActions';
 
-describe('on initial render', () => {
-    it('the input is empty', () => {
-        const wrapper = shallow(<PlayWord />);
-        expect(wrapper.find({ 'data-cy': 'type-word' }).text()).toEqual('');
-    });
-    it('the submit button is visible', () => {
-        const wrapper = shallow(<PlayWord />);
-        expect(wrapper.find({ 'data-cy': 'send-word' }));
-    });
+const middlewares = [thunk];
+const mockStore = configureStore(middlewares);
+const store = mockStore({
+    playWordReducer: {},
+    myCardsReducer: {}
 });
 
-describe('on player types in the box', () => {
-    it('calls handle change', () => {
-        const spy = jest.spyOn(PlayWord.prototype, 'handleChange');
-        const wrapper = shallow(<PlayWord />);
-        wrapper.find({ 'data-cy': 'type-word' }).simulate('change',  { preventDefault: () => {}, target: { value: 'test' } });
-        expect(spy).toHaveBeenCalled();
-        spy.mockRestore();
-    });
-    it('updates the state', () => {
-        const wrapper = shallow(<PlayWord />);
-        wrapper.find({ 'data-cy': 'type-word' }).simulate('change',  { preventDefault: () => {}, target: { value: 'test' } });
-        expect(wrapper.state().currentValue).toEqual('test');
-    });
-});
+describe('PlayWord', () => {
+    let wrapper;
+    const setState = jest.fn();
+    jest.spyOn(React, 'useState').mockImplementation(init => [init, setState]);
+    const sendWordSpy = jest.spyOn(actions, 'sendWord');
 
-describe('on button click', () => {
-    it('calls sendWord', () => {
-        const sendWord = jest.fn();
-        const wrapper = mount(<PlayWord sendWord={sendWord} />);
-        wrapper.find({ 'data-cy': 'play-word-form' }).simulate('submit');
-        expect(sendWord).toHaveBeenCalled();
-        sendWord.mockRestore();
+    beforeEach(() => {
+        store.clearActions();
+        wrapper = mount(
+            <Provider store={store}>
+                <PlayWord />
+            </Provider>
+        );
     });
-});
 
-describe('on receive 400 from server due to invalid word entered', () => {
-    it('displays error', () => {
-        const wrapper = shallow(<PlayWord error={"Invalid word"} />);
-        expect(wrapper.find({'data-cy' :"send-error"}).text()).toEqual('Invalid word');
+    afterEach(() => {
+        jest.clearAllMocks();
     });
-})
-describe('on receive 200 form server due to valid word entered', () => {
-    it('does not display error', () => {
-        const wrapper = shallow(<PlayWord error={""} />);
-        expect(wrapper.find({'data-cy' :"send-error"}).text()).toEqual('');
-    });
-});
 
-describe('on play card flag', () => {
-    it('displays the play word prompt', () => {
-        const wrapper = shallow(<PlayWord playWord={true} />);
-        expect(wrapper.find({'data-cy' :"play-word"}));
+    describe('on initial render', () => {
+        it('the input is empty', () => {
+            expect(wrapper.find({ 'data-cy': 'type-word' }).text()).toEqual('');
+        });
+        it('the submit button is visible', () => {
+            expect(wrapper.find({ 'data-cy': 'send-word' }));
+        });
+    });
+
+    describe('on player types in the box', () => {
+        it('updates the state', () => {
+            wrapper.find({ 'data-cy': 'type-word' }).props().onChange({ preventDefault: jest.fn(), target: { value: 'test' } });
+            expect(setState).toHaveBeenCalledWith('test');
+        });
+    });
+    
+    describe('on click send button', () => {
+        it('dispatches sendWord', () => {
+            wrapper.find({ 'data-cy': 'play-word-form' }).props().onSubmit({ preventDefault: jest.fn() });
+            expect(sendWordSpy).toHaveBeenCalled();
+        });
+
+        it('clears the input', () => {
+            wrapper.find({ 'data-cy': 'play-word-form' }).props().onSubmit({ preventDefault: jest.fn() });
+            expect(setState).toHaveBeenCalledWith('');
+        });
+    });
+
+    describe('on error', () => {
+        const errorStore = mockStore({
+            playWordReducer: {
+                error: 'Invalid word'
+            },
+            myCardsReducer: {}
+        });
+
+        beforeEach(() => {
+            wrapper = mount(
+                <Provider store={errorStore}>
+                    <PlayWord />
+                </Provider>
+            );
+        });
+
+        it('displays the error', () => {
+            expect(wrapper.find({'data-cy' :"send-error"}).text()).toEqual('Invalid word');
+        });
     });
 });
