@@ -1,10 +1,12 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import styles from './Header.module.css';
-import Logo from '../Logo/Logo';
-import Logout from '../Logout/Logout';
+import Logo from '../../Logo/Logo';
+import { logOut } from '../../Login/LoginActions';
 
 function Header(props) {
     const { history } = props;
+    const dispatch = useDispatch();
     return (
         <div className={styles.header}>
             <div className={styles.buttons}>
@@ -12,9 +14,11 @@ function Header(props) {
                 <button onClick={() => history.push('/upload')} data-cy="go-upload" type='button'>Upload</button>
             </div>
             <Logo />
-            <Logout />
+            <button onClick={() => dispatch(logOut())} data-cy="logout" type='button'>Logout</button>
         </div>
     );
 }
+
+
 
 export default Header;

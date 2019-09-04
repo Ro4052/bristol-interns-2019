@@ -2,8 +2,8 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styles from './PlayerInteractions.module.css';
 import classNames from 'classnames/bind';
-import { requestNextRound } from '../Timer/TimerActions';
-import { statusTypes } from '../../services/statusTypes';
+import { requestNextRound } from '../../Timer/TimerActions';
+import { statusTypes } from '../../../services/statusTypes';
 
 function PlayerInteractions() {
     const { status, currentWord } = useSelector(state => state.dashboardReducer);
