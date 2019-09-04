@@ -5,7 +5,7 @@ import classNames from 'classnames/bind';
 import { requestNextRound } from '../Timer/TimerActions';
 import { statusTypes } from '../../services/statusTypes';
 
-export function PlayerInteractions() {
+function PlayerInteractions() {
     const { status, currentWord } = useSelector(state => state.dashboardReducer);
     const { username } = useSelector(state => state.authReducer);
     const { currentPlayer } = useSelector(state => state.playersReducer);

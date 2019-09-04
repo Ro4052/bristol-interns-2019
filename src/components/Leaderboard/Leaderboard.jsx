@@ -6,7 +6,7 @@ import classNames from 'classnames/bind';
 
 const cx = classNames.bind(styles);
 
-export function Leaderboard(props) {
+function Leaderboard(props) {
     const { history} = props;
     const { players } = useSelector(state => state.leaderboardReducer);
     const dispatch = useDispatch();

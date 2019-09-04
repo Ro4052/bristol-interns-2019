@@ -3,7 +3,7 @@ import { sendChat } from '../ChatActions';
 import { useDispatch } from 'react-redux';
 import styles from '../Chat.module.css';
 
-export function ChatInput() {
+function ChatInput() {
     const [currentValue, setCurrentValue] = React.useState('');
     const dispatch = useDispatch();
 

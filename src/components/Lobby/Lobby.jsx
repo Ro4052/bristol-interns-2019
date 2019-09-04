@@ -12,7 +12,7 @@ import classNames from 'classnames/bind';
 
 const cx = classNames.bind(styles);
 
-export function Lobby(props) {
+function Lobby(props) {
     const [chatVisible, setChatVisible] = React.useState(false);
     const { rooms } = useSelector(state => state.lobbyReducer);
     const { status } = useSelector(state => state.dashboardReducer);
@@ -25,7 +25,7 @@ export function Lobby(props) {
         if (status !== statusTypes.NOT_STARTED) {
             history.push('/dashboard');
         }
-    });
+    }, [dispatch, history, status]);
 
     const toggleChat = () => {
         setChatVisible(!chatVisible);

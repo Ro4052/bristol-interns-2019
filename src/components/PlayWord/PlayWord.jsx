@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { sendWord } from './PlayWordActions';
 
-export function PlayWord() {
+function PlayWord() {
     const [currentValue, setCurrentValue] = React.useState('');
     const { error } = useSelector(state => state.playWordReducer);
     const dispatch = useDispatch();

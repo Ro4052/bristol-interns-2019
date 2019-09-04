@@ -7,7 +7,7 @@ import Message from './Message/Message';
 
 const cx = classNames.bind(styles);
 
-export function Chat() {
+function Chat() {
     const { messages } = useSelector(state => state.chatReducer);
 
     const messagesEndRef = useRef(null);

@@ -9,7 +9,7 @@ import { authenticateUser } from '../Login/LoginActions';
 import { statusTypes } from '../../services/statusTypes';
 import Instructions from '../Instructions/Instructions';
 
-export function Dashboard() {
+function Dashboard() {
     const { status, roundNum, rounds } = useSelector(state => state.dashboardReducer);
     const { playCard, playedCardId } = useSelector(state => state.myCardsReducer);
     const { playWord, word } = useSelector(state => state.playWordReducer);
@@ -19,7 +19,7 @@ export function Dashboard() {
 
     useEffect(() => {
         dispatch(authenticateUser());
-    });
+    }, [dispatch]);
 
     const showMyCards = playCard || (playWord && !word && playedCardId && !winners.length);
     const showPlayedCards = status !== statusTypes.GAME_OVER && !playCard && cards.length > 0;
