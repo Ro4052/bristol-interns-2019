@@ -9,7 +9,7 @@ const cx = classNames.bind(styles);
 function Chat() {
     const { messages } = useSelector(state => state.chatReducer);
 
-    const messagesEndRef = useRef(null);
+    const messagesEndRef = useRef();
     useEffect(() => {
         messagesEndRef.current.scrollIntoView({ behaviour: 'smooth' });
     });
