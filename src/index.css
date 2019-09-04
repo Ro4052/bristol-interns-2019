@@ -79,6 +79,10 @@ button:hover {
     background-color: var(--light-orange);
 }
 
+.error-text {
+    color: red;
+}
+
 /*  SCROLLBARS */
 
 .arrowScrollbar::-webkit-scrollbar {

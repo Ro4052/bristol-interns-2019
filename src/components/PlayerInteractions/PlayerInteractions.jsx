@@ -16,7 +16,7 @@ export function PlayerInteractions() {
     const dispatch = useDispatch();
 
     const isStatus = checkStatus => status === checkStatus;
-    const isCurrentPlayer = ()  => currentPlayer.username === username;
+    const isCurrentPlayer = ()  => currentPlayer && currentPlayer.username === username;
 
     return (
         <div className={classNames(styles.playerInteractions)}>

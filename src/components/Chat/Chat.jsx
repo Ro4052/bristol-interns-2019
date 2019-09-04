@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import styles from './Chat.module.css';
 import classNames from 'classnames/bind';
-import ChatInput from './ChatInput/ChatInput';
+import ChatForm from './ChatForm/ChatForm';
 import Message from './Message/Message';
 
 const cx = classNames.bind(styles);
@@ -26,7 +26,7 @@ export function Chat() {
                     </div>
                 </div>
             </div>
-            <ChatInput />
+            <ChatForm />
         </div>
     );
 }

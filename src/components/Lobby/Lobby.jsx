@@ -6,7 +6,7 @@ import { authenticateUser } from '../Login/LoginActions';
 import { viewMessages } from '../Chat/ChatActions';
 import Chat from '../Chat/Chat';
 import CreateRoom from './CreateRoom/CreateRoom';
-import Header from './Header/Header';
+import Header from '../Header/Header';
 import Room from './Room/Room';
 import classNames from 'classnames/bind';
 

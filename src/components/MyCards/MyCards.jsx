@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { fetchCards, selectCard } from './MyCardsActions';
-import CardList from '../shared/CardList/CardList';
+import CardList from '../CardList/CardList';
 
 export class MyCards extends React.Component {
 
