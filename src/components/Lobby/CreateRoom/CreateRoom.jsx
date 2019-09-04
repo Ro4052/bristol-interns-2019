@@ -18,7 +18,7 @@ function CreateRoom() {
             <h2 className={styles.createRoomHeader}>Create room</h2>
             <form className={styles.createRoomForm} data-cy="create-room-form" onSubmit={submitCreateRoom}>
                 <select className={styles.selectRounds} data-cy="num-rounds-options" onChange={e => dispatch(setRoundCount(e.target.value))}>
-                    {options.map((option, key) => <option key={key} value={option}>{option} rounds</option>)}
+                    {options.map((option, index) => <option key={index} value={option}>{option} rounds</option>)}
                 </select>
                 <select className={styles.selectRounds} data-cy="mode-options" onChange={e => dispatch(setGameMode(e.target.value))}>
                     <option value="original">TellTales Images</option>

@@ -20,8 +20,8 @@ function Chat() {
             <div className={styles.messagesContainer}>
                 <div className={styles.scrollContainer}>
                     <div className={cx(styles.messages, 'arrowScrollbar')}>
-                        {messages.map((message, key) => 
-                            <div key={key} className={styles.message}>
+                        {messages.map((message, index) => 
+                            <div key={index} className={styles.message}>
                                 <div data-cy='message-username' className={styles.messageUsername}>{message.username}:</div>
                                 <div data-cy='message-text' className={styles.messageText}>{message.text}</div>
                             </div>

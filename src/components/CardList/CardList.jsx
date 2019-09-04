@@ -7,7 +7,7 @@ function CardList({ cy, cards, handleClick, isEnabled }) {
         <div className={styles.fade}>
             <div className={styles.cardList} data-cy={cy}>
                 <div className={styles.spacer} />
-                {cards.map((card, key) => <Card card={card} key={card.cardId || key} handleClick={handleClick} enabled={isEnabled(card.cardId)} />)}
+                {cards.map((card, index) => <Card card={card} key={card.cardId || index} handleClick={handleClick} enabled={isEnabled(card.cardId)} />)}
                 <div className={styles.spacer} />
             </div>
         </div>

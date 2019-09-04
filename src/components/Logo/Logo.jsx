@@ -5,7 +5,7 @@ function Logo() {
     const letters = ["T", "e", "l", "l", "T", "a", "l", "e", "s"];
     return (
         <div className={styles.logo}>
-            {letters.map((letter, key) => <span key={key} className={styles.letter} data-letter={letter}>{letter}</span>)}
+            {letters.map((letter, index) => <span key={index} className={styles.letter} data-letter={letter}>{letter}</span>)}
         </div>
     );
 }
