@@ -3,7 +3,7 @@ import styles from './Header.module.css';
 import Logo from '../Logo/Logo';
 import Logout from '../Logout/Logout';
 
-export function Header(props) {
+function Header(props) {
     const { history } = props;
     return (
         <div className={styles.header}>
