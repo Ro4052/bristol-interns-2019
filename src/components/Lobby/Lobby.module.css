@@ -74,6 +74,11 @@
         justify-content: stretch;
         justify-items: stretch;
         position: relative;
+        overflow: visible;
+    }
+
+    .rooms {
+        overflow: visible;
     }
 
     .chatContainer {
