@@ -45,10 +45,33 @@ describe('Chat', () => {
         });
     });
     
-    // describe('on draw', () => {
-    //     it("displays the drawers", () => {
-    //         expect(wrapper.find({ 'data-cy': 'drawers' }).text()).toEqual("Draw between one and two ");
-    //         expect(wrapper.find({ 'data-cy': 'winner' }).children()).toEqual({});
-    //     });
-    // });
+    describe('on draw', () => {
+        beforeEach(() => {
+            const drawStore = mockStore({
+                authReducer: {},
+                chatReducer: {
+                    messages: [{
+                        username: 'player1',
+                        text: 'hello'
+                    }]
+                },
+                gameOverReducer: {
+                    winners: [
+                        { username: 'player1' },
+                        { username: 'player2' }
+                    ]
+                }
+            });
+            wrapper = mount(
+                <Provider store={drawStore}>
+                    <GameOver />
+                </Provider>
+            );
+        });
+
+        it("displays the drawers", () => {
+            expect(wrapper.find({ 'data-cy': 'drawers' }).text()).toEqual("Draw between player1 and player2 ");
+            expect(wrapper.find({ 'data-cy': 'winner' }).children()).toEqual({});
+        });
+    });
 });
