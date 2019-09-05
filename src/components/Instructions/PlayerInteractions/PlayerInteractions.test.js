@@ -1,11 +1,11 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import PlayerInteractions from './PlayerInteractions';
-import { statusTypes } from '../../services/statusTypes';
+import { statusTypes } from '../../../services/statusTypes';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import * as actions from '../Timer/TimerActions';
+import * as actions from '../../Timer/TimerActions';
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);

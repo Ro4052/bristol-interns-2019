@@ -8,7 +8,10 @@ const middlewares = [];
 const mockStore = configureStore(middlewares);
 const store = mockStore({
     chatReducer: {
-        messages: []
+        messages: [{
+            username: 'player1',
+            text: 'hello'
+        }]
     }
 });
 
@@ -31,10 +34,8 @@ describe('Chat', () => {
     });
 
     describe('on render', () => {
-        it('scrolls to bottom', () => {
-            // jest.spyOn(Chat.prototype, 'scrollToBottom').mockImplementation(jest.fn());
-            // const wrapper = shallow(<Chat messages={[]} newMessages={["Hello"]} />);
-            // expect(wrapper.exists({ 'data-cy': 'new-message' }));
+        it('displays messages', () => {
+            expect(wrapper.find({ 'data-cy': 'chat-message' }).length).toEqual(1);
         });
     });
 });

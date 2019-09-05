@@ -13,7 +13,7 @@ function GameOver() {
     return (
         <div data-cy='game-over' className={styles.gameOverBox}>
             {
-            (draw)
+            draw
             ? <h2 data-cy='drawers'>Draw between {winners.map((winner, index) => <span key={winner.username}>{winner.username}{index < winners.length - 1 ? ' and' : ''} </span>)}</h2>
             : (username === winners[0].username) 
                 ? <h2 data-cy='winner'>You win</h2>
