@@ -30,11 +30,13 @@ function Dashboard() {
                     {status !== statusTypes.NOT_STARTED && <h2>Round: <span id="round-number" data-cy="round-number">{roundNum}/{rounds}</span></h2>}
                     <Players />
                 </div>
-                <Chat />
+                <div className={styles.chatContainer}>
+                    <Chat />
+                </div>
             </div>
             <div className={styles.right}>
-                <Instructions />
-                <div className={styles.centerBox}>
+                <div className={styles.rightInner}>
+                    <Instructions />
                     {showPlayedCards && <PlayedCards />}
                     {showMyCards && <MyCards />}
                 </div>

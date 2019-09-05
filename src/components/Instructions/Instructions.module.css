@@ -43,3 +43,9 @@
 .circle3 {
     padding: 0.5em;
 }
+
+@media screen and (max-width: 1000px) {
+    .timothy {
+        display: none;
+    }
+}

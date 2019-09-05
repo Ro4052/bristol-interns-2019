@@ -6,9 +6,9 @@
 }
 
 .gameInfo {
-    font-size: 3vmin;
+    font-size: 1.6em;
     background-color: white;
-    border: 3px solid black;
+    border: 2px solid black;
     border-radius: 20px;
     padding: 0 1em 1em 1em;
     margin-bottom: 1em;
@@ -27,9 +27,23 @@
     margin-right: 1.2em;
 }
 
-.right {
-    width: 60%;
+.chatContainer {
     flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.right {
+    flex-grow: 1;
+    position: relative;
+}
+
+.rightInner {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -37,42 +51,21 @@
 
 @media screen and (max-width: 1000px) {
     .left {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .right {
-        width: 100%;
-        height: 50%;
-        align-items: center;
-    }
-
-    .main {
-        flex-direction: column;
+        width: 40%;
     }
 }
 
-@media screen and (max-width: 900px) {
-    .main {
-        height: 600px;
-        flex-direction: column;
-    }
-}
-
-@media screen and (max-height: 500px) {
+@media screen and (max-width: 800px) {
     .dashboard {
         height: auto;
+        flex-direction: column;
     }
-}
 
-.centerBox {
-    width: 100%;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    .chatContainer {
+        display: none;
+    }
+
+    .left {
+        width: initial;
+    }
 }
