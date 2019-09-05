@@ -11,7 +11,8 @@ const mockStore = configureStore(middlewares);
 const store = mockStore({
     authReducer: {},
     chatReducer: {
-        messages: []
+        messages: [],
+        newMessages: []
     },
     dashboardReducer: {
         currentPlayer: {}

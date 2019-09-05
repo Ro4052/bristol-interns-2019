@@ -44,7 +44,9 @@ function Login() {
                 </form>
                 <button className={styles.toggleButton} data-cy="toggle-signup" onClick={() => setSignUpToggle(!signUpToggle)}>{signUpToggle ? "Already a member? Log in." : "Don't have an account? Sign up"}</button> or
                 <a className={styles.githubLogin} href={uri}>Log in with GitHub <img src={github} className={styles.githubLogo} alt='github-logo' /></a>
-                <Timothy />
+                <div className={styles.timothyContainer}>
+                    <Timothy />
+                </div>
             </div>
     );
 }

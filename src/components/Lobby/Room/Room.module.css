@@ -10,6 +10,10 @@
     margin: 1em;
 }
 
+.currentRoom {
+    border: 5px solid green;
+}
+
 .player {
     display: flex;
     justify-content: center;
