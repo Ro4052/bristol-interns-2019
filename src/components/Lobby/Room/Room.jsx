@@ -2,6 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styles from './Room.module.css';
 import { startGame, joinRoom, leaveRoom, addAIPlayer, removeAIPlayer } from '../LobbyActions';
+import classNames from 'classnames/bind';
+
+const cx = classNames.bind(styles);
 
 export class Room extends React.Component {
     render() {
@@ -10,7 +13,7 @@ export class Room extends React.Component {
         const hasMaxPlayers = this.props.room.players.length >= this.props.room.maxPlayers;
         const hasMinPlayers = this.props.room.players.length >= this.props.room.minPlayers;
         return (
-            <div className={styles.room} data-cy="room">
+            <div className={cx(styles.room, { currentRoom: inRoom })} data-cy="room">
                 <h2 className={styles.title} data-cy="room-title">{`Room: ${this.props.room.title}`}</h2>
                 <table className={styles.players}>
                     <tbody data-cy='room-players'>
