@@ -1,8 +1,15 @@
-.dashboard {
+.wrapper {
     height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard {
+    flex-grow: 1;
     display: flex;
     padding: 1.2em;
     flex-direction: row;
+    position: relative;
 }
 
 .gameInfo {
@@ -49,6 +56,10 @@
     align-items: stretch;
 }
 
+.chatButton {
+    display: none;
+}
+
 @media screen and (max-width: 1000px) {
     .left {
         width: 40%;
@@ -57,12 +68,28 @@
 
 @media screen and (max-width: 800px) {
     .dashboard {
-        height: auto;
         flex-direction: column;
     }
 
     .chatContainer {
         display: none;
+    }
+    
+    .chatOverlay {
+        display: flex;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 0.8em;
+        z-index: 100;
+    }
+
+    .chatButton {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
     }
 
     .left {
