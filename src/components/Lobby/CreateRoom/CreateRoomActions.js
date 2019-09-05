@@ -28,14 +28,10 @@ export const createRoom = (numRounds, gameMode) => dispatch => {
         if (res.status === 200) {
             dispatch(createRoomSuccess());
         } else {
-            console.log(res);
-            
             throw new Error(res.data.message);
         }
     })
     .catch(err => {
-        console.log(err);
-        
         dispatch(createRoomFailure(err.message))
     });
 };
