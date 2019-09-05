@@ -35,7 +35,7 @@ function Dashboard() {
     const showMyCards = playCard || (playWord && !word && playedCardId && !winners.length);
     const showPlayedCards = status !== statusTypes.GAME_OVER && !playCard && cards.length > 0;
     return (
-        <div className={styles.wrapper}>
+        <div className={styles.container}>
             <div>
                 <button className={styles.chatButton} type='button' onClick={toggleChat} data-cy='toggle-chat'>
                     {chatVisible ? "Hide chat" : "Show chat"}
@@ -53,11 +53,9 @@ function Dashboard() {
                     </div>
                 </div>
                 <div className={styles.right}>
-                    <div className={styles.rightInner}>
-                        <Instructions />
-                        {showPlayedCards && <PlayedCards />}
-                        {showMyCards && <MyCards />}
-                    </div>
+                    <Instructions />
+                    {showPlayedCards && <PlayedCards />}
+                    {showMyCards && <MyCards />}
                 </div>
             </div>
         </div>
