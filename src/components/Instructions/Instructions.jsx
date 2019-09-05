@@ -31,10 +31,12 @@ function Instructions() {
                 {(status === statusTypes.WAITING_FOR_OTHER_PLAYERS && playCardDuration > 0) && <Timer cy="card-timer" setDuration={duration => dispatch(setPlayCardTimer(duration))} duration={playCardDuration} />}
                 {(status === statusTypes.WAITING_FOR_VOTES && voteCardDuration > 0) && <Timer cy="vote-timer" setDuration={duration => dispatch(setVoteCardTimer(duration))} duration={voteCardDuration} />}
             </div>
-            <div className={styles.timothy}>
+            <div className={styles.circles}>
                 <div className={styles.circle1}/>
                 <div className={styles.circle2}/>
                 <div className={styles.circle3}/>
+            </div>
+            <div className={styles.timothy}>
                 <Timothy />
             </div>
         </div>

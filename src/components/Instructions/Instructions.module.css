@@ -17,7 +17,7 @@
     align-items: center;
 }
 
-.timothy {
+.circles {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -45,6 +45,17 @@
 }
 
 @media screen and (max-width: 1000px) {
+    .instructions {
+        flex-direction: column-reverse;
+        justify-content: space-evenly;
+    }
+
+    .circles {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 800px) {
     .timothy {
         display: none;
     }
