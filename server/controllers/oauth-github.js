@@ -6,7 +6,7 @@ module.exports = (oauthClientId, oauthSecret) => {
         client_id: oauthClientId
     }).toString();
 
-    authorise = (req, callback) => {
+    const authorise = (req, callback) => {
         const code = req.query.code;
         request({
             url: URI("https://github.com/login/oauth/access_token")

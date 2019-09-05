@@ -9,14 +9,6 @@
     box-sizing: border-box;
 }
 
-body {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 :root {
   height: 100%;
   width: 100%;
@@ -33,12 +25,19 @@ body {
   --main-font: 'Teko';
 }
 
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--dark-orange);
+  }
+
 #root {
   height: 100%;
   width: 100%;
   font-family: var(--main-font);
-  background-color: var(--dark-orange);
-  background-size: cover;
 }
 
 ul {
@@ -78,6 +77,10 @@ button {
 
 button:hover {
     background-color: var(--light-orange);
+}
+
+.error-text {
+    color: red;
 }
 
 /*  SCROLLBARS */

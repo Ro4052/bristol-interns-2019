@@ -27,7 +27,7 @@ export class Card extends React.Component {
 
     render() {
         const src = {
-            original: this.props.card.cardId ? require(`../../../../images/cards/card (${this.props.card.cardId}).jpg`) : require('../../../../images/cardBack.jpg'),
+            original: this.props.card.cardId ? require(`../../../images/cards/card (${this.props.card.cardId}).jpg`) : require('../../../images/cardBack.jpg'),
             custom: this.props.card.url
         }[this.props.gameMode];
         const alt = this.props.card.cardId ? `card-${this.props.card.cardId}` : 'card-hidden';
@@ -46,7 +46,7 @@ export class Card extends React.Component {
                         </div>}
                     </div>
                     <div className={styles.back}>
-                        <img data-cy='card-image' className={styles.image} alt="card-hidden" src={require('../../../../images/cardBack.jpg')} />
+                        <img data-cy='card-image' className={styles.image} alt="card-hidden" src={require('../../../images/cardBack.jpg')} />
                     </div>
                 </div>
             </div>

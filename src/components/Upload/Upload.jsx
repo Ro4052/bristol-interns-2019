@@ -37,18 +37,23 @@ export class Upload extends React.Component {
 
     render() {            
         return (
-            <div className={styles.uploadSection}>
-                {this.props.message && <span className={styles.uploadMessage}>{this.props.message}</span>}
-                <form className={styles.uploadForm} data-cy='upload-form' onSubmit={this.sendImageUpload}>
-                    <div className={cx(styles.fileUpload, { active: this.state.file })}>
-                        <div className={styles.fileSelect}>
-                            <div className={styles.fileSelectButton} id="fileName">Choose File</div>
-                            <div className={styles.fileSelectName} id="noFile">{this.state.file ? this.state.file.name : "No file chosen..."}</div> 
-                            <input data-cy='upload-input' type="file" name="chooseFile" id="chooseFile" onChange={this.onChange} />
+            <div className={styles.uploadPage}>
+                <div>
+                    <button onClick={() => this.props.history.push('/lobby')} data-cy="back" type='button'>Back</button>
+                </div>
+                <div className={styles.uploadSection}>
+                    {this.props.message && <span className={styles.uploadMessage}>{this.props.message}</span>}
+                    <form className={styles.uploadForm} data-cy='upload-form' onSubmit={this.sendImageUpload}>
+                        <div className={cx(styles.fileUpload, { active: this.state.file })}>
+                            <div className={styles.fileSelect}>
+                                <div className={styles.fileSelectButton} id="fileName">Choose File</div>
+                                <div className={styles.fileSelectName} id="noFile">{this.state.file ? this.state.file.name : "No file chosen..."}</div> 
+                                <input data-cy='upload-input' type="file" name="chooseFile" id="chooseFile" onChange={this.onChange} />
+                            </div>
                         </div>
-                    </div>
-                    <button data-cy='upload-button' type="submit">Upload</button>
-                </form>
+                        <button data-cy='upload-button' type="submit">Upload</button>
+                    </form>
+                </div>
             </div>
         )
     }

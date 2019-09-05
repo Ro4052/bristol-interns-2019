@@ -1,71 +1,40 @@
 .room {
-    width: 40vh;
-    height: 45vh;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 3vmin 2vmin;
-    margin: 3vmin;
-    background-color: white;
-    border: 3px solid black;
-    border-radius: 20px;
-    font-size: 1.5em;
+    padding: 1em;
+    margin: 1em;
 }
 
-.roomHeader {
-    text-align: center;
-    margin-top: 0;
+.currentRoom {
+    border: 5px solid green;
 }
 
-.waiting {
-    text-align: center;
-    margin-top: 2vmin;
-}
-
-.roomButton {
-    font-size: 3vh;
-}
-
-.roomButtons {
+.player {
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
+    align-items: center;
 }
 
 .removeAIButton {
-    width: 4vmin;
-    height: 4vmin;
-    padding: 0;
-    font-size: 2.8vmin;
-    letter-spacing: 0;
-    text-align: center;
+    font-size: 1em;
 }
 
-.roomPlayers {
+.players {
+    font-size: 1.2em;
     display: flex;
-    width: 80%;
-    height: 50%;
+    flex-grow: 1;
     flex-direction: column;
     align-content: center;
     justify-content: center;
     flex-wrap: wrap;
 }
 
-.playerInRoom {
+.roomButtons {
     display: flex;
-    flex-direction: row;
-    align-items: center;
     justify-content: center;
-}
-
-@media only screen and (max-width: 1500px) {
-    .room {
-        height: 300px;
-        min-height: auto;
-    }
-    .roomHeader {
-        margin: 0;
-        font-size: 1.2em;
-    }
 }

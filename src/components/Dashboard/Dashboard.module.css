@@ -1,135 +1,96 @@
-.dashboard {
-    height: 100%;
+.container {
     display: flex;
     flex-direction: column;
 }
 
-.header {
-    display: flex;
-    flex-direction: row-reverse;
-    align-items: center;
+@media only screen and (min-width: 700px) {
+    .container {
+        width: 100%;
+        height: 100%;
+    }
 }
 
-.logo {
-    flex-grow: 1;
-    padding: 1em;
-}
-
-.main {
+.dashboard {
     flex-grow: 1;
     display: flex;
+    padding: 1.2em;
     flex-direction: row;
-    background-color: var(--dark-orange);
+    position: relative;
 }
 
 .gameInfo {
-    width: 50%;
-    font-size: 3vmin;
-    margin: 1vmin;
+    font-size: 1.6em;
     background-color: white;
-    border: 3px solid black;
+    border: 2px solid black;
     border-radius: 20px;
     padding: 0 1em 1em 1em;
+    margin-bottom: 1em;
 }
 
 .gameInfo > h2 {
-    font-size: 1.5em;
     text-align: center;
 }
 
-.side {
+.left {
     width: 30%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    align-items: stretch;
+    margin-right: 1.2em;
 }
 
-.middle {
-    width: 60%;
+.chatContainer {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
 }
 
-.interactions {
-    height: 60%;
+.right {
+    flex-grow: 1;
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
+    flex-direction: column;
+    align-items: stretch;
+    overflow: hidden;
+}
+
+.chatButton {
+    display: none;
 }
 
 @media screen and (max-width: 1000px) {
-    .side {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-    .middle {
-        width: 100%;
-        height: 50%;
-        align-items: center;
-    }
-    .main {
-        flex-direction: column;
-    }
-    .interactions {
-        height: 40%;
+    .left {
+        width: 40%;
     }
 }
 
-@media screen and (max-width: 900px) {
-    .main {
-        height: 600px;
-        flex-direction: column;
-    }
-}
-
-@media screen and (max-height: 500px) {
+@media screen and (max-width: 800px) {
     .dashboard {
-        height: auto;
+        flex-direction: column;
     }
-}
 
-.centerBox {
-    width: 100%;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
+    .chatContainer {
+        display: none;
+    }
+    
+    .chatOverlay {
+        display: flex;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 0.8em;
+        z-index: 100;
+    }
 
-.circle1,
-.circle2,
-.circle3 {
-    border: 3px solid black;
-    background-color: #fac825;
-    border-radius: 50%;
-}
+    .chatButton {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
 
-.circle1 {
-    padding: 2vmin 2.5vmin;
-    margin: 1vmin;
-    margin-bottom: 30px;
-}
-  
-.circle1:before {
-    content: "";
-    padding: 0px;
-}
-  
-.circle2 {
-    padding: 1.5vmin 2vmin;
-    margin: 1vmin;
-    margin-bottom: 50px;
-}
-
-.circle3 {
-    padding: 1vmin 1.5vmin;
-    margin: 1vmin;
-    margin-bottom: 70px;
+    .left {
+        width: initial;
+    }
 }

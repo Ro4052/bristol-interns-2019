@@ -1,12 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { voteForCard } from './PlayedCardsActions';
-import CardList from '../shared/CardList/CardList';
-import Card from '../shared/CardList/Card/Card';
+import CardList from '../CardList/CardList';
+import Card from '../CardList/Card/Card';
 import styles from './PlayedCards.module.css';
 
 export class PlayedCards extends React.Component {
-    
     constructor(props) {
         super(props);
         this.isEnabled = this.isEnabled.bind(this);

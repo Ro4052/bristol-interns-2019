@@ -1,60 +1,107 @@
-.main {
-    display: inline-block;
-    width: 100%;
-    align-items: stretch;
-    background-color: var(--dark-orange);
-}
-
-.header {
-    height: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row-reverse;
-}
-
-.header > div > button {
-    font-size: 3.5vh;
-}
-
 .container {
-    height: 85%;
+    display: flex;
+    flex-direction: column;
+}
+
+.lobby {
     display: flex;
     flex-direction: row;
     flex-grow: 1;
+    padding: 1em;
+    overflow: hidden
 }
 
-.leftSide {
-    max-width: 50%;
+.chatContainer {
     display: flex;
-    flex-grow: 0;
-    justify-content: stretch;
     flex-direction: column;
-    align-items: stretch;
 }
 
-.roomArea {
-    width: 100%;
+.chatButton {
+    display: none;
+}
+
+.newMessage {
+    background-color: red;
+    margin-left: 0.2em;
+    font-size: 1em;
+    width: 1.5em;
+    height: 1.5em;
+    line-height: 1.5em;
+    border-radius: 50%;
+}
+
+.rooms {
+    flex-grow: 1;
     display: flex;
-    justify-content: flex-start;
-    flex-direction: row;
-    flex-flow: row wrap;
-    align-items: flex-start;
+    font-size: 1.2em;
+    overflow-y: auto;
 }
 
-@media only screen and (max-width: 1500px) {
-    .roomArea {
-        justify-content: center;
+@media only screen and (min-width: 1100px) {
+    .rooms {
+        flex-flow: row wrap;
+        justify-content: space-evenly;
+        align-items: stretch;
+        align-content: flex-start;
     }
 }
 
-@media only screen and (max-width: 1000px) {
-    .container {
+@media only screen and (max-width: 1100px) {
+    .rooms {
         flex-direction: column;
     }
-    .leftSide {
-        max-width: none;
+}
+
+@media only screen and (max-width: 1100px) and (min-width: 700px) {
+    .chatContainer {
+        width: 50%;
+    }
+
+    .rooms {
+        width: 50%;
+    }
+}
+
+@media only screen and (min-width: 700px) {
+    .container {
         width: 100%;
+        height: 100%;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    .lobby {
+        flex-direction: column;
+        align-items: stretch;
+        align-content: stretch;
+        justify-content: stretch;
+        justify-items: stretch;
+        position: relative;
+        overflow: visible;
+    }
+
+    .rooms {
+        overflow: visible;
+    }
+
+    .chatContainer {
+        display: none;
+    }
+
+    .chatOverlay {
+        display: flex;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 0.8em;
+        z-index: 100;
+    }
+
+    .chatButton {
+        display: flex;
+        flex-direction: row;
         align-items: center;
     }
 }

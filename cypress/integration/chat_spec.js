@@ -4,7 +4,6 @@ describe('Chat', () => {
     describe('on send a message in the main lobby', () => {
         beforeEach(() => {
             cy.signup('Bob', 'password');
-            cy.showChat();
             cy.sendMessage(); 
         });
 
@@ -23,7 +22,6 @@ describe('Chat', () => {
             cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
             .then(() => cy.signup('Bob', 'password'))
             .then(() => cy.createRoom(3))
-            .then(() => cy.showChat())
             .then(() => cy.request(`http://localhost:12346/send-message?url=${encodeURIComponent(url)}`));
         });
 
@@ -33,24 +31,9 @@ describe('Chat', () => {
         });
     });
 
-    describe('on someone else sends a message in the lobby when chat is hidden', () => {
-        beforeEach(() => {
-            cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`)
-            .then(() => cy.signup('Bob', 'password'))
-            .then(() => cy.createRoom(3))
-            .then(() => cy.request(`http://localhost:12346/send-message?url=${encodeURIComponent(url)}`));
-        });
-
-        it("others see the message", () => {
-            cy.get('[data-cy="new-message"]').should('have.text', '+1');
-        });
-    });
-
     describe('on someone else sends a message in a room', () => {
         beforeEach(() => {
             cy.signup('Bob', 'password')
-            .then(() => cy.url().should('contain', '/lobby'))
-            .then(() => cy.showChat())
             .then(() => cy.request(`http://localhost:12346/connect?url=${encodeURIComponent(url)}`))
             .then(() => cy.request(`http://localhost:12346/createRoom?url=${encodeURIComponent(url)}`))
             .then(() => cy.request(`http://localhost:12346/startGame?url=${encodeURIComponent(url)}`))

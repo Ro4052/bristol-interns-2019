@@ -100,10 +100,6 @@ Cypress.Commands.add('refreshPage', () => {
     cy.visit('/dashboard');
 });
 
-Cypress.Commands.add('showChat', () => {
-    cy.get('[data-cy="show-chat"]').click();
-});
-
 Cypress.Commands.add('playCardWord', () => {
     cy.route({
         method: 'POST',

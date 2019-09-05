@@ -1,38 +1,18 @@
 .createRoom {
-    height: 200px;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 1em;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: white;
-    border: 2px solid black;
-    border-radius: 1em;
-    margin: 0 1em 1em 1em;
-    padding: 3vmin;
-}
-
-.createRoomHeader {
-    font-size: 2em;
-    margin: 2vmin;
+    text-align: center;
+    padding: 1em;
+    margin: 1em;
 }
 
 .createRoomForm {
-    width: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.selectRounds {
-    font-size: 1.2em;
-}
-
-.createRoomButton {
-    font-size: 2em;
-}
-
-@media only screen and (max-width: 1000px) {
-    .createRoom {
-        width: 80%;
-    }
+    flex-direction: column;
+    align-items: stretch;
 }

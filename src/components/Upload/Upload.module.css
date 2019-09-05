@@ -1,8 +1,15 @@
+.uploadPage {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
 .uploadSection {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 12vh;
+    flex-grow: 1;
+    justify-content: center;
 }
 
 .uploadForm {

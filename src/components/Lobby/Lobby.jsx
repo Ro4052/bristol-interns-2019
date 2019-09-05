@@ -1,55 +1,56 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import styles from './Lobby.module.css';
-import Room from './Room/Room';
-import Logo from '../Logo/Logo';
-import Logout from '../Logout/Logout';
-import CreateRoom from './CreateRoom/CreateRoom';
-import Upload  from '../Upload/Upload';
-import LeaderboardButton from '../Leaderboard/LeaderboardButton/LeaderboardButton';
-import { authenticateUser } from '../Login/LoginActions';
-import history from '../../services/history';
-import Chat from '../Chat/Chat';
 import { statusTypes } from '../../services/statusTypes';
+import { authenticateUser } from '../Login/LoginActions';
+import { viewMessages } from '../Chat/ChatActions';
+import Chat from '../Chat/Chat';
+import CreateRoom from './CreateRoom/CreateRoom';
+import Header from './Header/Header';
+import Room from './Room/Room';
+import classNames from 'classnames/bind';
 
-export class Lobby extends React.Component {
-    componentDidMount() {
-        this.props.authenticateUser();
-        if (this.props.status !== statusTypes.NOT_STARTED) {
+const cx = classNames.bind(styles);
+
+function Lobby({ history }) {
+    const [chatVisible, setChatVisible] = React.useState(false);
+    const { rooms } = useSelector(state => state.lobbyReducer);
+    const { status } = useSelector(state => state.dashboardReducer);
+    const { newMessages } = useSelector(state => state.chatReducer);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(authenticateUser());
+        if (status !== statusTypes.NOT_STARTED) {
             history.push('/dashboard');
         }
+    }, [dispatch, history, status]);
+
+    const toggleChat = () => {
+        setChatVisible(!chatVisible);
+        dispatch(viewMessages());
     }
 
-    render() {
-        return (
-            <div className={styles.main}>
-                <div className={styles.header}>
-                    <Logout />
-                    <Logo />
-                    <LeaderboardButton />
+    return (
+        <div className={styles.container}>
+            <Header history={history} />
+            <div>
+                <button className={styles.chatButton} type='button' onClick={toggleChat} data-cy='toggle-chat'>
+                    {chatVisible ? "Hide chat" : "Show chat"}
+                    {!chatVisible && newMessages.length !== 0 && !chatVisible && <div className={styles.newMessage} data-cy='new-message'>+{newMessages.length}</div>}
+                </button>
+            </div>
+            <div className={styles.lobby}>
+                <div className={cx(styles.chatContainer, { chatOverlay: chatVisible })}>
+                    <Chat />
                 </div>
-                <div className={styles.container}>
-                    <div className={styles.leftSide}>
-                        <Upload />
-                        <CreateRoom />
-                        <Chat showOnDefault={true} />
-                    </div>
-                    <div className={styles.roomArea} data-cy="current-rooms">
-                        {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}                    
-                    </div>
+                <div className={cx(styles.rooms, "arrowScrollbar")}>
+                    <CreateRoom />
+                    {rooms.map(room => <Room room={room} key={room.roomId} />)}
                 </div>
             </div>
-        );
-    }
+        </div>
+    );
 }
 
-const mapStateToProps = state => ({
-    rooms: state.lobbyReducer.rooms,
-    status: state.dashboardReducer.status
-});
-
-const mapDispatchToProps = dispatch => ({
-    authenticateUser: () => dispatch(authenticateUser())
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Lobby);
+export default Lobby;
