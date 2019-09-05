@@ -44,11 +44,9 @@ function Lobby({ history }) {
                 <div className={cx(styles.chatContainer, { chatOverlay: chatVisible })}>
                     <Chat />
                 </div>
-                <div className={styles.roomsOuter}>
-                    <div className={cx(styles.roomsInner, "arrowScrollbar")}>
-                        <CreateRoom />
-                        {rooms.map(room => <Room room={room} key={room.roomId} />)}
-                    </div>
+                <div className={cx(styles.rooms, "arrowScrollbar")}>
+                    <CreateRoom />
+                    {rooms.map(room => <Room room={room} key={room.roomId} />)}
                 </div>
             </div>
         </div>
