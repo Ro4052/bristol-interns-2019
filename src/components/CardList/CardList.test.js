@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { CardList } from './CardList';
+import CardList from './CardList';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 

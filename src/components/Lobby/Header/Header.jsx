@@ -1,19 +1,19 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import styles from './Header.module.css';
 import Logo from '../../Logo/Logo';
-import Logout from '../../Logout/Logout';
-import LeaderboardButton from '../../Leaderboard/LeaderboardButton/LeaderboardButton';
-import UploadButton from '../../Upload/UploadButton/UploadButton';
+import { logOut } from '../../Login/LoginActions';
 
-export function Header(props) {
+function Header({ history }) {
+    const dispatch = useDispatch();
     return (
         <div className={styles.header}>
             <div className={styles.buttons}>
-                <LeaderboardButton history={props.history} />
-                <UploadButton history={props.history} />
+                <button onClick={() => history.push('/leaderboard')} data-cy="go-leaderboard" type='button'>Leaderboard</button>
+                <button onClick={() => history.push('/upload')} data-cy="go-upload" type='button'>Upload</button>
             </div>
             <Logo />
-            <Logout />
+            <button onClick={() => dispatch(logOut())} data-cy="logout" type='button'>Logout</button>
         </div>
     );
 }

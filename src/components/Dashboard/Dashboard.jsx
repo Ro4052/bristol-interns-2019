@@ -1,69 +1,46 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import styles from './Dashboard.module.css';
-import Timothy from '../Timothy/Timothy';
 import PlayedCards from '../PlayedCards/PlayedCards';
 import MyCards from '../MyCards/MyCards';
 import Players from '../Players/Players';
-import GameOver from '../GameOver/GameOver';
 import Chat from '../Chat/Chat';
-import PlayerInteractions from '../PlayerInteractions/PlayerInteractions';
 import { authenticateUser } from '../Login/LoginActions';
-import PlayWord from '../PlayWord/PlayWord';
 import { statusTypes } from '../../services/statusTypes';
+import Instructions from '../Instructions/Instructions';
 
-export class Dashboard extends React.Component {
-    componentDidMount() {
-        this.props.authenticateUser();
-    }
+function Dashboard() {
+    const { status, roundNum, rounds } = useSelector(state => state.dashboardReducer);
+    const { playCard, playedCardId } = useSelector(state => state.myCardsReducer);
+    const { playWord, word } = useSelector(state => state.playWordReducer);
+    const { cards } = useSelector(state => state.playedCardsReducer);
+    const { winners } = useSelector(state => state.gameOverReducer);
+    const dispatch = useDispatch();
 
-    render() {
-        const showPlayerInteractions = (!this.props.playWord || this.props.word || !this.props.playedCardId) && !(this.props.winners.length);
-        const showPlayWord = this.props.playWord && !this.props.word && this.props.playedCardId && !(this.props.winners.length);
-        return (
-            <div className={styles.dashboard}>
-                <div className={styles.left}>
-                    <div className={styles.gameInfo}>
-                        {this.props.status !== statusTypes.NOT_STARTED && <h2>Round: <span id="round-number" data-cy="round-number">{this.props.roundNum}/{this.props.rounds}</span></h2>}
-                        <Players />
-                    </div>
-                    <Chat showOnDefault={false} />
+    useEffect(() => {
+        dispatch(authenticateUser());
+    }, [dispatch]);
+
+    const showMyCards = playCard || (playWord && !word && playedCardId && !winners.length);
+    const showPlayedCards = status !== statusTypes.GAME_OVER && !playCard && cards.length > 0;
+    return (
+        <div className={styles.dashboard}>
+            <div className={styles.left}>
+                <div className={styles.gameInfo}>
+                    {status !== statusTypes.NOT_STARTED && <h2>Round: <span id="round-number" data-cy="round-number">{roundNum}/{rounds}</span></h2>}
+                    <Players />
                 </div>
-                <div className={styles.right}>
-                    <div className={styles.interactions}>
-                        {showPlayerInteractions && <PlayerInteractions />}
-                        {showPlayWord && <PlayWord />}
-                        {(this.props.winners.length > 0) && <GameOver />}
-                        <div className={styles.circle1}/>
-                        <div className={styles.circle2}/>
-                        <div className={styles.circle3}/>
-                        <Timothy />
-                    </div>
-                    <div className={styles.centerBox}>
-                    {this.props.status !== statusTypes.GAME_OVER && !this.props.playCard && this.props.playedCards.length > 0 && <PlayedCards />}
-                    {(this.props.playCard || showPlayWord) && <MyCards />}
-                    </div>
+                <Chat />
+            </div>
+            <div className={styles.right}>
+                <Instructions />
+                <div className={styles.centerBox}>
+                    {showPlayedCards && <PlayedCards />}
+                    {showMyCards && <MyCards />}
                 </div>
             </div>
-        );
-    }
+        </div>
+    );
 }
 
-const mapStateToProps = state => ({
-    status: state.dashboardReducer.status,
-    roundNum: state.dashboardReducer.roundNum,
-    rounds: state.dashboardReducer.rounds,
-    playCard: state.myCardsReducer.playCard,
-    playWord: state.playWordReducer.playWord,
-    voteCard: state.playedCardsReducer.voteCard,
-    playedCardId: state.myCardsReducer.playedCardId,
-    winners: state.gameOverReducer.winners,
-    word: state.playWordReducer.word,
-    playedCards: state.playedCardsReducer.cards
-});
-
-const mapDispatchToProps = dispatch => ({
-    authenticateUser: () => dispatch(authenticateUser())
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default Dashboard;

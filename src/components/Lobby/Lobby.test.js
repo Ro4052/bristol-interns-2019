@@ -1,11 +1,11 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
-import { Lobby } from './Lobby';
-import { Chat } from '../Chat/Chat';
+import Lobby from './Lobby';
 import configureStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 
-const middlewares = [];
+const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 
 const room = {
@@ -16,41 +16,42 @@ const room = {
     ]
 };
 
-const emptyState = { authReducer: { username: 'unicorn' }, lobbyReducer: { rooms: [] }, dashboardReducer: { status: '' }, createRoomReducer: {}, chatReducer: { messages: [], newMessages: [] }, uploadReducer: { message: "" } };
-const emptyStore = mockStore(emptyState);
-
-describe('on render', () => {
-    it('renders a drop down button', () => {
-        jest.spyOn(Chat.prototype, 'scrollToBottom').mockImplementation(jest.fn());
-        const wrapper = mount(
-            <Provider store={emptyStore}>
-                <Lobby history={[]} authenticateUser={jest.fn()} rooms={[]} newMessages={[]} createRoom={jest.fn()}  />
-            </Provider>
-        );
-        expect(wrapper.exists({ 'data-cy': 'num-rounds-options' })).toEqual(true);
-    });
+const store = mockStore({
+    authReducer: { username: 'unicorn' },
+    lobbyReducer: { rooms: [room] },
+    dashboardReducer: { status: '' },
+    createRoomReducer: {},
+    chatReducer: { messages: [], newMessages: [] },
+    uploadReducer: { message: "" }
 });
 
-describe('if given an empty list rooms', () => {
-    it('displays no rooms', () => {
-        jest.spyOn(Chat.prototype, 'scrollToBottom').mockImplementation(jest.fn());
-        const wrapper = mount(
-            <Provider store={emptyStore}>
-                <Lobby history={[]} authenticateUser={jest.fn()} rooms={[]} newMessages={[]} />
-            </Provider>
-        );
-        expect(wrapper.find({ 'data-cy': 'room' }).length).toEqual(0);
-    });
-});
+describe('Lobby', () => {
+    let wrapper;
+    const setState = jest.fn();
+    jest.spyOn(React, 'useState').mockImplementation(init => [init, setState]);
 
-describe('if given a list of rooms', () => {
-    it('displays the correct number of rooms', () => {
-        jest.spyOn(Chat.prototype, 'scrollToBottom').mockImplementation(jest.fn());
-        const wrapper = mount(
-            <Provider store={emptyStore}>
-                <Lobby history={[]} authenticateUser={jest.fn()} rooms={[room]} newMessages={[]} />
+    beforeEach(() => {
+        store.clearActions();
+        wrapper = mount(
+            <Provider store={store}>
+                <Lobby history={[]} />
             </Provider>
         );
-        expect(wrapper.find({ 'data-cy': 'room' }).length).toEqual(1);
+    });
+
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
+    describe('on render', () => {
+        it('renders a drop down button', () => {
+            expect(wrapper.exists({ 'data-cy': 'num-rounds-options' })).toEqual(true);
+        });
+    });
+    
+    describe('if given a list of rooms', () => {
+        it('displays the correct number of rooms', () => {
+            expect(wrapper.find({ 'data-cy': 'room' }).length).toEqual(1);
+        });
     });
 });

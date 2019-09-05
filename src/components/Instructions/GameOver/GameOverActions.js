@@ -1,10 +1,10 @@
 import { types } from './GameOverActionTypes';
-import history from '../../services/history';
-import { setVotedCard } from '../PlayedCards/PlayedCardsActions';
+import history from '../../../services/history';
+import { setVotedCard } from '../../PlayedCards/PlayedCardsActions';
 import { resetWord } from '../PlayWord/PlayWordActions';
-import { setCurrentPlayer } from '../Players/PlayersActions';
-import { setCurrentWord, setStatus, setRoundNumber } from '../Dashboard/DashboardActions';
-import { resetChat } from '../Chat/ChatActions';
+import { setCurrentPlayer } from '../../Players/PlayersActions';
+import { setCurrentWord, setStatus, setRoundNumber } from '../../Dashboard/DashboardActions';
+import { resetChat } from '../../Chat/ChatActions';
 
 export const setWinners = winners => ({
     type: types.SET_WINNERS,

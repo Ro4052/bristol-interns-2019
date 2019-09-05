@@ -1,7 +1,7 @@
 import React from 'react';
 import { PlayedCards } from './PlayedCards';
 import { shallow } from 'enzyme';
-import CardList from '../shared/CardList/CardList';
+import CardList from '../CardList/CardList';
 
 describe('on render', () => {
     it('renders a CardList', () => {

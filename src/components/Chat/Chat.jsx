@@ -1,52 +1,38 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { useRef, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import styles from './Chat.module.css';
 import classNames from 'classnames/bind';
-import ChatInput from './ChatInput/ChatInput';
-import Message from './Message/Message';
+import ChatForm from './ChatForm/ChatForm';
 
 const cx = classNames.bind(styles);
 
-export class Chat extends React.Component {
-    messagesEndRef = React.createRef();
+function Chat() {
+    const { messages } = useSelector(state => state.chatReducer);
 
-    constructor() {
-        super();
-        this.scrollToBottom = this.scrollToBottom.bind(this);
-    }
+    const messagesEndRef = useRef();
+    useEffect(() => {
+        messagesEndRef.current.scrollIntoView({ behaviour: 'smooth' });
+    });
 
-    componentDidMount() {
-        this.scrollToBottom();
-    }
-
-    componentDidUpdate() {
-        this.scrollToBottom();
-    }
-
-    scrollToBottom() {
-        this.messagesEndRef.current.scrollIntoView({ behaviour: 'smooth' });
-    }
-
-    render() {
-        return (
-            <div className={cx(styles.chat)} data-cy='chat-room'>
-                <h1>Chat</h1>
-                <div className={styles.messagesContainer}>
-                    <div className={styles.scrollContainer}>
-                        <div className={cx(styles.messages, 'arrowScrollbar')}>
-                            {this.props.messages.map((message, key) => <Message message={message} key={key} />)}
-                            <div ref={this.messagesEndRef} />
-                        </div>
+    return (
+        <div className={cx(styles.chat)} data-cy='chat-room'>
+            <h1>Chat</h1>
+            <div className={styles.messagesContainer}>
+                <div className={styles.scrollContainer}>
+                    <div className={cx(styles.messages, 'arrowScrollbar')}>
+                        {messages.map((message, index) => 
+                            <div data-cy='chat-message' key={index} className={styles.message}>
+                                <div data-cy='message-username' className={styles.messageUsername}>{message.username}:</div>
+                                <div data-cy='message-text' className={styles.messageText}>{message.text}</div>
+                            </div>
+                        )}
+                        <div ref={messagesEndRef} />
                     </div>
                 </div>
-                <ChatInput />
             </div>
-        );
-    }
+            <ChatForm />
+        </div>
+    );
 }
 
-const mapStateToProps = state => ({
-    messages: state.chatReducer.messages
-});
-
-export default connect(mapStateToProps)(Chat);
+export default Chat;

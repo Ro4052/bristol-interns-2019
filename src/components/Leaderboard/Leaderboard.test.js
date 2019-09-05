@@ -1,38 +1,50 @@
 import React from 'react';
+import Leaderboard from './Leaderboard';
 import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
 import configureStore from 'redux-mock-store';
-import { Leaderboard } from './Leaderboard';
+import thunk from 'redux-thunk';
+import * as leaderboardActions from './LeaderboardActions';
 
-const middlewares = [];
+const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
-
-const players = [
-    { id: 1, username: "unicorn" },
-    { id: 2, username: "halfling" }
-];
-
-const emptyState = { leaderboardReducer: { players: [] } };
-const emptyStore = mockStore(emptyState);
-
-describe('if given an empty list of players', () => {
-    it('displays no players', () => {
-        const wrapper = mount(
-            <Provider store={emptyStore}>
-                <Leaderboard getPlayers={jest.fn()} players={[]} />
-            </Provider>
-        );
-        expect(wrapper.find({ 'data-cy': 'player-row' }).length).toEqual(0);
-    });
+const store = mockStore({
+    leaderboardReducer: {
+        players: [
+            { id: 1, username: "unicorn" },
+            { id: 2, username: "halfling" }
+        ]
+    }
 });
 
-describe('if given a list of players', () => {
-    it('displays the correct usernames and scores', () => {
-        const wrapper = mount(
-            <Provider store={emptyStore}>
-                <Leaderboard getPlayers={jest.fn()} players={players} />
+describe('Leaderboard', () => {
+    let wrapper;
+    const setState = jest.fn();
+    jest.spyOn(React, 'useState').mockImplementation(init => [init, setState]);
+    const getPlayersSpy = jest.spyOn(leaderboardActions, 'getPlayers');
+
+    beforeEach(() => {
+        store.clearActions();
+        wrapper = mount(
+            <Provider store={store}>
+                <Leaderboard />
             </Provider>
         );
-        expect(wrapper.find({ 'data-cy': 'player-row' }).length).toEqual(2);
+    });
+
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
+    describe('on render', () => {
+        it('dispatches getPlayers', () => {
+            expect(getPlayersSpy).toHaveBeenCalled();
+        });
+    });
+
+    describe('if given a list of players', () => {
+        it('displays the correct usernames and scores', () => {
+            expect(wrapper.find({ 'data-cy': 'player-row' }).length).toEqual(2);
+        });
     });
 });

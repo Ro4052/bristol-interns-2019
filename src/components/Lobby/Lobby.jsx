@@ -1,5 +1,5 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import styles from './Lobby.module.css';
 import { statusTypes } from '../../services/statusTypes';
 import { authenticateUser } from '../Login/LoginActions';
@@ -12,62 +12,47 @@ import classNames from 'classnames/bind';
 
 const cx = classNames.bind(styles);
 
-export class Lobby extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            chatVisible: false
-        };
-        this.toggleChat = this.toggleChat.bind(this);
-    }
+function Lobby({ history }) {
+    const [chatVisible, setChatVisible] = React.useState(false);
+    const { rooms } = useSelector(state => state.lobbyReducer);
+    const { status } = useSelector(state => state.dashboardReducer);
+    const { newMessages } = useSelector(state => state.chatReducer);
+    const dispatch = useDispatch();
 
-    componentDidMount() {
-        this.props.authenticateUser();
-        if (this.props.status !== statusTypes.NOT_STARTED) {
-            this.props.history.push('/dashboard');
+    useEffect(() => {
+        dispatch(authenticateUser());
+        if (status !== statusTypes.NOT_STARTED) {
+            history.push('/dashboard');
         }
+    }, [dispatch, history, status]);
+
+    const toggleChat = () => {
+        setChatVisible(!chatVisible);
+        dispatch(viewMessages());
     }
 
-    toggleChat() {
-        this.setState({ chatVisible: !this.state.chatVisible });
-        this.props.viewMessages();
-    }
-
-    render() {
-        return (
-            <div className={styles.container}>
-                <Header history={this.props.history} />
-                <div>
-                    <button className={styles.chatButton} type='button' onClick={this.toggleChat} data-cy='toggle-chat'>
-                        {this.state.chatVisible ? "Hide chat" : "Show chat"}
-                        {!this.state.chatVisible && this.props.newMessages.length !== 0 && !this.state.showChat && <div className={styles.newMessage} data-cy='new-message'>+{this.props.newMessages.length}</div>}
-                    </button>
+    return (
+        <div className={styles.container}>
+            <Header history={history} />
+            <div>
+                <button className={styles.chatButton} type='button' onClick={toggleChat} data-cy='toggle-chat'>
+                    {chatVisible ? "Hide chat" : "Show chat"}
+                    {!chatVisible && newMessages.length !== 0 && !chatVisible && <div className={styles.newMessage} data-cy='new-message'>+{newMessages.length}</div>}
+                </button>
+            </div>
+            <div className={styles.lobby}>
+                <div className={cx(styles.chatContainer, { chatOverlay: chatVisible })}>
+                    <Chat />
                 </div>
-                <div className={styles.lobby}>
-                    <div className={cx(styles.chatContainer, { chatOverlay: this.state.chatVisible })}>
-                        <Chat />
-                    </div>
-                    <div className={styles.roomsOuter}>
-                        <div className={cx(styles.roomsInner, "arrowScrollbar")}>
-                            <CreateRoom />
-                            {this.props.rooms.map(room => <Room room={room} key={room.roomId} />)}
-                        </div>
+                <div className={styles.roomsOuter}>
+                    <div className={cx(styles.roomsInner, "arrowScrollbar")}>
+                        <CreateRoom />
+                        {rooms.map(room => <Room room={room} key={room.roomId} />)}
                     </div>
                 </div>
             </div>
-        );
-    }
+        </div>
+    );
 }
 
-const mapStateToProps = state => ({
-    rooms: state.lobbyReducer.rooms,
-    status: state.dashboardReducer.status,
-    newMessages: state.chatReducer.newMessages
-});
-
-const mapDispatchToProps = dispatch => ({
-    authenticateUser: () => dispatch(authenticateUser()),
-    viewMessages: () => dispatch(viewMessages())
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Lobby);
+export default Lobby;
